@@ -25,12 +25,25 @@ EXTRA_DIST = \
 	$(NULL)
 
 DISTCLEANFILES = \
+	configure \
+	config.guess \
+	config.h.in \
+	config.h.in~ \
+	config.sub \
 	intltool-extract \
+	intltool-extract.in \
 	intltool-merge \
+	intltool-merge.in \
 	intltool-update \
+	intltool-update.in \
+	Makefile.in \
 	po/.intltool-merge-cache \
 	$(NULL)
 
 EXTRADIST = \
-	autogen.sh
+	autogen.sh \
+	$(NULL)
+
+devclean:
+	$(MAKE) -C src devclean
 
