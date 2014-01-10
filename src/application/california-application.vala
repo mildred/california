@@ -8,10 +8,14 @@ extern const string PACKAGE_VERSION;
 
 namespace California {
 
+/**
+ * The main California application object.
+ */
+
 public class Application : Gtk.Application {
     public const string TITLE = "California";
     public const string DESCRIPTION = _("Desktop Calendar");
-    public const string COPYRIGHT = "Copyright 2014 Yorba Foundation";
+    public const string COPYRIGHT = _("Copyright 2014 Yorba Foundation");
     public const string VERSION = PACKAGE_VERSION;
     public const string ID = "org.yorba.california";
     
@@ -39,7 +43,7 @@ public class Application : Gtk.Application {
         try {
             register();
         } catch (Error err) {
-            error("Error registering GearyApplication: %s", err.message);
+            error("Error registering application: %s", err.message);
         }
         
         activate();
@@ -54,16 +58,7 @@ public class Application : Gtk.Application {
         base.startup();
         
         add_action_entries(action_entries, this);
-        
-        Gtk.Builder builder = new Gtk.Builder();
-        try {
-            builder.add_from_resource("/org/yorba/california/rc/app-menu.interface");
-        } catch (Error err) {
-            error("Error loading app-menu resource: %s", err.message);
-        }
-        
-        MenuModel app_menu = (MenuModel) builder.get_object("app-menu");
-        set_app_menu(app_menu);
+        set_app_menu(Resource.load<MenuModel>("app-menu.interface", "app-menu"));
     }
     
     // This method is invoked when the primary instance is first started or is activated by a

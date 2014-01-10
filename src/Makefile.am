@@ -9,8 +9,21 @@ bin_PROGRAMS = california
 
 california_VALASOURCES = \
 	main.vala \
+	\
 	application/california-application.vala \
+	application/resource.vala \
+	\
+	base/base-object.vala \
+	\
 	components/main-window.vala \
+	\
+	model/calendar/calendar-day-of-month.vala \
+	model/calendar/calendar-date.vala \
+	model/calendar/calendar-date-range.vala \
+	model/calendar/calendar-error.vala \
+	model/calendar/calendar-month.vala \
+	model/calendar/calendar-month-year.vala \
+	model/calendar/calendar-year.vala \
 	$(NULL)
 
 california_SOURCES = \
@@ -26,6 +39,7 @@ california_VALAFLAGS = \
 	--pkg gtk+-3.0 \
 	--pkg gio-2.0 \
 	--pkg posix \
+	--pkg gee-0.8 \
 	$(NULL)
 
 california_CFLAGS = \

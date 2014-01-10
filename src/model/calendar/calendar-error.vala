@@ -7,16 +7,14 @@
 namespace California {
 
 /**
- * Primary application window.
+ * Errors related to date, time, or date/time.
  */
 
-public class MainWindow : Gtk.ApplicationWindow {
-    public MainWindow(Application app) {
-        Object (application: app);
-        
-        title = Application.TITLE;
-    }
+public errordomain CalendarError {
+    /**
+     * Indicates the date, time, or date/time is outside of accepted bounds.
+     */
+    INVALID
 }
 
 }
-
