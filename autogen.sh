@@ -11,4 +11,7 @@ which gnome-autogen.sh || {
     exit 1
 }
 
+mkdir -p config
+mkdir -p m4
+
 . gnome-autogen.sh

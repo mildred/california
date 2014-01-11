@@ -13,16 +13,11 @@ namespace California.Calendar {
  * {@link MAX}, 1 to 31.
  */
 
-public class DayOfMonth : BaseObject {
+public class DayOfMonth : SimpleValue {
     public const int MIN = 1;
     public const int MAX = 31;
     
-    private static DayOfMonth?[] days = new DayOfMonth[MAX - MIN + 1];
-    
-    /**
-     * Returns the 1-based value for this day of the month.
-     */
-    public int value { get; private set; }
+    private static DayOfMonth[]? days = null;
     
     /**
      * Returns the day number as an informal (no leading zero) string.
@@ -34,47 +29,66 @@ public class DayOfMonth : BaseObject {
      */
     public string formal_number { get; private set; }
     
-    private DayOfMonth(int value) throws CalendarError {
-        if (value < MIN || value > MAX)
-            throw new CalendarError.INVALID("Invalid day of month %d", value);
+    private DayOfMonth(int value) {
+        base (value, MIN, MAX);
         
-        this.value = value;
         informal_number = "%d".printf(value);
         formal_number = "%02d".printf(value);
+    }
+    
+    internal static void init() {
+        days = new DayOfMonth[MAX - MIN + 1];
+        for (int ctr = MIN; ctr <= MAX; ctr++)
+            days[ctr - MIN] = new DayOfMonth(ctr);
+    }
+    
+    internal static void terminate() {
+        days = null;
     }
     
     /**
      * Returns a {@link DayOfMonth} for the supplied 1-based value.
      */
     public static DayOfMonth for(int value) throws CalendarError {
-        int index = value - 1;
+        int index = value - MIN;
         
         if (index < 0 || index >= days.length)
-            throw new CalendarError.INVALID("Invalid day of month (index) %d", value);
-        
-        if (days[index] == null)
-            days[index] = new DayOfMonth(value);
+            throw new CalendarError.INVALID("Invalid day of month value %d", value);
         
         return days[index];
+    }
+    
+    /**
+     * Only use for internally-generated values, not externally-sourced ones (files, network,
+     * user-input, etc.)
+     */
+    internal static DayOfMonth for_checked(int value) {
+        try {
+            return for(value);
+        } catch (CalendarError calerr) {
+            error("Invalid checked day of month %d: %s", value, calerr.message);
+        }
+    }
+    
+    internal static DayOfMonth from_gdate(GLib.Date gdate) {
+        assert(gdate.valid());
+        
+        return for_checked(gdate.get_day());
     }
     
     /**
      * Returns the first day of the month for any month.
      */
     public static DayOfMonth first() {
-        try {
-            return for(MIN);
-        } catch (CalendarError calerr) {
-            error("First of month unavailable: %s", calerr.message);
-        }
+        return for_checked(MIN);
     }
     
-    public inline DateDay to_date_day() {
+    internal inline DateDay to_date_day() {
         return (DateDay) value;
     }
     
     public override string to_string() {
-        return "%02d".printf(value);
+        return formal_number;
     }
 }
 

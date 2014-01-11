@@ -29,7 +29,7 @@ public class Application : Gtk.Application {
         { "quit", on_quit }
     };
     
-    private MainWindow? main_window = null;
+    private Component.MainWindow? main_window = null;
     private File? exec_file = null;
     
     public Application() {
@@ -57,15 +57,26 @@ public class Application : Gtk.Application {
     public override void startup() {
         base.startup();
         
+        // unit initialization
+        Calendar.init();
+        
         add_action_entries(action_entries, this);
         set_app_menu(Resource.load<MenuModel>("app-menu.interface", "app-menu"));
+    }
+    
+    // This method is invoked when the main loop terminates on the primary instance.
+    public override void shutdown() {
+        // unit termination
+        Calendar.terminate();
+        
+        base.shutdown();
     }
     
     // This method is invoked when the primary instance is first started or is activated by a
     // secondary instance.  It is called after startup().
     public override void activate() {
         if (main_window == null) {
-            main_window = new MainWindow(this);
+            main_window = new Component.MainWindow(this);
             main_window.show_all();
         } else {
             main_window.present();

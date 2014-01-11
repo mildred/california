@@ -10,7 +10,7 @@ namespace California.Calendar {
  * An immutable representation of a {@link Month} and a {@link Year}.
  */
 
-public class MonthYear : BaseObject {
+public class MonthYear : BaseObject, Gee.Comparable<MonthYear>, Gee.Hashable<MonthYear> {
     /**
      * The {@link Month} of the associated {@link Year}.
      */
@@ -27,6 +27,13 @@ public class MonthYear : BaseObject {
     }
     
     /**
+     * Returns the current {@link MonthYear}.
+     */
+    public static MonthYear current(TimeZone tz = new TimeZone.local()) {
+        return new MonthYear(Month.current(tz), Year.current(tz));
+    }
+    
+    /**
      * Returns the number of days in the month for the specified year.
      */
     public int days_in_month() {
@@ -34,14 +41,25 @@ public class MonthYear : BaseObject {
     }
     
     /**
-     * Returns the last {@link DayOfMonth} for the specified year.
+     * Returns the first {@link DayOfMonth} for the month in the associated year.
+     */
+    public DayOfMonth first_day_of_month() {
+        return DayOfMonth.for_checked(1);
+    }
+    
+    /**
+     * Returns the last {@link DayOfMonth} for the month in the associated year.
      */
     public DayOfMonth last_day_of_month() {
-        try {
-            return DayOfMonth.for(days_in_month());
-        } catch (CalendarError calerr) {
-            error("Invalid days in month %s: %s", to_string(), calerr.message);
-        }
+        return DayOfMonth.for_checked(days_in_month());
+    }
+    
+    /**
+     * Returns the day of the week for the {@link DayOfMonth} for the month in the associated
+     * year.
+     */
+    public Date date_for(DayOfMonth day_of_month) throws CalendarError {
+        return new Date(day_of_month, month, year);
     }
     
     /**
@@ -57,6 +75,34 @@ public class MonthYear : BaseObject {
             error("Unable to generate date range for %s %s: %s", to_string(), year.to_string(),
                 calerr.message);
         }
+    }
+    
+    public int compare_to(MonthYear other) {
+        if (this == other)
+            return 0;
+        
+        int cmp = year.compare_to(other.year);
+        if (cmp != 0)
+            return cmp;
+        
+        cmp = month.compare_to(other.month);
+        if (cmp != 0)
+            return cmp;
+        
+        return 0;
+    }
+    
+    public bool equal_to(MonthYear other) {
+        if (this == other)
+            return true;
+        
+        return month.equal_to(other.month) && year.equal_to(other.year);
+    }
+    
+    public uint hash() {
+        // assuming month's hash is its value -- pretty good assumption -- give it 4 bits of space
+        // for its value 1 - 12
+        return (year.hash() << 4) | month.hash();
     }
     
     public override string to_string() {

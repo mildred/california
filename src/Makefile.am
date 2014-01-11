@@ -16,13 +16,19 @@ california_VALASOURCES = \
 	base/base-object.vala \
 	\
 	components/main-window.vala \
+	components/month-grid.vala \
+	components/month-grid-cell.vala \
 	\
+	model/calendar/calendar.vala \
 	model/calendar/calendar-day-of-month.vala \
+	model/calendar/calendar-day-of-week.vala \
 	model/calendar/calendar-date.vala \
 	model/calendar/calendar-date-range.vala \
 	model/calendar/calendar-error.vala \
 	model/calendar/calendar-month.vala \
 	model/calendar/calendar-month-year.vala \
+	model/calendar/calendar-simple-value.vala \
+	model/calendar/calendar-unit.vala \
 	model/calendar/calendar-year.vala \
 	$(NULL)
 

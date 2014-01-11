@@ -20,8 +20,9 @@ intltool-extract.sh
 intltool*.in
 libtool
 ltmain.sh
+m4
 missing
 stamp-it
 stamp-h1
 po/POTFILES
-
+.valencia

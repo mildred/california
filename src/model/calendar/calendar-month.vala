@@ -7,32 +7,28 @@
 namespace California.Calendar {
 
 /**
- * An immutable 1-based representation of a month of year.
- *
- * This is a more functional object than the {@link Month} enum, which is provided for naming (code)
- * convenience.
+ * An immutable one-based representation of a month of year.
  */
 
-public class Month : BaseObject {
-    public const int JAN = 1;
-    public const int FEB = 2;
-    public const int MAR = 3;
-    public const int APR = 4;
-    public const int MAY = 5;
-    public const int JUN = 6;
-    public const int JUL = 7;
-    public const int AUG = 8;
-    public const int SEP = 9;
-    public const int OCT = 10;
-    public const int NOV = 11;
-    public const int DEC = 12;
+public class Month : SimpleValue {
+    public static Month JAN;
+    public static Month FEB;
+    public static Month MAR;
+    public static Month APR;
+    public static Month MAY;
+    public static Month JUN;
+    public static Month JUL;
+    public static Month AUG;
+    public static Month SEP;
+    public static Month OCT;
+    public static Month NOV;
+    public static Month DEC;
     
-    public const int MIN = JAN;
-    public const int MAX = DEC;
+    public const int MIN = 1;
+    public const int MAX = 12;
+    public const int COUNT = MAX - MIN + 1;
     
-    private static Month?[] months = new Month[MAX - MIN + 1];
-    
-    public int value { get; private set; }
+    private static Month[]? months = null;
     
     /**
      * A locale-specific abbreviated name for the month.
@@ -54,21 +50,19 @@ public class Month : BaseObject {
      */
     public string formal_number { get; private set; }
     
-    private Month(int value) throws CalendarError {
-        this.value = value;
+    private Month(int value) {
+        base (value, MIN, MAX);
         
         // GLib's Date.strftime requires a fullly-formed struct to get strings, so fake it
         // and stash
         GLib.Date date = GLib.Date();
-        date.set_day((DateDay) 1);
-        date.set_month(to_date_month());
-        date.set_year((DateYear) 2014);
+        date.clear();
+        date.set_dmy(1, to_date_month(), 2014);
         
         char[] buf = new char[64];
         date.strftime(buf, "%b");
         abbrev_name = (string) buf;
         
-        buf = new char[64];
         date.strftime(buf, "%B");
         full_name = (string) buf;
         
@@ -76,22 +70,56 @@ public class Month : BaseObject {
         formal_number = "%02d".printf(value);
     }
     
+    internal static void init() {
+        months = new Month[COUNT];
+        for (int ctr = MIN; ctr <= MAX; ctr++)
+            months[ctr - MIN] = new Month(ctr);
+    }
+    
+    internal static void terminate() {
+        months = null;
+    }
+    
     /**
      * Returns a {@link Month} for the specified 1-based month.
      */
     public static Month for(int value) throws CalendarError {
-        int index = value - 1;
+        int index = value - MIN;
         
         if (index < 0 || index >= months.length)
-            throw new CalendarError.INVALID("Invalid month of year (index) %d", value);
-        
-        if (months[index] == null)
-            months[index] = new Month(value);
+            throw new CalendarError.INVALID("Invalid month of year value %d", value);
         
         return months[index];
     }
     
-    public inline DateMonth to_date_month() {
+    /**
+     * For situations where the month value had better be correct (i.e. not from an external source,
+     * such as a network response, file, or user input).
+     */
+    internal static Month for_checked(int value) {
+        try {
+            return for(value);
+        } catch (CalendarError calerr) {
+            error("Unable to fetch Month for value %d: %s", value, calerr.message);
+        }
+    }
+    
+    internal static Month from_gdate(GLib.Date gdate) {
+        assert(gdate.valid());
+        
+        return for_checked(gdate.get_month());
+    }
+    
+    /**
+     * Returns the current {@link Month}.
+     */
+    public static Month current(TimeZone tz = new TimeZone.local()) {
+        DateTime now = new DateTime.now(tz);
+        
+        return for_checked(now.get_month());
+    }
+    
+    internal inline DateMonth to_date_month() {
         return (DateMonth) value;
     }
     
