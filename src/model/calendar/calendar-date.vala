@@ -102,7 +102,7 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
         assert(week_of_the_month_sunday > 0);
     }
     
-    public bool within_month_year(MonthYear month_year) {
+    public bool within_month_year(MonthOfYear month_year) {
         return month.equal_to(month_year.month) && year.equal_to(month_year.year);
     }
     

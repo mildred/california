@@ -10,7 +10,7 @@ namespace California.Calendar {
  * An immutable one-based representation of a month of year.
  */
 
-public class Month : SimpleValue {
+public class Month : BaseObject, Gee.Comparable<Month>, Gee.Hashable<Month> {
     public static Month JAN;
     public static Month FEB;
     public static Month MAR;
@@ -50,8 +50,12 @@ public class Month : SimpleValue {
      */
     public string formal_number { get; private set; }
     
+    private int value;
+    
     private Month(int value) {
-        base (value, MIN, MAX);
+        assert(value >= MIN && value <= MAX);
+        
+        this.value = value;
         
         // GLib's Date.strftime requires a fullly-formed struct to get strings, so fake it
         // and stash
@@ -74,10 +78,24 @@ public class Month : SimpleValue {
         months = new Month[COUNT];
         for (int ctr = MIN; ctr <= MAX; ctr++)
             months[ctr - MIN] = new Month(ctr);
+        
+        JAN = months[0];
+        FEB = months[1];
+        MAR = months[2];
+        APR = months[3];
+        MAY = months[4];
+        JUN = months[5];
+        JUL = months[6];
+        AUG = months[7];
+        SEP = months[8];
+        OCT = months[9];
+        NOV = months[10];
+        DEC = months[11];
     }
     
     internal static void terminate() {
         months = null;
+        JAN = FEB = MAR = APR = MAY = JUN = JUL = AUG = SEP = OCT = NOV = DEC = null;
     }
     
     /**
@@ -121,6 +139,18 @@ public class Month : SimpleValue {
     
     internal inline DateMonth to_date_month() {
         return (DateMonth) value;
+    }
+    
+    public int compare_to(Month other) {
+        return value - other.value;
+    }
+    
+    public bool equal_to(Month other) {
+        return this == other;
+    }
+    
+    public uint hash() {
+        return value;
     }
     
     public override string to_string() {

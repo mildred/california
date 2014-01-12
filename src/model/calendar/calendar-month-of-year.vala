@@ -7,10 +7,10 @@
 namespace California.Calendar {
 
 /**
- * An immutable representation of a {@link Month} and a {@link Year}.
+ * An immutable representation of a {@link Month} of a {@link Year}.
  */
 
-public class MonthYear : BaseObject, Gee.Comparable<MonthYear>, Gee.Hashable<MonthYear> {
+public class MonthOfYear : DateSpan, Gee.Comparable<MonthOfYear>, Gee.Hashable<MonthOfYear> {
     /**
      * The {@link Month} of the associated {@link Year}.
      */
@@ -21,37 +21,44 @@ public class MonthYear : BaseObject, Gee.Comparable<MonthYear>, Gee.Hashable<Mon
      */
     public Year year { get; private set; }
     
-    public MonthYear(Month month, Year year) {
+    /**
+     * The number of days in the month.
+     */
+    public int days_in_month { get; private set; }
+    
+    public MonthOfYear(Month month, Year year) {
+        base.uninitialized();
+        
         this.month = month;
         this.year = year;
+        days_in_month = month.to_date_month().get_days_in_month(year.to_date_year());
+        
+        try {
+            init_span(date_for(first_day_of_month()), date_for(last_day_of_month()));
+        } catch (CalendarError calerr) {
+            error("Unable to generate first/last days of month for %s: %s", to_string(), calerr.message);
+        }
     }
     
     /**
      * Returns the current {@link MonthYear}.
      */
-    public static MonthYear current(TimeZone tz = new TimeZone.local()) {
-        return new MonthYear(Month.current(tz), Year.current(tz));
-    }
-    
-    /**
-     * Returns the number of days in the month for the specified year.
-     */
-    public int days_in_month() {
-        return month.to_date_month().get_days_in_month(year.to_date_year());
+    public static MonthOfYear current(TimeZone tz = new TimeZone.local()) {
+        return new MonthOfYear(Month.current(tz), Year.current(tz));
     }
     
     /**
      * Returns the first {@link DayOfMonth} for the month in the associated year.
      */
     public DayOfMonth first_day_of_month() {
-        return DayOfMonth.for_checked(1);
+        return DayOfMonth.first();
     }
     
     /**
      * Returns the last {@link DayOfMonth} for the month in the associated year.
      */
     public DayOfMonth last_day_of_month() {
-        return DayOfMonth.for_checked(days_in_month());
+        return DayOfMonth.for_checked(days_in_month);
     }
     
     /**
@@ -62,22 +69,7 @@ public class MonthYear : BaseObject, Gee.Comparable<MonthYear>, Gee.Hashable<Mon
         return new Date(day_of_month, month, year);
     }
     
-    /**
-     * Returns a {@link DateRange} representing the first to last day of the month for a given year.
-     */
-    public DateRange to_date_range() {
-        try {
-            Date start = new Date(DayOfMonth.first(), month, year);
-            Date end = new Date(last_day_of_month(), month, year);
-            
-            return new DateRange(start, end);
-        } catch (CalendarError calerr) {
-            error("Unable to generate date range for %s %s: %s", to_string(), year.to_string(),
-                calerr.message);
-        }
-    }
-    
-    public int compare_to(MonthYear other) {
+    public int compare_to(MonthOfYear other) {
         if (this == other)
             return 0;
         
@@ -92,7 +84,7 @@ public class MonthYear : BaseObject, Gee.Comparable<MonthYear>, Gee.Hashable<Mon
         return 0;
     }
     
-    public bool equal_to(MonthYear other) {
+    public bool equal_to(MonthOfYear other) {
         if (this == other)
             return true;
         

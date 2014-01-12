@@ -13,7 +13,7 @@ namespace California.Calendar {
  * {@link MAX}, 1 to 31.
  */
 
-public class DayOfMonth : SimpleValue {
+public class DayOfMonth : BaseObject, Gee.Comparable<DayOfMonth>, Gee.Hashable<DayOfMonth> {
     public const int MIN = 1;
     public const int MAX = 31;
     
@@ -29,8 +29,12 @@ public class DayOfMonth : SimpleValue {
      */
     public string formal_number { get; private set; }
     
+    private int value;
+    
     private DayOfMonth(int value) {
-        base (value, MIN, MAX);
+        assert(value >= MIN && value <= MAX);
+        
+        this.value = value;
         
         informal_number = "%d".printf(value);
         formal_number = "%02d".printf(value);
@@ -85,6 +89,18 @@ public class DayOfMonth : SimpleValue {
     
     internal inline DateDay to_date_day() {
         return (DateDay) value;
+    }
+    
+    public int compare_to(DayOfMonth other) {
+        return value - other.value;
+    }
+    
+    public bool equal_to(DayOfMonth other) {
+        return value == other.value;
+    }
+    
+    public uint hash() {
+        return value;
     }
     
     public override string to_string() {

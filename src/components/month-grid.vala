@@ -20,12 +20,12 @@ public class MonthGrid : Gtk.Grid {
      *
      * Defaults to the current month and year.
      */
-    public Calendar.MonthYear month_year { get; set; default = Calendar.MonthYear.current(); }
+    public Calendar.MonthOfYear month_year { get; set; default = Calendar.MonthOfYear.current(); }
     
     /**
      * If MonthYear is not supplied, the current date is used.
      */
-    public MonthGrid(Calendar.MonthYear? month_year) {
+    public MonthGrid(Calendar.MonthOfYear? month_year) {
         column_homogeneous = true;
         column_spacing = 2;
         row_homogeneous = true;
@@ -61,14 +61,10 @@ public class MonthGrid : Gtk.Grid {
     }
     
     private void update_cells() throws CalendarError {
-        Calendar.Date date = month_year.date_for(month_year.first_day_of_month());
-        Calendar.Date end = month_year.date_for(month_year.last_day_of_month());
-        while (date.compare_to(end) <= 0) {
+        foreach (Calendar.Date date in month_year) {
             MonthGridCell? cell = get_cell_for(date);
             if (cell != null)
                 cell.date = date;
-            
-            date = date.adjust(1, Calendar.Unit.DAY);
         }
     }
     
@@ -83,7 +79,7 @@ public class MonthGrid : Gtk.Grid {
         int row = date.week_of_the_month_monday - 1;
         assert(row < NUM_WEEKS);
         
-        int col = date.day_of_week.value - 1;
+        int col = date.day_of_week.value_monday - 1;
         assert(col < Calendar.DayOfWeek.COUNT);
         
         return (MonthGridCell) get_child_at(col, row);

@@ -9,10 +9,16 @@ namespace California.Calendar {
 /**
  * An immutable one-based representation of a day of a week (Monday, Tuesday, etc.).
  *
- * Monday is defined as the first day of the week (one).
+ * Neither Monday nor Sunday are hard-defined as the first day of the week.  Accessing these
+ * objects via for() requires the caller to specify which is their definition of the first weekday.
  */
 
-public class DayOfWeek : SimpleValue {
+public class DayOfWeek : BaseObject, Gee.Hashable<DayOfWeek> {
+    public enum First {
+        MONDAY,
+        SUNDAY
+    }
+    
     public static DayOfWeek MON;
     public static DayOfWeek TUE;
     public static DayOfWeek WED;
@@ -25,7 +31,18 @@ public class DayOfWeek : SimpleValue {
     public const int MAX = 7;
     public const int COUNT = MAX - MIN + 1;
     
-    private static DayOfWeek[]? days_of_week = null;
+    private static DayOfWeek[]? days_of_week_monday = null;
+    private static DayOfWeek[]? days_of_week_sunday = null;
+    
+    /**
+     * The one-based value for the day of the week if Monday is defined as the first day.
+     */
+    public int value_monday { get; private set; }
+    
+    /**
+     * The one-based value for the day of the week if Sunday is defined as the first day.
+     */
+    public int value_sunday { get; private set; }
     
     /**
      * The abbreviated locale-specific name for the day of the week.
@@ -38,8 +55,11 @@ public class DayOfWeek : SimpleValue {
     public string full_name { get; private set; }
     
     private DayOfWeek(int value, string abbrev_name, string full_name) {
-        base (value, MIN, MAX);
+        assert(value >= MIN && value <= MAX);
         
+        // internally, Monday is default the first day of the week
+        value_monday = value;
+        value_sunday = (value + 1) % COUNT;
         this.abbrev_name = abbrev_name;
         this.full_name = full_name;
     }
@@ -51,14 +71,15 @@ public class DayOfWeek : SimpleValue {
         GLib.Date date = GLib.Date();
         date.set_dmy(1, 1, 2014);
         
+        // GLib.Weekday is 1-based, Monday first, so these arrays are the same
         string[] abbrevs = new string[COUNT];
         string[] fulls = new string[COUNT];
         char[] buf = new char[64];
         for (int ctr = MIN; ctr <= MAX; ctr++) {
             assert(date.valid());
             
-            // GLib.Weekday is 1-based
-            int offset = (int) date.get_weekday() - MIN;
+            // GLib.Weekday is 1-based, Monday first
+            int offset = (int) date.get_weekday() - 1;
             assert(offset >= 0 && offset < COUNT);
             
             date.strftime(buf, "%a");
@@ -70,42 +91,63 @@ public class DayOfWeek : SimpleValue {
             date.add_days(1);
         }
         
-        days_of_week = new DayOfWeek[COUNT];
+        // Following GLib's lead, days of week Monday-first is straightforward
+        days_of_week_monday = new DayOfWeek[COUNT];
         for (int ctr = MIN; ctr <= MAX; ctr++)
-            days_of_week[ctr - MIN] = new DayOfWeek(ctr, abbrevs[ctr - MIN], fulls[ctr - MIN]);
+            days_of_week_monday[ctr - MIN] = new DayOfWeek(ctr, abbrevs[ctr - MIN], fulls[ctr - MIN]);
         
-        MON = days_of_week[0];
-        TUE = days_of_week[1];
-        WED = days_of_week[2];
-        THU = days_of_week[3];
-        FRI = days_of_week[4];
-        SAT = days_of_week[5];
-        SUN = days_of_week[6];
+        MON = days_of_week_monday[0];
+        TUE = days_of_week_monday[1];
+        WED = days_of_week_monday[2];
+        THU = days_of_week_monday[3];
+        FRI = days_of_week_monday[4];
+        SAT = days_of_week_monday[5];
+        SUN = days_of_week_monday[6];
+        
+        // now fill in the Sunday-first array using the already-built objects
+        days_of_week_sunday = new DayOfWeek[COUNT];
+        days_of_week_sunday[0] = SUN;
+        days_of_week_sunday[1] = MON;
+        days_of_week_sunday[2] = TUE;
+        days_of_week_sunday[3] = WED;
+        days_of_week_sunday[4] = THU;
+        days_of_week_sunday[5] = FRI;
+        days_of_week_sunday[6] = SAT;
     }
     
     internal static void terminate() {
-        days_of_week = null;
+        days_of_week_monday = days_of_week_sunday = null;
+        MON = TUE = WED = THU = FRI = SAT = SUN = null;
     }
     
     /**
      * Returns the day of the week for the specified one-based value.
      */
-    public static DayOfWeek for(int value) throws CalendarError {
+    public static DayOfWeek for(int value, First first) throws CalendarError {
         int index = value - MIN;
         
-        if (index < 0 || index >= days_of_week.length)
+        if (index < 0 || index >= COUNT)
             throw new CalendarError.INVALID("Invalid day of week value %d", value);
         
-        return days_of_week[index];
+        switch (first) {
+            case First.MONDAY:
+                return days_of_week_monday[index];
+            
+            case First.SUNDAY:
+                return days_of_week_sunday[index];
+            
+            default:
+                assert_not_reached();
+        }
     }
     
     /**
      * Should only be used by internal calls when value is known to be safe and doesn't originate
      * from external sources, like a file, network, or user-input.
      */
-    internal static DayOfWeek for_checked(int value) {
+    internal static DayOfWeek for_checked(int value, First first) {
         try {
-            return for(value);
+            return for(value, first);
         } catch (CalendarError calerr) {
             error("%s", calerr.message);
         }
@@ -114,7 +156,16 @@ public class DayOfWeek : SimpleValue {
     internal static DayOfWeek from_gdate(GLib.Date date) {
         assert(date.valid());
         
-        return for_checked(date.get_weekday());
+        // GLib.Weekday is Monday-first
+        return for_checked(date.get_weekday(), First.MONDAY);
+    }
+    
+    public bool equal_to(DayOfWeek other) {
+        return this == other;
+    }
+    
+    public uint hash() {
+        return direct_hash(this);
     }
     
     public override string to_string() {

@@ -13,23 +13,60 @@ namespace California.Calendar {
  * value is described as thousands of years from now.
  */
 
-public class Year : SimpleValue {
+public class Year : DateSpan, Gee.Comparable<Year>, Gee.Hashable<Year> {
+    /**
+     * The year as an integer.
+     */
+    public int value { get; private set; }
+    
     public Year(int value) {
-        base (value, 1, int.MAX);
+        base.uninitialized();
+        
+        assert(value >= 1);
+        
+        this.value = value;
+        
+        try {
+            init_span(new Date(DayOfMonth.first(), Month.JAN, this),
+                new Date(new MonthOfYear(Month.DEC, this).last_day_of_month(), Month.DEC, this));
+        } catch (CalendarError calerr) {
+            error("Unable to generate start/end dates of year %s: %s", to_string(), calerr.message);
+        }
     }
     
     internal Year.from_gdate(GLib.Date gdate) {
-        base (gdate.get_year(), 1, int.MAX);
+        assert(gdate.valid());
+        
+        this(gdate.get_year());
     }
     
+    /**
+     * Create a {@link Year} for the current time in the specified timezone.
+     */
     public static Year current(TimeZone tz = new TimeZone.local()) {
         DateTime now = new DateTime.now(tz);
         
         return new Year(now.get_year());
     }
     
-    internal inline DateYear to_date_year() {
+    public int compare_to(Year other) {
+        return value - other.value;
+    }
+    
+    public bool equal_to(Year other) {
+        return value == other.value;
+    }
+    
+    public uint hash() {
+        return value;
+    }
+    
+    internal DateYear to_date_year() {
         return (DateYear) value;
+    }
+    
+    public override string to_string() {
+        return value.to_string();
     }
 }
 
