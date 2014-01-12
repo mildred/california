@@ -20,19 +20,29 @@ public class MonthGrid : Gtk.Grid {
      *
      * Defaults to the current month and year.
      */
-    public Calendar.MonthOfYear month_year { get; set; default = Calendar.MonthOfYear.current(); }
+    public Calendar.MonthOfYear month_of_year { get; set; default = Calendar.MonthOfYear.current(); }
+    
+    /**
+     * The set first day of the week.
+     */
+    public Calendar.FirstOfWeek first_of_week { get; set; default = Calendar.FirstOfWeek.SUNDAY; }
+    
+    /**
+     * Show days outside the current month.
+     */
+    public bool show_outside_month { get; set; default = false; }
     
     /**
      * If MonthYear is not supplied, the current date is used.
      */
-    public MonthGrid(Calendar.MonthOfYear? month_year) {
+    public MonthGrid(Calendar.MonthOfYear? month_of_year) {
         column_homogeneous = true;
         column_spacing = 2;
         row_homogeneous = true;
         row_spacing = 2;
         
-        if (month_year != null)
-            this.month_year = month_year;
+        if (month_of_year != null)
+            this.month_of_year = month_of_year;
         
         // prep the grid with a fixed number of rows and columns
         for (int week = 0; week < NUM_WEEKS; week++)
@@ -50,39 +60,27 @@ public class MonthGrid : Gtk.Grid {
         update();
         
         notify["month-year"].connect(update);
+        notify["first-of-week"].connect(update);
+        notify["show-outside-month"].connect(update);
     }
     
     private void update() {
-        try {
-            update_cells();
-        } catch (CalendarError calerr) {
-            debug("Unable to update MonthGrid: %s", calerr.message);
-        }
-    }
-    
-    private void update_cells() throws CalendarError {
-        foreach (Calendar.Date date in month_year) {
-            MonthGridCell? cell = get_cell_for(date);
-            if (cell != null)
-                cell.date = date;
-        }
-    }
-    
-    private MonthGridCell? get_cell_for(Calendar.Date date) {
-        if (!date.within_month_year(month_year)) {
-            debug("Date %s not in grid's month %s", date.to_string(), month_year.to_string());
+        foreach (Calendar.Week week in month_of_year.weeks(first_of_week)) {
+            // convert one-based to zero-based row/col indexing
+            int row = week.week_of_month - 1;
+            assert(row < NUM_WEEKS);
             
-            return null;
+            foreach (Calendar.Date date in week) {
+                int col = date.day_of_week.ordinal(first_of_week) - 1;
+                assert(col < Calendar.DayOfWeek.COUNT);
+                
+                MonthGridCell cell = (MonthGridCell) get_child_at(col, row);
+                if (date in month_of_year)
+                    cell.date = date;
+                else
+                    cell.date = show_outside_month ? date : null;
+            }
         }
-        
-        // convert one-based to zero-based row/col indexing
-        int row = date.week_of_the_month_monday - 1;
-        assert(row < NUM_WEEKS);
-        
-        int col = date.day_of_week.value_monday - 1;
-        assert(col < Calendar.DayOfWeek.COUNT);
-        
-        return (MonthGridCell) get_child_at(col, row);
     }
 }
 

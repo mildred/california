@@ -8,6 +8,9 @@ namespace California.Calendar {
 
 /**
  * Represents an immutable span of consecutive {@link Date}s.
+ *
+ * A DateSpan may be naturally iterated over its {@link Date}s.  It also provides iterators for
+ * {@link Week}s.
  */
 
 public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date> {
@@ -15,15 +18,15 @@ public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date> {
         public bool read_only { get { return true; } }
         public bool valid { get { return current != null; } }
         
-        public Gee.Iterable<Date> owner;
+        public DateSpan owner;
         public Date first;
         public Date last;
         public Date? current = null;
         
-        public DateSpanIterator(Gee.Iterable<Date> owner, Date first, Date last) {
+        public DateSpanIterator(DateSpan owner) {
             this.owner = owner;
-            this.first = first;
-            this.last = last;
+            first = owner.start_date;
+            last = owner.end_date;
         }
         
         public new Date get() {
@@ -46,7 +49,7 @@ public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date> {
         }
         
         public void remove() {
-            error("DateSpan iterator is read-only");
+            error("DateSpanIterator is read-only");
         }
         
         public bool @foreach(Gee.ForallFunc<Date> fn) {
@@ -64,7 +67,7 @@ public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date> {
         }
         
         public override string to_string() {
-            return "DateSpanIterator :%s::%s".printf(first.to_string(), last.to_string());
+            return "DateSpanIterator %s::%s".printf(first.to_string(), last.to_string());
         }
     }
     
@@ -121,10 +124,17 @@ public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date> {
     }
     
     /**
+     * Returns true if the {@link Date} is within the {@link DateSpan}.
+     */
+    public bool contains(Date date) {
+        return (start_date.compare_to(date) <= 0) && (end_date.compare_to(date) >= 0);
+    }
+    
+    /**
      * Returns an Iterator for all {@link Date}s in the {@link DateSpan}.
      */
     public Gee.Iterator<Date> iterator() {
-        return new DateSpanIterator(this, start_date, end_date);
+        return new DateSpanIterator(this);
     }
     
     /**
@@ -135,6 +145,13 @@ public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date> {
      */
     public bool @foreach(Gee.ForallFunc<Date> fn) {
         return iterator().foreach(fn);
+    }
+    
+    /**
+     * Returns a {@link WeekSpan} for each {@link Week} (full and partial) in the {@link DateSpan}.
+     */
+    public WeekSpan weeks(FirstOfWeek first_of_week) {
+        return new WeekSpan(this, first_of_week);
     }
     
     public override string to_string() {

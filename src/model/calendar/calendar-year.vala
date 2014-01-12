@@ -19,12 +19,15 @@ public class Year : DateSpan, Gee.Comparable<Year>, Gee.Hashable<Year> {
      */
     public int value { get; private set; }
     
+    /**
+     * Creates a new {@link Year} from 1 CE to several thousand years in the future.
+     *
+     * Negative values and zero are clamped to 1 CE.
+     */
     public Year(int value) {
         base.uninitialized();
         
-        assert(value >= 1);
-        
-        this.value = value;
+        this.value = value.clamp(1, int.MAX);
         
         try {
             init_span(new Date(DayOfMonth.first(), Month.JAN, this),

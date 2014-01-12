@@ -26,31 +26,6 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
     public Month month { get; private set; }
     public Year year { get; private set; }
     
-    /**
-     * One-based week of the month this date falls on if weeks start with Monday.
-     *
-     * Zero if the date is before the first Monday of the year.
-     */
-    public int week_of_the_month_monday { get; private set; }
-    /**
-     * One-based week of the month this date falls on if weeks start with Sunday.
-     *
-     * Zero if the date is before the first Sunday of the year.
-     */
-    public int week_of_the_month_sunday { get; private set; }
-    /**
-     * One-based week of the year this date falls on if weeks start with Monday.
-     *
-     * Zero if the date is before the first Monday of the year.
-     */
-    public int week_of_the_year_monday { get; private set; }
-    /**
-     * One-based week of the year this date falls on if weeks start with Sunday.
-     *
-     * Zero if the date is before the first Sunday of the year.
-     */
-    public int week_of_the_year_sunday { get; private set; }
-    
     private GLib.Date gdate;
     
     /**
@@ -69,8 +44,6 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
         this.day_of_month = day_of_month;
         this.month = month;
         this.year = year;
-        
-        init();
     }
     
     internal Date.from_gdate(GLib.Date gdate) {
@@ -82,28 +55,70 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
         day_of_month = DayOfMonth.from_gdate(gdate);
         month = Month.from_gdate(gdate);
         year = new Year.from_gdate(gdate);
-        
-        init();
     }
     
-    private void init() {
-        assert(gdate.valid());
+    /**
+     * Returns the {@link Week} the {@link Date} falls in.
+     */
+    public Week week_of(FirstOfWeek first) {
+        // calc how many days this Date is ahead of the first day of its week
+        int ahead = day_of_week.ordinal(first) - first.as_day_of_week().ordinal(first);
+        assert(ahead >= 0);
         
-        week_of_the_year_monday = (int) gdate.get_monday_week_of_year();
-        week_of_the_year_sunday = (int) gdate.get_sunday_week_of_year();
+        Date start;
+        if (ahead == 0) {
+            start = this;
+        } else {
+            GLib.Date clone = gdate;
+            clone.subtract_days(ahead);
+            start = new Date.from_gdate(clone);
+        }
         
-        GLib.Date first = GLib.Date();
-        first.set_dmy(1, month.to_date_month(), year.to_date_year());
-        assert(first.valid());
+        // add six days and that's the last day of the week
+        Date end = start.adjust(DayOfWeek.COUNT - 1, Unit.DAY);
         
-        week_of_the_month_monday = week_of_the_year_monday - ((int) first.get_monday_week_of_year()) + 1;
-        assert(week_of_the_month_monday > 0);
-        week_of_the_month_sunday = week_of_the_year_sunday - ((int) first.get_sunday_week_of_year()) + 1;
-        assert(week_of_the_month_sunday > 0);
+        // get the numeric week of the year of this date
+        int week_of_year;
+        switch (first) {
+            case FirstOfWeek.MONDAY:
+                week_of_year = (int) gdate.get_monday_week_of_year();
+            break;
+            
+            case FirstOfWeek.SUNDAY:
+                week_of_year = (int) gdate.get_sunday_week_of_year();
+            break;
+            
+            default:
+                assert_not_reached();
+        }
+        
+        // get the numeric week of the month of this date (using weeks of the year to calculate)
+        GLib.Date first_of_month = GLib.Date();
+        first_of_month.set_dmy(1, month.to_date_month(), year.to_date_year());
+        assert(first_of_month.valid());
+        
+        int week_of_month;
+        switch (first) {
+            case FirstOfWeek.MONDAY:
+                week_of_month = week_of_year - ((int) first_of_month.get_monday_week_of_year()) + 1;
+            break;
+            
+            case FirstOfWeek.SUNDAY:
+                week_of_month = week_of_year - ((int) first_of_month.get_sunday_week_of_year()) + 1;
+            break;
+            
+            default:
+                assert_not_reached();
+        }
+        
+        return new Week(start, end, week_of_month, week_of_year, month_of_year(), first);
     }
     
-    public bool within_month_year(MonthOfYear month_year) {
-        return month.equal_to(month_year.month) && year.equal_to(month_year.year);
+    /**
+     * Returns the {@link MonthOfYear} the {@link Date} falls in.
+     */
+    public MonthOfYear month_of_year() {
+        return new MonthOfYear(month, year);
     }
     
     /**
@@ -121,33 +136,43 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
                 if (quantity > 0)
                     clone.add_days(quantity);
                 else
-                    clone.subtract_days(quantity);
+                    clone.subtract_days(-quantity);
             break;
             
             case Unit.WEEK:
                 if (quantity > 0)
                     clone.add_days(quantity * DayOfWeek.COUNT);
                 else
-                    clone.subtract_days(quantity * DayOfWeek.COUNT);
+                    clone.subtract_days((-quantity) * DayOfWeek.COUNT);
             break;
             
             case Unit.MONTH:
                 if (quantity > 0)
                     clone.add_months(quantity);
                 else
-                    clone.subtract_months(quantity);
+                    clone.subtract_months(-quantity);
             break;
             
             case Unit.YEAR:
                 if (quantity > 0)
                     clone.add_years(quantity);
                 else
-                    clone.subtract_years(quantity);
+                    clone.subtract_years(-quantity);
             break;
             
             default:
                 assert_not_reached();
         }
+        
+        return new Date.from_gdate(clone);
+    }
+    
+    /**
+     * Returns a {@link Date} clamped between the two supplied Dates, inclusive.
+     */
+    public Date clamp(Date min, Date max) {
+        GLib.Date clone = gdate;
+        clone.clamp(min.gdate, max.gdate);
         
         return new Date.from_gdate(clone);
     }

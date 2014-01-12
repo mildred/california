@@ -25,9 +25,12 @@ california_VALASOURCES = \
 	model/calendar/calendar-day-of-week.vala \
 	model/calendar/calendar-date.vala \
 	model/calendar/calendar-error.vala \
+	model/calendar/calendar-first-of-week.vala \
 	model/calendar/calendar-month.vala \
 	model/calendar/calendar-month-of-year.vala \
 	model/calendar/calendar-unit.vala \
+	model/calendar/calendar-week.vala \
+	model/calendar/calendar-week-span.vala \
 	model/calendar/calendar-year.vala \
 	$(NULL)
 

@@ -14,11 +14,6 @@ namespace California.Calendar {
  */
 
 public class DayOfWeek : BaseObject, Gee.Hashable<DayOfWeek> {
-    public enum First {
-        MONDAY,
-        SUNDAY
-    }
-    
     public static DayOfWeek MON;
     public static DayOfWeek TUE;
     public static DayOfWeek WED;
@@ -35,16 +30,6 @@ public class DayOfWeek : BaseObject, Gee.Hashable<DayOfWeek> {
     private static DayOfWeek[]? days_of_week_sunday = null;
     
     /**
-     * The one-based value for the day of the week if Monday is defined as the first day.
-     */
-    public int value_monday { get; private set; }
-    
-    /**
-     * The one-based value for the day of the week if Sunday is defined as the first day.
-     */
-    public int value_sunday { get; private set; }
-    
-    /**
      * The abbreviated locale-specific name for the day of the week.
      */
     public string abbrev_name { get; private set; }
@@ -54,12 +39,15 @@ public class DayOfWeek : BaseObject, Gee.Hashable<DayOfWeek> {
      */
     public string full_name { get; private set; }
     
+    private int value_monday;
+    private int value_sunday;
+    
     private DayOfWeek(int value, string abbrev_name, string full_name) {
         assert(value >= MIN && value <= MAX);
         
         // internally, Monday is default the first day of the week
         value_monday = value;
-        value_sunday = (value + 1) % COUNT;
+        value_sunday = (value % COUNT) + 1;
         this.abbrev_name = abbrev_name;
         this.full_name = full_name;
     }
@@ -123,17 +111,17 @@ public class DayOfWeek : BaseObject, Gee.Hashable<DayOfWeek> {
     /**
      * Returns the day of the week for the specified one-based value.
      */
-    public static DayOfWeek for(int value, First first) throws CalendarError {
+    public static DayOfWeek for(int value, FirstOfWeek first_of_week) throws CalendarError {
         int index = value - MIN;
         
         if (index < 0 || index >= COUNT)
             throw new CalendarError.INVALID("Invalid day of week value %d", value);
         
-        switch (first) {
-            case First.MONDAY:
+        switch (first_of_week) {
+            case FirstOfWeek.MONDAY:
                 return days_of_week_monday[index];
             
-            case First.SUNDAY:
+            case FirstOfWeek.SUNDAY:
                 return days_of_week_sunday[index];
             
             default:
@@ -145,9 +133,9 @@ public class DayOfWeek : BaseObject, Gee.Hashable<DayOfWeek> {
      * Should only be used by internal calls when value is known to be safe and doesn't originate
      * from external sources, like a file, network, or user-input.
      */
-    internal static DayOfWeek for_checked(int value, First first) {
+    internal static DayOfWeek for_checked(int value, FirstOfWeek first_of_week) {
         try {
-            return for(value, first);
+            return for(value, first_of_week);
         } catch (CalendarError calerr) {
             error("%s", calerr.message);
         }
@@ -157,7 +145,24 @@ public class DayOfWeek : BaseObject, Gee.Hashable<DayOfWeek> {
         assert(date.valid());
         
         // GLib.Weekday is Monday-first
-        return for_checked(date.get_weekday(), First.MONDAY);
+        return for_checked(date.get_weekday(), FirstOfWeek.MONDAY);
+    }
+    
+    /**
+     * The one-based ordinal value of the day of the week, depended on what the definition of
+     * the first day of the week.
+     */
+    public int ordinal(FirstOfWeek first_of_week) {
+        switch (first_of_week) {
+            case FirstOfWeek.MONDAY:
+                return value_monday;
+            
+            case FirstOfWeek.SUNDAY:
+                return value_sunday;
+            
+            default:
+                assert_not_reached();
+        }
     }
     
     public bool equal_to(DayOfWeek other) {
