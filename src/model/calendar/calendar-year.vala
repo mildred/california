@@ -37,19 +37,17 @@ public class Year : DateSpan, Gee.Comparable<Year>, Gee.Hashable<Year> {
         }
     }
     
+    /**
+     * Create a {@link Year} for the current time in the specified timezone.
+     */
+    public Year.now(TimeZone tz = new TimeZone.local()) {
+        this(new DateTime.now(tz).get_year());
+    }
+    
     internal Year.from_gdate(GLib.Date gdate) {
         assert(gdate.valid());
         
         this(gdate.get_year());
-    }
-    
-    /**
-     * Create a {@link Year} for the current time in the specified timezone.
-     */
-    public static Year current(TimeZone tz = new TimeZone.local()) {
-        DateTime now = new DateTime.now(tz);
-        
-        return new Year(now.get_year());
     }
     
     public int compare_to(Year other) {

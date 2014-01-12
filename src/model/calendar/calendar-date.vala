@@ -46,6 +46,27 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
         this.year = year;
     }
     
+    /**
+     * Creates a {@link Date} for the DateTime.
+     */
+    public Date.date_time(DateTime date_time) {
+        day_of_month = DayOfMonth.for_checked(date_time.get_day_of_month());
+        month = Month.for_checked(date_time.get_month());
+        year = new Year(date_time.get_year());
+        
+        gdate.set_dmy(day_of_month.to_date_day(), month.to_date_month(), year.to_date_year());
+        assert(gdate.valid());
+        
+        day_of_week = DayOfWeek.from_gdate(gdate);
+    }
+    
+    /**
+     * Creates a {@link Date} that corresponds to the current time in the specified timezone.
+     */
+    public Date.now(TimeZone tz = new TimeZone.local()) {
+        this.date_time(new DateTime.now(tz));
+    }
+    
     internal Date.from_gdate(GLib.Date gdate) {
         assert(gdate.valid());
         
@@ -55,6 +76,13 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
         day_of_month = DayOfMonth.from_gdate(gdate);
         month = Month.from_gdate(gdate);
         year = new Year.from_gdate(gdate);
+    }
+    
+    /**
+     * Returns true if the {@link Date} corresponds with the current time.
+     */
+    public bool is_now(TimeZone tz = new TimeZone.local()) {
+        return equal_to(new Date.now(tz));
     }
     
     /**

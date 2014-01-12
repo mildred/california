@@ -41,10 +41,10 @@ public class MonthOfYear : DateSpan, Gee.Comparable<MonthOfYear>, Gee.Hashable<M
     }
     
     /**
-     * Returns the current {@link MonthYear}.
+     * Returns the {@link MonthYear} for the current time in the specified timezone.
      */
-    public static MonthOfYear current(TimeZone tz = new TimeZone.local()) {
-        return new MonthOfYear(Month.current(tz), Year.current(tz));
+    public MonthOfYear.now(TimeZone tz = new TimeZone.local()) {
+        this(Month.current(tz), new Year.now(tz));
     }
     
     /**
@@ -67,6 +67,15 @@ public class MonthOfYear : DateSpan, Gee.Comparable<MonthOfYear>, Gee.Hashable<M
      */
     public Date date_for(DayOfMonth day_of_month) throws CalendarError {
         return new Date(day_of_month, month, year);
+    }
+    
+    /**
+     * Returns a {@link MonthOfYear} adjusted a quantity of months from this one.
+     *
+     * Subtraction (adjusting to a past date) is acheived by using a negative quantity.
+     */
+    public MonthOfYear adjust(int quantity) {
+        return start_date.adjust(quantity, Unit.MONTH).month_of_year();
     }
     
     public int compare_to(MonthOfYear other) {

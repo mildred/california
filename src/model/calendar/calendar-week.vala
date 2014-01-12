@@ -20,12 +20,16 @@ namespace California.Calendar {
 
 public class Week : DateSpan, Gee.Hashable<Week> {
     /**
-     * The one-based week of the month (1 to 5).
+     * The one-based week of the month (1 to 6).
      */
     public int week_of_month { get; private set; }
     
     /**
      * The one-based week of the year (1 to 52).
+     *
+     * If the start of the week is before the first day of {@link month_of_year}, this value will
+     * be zero.
+     *
      */
     public int week_of_year { get; private set; }
     
