@@ -57,17 +57,17 @@ public class Month : BaseObject, Gee.Comparable<Month>, Gee.Hashable<Month> {
         
         this.value = value;
         
-        // GLib's Date.strftime requires a fullly-formed struct to get strings, so fake it
+        // GLib's Date.strftime requires a fully-formed struct to get strings, so fake it
         // and stash
         GLib.Date date = GLib.Date();
         date.clear();
         date.set_dmy(1, to_date_month(), 2014);
         
         char[] buf = new char[64];
-        date.strftime(buf, "%b");
+        date.strftime(buf, FMT_MONTH_ABBREV);
         abbrev_name = (string) buf;
         
-        date.strftime(buf, "%B");
+        date.strftime(buf, FMT_MONTH_FULL);
         full_name = (string) buf;
         
         informal_number = "%d".printf(value);

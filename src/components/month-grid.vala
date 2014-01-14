@@ -13,7 +13,10 @@ namespace California.Component {
  */
 
 public class MonthGrid : Gtk.Grid {
-    public const int NUM_WEEKS = 6;
+    // days of the week
+    public const int COLS = Calendar.DayOfWeek.COUNT;
+    // weeks of the month
+    public const int ROWS = 6;
     
     public const string PROP_MONTH_OF_YEAR = "month-of-year";
     public const string PROP_FIRST_OF_WEEK = "first-of-week";
@@ -41,24 +44,24 @@ public class MonthGrid : Gtk.Grid {
      */
     public MonthGrid(Calendar.MonthOfYear? month_of_year) {
         column_homogeneous = true;
-        column_spacing = 2;
+        column_spacing = 0;
         row_homogeneous = true;
-        row_spacing = 2;
+        row_spacing = 0;
         
         if (month_of_year != null)
             this.month_of_year = month_of_year;
         
         // prep the grid with a fixed number of rows and columns
-        for (int week = 0; week < NUM_WEEKS; week++)
+        for (int row = 0; row < ROWS; row++)
             insert_row(0);
         
-        for (int dofw = 0; dofw < Calendar.DayOfWeek.COUNT; dofw++)
+        for (int col = 0; col < COLS; col++)
             insert_column(0);
         
         // pre-add grid elements for every cell, which are updated when the MonthYear changes
-        for (int row = 0; row < NUM_WEEKS; row++) {
-            for (int col = 0; col < Calendar.DayOfWeek.COUNT; col++)
-                attach(new MonthGridCell(col, row), col, row, 1, 1);
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++)
+                attach(new MonthGridCell(row, col), col, row, 1, 1);
         }
         
         update();
@@ -69,15 +72,15 @@ public class MonthGrid : Gtk.Grid {
     }
     
     private MonthGridCell get_cell(int row, int col) {
-        assert(row < NUM_WEEKS);
-        assert(col < Calendar.DayOfWeek.COUNT);
+        assert(row >= 0 && row < ROWS);
+        assert(col >= 0 && col < COLS);
         
         return (MonthGridCell) get_child_at(col, row);
     }
     
     private void clear() {
-        for (int row = 0; row < NUM_WEEKS; row++) {
-            for (int col = 0; col < Calendar.DayOfWeek.COUNT; col++)
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++)
                 get_cell(row, col).date = null;
         }
     }
@@ -94,6 +97,8 @@ public class MonthGrid : Gtk.Grid {
             foreach (Calendar.Date date in week) {
                 int col = date.day_of_week.ordinal(first_of_week) - 1;
                 
+                // if the date is in the month or configured to show days outside the month, set
+                // the cell to show that date; otherwise, it'll be cleared
                 get_cell(row, col).date = (date in month_of_year) || show_outside_month ? date : null;
             }
         }

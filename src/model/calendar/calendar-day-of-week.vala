@@ -70,10 +70,10 @@ public class DayOfWeek : BaseObject, Gee.Hashable<DayOfWeek> {
             int offset = (int) date.get_weekday() - 1;
             assert(offset >= 0 && offset < COUNT);
             
-            date.strftime(buf, "%a");
+            date.strftime(buf, FMT_DAY_OF_WEEK_ABBREV);
             abbrevs[offset] = (string) buf;
             
-            date.strftime(buf, "%A");
+            date.strftime(buf, FMT_DAY_OF_WEEK_FULL);
             fulls[offset] = (string) buf;
             
             date.add_days(1);

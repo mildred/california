@@ -26,6 +26,16 @@ public class MonthOfYear : DateSpan, Gee.Comparable<MonthOfYear>, Gee.Hashable<M
      */
     public int days_in_month { get; private set; }
     
+    /**
+     * Full name for user display.
+     */
+    public string full_name { get; private set; }
+    
+    /**
+     * Abbreviated name for user display.
+     */
+    public string abbrev_name { get; private set; }
+    
     public MonthOfYear(Month month, Year year) {
         base.uninitialized();
         
@@ -38,6 +48,9 @@ public class MonthOfYear : DateSpan, Gee.Comparable<MonthOfYear>, Gee.Hashable<M
         } catch (CalendarError calerr) {
             error("Unable to generate first/last days of month for %s: %s", to_string(), calerr.message);
         }
+        
+        full_name = start_date.format(FMT_MONTH_YEAR_FULL);
+        abbrev_name = start_date.format(FMT_MONTH_YEAR_ABBREV);
     }
     
     /**
