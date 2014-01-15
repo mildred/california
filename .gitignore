@@ -1,5 +1,6 @@
 *~
 .deps
+.valencia
 *_vala.stamp
 Makefile
 Makefile.in
@@ -25,4 +26,5 @@ missing
 stamp-it
 stamp-h1
 po/POTFILES
-.valencia
+vapi/libecal-1.2/libecal-1.2.gi
+

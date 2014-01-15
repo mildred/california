@@ -43,11 +43,14 @@ california_RC = \
 	rc/app-menu.interface
 
 california_VALAFLAGS = \
-	--fatal-warnings -g --enable-checking --thread \
+	--fatal-warnings -g --enable-checking --vapidir $(top_srcdir)/vapi\
 	--pkg gtk+-3.0 \
 	--pkg gio-2.0 \
 	--pkg posix \
 	--pkg gee-0.8 \
+	--pkg libedataserver-1.2 \
+	--pkg libecal-1.2 \
+	--pkg libical \
 	$(NULL)
 
 california_CFLAGS = \

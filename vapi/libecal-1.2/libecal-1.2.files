@@ -1,0 +1,15 @@
+include/evolution-data-server/libecal/e-cal-time-util.h
+include/evolution-data-server/libecal/e-cal-check-timezones.h
+include/evolution-data-server/libecal/e-cal-client-view.h
+include/evolution-data-server/libecal/e-cal-enumtypes.h
+include/evolution-data-server/libecal/e-cal-recur.h
+include/evolution-data-server/libecal/e-cal-time-util.h
+include/evolution-data-server/libecal/e-cal-util.h
+include/evolution-data-server/libecal/e-timezone-cache.h
+include/evolution-data-server/libecal/e-cal-client.h
+include/evolution-data-server/libecal/e-cal-component.h
+include/evolution-data-server/libecal/e-cal.h
+include/evolution-data-server/libecal/e-cal-system-timezone.h
+include/evolution-data-server/libecal/e-cal-types.h
+include/evolution-data-server/libecal/e-cal-view.h
+lib/libecal-1.2.so
