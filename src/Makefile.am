@@ -1,4 +1,4 @@
-NULL = 
+NULL =
 
 AM_CPPFLAGS = \
 	$(CALIFORNIA_CFLAGS) \
@@ -86,8 +86,13 @@ DISTCLEANFILES = \
 	Makefile.in \
 	$(NULL)
 
+GITIGNOREFILES = \
+	$(california_VALASOURCES:%.vala=%.c) \
+	$(NULL)
+
 .PHONY: devclean
 devclean: clean
 	rm -f california_vala.stamp
 	rm -f $(california_VALASOURCES:%.vala=%.c)
 
+-include $(top_srcdir)/git.mk
