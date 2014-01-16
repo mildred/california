@@ -10,6 +10,9 @@
  * Most of the classes here are immutable and defined as GObjects to make them easier to use in
  * Vala and with support libraries.  The "core" logic relies heavily on GLib's Date, Time, and
  * DateTime classes.
+ *
+ * {@link Calendar.init} should be invoked prior to using any class in this namespace.  Call
+ * {@link Calendar.terminate} when the application is closing.
  */
 
 namespace California.Calendar {

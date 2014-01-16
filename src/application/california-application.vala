@@ -59,14 +59,18 @@ public class Application : Gtk.Application {
         
         // unit initialization
         Calendar.init();
+        Backing.init();
         
         add_action_entries(action_entries, this);
         set_app_menu(Resource.load<MenuModel>("app-menu.interface", "app-menu"));
+        
+        Backing.Manager.instance.open_async.begin(null, on_backing_manager_opened);
     }
     
     // This method is invoked when the main loop terminates on the primary instance.
     public override void shutdown() {
         // unit termination
+        Backing.terminate();
         Calendar.terminate();
         
         base.shutdown();
@@ -83,6 +87,23 @@ public class Application : Gtk.Application {
         }
         
         base.activate();
+    }
+    
+    // Presents a modal error dialog to the user
+    public void error_message(string msg) {
+        Gtk.MessageDialog dialog = new Gtk.MessageDialog(main_window, Gtk.DialogFlags.MODAL,
+            Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "%s", msg);
+        dialog.run();
+        dialog.destroy();
+    }
+    
+    private void on_backing_manager_opened(Object? source, AsyncResult result) {
+        try {
+            Backing.Manager.instance.open_async.end(result);
+        } catch (Error err) {
+            error_message(_("Unable to open California: %s").printf(err.message));
+            quit();
+        }
     }
     
     private void on_about() {

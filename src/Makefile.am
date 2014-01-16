@@ -13,6 +13,15 @@ california_VALASOURCES = \
 	application/california-application.vala \
 	application/resource.vala \
 	\
+	backing/backing.vala \
+	backing/backing-calendar-source.vala \
+	backing/backing-manager.vala \
+	backing/backing-source.vala \
+	backing/backing-store.vala \
+	\
+	backing/eds/backing-eds-calendar-source.vala \
+	backing/eds/backing-eds-store.vala \
+	\
 	base/base-object.vala \
 	\
 	components/main-window.vala \
