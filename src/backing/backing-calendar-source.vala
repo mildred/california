@@ -21,7 +21,7 @@ public abstract class CalendarSource : Source {
     /**
      * Obtain a {@link CalendarSourceSubscription} for the specified date window.
      */
-    public abstract async CalendarSourceSubscription subscribe_async(Calendar.DateSpan window,
+    public abstract async CalendarSourceSubscription subscribe_async(Calendar.DateTimeSpan window,
         Cancellable? cancellable = null) throws Error;
 }
 

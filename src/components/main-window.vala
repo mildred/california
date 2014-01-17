@@ -16,12 +16,28 @@ public class MainWindow : Gtk.ApplicationWindow {
     public Calendar.MonthOfYear month_of_year { get; private set; }
     
     private MonthGrid grid = new MonthGrid(null);
+    private Gee.ArrayList<Backing.CalendarSourceSubscription> subscriptions = new Gee.ArrayList<
+        Backing.CalendarSourceSubscription>();
     
     public MainWindow(Application app) {
         Object (application: app);
         
         title = Application.TITLE;
         set_size_request(800, 600);
+        
+        notify[PROP_MONTH_OF_YEAR].connect(() => {
+            Calendar.DateTimeSpan window = new Calendar.DateTimeSpan.from_date_span(month_of_year,
+                new TimeZone.local());
+            
+            subscriptions.clear();
+            foreach (Backing.Store store in Backing.Manager.instance.get_stores()) {
+                foreach (Backing.Source source in store.get_sources_of_type(typeof (Backing.CalendarSource))) {
+                    Backing.CalendarSource calendar = (Backing.CalendarSource) source;
+                    debug("Subscribing to %s...", calendar.to_string());
+                    calendar.subscribe_async.begin(window, null, on_subscribed);
+                }
+            }
+        });
         
         // bind the MonthGrid's setting to ours
         bind_property(PROP_MONTH_OF_YEAR, grid, MonthGrid.PROP_MONTH_OF_YEAR);
@@ -67,6 +83,19 @@ public class MainWindow : Gtk.ApplicationWindow {
         button.always_show_image = true;
         
         return new Gtk.ToolButton(button, null);
+    }
+    
+    private void on_subscribed(Object? source, AsyncResult result) {
+        Backing.CalendarSource calendar = (Backing.CalendarSource) source;
+        
+        try {
+            Backing.CalendarSourceSubscription subscription = calendar.subscribe_async.end(result);
+            debug("Subscribed to %s", calendar.to_string());
+            subscriptions.add(subscription);
+            subscription.start();
+        } catch (Error err) {
+            debug("Unable to subscribe to %s: %s", calendar.to_string(), err.message);
+        }
     }
 }
 

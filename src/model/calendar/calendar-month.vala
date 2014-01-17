@@ -31,6 +31,11 @@ public class Month : BaseObject, Gee.Comparable<Month>, Gee.Hashable<Month> {
     private static Month[]? months = null;
     
     /**
+     * The one-based integer value of this month.
+     */
+    public int value { get; private set; }
+    
+    /**
      * A locale-specific abbreviated name for the month.
      */
     public string abbrev_name { get; private set; }
@@ -49,8 +54,6 @@ public class Month : BaseObject, Gee.Comparable<Month>, Gee.Hashable<Month> {
      * The month number as a formal (leading zero) string.
      */
     public string formal_number { get; private set; }
-    
-    private int value;
     
     private Month(int value) {
         assert(value >= MIN && value <= MAX);

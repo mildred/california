@@ -34,13 +34,18 @@ internal class EdsCalendarSource : CalendarSource {
         client = null;
     }
     
-    public override async CalendarSourceSubscription subscribe_async(Calendar.DateSpan window,
+    public override async CalendarSourceSubscription subscribe_async(Calendar.DateTimeSpan window,
         Cancellable? cancellable = null) throws Error {
         if (client == null)
             throw new BackingError.UNAVAILABLE("%s has been removed", to_string());
         
+        // construct s-expression describing the CalClientView's purview
+        string sexp = "occur-in-time-range? (make-time \"%s\") (make-time \"%s\")".printf(
+            E.isodate_from_time_t((time_t) window.start_date_time.to_unix()),
+            E.isodate_from_time_t((time_t) window.end_date_time.to_unix()));
+        
         E.CalClientView view;
-        yield client.get_view("", cancellable, out view);
+        yield client.get_view(sexp, cancellable, out view);
         
         return new EdsCalendarSourceSubscription(this, window, view);
     }

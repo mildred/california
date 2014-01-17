@@ -154,6 +154,24 @@ public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date> {
         return new WeekSpan(this, first_of_week);
     }
     
+    /**
+     * Returns the earliest DateTime for this {@link DateSpan}.
+     *
+     * @see Date.earliest_date_time
+     */
+    public DateTime earliest_date_time(TimeZone tz) {
+        return start_date.earliest_date_time(tz);
+    }
+    
+    /**
+     * Returns the latest DateTime for this {@link DateSpan}.
+     *
+     * @see Date.latest_date_time
+     */
+    public DateTime latest_date_time(TimeZone tz) {
+        return end_date.latest_date_time(tz);
+    }
+    
     public override string to_string() {
         return "%s::%s".printf(start_date.to_string(), end_date.to_string());
     }

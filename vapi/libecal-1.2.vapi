@@ -32,7 +32,7 @@ namespace E {
 		public void generate_instances (time_t start, time_t end, GLib.Cancellable? cancellable, E.CalRecurInstanceFn cb, void* cb_data, owned GLib.DestroyNotify? destroy_cb_data);
 		public void generate_instances_for_object (iCal.icalcomponent icalcomp, ulong start, ulong end, GLib.Cancellable? cancellable, E.CalRecurInstanceFn cb, void* cb_data, owned GLib.DestroyNotify? destroy_cb_data);
 		public void generate_instances_for_object_sync (iCal.icalcomponent icalcomp, ulong start, ulong end, E.CalRecurInstanceFn cb, void* cb_data);
-		public void generate_instances_sync (ulong start, ulong end, E.CalRecurInstanceFn cb, void* cb_data);
+		public void generate_instances_sync (time_t start, time_t end, [CCode (delegate_target_pos = 3.9)] E.CalRecurInstanceFn cb);
 		public async bool get_attachment_uris (string uid, string rid, GLib.Cancellable? cancellable) throws GLib.Error;
 		public bool get_attachment_uris_sync (string uid, string rid, GLib.SList out_attachment_uris, GLib.Cancellable? cancellable) throws GLib.Error;
 		public unowned string get_component_as_string (iCal.icalcomponent icalcomp);
@@ -533,7 +533,7 @@ namespace E {
 		AnyType
 	}
 	[CCode (cheader_filename = "libecal/libecal.h")]
-	public delegate bool CalRecurInstanceFn (E.CalComponent comp, ulong instance_start, ulong instance_end);
+	public delegate bool CalRecurInstanceFn (E.CalComponent comp, time_t instance_start, time_t instance_end);
 	[CCode (cheader_filename = "libecal/libecal.h")]
 	public delegate iCal.icaltimezone CalRecurResolveTimezoneFn (string tzid);
 	[CCode (cheader_filename = "libecal/libecal.h")]
@@ -615,7 +615,7 @@ namespace E {
 	[CCode (cheader_filename = "libecal/libecal.h", cname = "icaltimetype_to_tm_with_zone")]
 	public static void* icaltimetype_to_tm_with_zone (void* itt, iCal.icaltimezone from_zone, iCal.icaltimezone to_zone);
 	[CCode (cheader_filename = "libecal/libecal.h", cname = "isodate_from_time_t")]
-	public static unowned string isodate_from_time_t (ulong t);
+	public static string isodate_from_time_t (time_t t);
 	[CCode (cheader_filename = "libecal/libecal.h", cname = "time_add_day")]
 	public static ulong time_add_day (ulong time, int days);
 	[CCode (cheader_filename = "libecal/libecal.h", cname = "time_add_day_with_zone")]

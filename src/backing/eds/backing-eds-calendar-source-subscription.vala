@@ -16,7 +16,7 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
     private bool started = false;
     
     // Called from EdsCalendarSource.subscribe_async().  The CalClientView should not be started
-    public EdsCalendarSourceSubscription(EdsCalendarSource eds_calendar, Calendar.DateSpan window,
+    public EdsCalendarSourceSubscription(EdsCalendarSource eds_calendar, Calendar.DateTimeSpan window,
         E.CalClientView view) {
         base (eds_calendar, window);
         
@@ -30,11 +30,21 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
         
         started = true;
         
-        // go async
-        start_async.begin(cancellable, on_start_completed);
+        try {
+            internal_start(cancellable);
+        } catch (Error err) {
+            start_failed(err);
+            
+            return;
+        }
+        
+        // done
+        // TODO: If async version of generate instances is used, this will need to be set when that
+        // completes
+        active = true;
     }
     
-    private async void start_async(Cancellable? cancellable) throws Error {
+    private void internal_start(Cancellable? cancellable) throws Error {
         // prepare flags and fields of interest .. don't want known events delivered via signals
         view.set_fields_of_interest(null);
         view.set_flags(E.CalClientViewFlags.NONE);
@@ -49,19 +59,22 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
         view.start();
         
         // prime with the list of known events
+        // TODO: Use asynchronous version of this call
+        debug("generating for %s...", to_string());
+        view.client.generate_instances_sync(
+            (time_t) window.start_date_time.to_unix(),
+            (time_t) window.end_date_time.to_unix(),
+            on_instance_generated);
     }
     
-    private void on_start_completed(Object? source, AsyncResult result) {
-        try {
-            start_async.end(result);
-        } catch (Error err) {
-            start_failed(err);
-            
-            return;
-        }
+    private bool on_instance_generated(E.CalComponent eds_component, time_t instance_start,
+        time_t instance_end) {
+        E.CalComponentText text;
+        eds_component.get_summary(out text);
         
-        // ready
-        active = true;
+        debug("%s: generated %s", to_string(), text.value);
+        
+        return true;
     }
     
     private void on_objects_added(SList<weak iCal.icalcomponent> objects) {

@@ -34,6 +34,7 @@ california_VALASOURCES = \
 	\
 	model/calendar/calendar.vala \
 	model/calendar/calendar-date-span.vala \
+	model/calendar/calendar-date-time-span.vala \
 	model/calendar/calendar-day-of-month.vala \
 	model/calendar/calendar-day-of-week.vala \
 	model/calendar/calendar-date.vala \

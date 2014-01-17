@@ -63,7 +63,7 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
     /**
      * Creates a {@link Date} that corresponds to the current time in the specified timezone.
      */
-    public Date.now(TimeZone tz = new TimeZone.local()) {
+    public Date.now(TimeZone tz) {
         this.date_time(new DateTime.now(tz));
     }
     
@@ -76,13 +76,6 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
         day_of_month = DayOfMonth.from_gdate(gdate);
         month = Month.from_gdate(gdate);
         year = new Year.from_gdate(gdate);
-    }
-    
-    /**
-     * Returns true if the {@link Date} corresponds with the current time.
-     */
-    public bool is_now(TimeZone tz = new TimeZone.local()) {
-        return equal_to(new Date.now(tz));
     }
     
     /**
@@ -147,6 +140,36 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
      */
     public MonthOfYear month_of_year() {
         return new MonthOfYear(month, year);
+    }
+    
+    /**
+     * Returns the {@link Date} as the earliest DateTime possible for the specified TimeZone.
+     *
+     * @see latest_date_time
+     * @see to_date_time
+     */
+    public DateTime earliest_date_time(TimeZone tz) {
+        return to_date_time(tz, 0, 0, 0.0);
+    }
+    
+    /**
+     * Returns the {@link Date} as the latest DateTime possible for the specified TimeZone.
+     *
+     * By latest, the precision of DateTime.seconds will be 59.0.  If more precision is
+     * necessary, use {@link to_date_time}.
+     *
+     * @see earliest_date_time
+     * @see to_date_time
+     */
+    public DateTime latest_date_time(TimeZone tz) {
+        return to_date_time(tz, 23, 59, 59.0);
+    }
+    
+    /**
+     * Returns a DateTime within the {@link Date}.
+     */
+    public DateTime to_date_time(TimeZone tz, int hour, int minute, double seconds) {
+        return new DateTime(tz, year.value, month.value, day_of_month.value, hour, minute, seconds);
     }
     
     /**

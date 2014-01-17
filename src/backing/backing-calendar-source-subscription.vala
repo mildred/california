@@ -7,8 +7,10 @@
 namespace California.Backing {
 
 /**
- * An active date span of interest that can notify of calendar event updates and list complete
- * collections of the same.
+ * A subscription to an active timespan of interest of a calendar.
+ *
+ * The subscription can notify of calendar event updates and list a complete or partial collections
+ * of the same.
  */
 
 public abstract class CalendarSourceSubscription : BaseObject {
@@ -18,11 +20,11 @@ public abstract class CalendarSourceSubscription : BaseObject {
     public CalendarSource calendar { get; private set; }
     
     /**
-     * The date window.
+     * The date-time window.
      *
      * This represents the span of time of interest for thie calendar source.
      */
-    public Calendar.DateSpan window { get; private set; }
+    public Calendar.DateTimeSpan window { get; private set; }
     
     /**
      * Indicates the subscription is running (started).
@@ -74,7 +76,7 @@ public abstract class CalendarSourceSubscription : BaseObject {
      */
     public signal void start_failed(Error err);
     
-    protected CalendarSourceSubscription(CalendarSource calendar, Calendar.DateSpan window) {
+    protected CalendarSourceSubscription(CalendarSource calendar, Calendar.DateTimeSpan window) {
         this.calendar = calendar;
         this.window = window;
     }

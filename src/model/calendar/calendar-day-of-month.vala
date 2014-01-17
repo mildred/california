@@ -20,6 +20,11 @@ public class DayOfMonth : BaseObject, Gee.Comparable<DayOfMonth>, Gee.Hashable<D
     private static DayOfMonth[]? days = null;
     
     /**
+     * The one-based integer value of this day of the month.
+     */
+    public int value { get; private set; }
+    
+    /**
      * Returns the day number as an informal (no leading zero) string.
      */
     public string informal_number { get; private set; }
@@ -28,8 +33,6 @@ public class DayOfMonth : BaseObject, Gee.Comparable<DayOfMonth>, Gee.Hashable<D
      * Returns the day number as a formal (leading zero) string.
      */
     public string formal_number { get; private set; }
-    
-    private int value;
     
     private DayOfMonth(int value) {
         assert(value >= MIN && value <= MAX);

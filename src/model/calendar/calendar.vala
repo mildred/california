@@ -54,7 +54,7 @@ public void init() {
     
     // TODO: Tie this into the event loop so it's properly updated; also make it a property of
     // an instance so it can be monitored
-    today = new Date.now();
+    today = new Date.now(new TimeZone.local());
 }
 
 public void terminate() {
