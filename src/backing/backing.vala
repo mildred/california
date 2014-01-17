@@ -27,9 +27,14 @@ namespace California.Backing {
 private int init_count = 0;
 
 public void init() {
-    if (init_count++ > 0)
+    if (!InitGuard.do_init(ref init_count))
         return;
     
+    // external unit init
+    Calendar.init();
+    Component.init();
+    
+    // internal class init
     Manager.init();
     
     // Register all Stores here
@@ -37,10 +42,13 @@ public void init() {
 }
 
 public void terminate() {
-    if (--init_count > 0)
+    if (!InitGuard.do_terminate(ref init_count))
         return;
     
     Manager.terminate();
+    
+    Component.terminate();
+    Calendar.terminate();
 }
 
 }

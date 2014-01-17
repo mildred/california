@@ -34,7 +34,7 @@ private static string FMT_DAY_OF_WEEK_FULL;
 private static string FMT_DAY_OF_WEEK_ABBREV;
 
 public void init() {
-    if (init_count++ > 0)
+    if (!InitGuard.do_init(ref init_count))
         return;
     
     // TODO: Properly fetch these from gettext() so the user's locale is respected (not just their
@@ -47,6 +47,7 @@ public void init() {
     FMT_DAY_OF_WEEK_FULL = _("%A");
     FMT_DAY_OF_WEEK_ABBREV = _("%a");
     
+    // internal class init
     DayOfWeek.init();
     DayOfMonth.init();
     Month.init();
@@ -57,7 +58,7 @@ public void init() {
 }
 
 public void terminate() {
-    if (--init_count > 0)
+    if (!InitGuard.do_terminate(ref init_count))
         return;
     
     today = null;

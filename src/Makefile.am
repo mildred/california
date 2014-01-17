@@ -15,13 +15,17 @@ california_VALASOURCES = \
 	\
 	backing/backing.vala \
 	backing/backing-calendar-source.vala \
+	backing/backing-calendar-source-subscription.vala \
+	backing/backing-error.vala \
 	backing/backing-manager.vala \
 	backing/backing-source.vala \
 	backing/backing-store.vala \
 	\
 	backing/eds/backing-eds-calendar-source.vala \
+	backing/eds/backing-eds-calendar-source-subscription.vala \
 	backing/eds/backing-eds-store.vala \
 	\
+	base/base-init-guard.vala \
 	base/base-object.vala \
 	\
 	components/main-window.vala \
@@ -41,6 +45,12 @@ california_VALASOURCES = \
 	model/calendar/calendar-week.vala \
 	model/calendar/calendar-week-span.vala \
 	model/calendar/calendar-year.vala \
+	\
+	model/component/component.vala \
+	model/component/component-instance.vala \
+	model/component/component-event.vala \
+	model/component/component-uid.vala \
+	\
 	$(NULL)
 
 california_SOURCES = \

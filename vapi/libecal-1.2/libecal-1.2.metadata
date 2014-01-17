@@ -18,10 +18,11 @@ ECalObjModType hidden="1"
 ECal hidden="1" # deprecated@3.2
 ECalAuthFunc hidden="1" # depends on ECal
 
-ECalChange is_value_type="1" cheader_filename="libecal/e-cal-types.h"
-ECalChangeType cheader_filename="libecal/e-cal-types.h"
+ECalChange is_value_type="1"
 
-ECalClient type_id="e_cal_client_get_type ()" cheader_filename="libecal/e-cal-client.h"
+ECalClient type_id="e_cal_client_get_type ()"
+
+e_cal_client_connect async="1" finish_name="e_cal_client_connect_finish"
 
 e_cal_client_add_timezone async="1"
 
@@ -41,8 +42,11 @@ e_cal_client_error_create transfer_ownership="1"
 e_cal_client_free_ecalcomp_slist.ecalcomps type_arguments="E.CalComponent"
 e_cal_client_free_icalcomp_slist.ecalcomps type_arguments="iCal.CalComponent"
 
+e_cal_client_generate_instances.start type_name="time_t"
+e_cal_client_generate_instances.end type_name="time_t"
 e_cal_client_generate_instances.cancellable nullable="1"
 e_cal_client_generate_instances.destroy_cb_data value_owned="1" nullable="1"
+
 e_cal_client_generate_instances_for_object.cancellable nullable="1"
 e_cal_client_generate_instances_for_object.destroy_cb_data value_owned="1" nullable="1"
 
@@ -94,9 +98,10 @@ e_cal_client_get_timezone_finish.zone is_out="1" value_owned="1"
 e_cal_client_get_timezone_sync.cancellable nullable="1"
 e_cal_client_get_timezone_sync.zone is_out="1" value_owned="1"
 
-e_cal_client_get_view async="1"
+e_cal_client_get_view async="1" finish_name="e_cal_client_get_view_finish"
 e_cal_client_get_view.cancellable nullable="1"
-e_cal_client_get_view_finish.view is_out="1" value_owned="1"
+e_cal_client_get_view_finish.view is_out="1" value_owned="0"
+
 e_cal_client_get_view_sync.cancellable nullable="1"
 e_cal_client_get_view_sync.view is_out="1" value_owned="1"
 
@@ -121,17 +126,13 @@ e_cal_client_send_objects_sync.cancellable nullable="1"
 e_cal_client_send_objects_sync.users is_out="1" value_owned="1" type_arguments="string"
 e_cal_client_send_objects_sync.modified_icalcomp is_out="1" value_owned="1"
 
-ECalClientError cheader_filename="libecal/e-cal-client.h"
-ECalClientSourceType cheader_filename="libecal/e-cal-client.h"
-ECalClientSourceTypeEnum cheader_filename="libecal/e-cal-client.h"
-
-ECalClientView cheader_filename="libecal/e-cal-client-view.h"
 ECalClientView:client owned_get="1" accessor_method="0"
 ECalClientView::objects_added.objects type_name="GLib.SList" type_arguments="unowned iCal.icalcomponent"
 ECalClientView::objects_modified.objects type_name="GLib.SList" type_arguments="unowned iCal.icalcomponent"
 ECalClientView::objects_removed.uids type_name="GLib.SList" type_arguments="unowned E.CalComponentId?"
 
-ECalComponent cheader_filename="libecal/e-cal-component.h"
+e_cal_client_view_set_fields_of_interest.fields_of_interest nullable="1"
+
 e_cal_component_gen_uid transfer_ownership="1"
 e_cal_component_get_alarm_uids transfer_ownership="1"
 e_cal_component_get_as_string transfer_ownership="1"
@@ -179,7 +180,6 @@ e_cal_component_set_geo.geo type_name="iCal.icalgeotype"
 e_cal_component_set_icalcomponent.icalcomp value_owned="1"
 e_cal_component_set_last_modified.t type_name="iCal.icaltimetype"
 
-ECalComponentAlarm cheader_filename="libecal/e-cal-component.h"
 e_cal_component_alarm_clone transfer_ownership="1"
 e_cal_component_alarm_get_action.action is_out="1" value_owned="1"
 e_cal_component_alarm_get_attach.attach is_out="1" value_owned="1"
@@ -187,53 +187,26 @@ e_cal_component_alarm_get_attendee_list.attendee_list is_out="1" value_owned="1"
 e_cal_component_alarm_get_description.description is_out="1" value_owned="1"
 e_cal_component_alarm_get_icalcomponent transfer_ownership="1"
 
-ECalComponentAlarmAction cheader_filename="libecal/e-cal-component.h"
-ECalComponentAlarmInstance is_value_type="1" cheader_filename="libecal/e-cal-component.h"
-ECalComponentAlarmRepeat is_value_type="1" cheader_filename="libecal/e-cal-component.h"
-ECalComponentAlarmTrigger is_value_type="1" cheader_filename="libecal/e-cal-component.h"
-ECalComponentAlarmTriggerType cheader_filename="libecal/e-cal-component.h"
-ECalComponentAlarms is_value_type="1" cheader_filename="libecal/e-cal-component.h"
-ECalComponentAlarms.alarms type_arguments="E.CalComponentAlarmInstance" cheader_filename="libecal/e-cal-component.h"
-ECalComponentAttendee is_value_type="1" cheader_filename="libecal/e-cal-component.h"
-ECalComponentClassification cheader_filename="libecal/e-cal-component.h"
+ECalComponentAlarmInstance is_value_type="1"
+ECalComponentAlarmRepeat is_value_type="1"
+ECalComponentAlarmTrigger is_value_type="1"
+ECalComponentAlarms is_value_type="1"
+ECalComponentAlarms.alarms type_arguments="E.CalComponentAlarmInstance"
+ECalComponentAttendee is_value_type="1"
 
-ECalComponentDateTime cheader_filename="libecal/e-cal-component.h" is_value_type="1" has_destroy_function="0"
+ECalComponentDateTime is_value_type="1" has_destroy_function="0"
 ECalComponentDateTime.value type_name="iCal.icaltimetype*"
 
-ECalComponentField cheader_filename="libecal/e-cal-component.h"
-ECalComponentId is_value_type="1" cheader_filename="libecal/e-cal-component.h"
-ECalComponentOrganizer is_value_type="1" cheader_filename="libecal/e-cal-component.h"
-ECalComponentPeriod is_value_type="1" cheader_filename="libecal/e-cal-component.h"
-ECalComponentPeriod.start type_name="iCal.icaltimetype" cheader_filename="libecal/e-cal-component.h"
-ECalComponentPeriodType cheader_filename="libecal/e-cal-component.h"
-ECalComponentRange is_value_type="1" cheader_filename="libecal/e-cal-component.h"
-ECalComponentRangeType cheader_filename="libecal/e-cal-component.h"
-ECalComponentText is_value_type="1" cheader_filename="libecal/e-cal-component.h"
-ECalComponentTransparency cheader_filename="libecal/e-cal-component.h"
-ECalComponentVType cheader_filename="libecal/e-cal-component.h"
+ECalComponentId is_value_type="1"
+ECalComponentOrganizer is_value_type="1"
+ECalComponentPeriod is_value_type="1"
+ECalComponentPeriod.start type_name="iCal.icaltimetype"
+ECalComponentRange is_value_type="1"
+ECalComponentText is_value_type="1"
 
-CalObjInstance is_value_type="1" cheader_filename="libecal/e-cal-util.h"
-CalObjModType cheader_filename="libecal/e-cal-util.h"
+CalObjInstance is_value_type="1"
 
-ECalLoadState cheader_filename="libecal/e-cal.h"
-CalMode cheader_filename="libecal/e-cal-util.h"
-ECalSetModeStatus cheader_filename="libecal/e-cal.h"
-ECalSourceType cheader_filename="libecal/e-cal.h"
-ECalendarStatus cheader_filename="libecal/e-cal-types.h"
-EDataCalMode cheader_filename="libecal/e-cal.h"
-ECalRecurInstanceFn cheader_filename="libecal/e-cal-recur.h"
-ECalRecurResolveTimezoneFn transfer_ownership="1" cheader_filename="libecal/e-cal-recur.h"
-
-CAL_BACKEND_PROPERTY* cheader_filename="libecal/e-cal-client.h"
-CAL_STATIC_CAPABILITY* cheader_filename="libecal/e-cal-util.h"
+ECalRecurResolveTimezoneFn transfer_ownership="1"
 
 ECalView hidden="1" # deprecated@3.2
 
-cal_obj_uid_list_free cheader_filename="libecal/e-cal-util.h"
-e_calendar_error_quark cheader_filename="libecal/e-cal-types.h"
-
-icaltimetype_to_tm* cheader_filename="libecal/e-cal-time-util.h"
-isodate_from_time_t cheader_filename="libecal/e-cal-time-util.h"
-tm_to_icaltimetype cheader_filename="libecal/e-cal-time-util.h"
-
-time_* cheader_filename="libecal/e-cal-time-util.h"

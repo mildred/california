@@ -17,6 +17,12 @@ public abstract class CalendarSource : Source {
     protected CalendarSource(string desc) {
         base (desc);
     }
+    
+    /**
+     * Obtain a {@link CalendarSourceSubscription} for the specified date window.
+     */
+    public abstract async CalendarSourceSubscription subscribe_async(Calendar.DateSpan window,
+        Cancellable? cancellable = null) throws Error;
 }
 
 }

@@ -59,6 +59,7 @@ public class Application : Gtk.Application {
         
         // unit initialization
         Calendar.init();
+        Component.init();
         Backing.init();
         
         add_action_entries(action_entries, this);
@@ -71,6 +72,7 @@ public class Application : Gtk.Application {
     public override void shutdown() {
         // unit termination
         Backing.terminate();
+        Component.terminate();
         Calendar.terminate();
         
         base.shutdown();
