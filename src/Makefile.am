@@ -28,9 +28,9 @@ california_VALASOURCES = \
 	base/base-init-guard.vala \
 	base/base-object.vala \
 	\
-	components/main-window.vala \
-	components/month-grid.vala \
-	components/month-grid-cell.vala \
+	views/main-window.vala \
+	views/month-grid.vala \
+	views/month-grid-cell.vala \
 	\
 	model/calendar/calendar.vala \
 	model/calendar/calendar-date-span.vala \
