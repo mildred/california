@@ -140,10 +140,10 @@ namespace E {
 		public void get_completed (out iCal.icaltimetype t);
 		public void get_contact_list (out GLib.SList text_list);
 		public void get_created (out iCal.icaltimetype t);
-		public void get_description_list (out GLib.SList text_list);
-		public void get_dtend (out E.CalComponentDateTime dt);
+		public void get_description_list (out GLib.SList<E.CalComponentText?> text_list);
+		public void get_dtend (ref E.CalComponentDateTime dt);
 		public void get_dtstamp (out iCal.icaltimetype t);
-		public void get_dtstart (out E.CalComponentDateTime dt);
+		public void get_dtstart (ref E.CalComponentDateTime dt);
 		public void get_due (out E.CalComponentDateTime dt);
 		public void get_exdate_list (out GLib.SList exdate_list);
 		public void get_exrule_list (out GLib.SList recur_list);
@@ -167,8 +167,8 @@ namespace E {
 		public void get_status (out iCal.icalproperty_status status);
 		public void get_summary (out E.CalComponentText summary);
 		public void get_transparency (out E.CalComponentTransparency transp);
-		public void get_uid (out string uid);
-		public void get_url (out string url);
+		public void get_uid (out unowned string uid);
+		public void get_url (out unowned string url);
 		public E.CalComponentVType get_vtype ();
 		public bool has_alarms ();
 		public bool has_attachments ();

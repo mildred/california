@@ -69,10 +69,12 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
     
     private bool on_instance_generated(E.CalComponent eds_component, time_t instance_start,
         time_t instance_end) {
-        E.CalComponentText text;
-        eds_component.get_summary(out text);
-        
-        debug("%s: generated %s", to_string(), text.value);
+        try {
+            Component.Event event = new Component.Event(eds_component);
+            debug("generated %s", event.to_string());
+        } catch (CalendarError calerr) {
+            debug("Unable to generate event: %s", calerr.message);
+        }
         
         return true;
     }

@@ -49,7 +49,8 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
     /**
      * Creates a {@link Date} for the DateTime.
      */
-    public Date.date_time(DateTime date_time) {
+    public Date.from_date_time(DateTime date_time) {
+        // Can use for_checked() methods because DateTime can only be created with proper values
         day_of_month = DayOfMonth.for_checked(date_time.get_day_of_month());
         month = Month.for_checked(date_time.get_month());
         year = new Year(date_time.get_year());
@@ -64,7 +65,7 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
      * Creates a {@link Date} that corresponds to the current time in the specified timezone.
      */
     public Date.now(TimeZone tz) {
-        this.date_time(new DateTime.now(tz));
+        this.from_date_time(new DateTime.now(tz));
     }
     
     internal Date.from_gdate(GLib.Date gdate) {

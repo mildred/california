@@ -1768,7 +1768,7 @@ namespace iCal {
 		public int is_utc;
 		public int is_date;
 		public int is_daylight;
-		public weak iCal.icaltimezone zone;
+		public iCal.icaltimezone *zone;
 	}
 	[CCode (cheader_filename = "libical/ical.h")]
 	public struct icaltimezonephase {
@@ -2573,8 +2573,6 @@ namespace iCal {
 	public static void icaltime_adjust (iCal.icaltimetype tt, int days, int hours, int minutes, int seconds);
 	[CCode (cheader_filename = "libical/ical.h", cname = "icaltime_as_ical_string")]
 	public static unowned string icaltime_as_ical_string (iCal.icaltimetype tt);
-	[CCode (cheader_filename = "libical/ical.h", cname = "icaltime_as_ical_string_r")]
-	public static unowned string icaltime_as_ical_string_r (iCal.icaltimetype tt);
 	[CCode (cheader_filename = "libical/ical.h", cname = "icaltime_as_timet")]
 	public static ulong icaltime_as_timet (iCal.icaltimetype p1);
 	[CCode (cheader_filename = "libical/ical.h", cname = "icaltime_as_timet_with_zone")]
