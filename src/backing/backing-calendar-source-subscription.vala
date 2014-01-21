@@ -29,10 +29,24 @@ public abstract class CalendarSourceSubscription : BaseObject {
     /**
      * Indicates the subscription is running (started).
      *
+     * If it's important to know when {@link start} completes in the background, the caller can
+     * watch for this property to change state to true.  {@link start_failed} is fired if start()
+     * completed with an Error.
+     *
+     * Once set, the Cancellable passed to start is no longer referenced by the subscription.
+     *
      * This can't be set inactive by the caller, but it can happen at any time (such as the
      * calendar being removed or closed).
      */
     public bool active { get; protected set; default = false; }
+    
+    /**
+     * Fired as existing {@link Component.Event}s are discovered when starting a subscription.
+     *
+     * This is fired while {@link start} is working, either in the foreground or in the background.
+     * It won't fire until start() is invoked.
+     */
+    public signal void event_discovered(Component.Event event);
     
     /**
      * Indicates that an event within the {@link window} has been added to the calendar.
@@ -93,7 +107,9 @@ public abstract class CalendarSourceSubscription : BaseObject {
      * A subscription can't be stopped or the {@link window} altered.  Simply drop the reference
      * and create another one with {@link CalendarSource.subscribe_async}.
      *
-     * @see start_failed
+     * If start is cancelled, the caller should assume this object to be invalid (incomplete)
+     * unless {@link active} is true.  At that point the Cancellable will no longer be used by
+     * the subscription.
      */
     public abstract void start(Cancellable? cancellable = null);
     

@@ -29,7 +29,7 @@ namespace E {
 		public static unowned string error_to_string (E.CalClientError code);
 		public static void free_ecalcomp_slist (GLib.SList<E.CalComponent> ecalcomps);
 		public static void free_icalcomp_slist (GLib.SList icalcomps);
-		public void generate_instances (time_t start, time_t end, GLib.Cancellable? cancellable, E.CalRecurInstanceFn cb, void* cb_data, owned GLib.DestroyNotify? destroy_cb_data);
+		public void generate_instances (time_t start, time_t end, GLib.Cancellable? cancellable, [CCode (delegate_target_pos = 4.9)] E.CalRecurInstanceFn cb, [CCode (delegate_target_pos = 4.9)] owned GLib.DestroyNotify? destroy_cb_data);
 		public void generate_instances_for_object (iCal.icalcomponent icalcomp, ulong start, ulong end, GLib.Cancellable? cancellable, E.CalRecurInstanceFn cb, void* cb_data, owned GLib.DestroyNotify? destroy_cb_data);
 		public void generate_instances_for_object_sync (iCal.icalcomponent icalcomp, ulong start, ulong end, E.CalRecurInstanceFn cb, void* cb_data);
 		public void generate_instances_sync (time_t start, time_t end, [CCode (delegate_target_pos = 3.9)] E.CalRecurInstanceFn cb);
@@ -140,7 +140,7 @@ namespace E {
 		public void get_completed (out iCal.icaltimetype t);
 		public void get_contact_list (out GLib.SList text_list);
 		public void get_created (out iCal.icaltimetype t);
-		public void get_description_list (out GLib.SList<E.CalComponentText?> text_list);
+		public void get_description_list (out unowned GLib.SList<E.CalComponentText?> text_list);
 		public void get_dtend (ref E.CalComponentDateTime dt);
 		public void get_dtstamp (out iCal.icaltimetype t);
 		public void get_dtstart (ref E.CalComponentDateTime dt);
@@ -532,7 +532,7 @@ namespace E {
 		Journal,
 		AnyType
 	}
-	[CCode (cheader_filename = "libecal/libecal.h")]
+	[CCode (cheader_filename = "libecal/libecal.h", instance_pos = 3.9)]
 	public delegate bool CalRecurInstanceFn (E.CalComponent comp, time_t instance_start, time_t instance_end);
 	[CCode (cheader_filename = "libecal/libecal.h")]
 	public delegate iCal.icaltimezone CalRecurResolveTimezoneFn (string tzid);

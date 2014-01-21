@@ -7,7 +7,7 @@
 namespace California.Component {
 
 /**
- * An object representation of an iCalendar Event.
+ * A mutable representation of an iCalendar Event.
  *
  * See [[https://tools.ietf.org/html/rfc5545#section-3.6.1]]
  */
@@ -50,7 +50,7 @@ public class Event : Instance {
         summary = text.value;
         
         // Events can hold at most one description
-        SList<E.CalComponentText?> text_list;
+        unowned SList<E.CalComponentText?> text_list;
         eds_component.get_description_list(out text_list);
         if (text_list != null && text_list.data != null)
             description = text_list.data.value;
@@ -77,6 +77,7 @@ public class Event : Instance {
                     assert_not_reached();
             }
         } finally {
+            // TODO: Ok to free dt structs that haven't been filled-in?
             E.CalComponent.free_datetime(eds_dtstart);
             E.CalComponent.free_datetime(eds_dtend);
         }

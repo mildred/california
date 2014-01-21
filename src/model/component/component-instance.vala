@@ -7,10 +7,14 @@
 namespace California.Component {
 
 /**
- * An iCalendar component that has a definitive instance within a calendar.
+ * A mutable iCalendar component that has a definitive instance within a calendar.
  *
- * By "instance", this means {@link Event}s, To-Do's, Journals, and Free/Busy components.
- * Alarms are contained within Instance components, and TimeZones are handled separately.
+ * By "instance", this means {@link Event}s, To-Do's, Journals, and Free/Busy components.  In other
+ * words, components which allocate a specific span of time within a calendar.  Some of thse
+ * components may be recurring, in which case any particular instance is merely a generated
+ * representation of that recurrance.
+ *
+ * Alarms are contained within Instance components.  Timezones are handled separately.
  *
  * Instance also offers a number of methods to convert iCal structures into internal objects.
  */
@@ -34,7 +38,7 @@ public abstract class Instance : BaseObject {
     public UID uid { get; private set; }
     
     /**
-     * Only available if created with {@link Instance.from_eds_component}.
+     * The current backing EDS component being represented by this {@link Instance}.
      */
     protected E.CalComponent? eds_component { get; private set; default = null; }
     

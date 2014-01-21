@@ -34,14 +34,7 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
             internal_start(cancellable);
         } catch (Error err) {
             start_failed(err);
-            
-            return;
         }
-        
-        // done
-        // TODO: If async version of generate instances is used, this will need to be set when that
-        // completes
-        active = true;
     }
     
     private void internal_start(Cancellable? cancellable) throws Error {
@@ -59,24 +52,34 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
         view.start();
         
         // prime with the list of known events
-        // TODO: Use asynchronous version of this call
-        debug("generating for %s...", to_string());
-        view.client.generate_instances_sync(
+        debug("generating events for %s...", to_string());
+        view.client.generate_instances(
             (time_t) window.start_date_time.to_unix(),
             (time_t) window.end_date_time.to_unix(),
-            on_instance_generated);
+            cancellable,
+            on_instance_generated,
+            on_generate_finished);
     }
     
     private bool on_instance_generated(E.CalComponent eds_component, time_t instance_start,
         time_t instance_end) {
+        // TODO: Are instance_start/instance_end required, or are they dtstart and dtend in the
+        // component?
         try {
             Component.Event event = new Component.Event(eds_component);
-            debug("generated %s", event.to_string());
+            debug("generated %s for %s", event.to_string(), to_string());
+            
+            event_discovered(event);
         } catch (CalendarError calerr) {
-            debug("Unable to generate event: %s", calerr.message);
+            debug("Unable to generate event for %s: %s", to_string(), calerr.message);
         }
         
         return true;
+    }
+    
+    private void on_generate_finished() {
+        // only set when generation (start) is finished
+        active = true;
     }
     
     private void on_objects_added(SList<weak iCal.icalcomponent> objects) {
