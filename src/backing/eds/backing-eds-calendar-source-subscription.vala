@@ -64,7 +64,7 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
         time_t instance_end) {
         try {
             Component.Event event = new Component.Event(eds_component);
-            debug("generated %s for %s", event.to_string(), to_string());
+            debug("generated %s for %s", event.to_string(), calendar.to_string());
             
             event_discovered(event);
         } catch (CalendarError calerr) {

@@ -4,15 +4,15 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Component {
+namespace California.Views.Month {
 
 /**
  * A Gtk.Grid widget that displays a month's worth of days as cells.
  *
- * @see MonthGridCell
+ * @see Cell
  */
 
-public class MonthGrid : Gtk.Grid {
+public class Host : Gtk.Grid {
     // days of the week
     public const int COLS = Calendar.DayOfWeek.COUNT;
     // weeks of the month
@@ -39,13 +39,12 @@ public class MonthGrid : Gtk.Grid {
      */
     public bool show_outside_month { get; set; default = false; }
     
-    private Gee.HashMap<Calendar.Date, MonthGridCell> date_to_cell = new Gee.HashMap<
-        Calendar.Date, MonthGridCell>();
+    private Gee.HashMap<Calendar.Date, Cell> date_to_cell = new Gee.HashMap<Calendar.Date, Cell>();
     
     /**
      * If MonthYear is not supplied, the current date is used.
      */
-    public MonthGrid(Calendar.MonthOfYear? month_of_year) {
+    public Host(Calendar.MonthOfYear? month_of_year) {
         column_homogeneous = true;
         column_spacing = 0;
         row_homogeneous = true;
@@ -64,7 +63,7 @@ public class MonthGrid : Gtk.Grid {
         // pre-add grid elements for every cell, which are updated when the MonthYear changes
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++)
-                attach(new MonthGridCell(row, col), col, row, 1, 1);
+                attach(new Cell(row, col), col, row, 1, 1);
         }
         
         update();
@@ -74,11 +73,11 @@ public class MonthGrid : Gtk.Grid {
         notify[PROP_SHOW_OUTSIDE_MONTH].connect(update);
     }
     
-    private MonthGridCell get_cell(int row, int col) {
+    private Cell get_cell(int row, int col) {
         assert(row >= 0 && row < ROWS);
         assert(col >= 0 && col < COLS);
         
-        return (MonthGridCell) get_child_at(col, row);
+        return (Cell) get_child_at(col, row);
     }
     
     private void clear() {
@@ -100,7 +99,7 @@ public class MonthGrid : Gtk.Grid {
             foreach (Calendar.Date date in week) {
                 int col = date.day_of_week.ordinal(first_of_week) - 1;
                 
-                MonthGridCell cell = get_cell(row, col);
+                Cell cell = get_cell(row, col);
                 
                 // if the date is in the month or configured to show days outside the month, set
                 // the cell to show that date; otherwise, it'll be cleared
@@ -115,7 +114,7 @@ public class MonthGrid : Gtk.Grid {
     public void add_event(Component.Event event) {
         // add event to every date it represents
         foreach (Calendar.Date date in event.get_event_date_span()) {
-            MonthGridCell? cell = date_to_cell.get(date);
+            Cell? cell = date_to_cell.get(date);
             if (cell == null) {
                 debug("Unable to add event %s to grid: date %s unavailable", event.to_string(),
                     date.to_string());

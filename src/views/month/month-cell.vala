@@ -4,13 +4,13 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Component {
+namespace California.Views.Month {
 
 /**
  * A single cell within a {@link MonthGrid}.
  */
 
-public class MonthGridCell : Gtk.DrawingArea {
+public class Cell : Gtk.DrawingArea {
     private const int TOP_LINE_FONT_SIZE_PT = 11;
     private const int LINE_FONT_SIZE_PT = 8;
     
@@ -29,12 +29,12 @@ public class MonthGridCell : Gtk.DrawingArea {
     private static Gdk.RGBA RGBA_DAY_OF_MONTH = { red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0 };
     private static Gdk.RGBA RGBA_CURRENT_DAY = { red: 0.0, green: 0.25, blue: 0.50, alpha: 0.10 };
     
-    private static Pango.FontDescription? top_line_font = null;
-    private static Pango.FontDescription? line_font = null;
+    private static Pango.FontDescription top_line_font;
+    private static Pango.FontDescription line_font;
     private static int top_line_height_px = -1;
     private static int line_height_px = -1;
     
-    public MonthGridCell(int row, int col) {
+    public Cell(int row, int col) {
         this.row = row;
         this.col = col;
         
@@ -44,14 +44,23 @@ public class MonthGridCell : Gtk.DrawingArea {
         
         // TODO: Init/terminate
         if (top_line_font == null) {
-            top_line_font = new Pango.FontDescription();
-            top_line_font.set_size(TOP_LINE_FONT_SIZE_PT * Pango.SCALE);
         }
+    }
+    
+    internal static void init() {
+        top_line_font = new Pango.FontDescription();
+        top_line_font.set_size(TOP_LINE_FONT_SIZE_PT * Pango.SCALE);
+    
+        line_font = new Pango.FontDescription();
+        line_font.set_size(LINE_FONT_SIZE_PT * Pango.SCALE);
         
-        if (line_font == null) {
-            line_font = new Pango.FontDescription();
-            line_font.set_size(LINE_FONT_SIZE_PT * Pango.SCALE);
-        }
+        // top_line_height_px and line_height_px can't be calculated until one of the Cells is
+        // rendered
+    }
+    
+    internal static void terminate() {
+        top_line_font = null;
+        line_font = null;
     }
     
     public void clear() {
@@ -88,13 +97,13 @@ public class MonthGridCell : Gtk.DrawingArea {
         ctx.set_line_width(0.5);
         
         // only draw bottom line if not on the bottom row
-        if (row < MonthGrid.ROWS - 1) {
+        if (row < Host.ROWS - 1) {
             ctx.move_to(0, height);
             ctx.line_to(width, height);
         }
         
         // only draw right line if not on the right-most column
-        if (col < MonthGrid.COLS - 1) {
+        if (col < Host.COLS - 1) {
             ctx.move_to(width, 0);
             ctx.line_to(width, height);
         }

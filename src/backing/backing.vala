@@ -25,9 +25,11 @@
 namespace California.Backing {
 
 private int init_count = 0;
+private bool mgr_init = false;
+private Error? mgr_err = null;
 
-public void init() {
-    if (!InitGuard.do_init(ref init_count))
+public void init() throws Error {
+    if (!Unit.do_init(ref init_count))
         return;
     
     // external unit init
@@ -39,16 +41,36 @@ public void init() {
     
     // Register all Stores here
     Manager.instance.register(new EdsStore());
+    
+    // open Manager, pumping event loop until it completes (possibly w/ error)
+    Manager.instance.open_async.begin(null, on_backing_manager_opened);
+    
+    while (!mgr_init)
+        Gtk.main_iteration();
+    
+    if (mgr_err != null)
+        throw mgr_err;
 }
 
 public void terminate() {
-    if (!InitGuard.do_terminate(ref init_count))
+    if (!Unit.do_terminate(ref init_count))
         return;
     
     Manager.terminate();
     
     Component.terminate();
     Calendar.terminate();
+}
+
+private void on_backing_manager_opened(Object? source, AsyncResult result) {
+    try {
+        Backing.Manager.instance.open_async.end(result);
+    } catch (Error err) {
+        mgr_err = err;
+    }
+    
+    // sentinel to init() that open_async is complete
+    mgr_init = true;
 }
 
 }

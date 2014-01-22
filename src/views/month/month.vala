@@ -5,15 +5,10 @@
  */
 
 /**
- * A simplified data model of the iCalendar component scheme.
- *
- * This model is intended to limit the exposure of libical to the rest of the application, while
- * also GObject-ifying it and making its information available in a Vala-friendly manner.
- *
- * See [[https://tools.ietf.org/html/rfc5545]]
+ * Views for displaying calendar information by the month.
  */
 
-namespace California.Component {
+namespace California.Views.Month {
 
 private int init_count = 0;
 
@@ -21,16 +16,22 @@ public void init() throws Error {
     if (!Unit.do_init(ref init_count))
         return;
     
-    // external unit init
+    // unit initialization
     Calendar.init();
+    Component.init();
+    
+    // internal initialization
+    Cell.init();
 }
 
 public void terminate() {
     if (!Unit.do_terminate(ref init_count))
         return;
     
+    Cell.terminate();
+    
+    Component.terminate();
     Calendar.terminate();
 }
 
 }
-

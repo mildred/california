@@ -29,7 +29,7 @@ public class Application : Gtk.Application {
         { "quit", on_quit }
     };
     
-    private Component.MainWindow? main_window = null;
+    private Views.MainWindow? main_window = null;
     private File? exec_file = null;
     
     public Application() {
@@ -58,22 +58,21 @@ public class Application : Gtk.Application {
         base.startup();
         
         // unit initialization
-        Calendar.init();
-        Component.init();
-        Backing.init();
+        try {
+            Views.init();
+        } catch (Error err) {
+            error_message(_("Unable to open California: %s").printf(err.message));
+            quit();
+        }
         
         add_action_entries(action_entries, this);
         set_app_menu(Resource.load<MenuModel>("app-menu.interface", "app-menu"));
-        
-        Backing.Manager.instance.open_async.begin(null, on_backing_manager_opened);
     }
     
     // This method is invoked when the main loop terminates on the primary instance.
     public override void shutdown() {
         // unit termination
-        Backing.terminate();
-        Component.terminate();
-        Calendar.terminate();
+        Views.terminate();
         
         base.shutdown();
     }
@@ -82,11 +81,11 @@ public class Application : Gtk.Application {
     // secondary instance.  It is called after startup().
     public override void activate() {
         if (main_window == null) {
-            main_window = new Component.MainWindow(this);
+            main_window = new Views.MainWindow(this);
             main_window.show_all();
-        } else {
-            main_window.present();
         }
+        
+        main_window.present();
         
         base.activate();
     }
@@ -97,15 +96,6 @@ public class Application : Gtk.Application {
             Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "%s", msg);
         dialog.run();
         dialog.destroy();
-    }
-    
-    private void on_backing_manager_opened(Object? source, AsyncResult result) {
-        try {
-            Backing.Manager.instance.open_async.end(result);
-        } catch (Error err) {
-            error_message(_("Unable to open California: %s").printf(err.message));
-            quit();
-        }
     }
     
     private void on_about() {

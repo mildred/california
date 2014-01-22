@@ -4,7 +4,7 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Component {
+namespace California.Views {
 
 /**
  * Primary application window.
@@ -15,7 +15,7 @@ public class MainWindow : Gtk.ApplicationWindow {
     
     public Calendar.MonthOfYear month_of_year { get; private set; }
     
-    private MonthGrid grid = new MonthGrid(null);
+    private Month.Host month_host = new Month.Host(null);
     private Gee.ArrayList<Backing.CalendarSourceSubscription> subscriptions = new Gee.ArrayList<
         Backing.CalendarSourceSubscription>();
     
@@ -27,7 +27,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         set_default_size(1024, 768);
         
         // bind the MonthGrid's setting to ours
-        bind_property(PROP_MONTH_OF_YEAR, grid, MonthGrid.PROP_MONTH_OF_YEAR);
+        bind_property(PROP_MONTH_OF_YEAR, month_host, Month.Host.PROP_MONTH_OF_YEAR);
         
         Gtk.Box layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         
@@ -48,7 +48,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         toolbar.add(date_item);
         
         layout.pack_start(toolbar, false, true, 0);
-        layout.pack_end(grid, true, true, 0);
+        layout.pack_end(month_host, true, true, 0);
         
         add(layout);
         
@@ -99,7 +99,7 @@ public class MainWindow : Gtk.ApplicationWindow {
     }
     
     private void on_event_added(Component.Event event) {
-        grid.add_event(event);
+        month_host.add_event(event);
     }
 }
 

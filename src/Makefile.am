@@ -25,12 +25,15 @@ california_VALASOURCES = \
 	backing/eds/backing-eds-calendar-source-subscription.vala \
 	backing/eds/backing-eds-store.vala \
 	\
-	base/base-init-guard.vala \
 	base/base-object.vala \
+	base/base-unit.vala \
 	\
 	views/main-window.vala \
-	views/month-grid.vala \
-	views/month-grid-cell.vala \
+	views/views.vala \
+	\
+	views/month/month.vala \
+	views/month/month-host.vala \
+	views/month/month-cell.vala \
 	\
 	model/calendar/calendar.vala \
 	model/calendar/calendar-date-span.vala \

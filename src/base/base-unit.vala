@@ -11,13 +11,17 @@
  * These guards are not thread-safe, as the unit init/termination functions are intended to be
  * called from the application's primary thread.
  */
- 
-namespace California.InitGuard {
+
+namespace California.Unit {
 
 /**
  * Called from the unit's init() function.
  *
+ * Each unit should maintain an initialization count as a private integer.  It should be
+ * statically initialized to zero.
+ *
  * @return true if the init() function should continue initialization.
+ * @see do_terminate
  */
 
 public bool do_init(ref int init_count) {
@@ -28,6 +32,7 @@ public bool do_init(ref int init_count) {
  * Called from the unit's terminate() function.
  *
  * @return true if the terminate() function should continue termination.
+ * @see do_init
  */
 
 public bool do_terminate(ref int init_count) {

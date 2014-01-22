@@ -23,9 +23,9 @@ internal class EdsStore : Store {
         
         List<E.Source> eds_sources = registry.list_sources(E.SOURCE_EXTENSION_CALENDAR);
         foreach (E.Source eds_source in eds_sources)
-            add_eds_source(eds_source);
+            yield add_eds_source_async(eds_source);
         
-        registry.source_added.connect(eds_source => add_eds_source(eds_source));
+        registry.source_added.connect(eds_source => add_eds_source_async.begin(eds_source));
         registry.source_removed.connect(eds_source => remove_eds_source(eds_source));
         
         is_open = true;
@@ -45,17 +45,13 @@ internal class EdsStore : Store {
         return sources.values.read_only_view;
     }
     
-    private void add_eds_source(E.Source eds_source) {
+    private async void add_eds_source_async(E.Source eds_source) {
         // only interested in calendars for now
         E.SourceCalendar? eds_calendar =
             eds_source.get_extension(E.SOURCE_EXTENSION_CALENDAR) as E.SourceCalendar;
         if (eds_calendar == null)
             return;
         
-        open_calendar_async.begin(eds_source, eds_calendar);
-    }
-    
-    private async void open_calendar_async(E.Source eds_source, E.SourceCalendar eds_calendar) {
         EdsCalendarSource calendar = new EdsCalendarSource(eds_source, eds_calendar);
         try {
             yield calendar.open_async(null);

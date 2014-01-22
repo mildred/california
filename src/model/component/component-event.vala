@@ -95,7 +95,7 @@ public class Event : Instance {
     }
     
     public override string to_string() {
-        return "Event %s %s".printf(summary,
+        return "Event \"%s\" (%s)".printf(summary,
             date_time_span != null ? date_time_span.to_string() : date_span.to_string());
     }
 }
