@@ -24,20 +24,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         title = Application.TITLE;
         set_size_request(800, 600);
-        
-        notify[PROP_MONTH_OF_YEAR].connect(() => {
-            Calendar.DateTimeSpan window = new Calendar.DateTimeSpan.from_date_span(month_of_year,
-                new TimeZone.local());
-            
-            subscriptions.clear();
-            foreach (Backing.Store store in Backing.Manager.instance.get_stores()) {
-                foreach (Backing.Source source in store.get_sources_of_type(typeof (Backing.CalendarSource))) {
-                    Backing.CalendarSource calendar = (Backing.CalendarSource) source;
-                    debug("Subscribing to %s...", calendar.to_string());
-                    calendar.subscribe_async.begin(window, null, on_subscribed);
-                }
-            }
-        });
+        set_default_size(1024, 768);
         
         // bind the MonthGrid's setting to ours
         bind_property(PROP_MONTH_OF_YEAR, grid, MonthGrid.PROP_MONTH_OF_YEAR);
@@ -45,21 +32,13 @@ public class MainWindow : Gtk.ApplicationWindow {
         Gtk.Box layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         
         Gtk.ToolButton back = create_button("go-previous-symbolic");
-        back.clicked.connect(() => {
-            debug("prev");
-            month_of_year = month_of_year.adjust(-1);
-        });
+        back.clicked.connect(() => { month_of_year = month_of_year.adjust(-1); });
         
         Gtk.ToolButton fwd = create_button("go-next-symbolic");
-        fwd.clicked.connect(() => {
-            debug("next");
-            month_of_year = month_of_year.adjust(1);
-        });
+        fwd.clicked.connect(() => { month_of_year = month_of_year.adjust(1); });
         
         Gtk.Label date_label = new Gtk.Label(null);
-        notify[PROP_MONTH_OF_YEAR].connect(() => {
-            date_label.label = month_of_year.full_name;
-        });
+        notify[PROP_MONTH_OF_YEAR].connect(() => { date_label.label = month_of_year.full_name; });
         Gtk.ToolItem date_item = new Gtk.ToolItem();
         date_item.add(date_label);
         
@@ -73,6 +52,8 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         add(layout);
         
+        notify[PROP_MONTH_OF_YEAR].connect(on_month_of_year_changed);
+        
         // only now set month_of_year so all connected components are updated
         month_of_year = new Calendar.MonthOfYear.now();
     }
@@ -85,17 +66,40 @@ public class MainWindow : Gtk.ApplicationWindow {
         return new Gtk.ToolButton(button, null);
     }
     
+    private void on_month_of_year_changed() {
+        // generate new DateTimeSpan window for all calendar subscriptions
+        Calendar.DateTimeSpan window = new Calendar.DateTimeSpan.from_date_span(month_of_year,
+            new TimeZone.local());
+        
+        // clear current subscriptions and generate new subscriptions for new window
+        subscriptions.clear();
+        foreach (Backing.Store store in Backing.Manager.instance.get_stores()) {
+            foreach (Backing.Source source in store.get_sources_of_type(typeof (Backing.CalendarSource))) {
+                Backing.CalendarSource calendar = (Backing.CalendarSource) source;
+                calendar.subscribe_async.begin(window, null, on_subscribed);
+            }
+        }
+    }
+    
     private void on_subscribed(Object? source, AsyncResult result) {
         Backing.CalendarSource calendar = (Backing.CalendarSource) source;
         
         try {
             Backing.CalendarSourceSubscription subscription = calendar.subscribe_async.end(result);
-            debug("Subscribed to %s", calendar.to_string());
             subscriptions.add(subscription);
+            
+            subscription.event_discovered.connect(on_event_added);
+            subscription.event_added.connect(on_event_added);
+            
+            // this will start signals firing for event changes
             subscription.start();
         } catch (Error err) {
             debug("Unable to subscribe to %s: %s", calendar.to_string(), err.message);
         }
+    }
+    
+    private void on_event_added(Component.Event event) {
+        grid.add_event(event);
     }
 }
 

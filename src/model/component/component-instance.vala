@@ -135,12 +135,17 @@ public abstract class Instance : BaseObject {
      * Note that if one is a {@link Calendar.Date} and the other is a DateTime, the DateTime is
      * coerced into Date and a DateSpan is returned.
      *
+     * dtend_inclusive indicates whether the ical_end_dt should be treated as inclusive or exclusive
+     * of the span.  See the iCalendar specification for information on how each component should
+     * treat the situation.  Exclusive only works for DATE values.
+     *
      * @returns {@link DateFormat} indicating if a DateSpan or a DateTimeSpan was returned via
      * the out parameters.  The other will always be null.  In no case will both be null.
      * @throws CalendarError if any value is out-of-range.
      */
-    public static DateFormat ical_to_span(iCal.icaltimetype *ical_start_dt, iCal.icaltimetype *ical_end_dt,
-        out Calendar.DateTimeSpan date_time_span, out Calendar.DateSpan date_span) throws CalendarError {
+    public static DateFormat ical_to_span(bool dtend_inclusive, iCal.icaltimetype *ical_start_dt,
+        iCal.icaltimetype *ical_end_dt, out Calendar.DateTimeSpan date_time_span,
+        out Calendar.DateSpan date_span) throws CalendarError {
         DateTime? start_date_time;
         Calendar.Date? start_date;
         ical_to_datetime_or_date(ical_start_dt, out start_date_time, out start_date);
@@ -171,6 +176,10 @@ public abstract class Instance : BaseObject {
             end_date = new Calendar.Date.from_date_time(end_date_time);
             end_date_time = null;
         }
+        
+        // if exclusive, drop back one day
+        if (!dtend_inclusive)
+            end_date = end_date.adjust(-1, Calendar.Unit.DAY);
         
         date_span = new Calendar.DateSpan(start_date, end_date);
         date_time_span = null;

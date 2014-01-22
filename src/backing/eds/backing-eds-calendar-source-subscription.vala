@@ -52,7 +52,6 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
         view.start();
         
         // prime with the list of known events
-        debug("generating events for %s...", to_string());
         view.client.generate_instances(
             (time_t) window.start_date_time.to_unix(),
             (time_t) window.end_date_time.to_unix(),
@@ -63,8 +62,6 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
     
     private bool on_instance_generated(E.CalComponent eds_component, time_t instance_start,
         time_t instance_end) {
-        // TODO: Are instance_start/instance_end required, or are they dtstart and dtend in the
-        // component?
         try {
             Component.Event event = new Component.Event(eds_component);
             debug("generated %s for %s", event.to_string(), to_string());

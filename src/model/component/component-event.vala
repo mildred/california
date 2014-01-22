@@ -62,9 +62,11 @@ public class Event : Instance {
             eds_component.get_dtstart(ref eds_dtstart);
             eds_component.get_dtend(ref eds_dtend);
             
+            // convert start and end DATE/DATE-TIMEs to internal values ... note that VEVENT dtend
+            // is non-inclusive (see https://tools.ietf.org/html/rfc5545#section-3.6.1)
             Calendar.DateSpan? date_span;
             Calendar.DateTimeSpan? date_time_span;
-            switch (ical_to_span(eds_dtstart.value, eds_dtend.value, out date_time_span, out date_span)) {
+            switch (ical_to_span(false, eds_dtstart.value, eds_dtend.value, out date_time_span, out date_span)) {
                 case DateFormat.DATE_TIME:
                     this.date_time_span = date_time_span;
                 break;
@@ -81,6 +83,15 @@ public class Event : Instance {
             E.CalComponent.free_datetime(eds_dtstart);
             E.CalComponent.free_datetime(eds_dtend);
         }
+    }
+    
+    /**
+     * Returns a {@link Calendar.DateSpan} for the {@link Event}.
+     *
+     * This will return a DateSpan whether the Event is a DATE or DATE-TIME VEVENT.
+     */
+    public Calendar.DateSpan get_event_date_span() {
+        return date_span ?? new Calendar.DateSpan.from_date_time_span(date_time_span);
     }
     
     public override string to_string() {

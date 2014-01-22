@@ -96,6 +96,14 @@ public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date> {
     }
     
     /**
+     * Create a {@link DateSpan} from the {@link DateTimeSpan}.
+     */
+    public DateSpan.from_date_time_span(DateTimeSpan date_time_span) {
+        init_span(new Date.from_date_time(date_time_span.start_date_time),
+            new Date.from_date_time(date_time_span.end_date_time));
+    }
+    
+    /**
      * Create an unintialized {@link DateSpan).
      *
      * Because it's sometimes inconvenient to generate the necessary {@link Date}s until the
