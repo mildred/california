@@ -45,6 +45,7 @@ california_VALASOURCES = \
 	model/calendar/calendar-first-of-week.vala \
 	model/calendar/calendar-month.vala \
 	model/calendar/calendar-month-of-year.vala \
+	model/calendar/calendar-span.vala \
 	model/calendar/calendar-unit.vala \
 	model/calendar/calendar-week.vala \
 	model/calendar/calendar-week-span.vala \

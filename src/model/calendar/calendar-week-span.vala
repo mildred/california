@@ -14,20 +14,20 @@ namespace California.Calendar {
  * days outside of the DateSpan.
  */
 
-public class WeekSpan : BaseObject, Gee.Traversable<Week>, Gee.Iterable<Week> {
+public class WeekSpan : BaseObject, Gee.Traversable<Week>, Gee.Iterable<Week>, Span<Week> {
     private class WeekSpanIterator : BaseObject, Gee.Traversable<Week>, Gee.Iterator<Week> {
         public bool read_only { get { return true; } }
         public bool valid { get { return current != null; } }
         
-        public DateSpan owner;
+        public WeekSpan owner;
         public Week first;
         public Week last;
         public Week? current = null;
         
-        public WeekSpanIterator(DateSpan owner, FirstOfWeek first_of_week) {
+        public WeekSpanIterator(WeekSpan owner) {
             this.owner = owner;
-            first = owner.start_date.week_of(first_of_week);
-            last = owner.end_date.week_of(first_of_week);
+            first = owner.start();
+            last = owner.end();
         }
         
         public new Week get() {
@@ -83,6 +83,16 @@ public class WeekSpan : BaseObject, Gee.Traversable<Week>, Gee.Iterable<Week> {
     public FirstOfWeek first_of_week { get; private set; }
     
     /**
+     * inheritDoc
+     */
+    public Date start_date { owned get { return dates.start_date; } }
+    
+    /**
+     * inheritDoc
+     */
+    public Date end_date { owned get { return dates.end_date; } }
+    
+    /**
      * Create a span of {@link Week}s corresponding to the {@link DateSpan} according to
      * {@link FirstOfWeek}'s definition of a week's starting day.
      */
@@ -92,10 +102,48 @@ public class WeekSpan : BaseObject, Gee.Traversable<Week>, Gee.Iterable<Week> {
     }
     
     /**
+     * Create an arbitrary span of {@link Week}s starting from the specified {@link Week}.
+     *
+     * Week's first-of-week is preserved.
+     */
+    public WeekSpan.count(Week start, int count) {
+        dates = new DateSpan(start.start_date, start.adjust(count).end_date);
+        first_of_week = start.first_of_week;
+    }
+    
+    /**
+     * inheritDoc
+     */
+    public Week start() {
+        return dates.start_date.week_of(first_of_week);
+    }
+    
+    /**
+     * inheritDoc
+     */
+    public Week end() {
+        return dates.end_date.week_of(first_of_week);
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public bool contains(Date date) {
+        return dates.contains(date);
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public bool has(Week week) {
+        return (start().compare_to(week) <= 0) && (end().compare_to(week) >= 0);
+    }
+    
+    /**
      * Returns an Iterator for each {@link Week} (full and partial) in the {@link WeekSpan}.
      */
     public Gee.Iterator<Week> iterator() {
-        return new WeekSpanIterator(dates, first_of_week);
+        return new WeekSpanIterator(this);
     }
     
     /**

@@ -17,6 +17,7 @@ public class Cell : Gtk.DrawingArea {
     private const int TEXT_MARGIN_PX = 2;
     private const int LINE_SPACING_PX = 4;
     
+    public weak Host owner { get; private set; }
     public int row { get; private set; }
     public int col { get; private set; }
     public Calendar.Date? date { get; set; default = null; }
@@ -27,6 +28,7 @@ public class Cell : Gtk.DrawingArea {
     // TODO: We may need to get these colors from the theme
     private static Gdk.RGBA RGBA_BORDER = { red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0 };
     private static Gdk.RGBA RGBA_DAY_OF_MONTH = { red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0 };
+    private static Gdk.RGBA RGBA_DAY_OUTSIDE_MONTH = { red: 0.6, green: 0.6, blue: 0.6, alpha: 1.0 };
     private static Gdk.RGBA RGBA_CURRENT_DAY = { red: 0.0, green: 0.25, blue: 0.50, alpha: 0.10 };
     
     private static Pango.FontDescription top_line_font;
@@ -34,17 +36,14 @@ public class Cell : Gtk.DrawingArea {
     private static int top_line_height_px = -1;
     private static int line_height_px = -1;
     
-    public Cell(int row, int col) {
+    public Cell(Host owner, int row, int col) {
+        this.owner = owner;
         this.row = row;
         this.col = col;
         
         notify["date"].connect(queue_draw);
         
         draw.connect(on_draw);
-        
-        // TODO: Init/terminate
-        if (top_line_font == null) {
-        }
     }
     
     internal static void init() {
@@ -159,8 +158,10 @@ public class Cell : Gtk.DrawingArea {
         ctx.stroke();
         
         // draw day of month as the top line
-        if (date != null)
-            draw_line_of_text(ctx, -1, RGBA_DAY_OF_MONTH, date.day_of_month.informal_number);
+        if (date != null) {
+            Gdk.RGBA color = (date in owner.month_of_year) ? RGBA_DAY_OF_MONTH : RGBA_DAY_OUTSIDE_MONTH;
+            draw_line_of_text(ctx, -1, color, date.day_of_month.informal_number);
+        }
         
         // represents the line number being drawn (zero-based for remaining lines)
         int line_number = 0;

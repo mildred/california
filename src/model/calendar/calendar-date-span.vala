@@ -13,8 +13,8 @@ namespace California.Calendar {
  * {@link Week}s.
  */
 
-public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date>, Gee.Comparable<DateSpan>,
-    Gee.Hashable<DateSpan> {
+public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date>, Span<Date>,
+    Gee.Comparable<DateSpan>, Gee.Hashable<DateSpan> {
     private class DateSpanIterator : BaseObject, Gee.Traversable<Date>, Gee.Iterator<Date> {
         public bool read_only { get { return true; } }
         public bool valid { get { return current != null; } }
@@ -73,18 +73,16 @@ public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date>, G
     }
     
     /**
-     * The first {@link Date} of the span.
-     *
-     * start_date will always be chronologically earlier or the same as end_date.
+     * @inheritDoc
      */
-    public Date start_date { get; private set; }
+    private Date _start_date;
+    public Date start_date { owned get { return _start_date; } }
     
     /**
-     * The last {@link Date} of the span.
-     *
-     * end_date will always be chronologically later or the same as start_date.
+     * @inheritDoc
      */
-    public Date end_date { get; private set; }
+    private Date _end_date;
+    public Date end_date { owned get { return _end_date; } }
     
     /**
      * Create a {@link DateSpan} with the specified start and end dates.
@@ -124,19 +122,40 @@ public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date>, G
      */
     protected void init_span(Date start_date, Date end_date) {
         if (start_date.compare_to(end_date) <= 0) {
-            this.start_date = start_date;
-            this.end_date = end_date;
+            _start_date = start_date;
+            _end_date = end_date;
         } else {
-            this.start_date = end_date;
-            this.end_date = start_date;
+            _start_date = end_date;
+            _end_date = start_date;
         }
     }
     
     /**
-     * Returns true if the {@link Date} is within the {@link DateSpan}.
+     * @inheritDoc
+     */
+    public Date start() {
+        return _start_date;
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public Date end() {
+        return _end_date;
+    }
+    
+    /**
+     * @inheritDoc
      */
     public bool contains(Date date) {
         return (start_date.compare_to(date) <= 0) && (end_date.compare_to(date) >= 0);
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public bool has(Date date) {
+        return contains(date);
     }
     
     /**
@@ -161,24 +180,6 @@ public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date>, G
      */
     public WeekSpan weeks(FirstOfWeek first_of_week) {
         return new WeekSpan(this, first_of_week);
-    }
-    
-    /**
-     * Returns the earliest DateTime for this {@link DateSpan}.
-     *
-     * @see Date.earliest_date_time
-     */
-    public DateTime earliest_date_time(TimeZone tz) {
-        return start_date.earliest_date_time(tz);
-    }
-    
-    /**
-     * Returns the latest DateTime for this {@link DateSpan}.
-     *
-     * @see Date.latest_date_time
-     */
-    public DateTime latest_date_time(TimeZone tz) {
-        return end_date.latest_date_time(tz);
     }
     
     /**

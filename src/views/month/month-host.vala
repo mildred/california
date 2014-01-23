@@ -37,7 +37,7 @@ public class Host : Gtk.Grid {
     /**
      * Show days outside the current month.
      */
-    public bool show_outside_month { get; set; default = false; }
+    public bool show_outside_month { get; set; default = true; }
     
     private Gee.HashMap<Calendar.Date, Cell> date_to_cell = new Gee.HashMap<Calendar.Date, Cell>();
     
@@ -63,7 +63,7 @@ public class Host : Gtk.Grid {
         // pre-add grid elements for every cell, which are updated when the MonthYear changes
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++)
-                attach(new Cell(row, col), col, row, 1, 1);
+                attach(new Cell(this, row, col), col, row, 1, 1);
         }
         
         update();
@@ -80,35 +80,35 @@ public class Host : Gtk.Grid {
         return (Cell) get_child_at(col, row);
     }
     
-    private void clear() {
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLS; col++)
-                get_cell(row, col).clear();
+    private void update_week(int row, Calendar.Week week) {
+        foreach (Calendar.Date date in week) {
+            int col = date.day_of_week.ordinal(first_of_week) - 1;
+            
+            Cell cell = get_cell(row, col);
+            
+            // if the date is in the month or configured to show days outside the month, set
+            // the cell to show that date; otherwise, it'll be cleared
+            cell.clear();
+            cell.date = (date in month_of_year) || show_outside_month ? date : null;
+            
+            // add to map for quick lookups
+            date_to_cell.set(date, cell);
         }
-        
-        date_to_cell.clear();
     }
     
     private void update() {
-        clear();
+        // clear mapping
+        date_to_cell.clear();
         
-        foreach (Calendar.Week week in month_of_year.weeks(first_of_week)) {
-            // convert one-based to zero-based row/col indexing
-            int row = week.week_of_month - 1;
-            
-            foreach (Calendar.Date date in week) {
-                int col = date.day_of_week.ordinal(first_of_week) - 1;
-                
-                Cell cell = get_cell(row, col);
-                
-                // if the date is in the month or configured to show days outside the month, set
-                // the cell to show that date; otherwise, it'll be cleared
-                cell.date = (date in month_of_year) || show_outside_month ? date : null;
-                
-                // add to map for quick lookups
-                date_to_cell.set(date, cell);
-            }
-        }
+        // create a WeekSpan for the first week of the month to the last displayed week (not all
+        // months will fill all displayed weeks, but some will)
+        Calendar.WeekSpan span = new Calendar.WeekSpan.count(month_of_year.weeks(first_of_week).start(),
+            ROWS - 1);
+        
+        // fill in weeks of the displayed month
+        int row = 0;
+        foreach (Calendar.Week week in span)
+            update_week(row++, week);
     }
     
     public void add_event(Component.Event event) {
