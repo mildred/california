@@ -13,7 +13,8 @@ namespace California.Calendar {
  * {@link Week}s.
  */
 
-public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date> {
+public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date>, Gee.Comparable<DateSpan>,
+    Gee.Hashable<DateSpan> {
     private class DateSpanIterator : BaseObject, Gee.Traversable<Date>, Gee.Iterator<Date> {
         public bool read_only { get { return true; } }
         public bool valid { get { return current != null; } }
@@ -178,6 +179,24 @@ public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date> {
      */
     public DateTime latest_date_time(TimeZone tz) {
         return end_date.latest_date_time(tz);
+    }
+    
+    /**
+     * Compares two {@link DateSpan}s by their {@link start_date}.
+     */
+    public int compare_to(DateSpan other) {
+        return start_date.compare_to(other.start_date);
+    }
+    
+    public bool equal_to(DateSpan other) {
+        if (this == other)
+            return true;
+        
+        return start_date.equal_to(other.start_date) && end_date.equal_to(other.end_date);
+    }
+    
+    public uint hash() {
+        return start_date.hash() ^ end_date.hash();
     }
     
     public override string to_string() {

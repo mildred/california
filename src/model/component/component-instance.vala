@@ -19,7 +19,7 @@ namespace California.Component {
  * Instance also offers a number of methods to convert iCal structures into internal objects.
  */
 
-public abstract class Instance : BaseObject {
+public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     public enum DateFormat {
         DATE_TIME,
         DATE
@@ -44,8 +44,23 @@ public abstract class Instance : BaseObject {
     
     /**
      * An {@link Instance} gleaned from an EDS calendar component object.
+     *
+     * This contructor will call {@link update}, which gives the subclass a single code path for
+     * updating its properties and internal state.  Anything which should not be updated by an
+     * external invocation of update() (such as immutable data) should update that state after
+     * the base constructor returns.
+     *
+     * If the E.CalComponent's VTYPE does not match the subclasses' VTYPE, ComponentError.MISMATCH
+     * is thrown.
      */
-    protected Instance(E.CalComponent eds_component) throws CalendarError {
+    protected Instance(E.CalComponent eds_component, E.CalComponentVType subclass_vtype) throws Error {
+        if (subclass_vtype != eds_component.get_vtype()) {
+            throw new ComponentError.MISMATCH("Cannot create VTYPE %s from component of VTYPE %s",
+                subclass_vtype, eds_component.get_vtype());
+        }
+        
+        // although base update() sets this, set it here in case it's referred to by the subclass
+        // as the "old" component during it's update()
         this.eds_component = eds_component;
         
         unowned string uid_string;
@@ -55,6 +70,50 @@ public abstract class Instance : BaseObject {
         iCal.icaltimetype ical_dtstamp;
         eds_component.get_dtstamp(out ical_dtstamp);
         dtstamp = ical_to_datetime(&ical_dtstamp);
+        
+        update(eds_component);
+    }
+    
+    /**
+     * Updates the {@link Instance} with information from the E.CalComponent.
+     *
+     * The Instance will update whatever changes it discovers from this new component and fire
+     * signals to update subscribers.
+     *
+     * This is also called by the Instance base class constructor to give subclasses a single
+     * code path for updating their state.  It's highly recommended the subclass call the base
+     * class update() first to allow it to do basic sanity checking before proceeding to update
+     * its own state.
+     *
+     * @throws BackingError if eds_component is not for this Instance.
+     */
+    public virtual void update(E.CalComponent eds_component) throws Error {
+        unowned string uid_string;
+        eds_component.get_uid(out uid_string);
+        Component.UID uid = new Component.UID(uid_string);
+        
+        if (!this.uid.equal_to(uid)) {
+            throw new BackingError.MISMATCH("Attempt to update component %s with component %s",
+                this.uid.to_string(), uid.to_string());
+        }
+    }
+    
+    /**
+     * Returns an appropriate {@link Component} instance for the iCalendar component.
+     *
+     * @returns null if the component is not represented in this namespace (yet).
+     */
+    public static Component.Instance? convert(E.CalComponent eds_component) throws Error {
+        switch (eds_component.get_vtype()) {
+            case E.CalComponentVType.EVENT:
+                return new Event(eds_component);
+            
+            default:
+                debug("Unable to construct component %s: unimplemented",
+                    eds_component.get_vtype().to_string());
+                
+                return null;
+        }
     }
     
     /**
@@ -63,10 +122,10 @@ public abstract class Instance : BaseObject {
      *
      * @returns {@link DateFormat} indicating if Date or DateTime holds a reference.  The other
      * will always be null.  In no case will both be null.
-     * @throws CalendarError if the supplied values are out-of-range
+     * @throws CalendarError if the supplied values are out-of-range.
      */
     public static DateFormat ical_to_datetime_or_date(iCal.icaltimetype *ical_dt, out DateTime? date_time,
-        out Calendar.Date? date) throws CalendarError {
+        out Calendar.Date? date) throws Error {
         if (iCal.icaltime_is_date(*ical_dt) == 0) {
             date_time = ical_to_datetime(ical_dt);
             date = null;
@@ -83,18 +142,19 @@ public abstract class Instance : BaseObject {
     /**
      * Convert an iCal.icaltimetype to a GLib.DateTime.
      *
-     * @throws CalendarError if the supplied values are out-of-range or is a DATE.
+     * @throws CalendarError if the supplied values are out-of-range or invalid, ComponentError
+     * if a DATE rather than a DATE-TIME.
      */
-    public static DateTime ical_to_datetime(iCal.icaltimetype *ical_dt) throws CalendarError {
+    public static DateTime ical_to_datetime(iCal.icaltimetype *ical_dt) throws Error {
         if (iCal.icaltime_is_date(*ical_dt) != 0) {
-            throw new CalendarError.INVALID("iCalendar time type must be DATE-TIME: %s",
+            throw new ComponentError.INVALID("iCalendar time type must be DATE-TIME: %s",
                 iCal.icaltime_as_ical_string(*ical_dt));
         }
         
         DateTime date_time = new DateTime(ical_to_timezone(ical_dt), ical_dt.year, ical_dt.month,
             ical_dt.day, ical_dt.hour, ical_dt.minute, ical_dt.second);
         if (date_time == null) {
-            throw new CalendarError.INVALID("Invalid iCalendar time: %s",
+            throw new ComponentError.INVALID("Invalid iCalendar time: %s",
                 iCal.icaltime_as_ical_string(*ical_dt));
         }
         
@@ -104,11 +164,12 @@ public abstract class Instance : BaseObject {
     /**
      * Convert an iCal.icaltimetype to a {@link Calendar.Date}.
      *
-     * @throws CalendarError if the supplied values are out-of-range or is a DATE-TIME.
+     * @throws CalendarError if the supplied values are out-of-range or invalid, ComponentError
+     * if a DATE-TIME rather than a DATE.
      */
-    public static Calendar.Date ical_to_date(iCal.icaltimetype *ical_dt) throws CalendarError {
+    public static Calendar.Date ical_to_date(iCal.icaltimetype *ical_dt) throws Error {
         if (iCal.icaltime_is_date(*ical_dt) == 0) {
-            throw new CalendarError.INVALID("iCalendar time type must be DATE: %s",
+            throw new ComponentError.INVALID("iCalendar time type must be DATE: %s",
                 iCal.icaltime_as_ical_string(*ical_dt));
         }
         
@@ -141,11 +202,11 @@ public abstract class Instance : BaseObject {
      *
      * @returns {@link DateFormat} indicating if a DateSpan or a DateTimeSpan was returned via
      * the out parameters.  The other will always be null.  In no case will both be null.
-     * @throws CalendarError if any value is out-of-range.
+     * @throws CalendarError if any value is invalid or out-of-range.
      */
     public static DateFormat ical_to_span(bool dtend_inclusive, iCal.icaltimetype *ical_start_dt,
         iCal.icaltimetype *ical_end_dt, out Calendar.DateTimeSpan date_time_span,
-        out Calendar.DateSpan date_span) throws CalendarError {
+        out Calendar.DateSpan date_span) throws Error {
         DateTime? start_date_time;
         Calendar.Date? start_date;
         ical_to_datetime_or_date(ical_start_dt, out start_date_time, out start_date);
@@ -185,6 +246,14 @@ public abstract class Instance : BaseObject {
         date_time_span = null;
         
         return DateFormat.DATE;
+    }
+    
+    public bool equal_to(Instance other) {
+        return (this != other) ? uid.equal_to(other.uid) : true;
+    }
+    
+    public uint hash() {
+        return uid.hash();
     }
 }
 

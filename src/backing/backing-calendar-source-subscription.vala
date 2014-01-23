@@ -71,6 +71,9 @@ public abstract class CalendarSourceSubscription : BaseObject {
     /**
      * Indicates that an event within the {@link date_window} has been altered.
      *
+     * This is fired after the alterations have been made.  Since the {@link Component.Instance}s
+     * are mutable, it's possible to monitor their properties for changes and be notified that way.
+     *
      * The signal is fired for both local additions (added through this interface) and remote
      * additions.
      *
@@ -90,9 +93,74 @@ public abstract class CalendarSourceSubscription : BaseObject {
      */
     public signal void start_failed(Error err);
     
+    private Gee.HashMap<Component.UID, Component.Event> events = new Gee.HashMap<
+        Component.UID, Component.Event>();
+    
     protected CalendarSourceSubscription(CalendarSource calendar, Calendar.DateTimeSpan window) {
         this.calendar = calendar;
         this.window = window;
+    }
+    
+    /**
+     * Add a pre-existing {@link Component.Event} to the subscription and notify subscribers.
+     *
+     * As with the other notify_*() methods, subclasses should invoke this method to fire the
+     * signal rather than do it directly.  This gives {@link CalenderSourceSubscription} the
+     * opportunity to update its internal state prior to firing the signal.
+     *
+     * It can also be overridden by a subclass to take action before or after the signal is fired.
+     *
+     * @see event_discovered
+     */
+    protected virtual void notify_event_discovered(Component.Event event) {
+        if (!events.has_key(event.uid)) {
+            events.set(event.uid, event);
+            event_discovered(event);
+        } else {
+            debug("Cannot add discovered event %s to %s: already known", event.to_string(), to_string());
+        }
+    }
+    
+    /**
+     * Add a new {@link Component.Event} to the subscription and notify subscribers.
+     *
+     * @see notify_event_discovered
+     * @see event_added
+     */
+    protected virtual void notify_event_added(Component.Event event) {
+        if (!events.has_key(event.uid)) {
+            events.set(event.uid, event);
+            event_added(event);
+        } else {
+            debug("Cannot add event %s to %s: already known", event.to_string(), to_string());
+        }
+    }
+    
+    /**
+     * Remove an {@link Component.Event} from the subscription and notify subscribers.
+     *
+     * @see notify_event_discovered
+     * @see event_removed
+     */
+    protected virtual void notify_event_removed(Component.UID uid) {
+        Component.Event? event;
+        if (events.unset(uid, out event))
+            event_removed(event);
+        else
+            debug("Cannot remove UID %s from %s: not known", uid.to_string(), to_string());
+    }
+    
+    /**
+     * Update an altered {@link Component.Event} and notify subscribers.
+     *
+     * @see notify_event_discovered
+     * @see event_altered
+     */
+    protected virtual void notify_event_altered(Component.Event event) {
+        if (events.has_key(event.uid))
+            event_altered(event);
+        else
+            debug("Cannot notify altered event %s in %s: not known", event.to_string(), to_string());
     }
     
     /**
@@ -112,6 +180,22 @@ public abstract class CalendarSourceSubscription : BaseObject {
      * the subscription.
      */
     public abstract void start(Cancellable? cancellable = null);
+    
+    /**
+     * Returns an {@link Component.Instance} for the {@link Component.UID}.
+     *
+     * @returns null if the UID has not been seen.
+     */
+    public Component.Instance? for_uid(Component.UID uid) {
+        return events.get(uid);
+    }
+    
+    /**
+     * Returns a read-only Map of all known {@link Component.Event}s.
+     */
+    public Gee.Map<Component.UID, Component.Event> get_events() {
+        return events.read_only_view;
+    }
     
     public override string to_string() {
         return "%s::%s".printf(calendar.to_string(), window.to_string());

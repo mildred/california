@@ -21,8 +21,8 @@ public class Cell : Gtk.DrawingArea {
     public int col { get; private set; }
     public Calendar.Date? date { get; set; default = null; }
     
-    private Gee.ArrayList<Component.Event> all_day_events = new Gee.ArrayList<Component.Event>();
-    private Gee.ArrayList<Component.Event> timed_events = new Gee.ArrayList<Component.Event>();
+    private Gee.TreeSet<Component.Event> all_day_events = new Gee.TreeSet<Component.Event>();
+    private Gee.TreeSet<Component.Event> timed_events = new Gee.TreeSet<Component.Event>();
     
     // TODO: We may need to get these colors from the theme
     private static Gdk.RGBA RGBA_BORDER = { red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0 };
@@ -70,10 +70,58 @@ public class Cell : Gtk.DrawingArea {
     }
     
     public void add_event(Component.Event event) {
+        bool added;
         if (event.date_time_span != null)
-            timed_events.add(event);
+            added = timed_events.add(event);
         else
+            added = all_day_events.add(event);
+        
+        if (!added)
+            return;
+        
+        // subscribe to interesting mutable properties
+        event.notify[Component.Event.PROP_SUMMARY].connect(queue_draw);
+        event.notify[Component.Event.PROP_DATE_SPAN].connect(on_span_updated);
+        event.notify[Component.Event.PROP_DATE_TIME_SPAN].connect(on_span_updated);
+        
+        queue_draw();
+    }
+    
+    public void remove_event(Component.Event event) {
+        // just try to remove from both, for safety
+        bool removed = all_day_events.remove(event);
+        removed = timed_events.remove(event) || removed;
+        
+        if (!removed)
+            return;
+        
+        event.notify[Component.Event.PROP_SUMMARY].disconnect(queue_draw);
+        event.notify[Component.Event.PROP_DATE_SPAN].disconnect(on_span_updated);
+        event.notify[Component.Event.PROP_DATE_TIME_SPAN].disconnect(on_span_updated);
+        
+        queue_draw();
+    }
+    
+    private void on_span_updated(Object object, ParamSpec param) {
+        if (date == null)
+            return;
+        
+        Component.Event event = (Component.Event) object;
+        
+        // remove from cell if no longer in this day
+        if (!(date in event.get_event_date_span())) {
+            remove_event(event);
+            queue_draw();
+            
+            return;
+        }
+        
+        // remove and add again to re-sort based on updated information
+        if (all_day_events.remove(event))
             all_day_events.add(event);
+        
+        if (timed_events.remove(event))
+            timed_events.add(event);
         
         queue_draw();
     }

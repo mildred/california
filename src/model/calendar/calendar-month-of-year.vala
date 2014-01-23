@@ -10,7 +10,7 @@ namespace California.Calendar {
  * An immutable representation of a {@link Month} of a {@link Year}.
  */
 
-public class MonthOfYear : DateSpan, Gee.Comparable<MonthOfYear>, Gee.Hashable<MonthOfYear> {
+public class MonthOfYear : DateSpan {
     /**
      * The {@link Month} of the associated {@link Year}.
      */
@@ -89,34 +89,6 @@ public class MonthOfYear : DateSpan, Gee.Comparable<MonthOfYear>, Gee.Hashable<M
      */
     public MonthOfYear adjust(int quantity) {
         return start_date.adjust(quantity, Unit.MONTH).month_of_year();
-    }
-    
-    public int compare_to(MonthOfYear other) {
-        if (this == other)
-            return 0;
-        
-        int cmp = year.compare_to(other.year);
-        if (cmp != 0)
-            return cmp;
-        
-        cmp = month.compare_to(other.month);
-        if (cmp != 0)
-            return cmp;
-        
-        return 0;
-    }
-    
-    public bool equal_to(MonthOfYear other) {
-        if (this == other)
-            return true;
-        
-        return month.equal_to(other.month) && year.equal_to(other.year);
-    }
-    
-    public uint hash() {
-        // assuming month's hash is its value -- pretty good assumption -- give it 4 bits of space
-        // for its value 1 - 12
-        return (year.hash() << 4) | month.hash();
     }
     
     public override string to_string() {

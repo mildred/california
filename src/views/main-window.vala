@@ -90,6 +90,7 @@ public class MainWindow : Gtk.ApplicationWindow {
             
             subscription.event_discovered.connect(on_event_added);
             subscription.event_added.connect(on_event_added);
+            subscription.event_removed.connect(on_event_removed);
             
             // this will start signals firing for event changes
             subscription.start();
@@ -100,6 +101,10 @@ public class MainWindow : Gtk.ApplicationWindow {
     
     private void on_event_added(Component.Event event) {
         month_host.add_event(event);
+    }
+    
+    private void on_event_removed(Component.Event event) {
+        month_host.remove_event(event);
     }
 }
 

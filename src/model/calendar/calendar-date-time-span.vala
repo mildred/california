@@ -15,7 +15,7 @@ namespace California.Calendar {
  * normalized to UTC.
  */
 
-public class DateTimeSpan : BaseObject {
+public class DateTimeSpan : BaseObject, Gee.Comparable<DateTimeSpan>, Gee.Hashable<DateTimeSpan> {
     /**
      * Starting DateTime of the span.
      *
@@ -42,6 +42,24 @@ public class DateTimeSpan : BaseObject {
     
     public DateTimeSpan.from_date_span(DateSpan span, TimeZone tz) {
         this (span.earliest_date_time(tz), span.latest_date_time(tz));
+    }
+    
+    /**
+     * Compares the {@link start_date_time} of two {@link DateTimeSpan}s.
+     */
+    public int compare_to(DateTimeSpan other) {
+        return start_date_time.compare(other.start_date_time);
+    }
+    
+    public bool equal_to(DateTimeSpan other) {
+        if (this == other)
+            return true;
+        
+        return start_date_time.equal(other.start_date_time) && end_date_time.equal(other.end_date_time);
+    }
+    
+    public uint hash() {
+        return start_date_time.hash() ^ end_date_time.hash();
     }
     
     public override string to_string() {

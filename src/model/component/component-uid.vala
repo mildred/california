@@ -27,6 +27,12 @@ public class UID : BaseObject, Gee.Hashable<UID>, Gee.Comparable<UID> {
         return (this != other) ? value == other.value : true;
     }
     
+    /**
+     * Compare UIDs for sort order.
+     *
+     * This is not particularly useful -- there's no notion of ordering for UIDs -- but can be
+     * used to stabilize sorts of {@link Instance}s.
+     */
     public int compare_to(UID other) {
         return strcmp(value, other.value);
     }

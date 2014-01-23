@@ -115,14 +115,16 @@ public class Host : Gtk.Grid {
         // add event to every date it represents
         foreach (Calendar.Date date in event.get_event_date_span()) {
             Cell? cell = date_to_cell.get(date);
-            if (cell == null) {
-                debug("Unable to add event %s to grid: date %s unavailable", event.to_string(),
-                    date.to_string());
-                
-                continue;
-            }
-            
-            cell.add_event(event);
+            if (cell != null)
+                cell.add_event(event);
+        }
+    }
+    
+    public void remove_event(Component.Event event) {
+        foreach (Calendar.Date date in event.get_event_date_span()) {
+            Cell? cell = date_to_cell.get(date);
+            if (cell != null)
+                cell.remove_event(event);
         }
     }
 }

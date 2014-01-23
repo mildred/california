@@ -13,7 +13,7 @@ namespace California.Calendar {
  * value is described as thousands of years from now.
  */
 
-public class Year : DateSpan, Gee.Comparable<Year>, Gee.Hashable<Year> {
+public class Year : DateSpan {
     /**
      * The year as an integer.
      */
@@ -48,18 +48,6 @@ public class Year : DateSpan, Gee.Comparable<Year>, Gee.Hashable<Year> {
         assert(gdate.valid());
         
         this(gdate.get_year());
-    }
-    
-    public int compare_to(Year other) {
-        return value - other.value;
-    }
-    
-    public bool equal_to(Year other) {
-        return value == other.value;
-    }
-    
-    public uint hash() {
-        return value;
     }
     
     internal DateYear to_date_year() {

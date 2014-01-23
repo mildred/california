@@ -18,7 +18,7 @@ namespace California.Calendar {
  * {@link Date.week_of} to obtain a Week for a particular calendar day.
  */
 
-public class Week : DateSpan, Gee.Hashable<Week> {
+public class Week : DateSpan {
     /**
      * The one-based week of the month (1 to 6).
      */
@@ -69,18 +69,6 @@ public class Week : DateSpan, Gee.Hashable<Week> {
      */
     public Week adjust(int quantity) {
         return start_date.adjust(quantity, Unit.WEEK).week_of(first_of_week);
-    }
-    
-    public bool equal_to(Week other) {
-        if (this == other)
-            return true;
-        
-        return (week_of_year == other.week_of_year) && month_of_year.equal_to(other.month_of_year);
-    }
-    
-    public uint hash() {
-        // give 6 bits for the week of the year (1 - 52)
-        return (month_of_year.year.value << 6) | week_of_year;
     }
     
     public override string to_string() {

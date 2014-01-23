@@ -12,7 +12,12 @@ namespace California.Component {
  * See [[https://tools.ietf.org/html/rfc5545#section-3.6.1]]
  */
 
-public class Event : Instance {
+public class Event : Instance, Gee.Comparable<Event> {
+    public const string PROP_SUMMARY = "summary";
+    public const string PROP_DESCRIPTION = "description";
+    public const string PROP_DATE_TIME_SPAN = "date-time-span";
+    public const string PROP_DATE_SPAN = "date-span";
+    
     /**
      * Summary (title) of {@link Event}.
      */
@@ -41,9 +46,20 @@ public class Event : Instance {
     
     /**
      * Create an {@link Event} {@link Component} from an EDS CalComponent object.
+     *
+     * Throws a BackingError if the E.CalComponent's VTYPE is not VEVENT.
      */
-    public Event(E.CalComponent eds_component) throws CalendarError {
-        base (eds_component);
+    public Event(E.CalComponent eds_component) throws Error {
+        base (eds_component, E.CalComponentVType.EVENT);
+        
+        // remainder of state is initialized in update()
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public override void update(E.CalComponent eds_component) throws Error {
+        base.update(eds_component);
         
         E.CalComponentText text;
         eds_component.get_summary(out text);
@@ -92,6 +108,54 @@ public class Event : Instance {
      */
     public Calendar.DateSpan get_event_date_span() {
         return date_span ?? new Calendar.DateSpan.from_date_time_span(date_time_span);
+    }
+    
+    /**
+     * Compares an {@link Event} to another and returns which is chronologically first.
+     *
+     * The method attempts to compare DATE-TIMEs first, then DATEs, coercing a DATE-TIME into a DATE
+     * if necessary.
+     *
+     * If both events have the same chronological time, they're sorted by summary in lexographical
+     * order.
+     *
+     * {@link dtstamp} is the third comparison attempted.  In general, dtstamp is the time the
+     * {@link Component} was created.
+     *
+     * Finally, UIDs are used to stabilize the sort.
+     *
+     * @inheritDoc
+     */
+    public int compare_to(Event other) {
+        if (this == other)
+            return 0;
+        
+        // starting time
+        int compare;
+        if (date_time_span != null && other.date_time_span != null)
+            compare = date_time_span.compare_to(other.date_time_span);
+        else if (date_span != null && other.date_span != null)
+            compare = date_span.compare_to(other.date_span);
+        else if (date_time_span != null)
+            compare = new Calendar.DateSpan.from_date_time_span(date_time_span).compare_to(other.date_span);
+        else
+            compare = date_span.compare_to(new Calendar.DateSpan.from_date_time_span(other.date_time_span));
+        
+        if (compare != 0)
+            return compare;
+        
+        // summary
+        compare = strcmp(summary, other.summary);
+        if (compare != 0)
+            return compare;
+        
+        // dtstamp
+        compare = dtstamp.compare(other.dtstamp);
+        if (compare != 0)
+            return compare;
+        
+        // stabilize with UIDs
+        return uid.compare_to(other.uid);
     }
     
     public override string to_string() {

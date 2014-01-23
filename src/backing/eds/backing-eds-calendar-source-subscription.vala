@@ -63,12 +63,11 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
     private bool on_instance_generated(E.CalComponent eds_component, time_t instance_start,
         time_t instance_end) {
         try {
-            Component.Event event = new Component.Event(eds_component);
-            debug("generated %s for %s", event.to_string(), calendar.to_string());
-            
-            event_discovered(event);
-        } catch (CalendarError calerr) {
-            debug("Unable to generate event for %s: %s", to_string(), calerr.message);
+            Component.Event? event = Component.Instance.convert(eds_component) as Component.Event;
+            if (event != null)
+                notify_event_discovered(event);
+        } catch (Error err) {
+            debug("Unable to generate discovered event for %s: %s", to_string(), err.message);
         }
         
         return true;
@@ -80,12 +79,43 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
     }
     
     private void on_objects_added(SList<weak iCal.icalcomponent> objects) {
+        foreach (weak iCal.icalcomponent ical_component in objects) {
+            E.CalComponent eds_component = new E.CalComponent.from_string(ical_component.as_ical_string());
+            try {
+                Component.Event? event = Component.Instance.convert(eds_component) as Component.Event;
+                if (event != null)
+                    notify_event_added(event);
+            } catch (Error err) {
+                debug("Unable to generate added event for %s: %s", to_string(), err.message);
+            }
+        }
     }
     
     private void on_objects_modified(SList<weak iCal.icalcomponent> objects) {
+        foreach (weak iCal.icalcomponent ical_component in objects) {
+            E.CalComponent eds_component = new E.CalComponent.from_string(ical_component.as_ical_string());
+            
+            unowned string uid_string;
+            eds_component.get_uid(out uid_string);
+            Component.UID uid = new Component.UID(uid_string);
+            
+            Component.Event? event = for_uid(uid) as Component.Event;
+            if (event == null)
+                continue;
+            
+            try {
+                event.update(eds_component);
+            } catch (Error err) {
+                debug("Unable to update event %s: %s", event.to_string(), err.message);
+            }
+            
+            notify_event_altered(event);
+        }
     }
     
-    private void on_objects_removed(SList<weak E.CalComponentId?> uids) {
+    private void on_objects_removed(SList<weak E.CalComponentId?> ids) {
+        foreach (weak E.CalComponentId id in ids)
+            notify_event_removed(new Component.UID(id.uid));
     }
 }
 
