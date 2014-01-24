@@ -31,6 +31,14 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         Gtk.Box layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         
+        Gtk.ToolButton today = new Gtk.ToolButton(null, _("Today"));
+        today.is_important = true;
+        today.clicked.connect(() => {
+            Calendar.MonthOfYear now = new Calendar.MonthOfYear.now();
+            if (!now.equal_to(month_of_year))
+                month_of_year = now;
+        });
+        
         Gtk.ToolButton back = create_button("go-previous-symbolic");
         back.clicked.connect(() => { month_of_year = month_of_year.adjust(-1); });
         
@@ -43,6 +51,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         date_item.add(date_label);
         
         Gtk.Toolbar toolbar = new Gtk.Toolbar();
+        toolbar.add(today);
         toolbar.add(back);
         toolbar.add(fwd);
         toolbar.add(date_item);
@@ -59,11 +68,7 @@ public class MainWindow : Gtk.ApplicationWindow {
     }
     
     private static Gtk.ToolButton create_button(string icon_name) {
-        Gtk.Button button = new Gtk.Button();
-        button.image = new Gtk.Image.from_icon_name(icon_name, Gtk.IconSize.BUTTON);
-        button.always_show_image = true;
-        
-        return new Gtk.ToolButton(button, null);
+        return new Gtk.ToolButton(new Gtk.Image.from_icon_name(icon_name, Gtk.IconSize.BUTTON), null);
     }
     
     private void on_month_of_year_changed() {
