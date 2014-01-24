@@ -11,6 +11,7 @@ california_VALASOURCES = \
 	main.vala \
 	\
 	application/california-application.vala \
+	application/california-main-window.vala \
 	application/resource.vala \
 	\
 	backing/backing.vala \
@@ -27,13 +28,6 @@ california_VALASOURCES = \
 	\
 	base/base-object.vala \
 	base/base-unit.vala \
-	\
-	views/main-window.vala \
-	views/views.vala \
-	\
-	views/month/month.vala \
-	views/month/month-host.vala \
-	views/month/month-cell.vala \
 	\
 	model/calendar/calendar.vala \
 	model/calendar/calendar-date-span.vala \
@@ -56,6 +50,13 @@ california_VALASOURCES = \
 	model/component/component-event.vala \
 	model/component/component-instance.vala \
 	model/component/component-uid.vala \
+	\
+	view/view.vala \
+	view/view-host-interface.vala \
+	\
+	view/month/month.vala \
+	view/month/month-host.vala \
+	view/month/month-cell.vala \
 	\
 	$(NULL)
 

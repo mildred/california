@@ -29,7 +29,7 @@ public class Application : Gtk.Application {
         { "quit", on_quit }
     };
     
-    private Views.MainWindow? main_window = null;
+    private MainWindow? main_window = null;
     private File? exec_file = null;
     
     public Application() {
@@ -59,7 +59,7 @@ public class Application : Gtk.Application {
         
         // unit initialization
         try {
-            Views.init();
+            View.init();
         } catch (Error err) {
             error_message(_("Unable to open California: %s").printf(err.message));
             quit();
@@ -72,7 +72,7 @@ public class Application : Gtk.Application {
     // This method is invoked when the main loop terminates on the primary instance.
     public override void shutdown() {
         // unit termination
-        Views.terminate();
+        View.terminate();
         
         base.shutdown();
     }
@@ -81,7 +81,7 @@ public class Application : Gtk.Application {
     // secondary instance.  It is called after startup().
     public override void activate() {
         if (main_window == null) {
-            main_window = new Views.MainWindow(this);
+            main_window = new MainWindow(this);
             main_window.show_all();
         }
         

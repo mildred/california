@@ -4,7 +4,7 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Views.Month {
+namespace California.View.Month {
 
 /**
  * A Gtk.Grid widget that displays a month's worth of days as cells.
@@ -12,10 +12,10 @@ namespace California.Views.Month {
  * @see Cell
  */
 
-public class Host : Gtk.Grid {
+public class Host : Gtk.Grid, View.HostInterface {
     // days of the week
     public const int COLS = Calendar.DayOfWeek.COUNT;
-    // weeks of the month
+    // calendar weeks to be displayed at any one time
     public const int ROWS = 6;
     
     public const string PROP_MONTH_OF_YEAR = "month-of-year";
@@ -27,7 +27,7 @@ public class Host : Gtk.Grid {
      *
      * Defaults to the current month and year.
      */
-    public Calendar.MonthOfYear month_of_year { get; set; default = new Calendar.MonthOfYear.now(); }
+    public Calendar.MonthOfYear month_of_year { get; private set; }
     
     /**
      * The set first day of the week.
@@ -39,19 +39,20 @@ public class Host : Gtk.Grid {
      */
     public bool show_outside_month { get; set; default = true; }
     
-    private Gee.HashMap<Calendar.Date, Cell> date_to_cell = new Gee.HashMap<Calendar.Date, Cell>();
-    
     /**
-     * If MonthYear is not supplied, the current date is used.
+     * @inheritDoc
      */
-    public Host(Calendar.MonthOfYear? month_of_year) {
+    public string current_label { get; protected set; }
+    
+    private Gee.HashMap<Calendar.Date, Cell> date_to_cell = new Gee.HashMap<Calendar.Date, Cell>();
+    private Gee.ArrayList<Backing.CalendarSourceSubscription> subscriptions = new Gee.ArrayList<
+        Backing.CalendarSourceSubscription>();
+    
+    public Host() {
         column_homogeneous = true;
         column_spacing = 0;
         row_homogeneous = true;
         row_spacing = 0;
-        
-        if (month_of_year != null)
-            this.month_of_year = month_of_year;
         
         // prep the grid with a fixed number of rows and columns
         for (int row = 0; row < ROWS; row++)
@@ -66,11 +67,37 @@ public class Host : Gtk.Grid {
                 attach(new Cell(this, row, col), col, row, 1, 1);
         }
         
-        update();
+        notify[PROP_MONTH_OF_YEAR].connect(on_month_of_year_changed);
+        notify[PROP_FIRST_OF_WEEK].connect(update_cells);
+        notify[PROP_SHOW_OUTSIDE_MONTH].connect(update_cells);
         
-        notify[PROP_MONTH_OF_YEAR].connect(update);
-        notify[PROP_FIRST_OF_WEEK].connect(update);
-        notify[PROP_SHOW_OUTSIDE_MONTH].connect(update);
+        // update now that signal handlers are in place
+        month_of_year = new Calendar.MonthOfYear.now();
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public void next() {
+        month_of_year = month_of_year.adjust(1);
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public void prev() {
+        month_of_year = month_of_year.adjust(-1);
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public void today() {
+        // since changing the date is expensive in terms of adding/removing subscriptions, only
+        // update the property if it's actually different
+        Calendar.MonthOfYear now = new Calendar.MonthOfYear.now();
+        if (!now.equal_to(month_of_year))
+            month_of_year = now;
     }
     
     private Cell get_cell(int row, int col) {
@@ -96,7 +123,7 @@ public class Host : Gtk.Grid {
         }
     }
     
-    private void update() {
+    private void update_cells() {
         // clear mapping
         date_to_cell.clear();
         
@@ -111,7 +138,43 @@ public class Host : Gtk.Grid {
             update_week(row++, week);
     }
     
-    public void add_event(Component.Event event) {
+    private void on_month_of_year_changed() {
+        current_label = month_of_year.full_name;
+        update_cells();
+        
+        // generate new DateTimeSpan window for all calendar subscriptions
+        Calendar.DateTimeSpan window = new Calendar.DateTimeSpan.from_date_span(month_of_year,
+            new TimeZone.local());
+        
+        // clear current subscriptions and generate new subscriptions for new window
+        subscriptions.clear();
+        foreach (Backing.Store store in Backing.Manager.instance.get_stores()) {
+            foreach (Backing.Source source in store.get_sources_of_type(typeof (Backing.CalendarSource))) {
+                Backing.CalendarSource calendar = (Backing.CalendarSource) source;
+                calendar.subscribe_async.begin(window, null, on_subscribed);
+            }
+        }
+    }
+    
+    private void on_subscribed(Object? source, AsyncResult result) {
+        Backing.CalendarSource calendar = (Backing.CalendarSource) source;
+        
+        try {
+            Backing.CalendarSourceSubscription subscription = calendar.subscribe_async.end(result);
+            subscriptions.add(subscription);
+            
+            subscription.event_discovered.connect(on_event_added);
+            subscription.event_added.connect(on_event_added);
+            subscription.event_removed.connect(on_event_removed);
+            
+            // this will start signals firing for event changes
+            subscription.start();
+        } catch (Error err) {
+            debug("Unable to subscribe to %s: %s", calendar.to_string(), err.message);
+        }
+    }
+    
+    private void on_event_added(Component.Event event) {
         // add event to every date it represents
         foreach (Calendar.Date date in event.get_event_date_span()) {
             Cell? cell = date_to_cell.get(date);
@@ -120,7 +183,7 @@ public class Host : Gtk.Grid {
         }
     }
     
-    public void remove_event(Component.Event event) {
+    private void on_event_removed(Component.Event event) {
         foreach (Calendar.Date date in event.get_event_date_span()) {
             Cell? cell = date_to_cell.get(date);
             if (cell != null)

@@ -14,6 +14,7 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
     private E.CalClientView view;
     // this is different than "active", which gets set when start completes
     private bool started = false;
+    private Error? start_err = null;
     
     // Called from EdsCalendarSource.subscribe_async().  The CalClientView should not be started
     public EdsCalendarSourceSubscription(EdsCalendarSource eds_calendar, Calendar.DateTimeSpan window,
@@ -23,9 +24,37 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
         this.view = view;
     }
     
+    ~EdsCalendarSourceSubscription() {
+        // need to wait for the finished callback if started
+        if (started && !active)
+            wait_until_started();
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public override void wait_until_started(MainContext context = MainContext.default(),
+        Cancellable? cancellable = null) throws Error {
+        if (!started)
+            throw new BackingError.INVALID("EdsCalendarSourceSubscription not started");
+        
+        if (start_err != null)
+            throw start_err;
+        
+        while (!active) {
+            if (cancellable != null && cancellable.is_cancelled())
+                throw new IOError.CANCELLED("wait_until_started() cancelled");
+            
+            context.iteration(true);
+        }
+    }
+    
+    /**
+     * @inheritDoc
+     */
     public override void start(Cancellable? cancellable) {
         // silently ignore repeated starts
-        if (started)
+        if (started || start_err != null)
             return;
         
         started = true;
@@ -33,6 +62,8 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
         try {
             internal_start(cancellable);
         } catch (Error err) {
+            start_err = err;
+            
             start_failed(err);
         }
     }

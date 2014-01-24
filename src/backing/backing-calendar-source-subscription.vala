@@ -182,6 +182,19 @@ public abstract class CalendarSourceSubscription : BaseObject {
     public abstract void start(Cancellable? cancellable = null);
     
     /**
+     * Wait for {@link start} to complete.
+     *
+     * This call will block until the {@link CalendarSourceSubscription} has started.  It will
+     * pump the event loop to ensure other operations can complete, although be warned that
+     * introduces the possibility of reentrancy, which this method is not guaraneteed to deal with.
+     *
+     * @throws BackingError.INVALID if called before start() has been invoked or IOError.CANCELLED
+     * if the Cancellable is cancelled.
+     */
+    public abstract void wait_until_started(MainContext context = MainContext.default(),
+        Cancellable? cancellable = null) throws Error;
+    
+    /**
      * Returns an {@link Component.Instance} for the {@link Component.UID}.
      *
      * @returns null if the UID has not been seen.

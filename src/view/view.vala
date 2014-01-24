@@ -5,10 +5,12 @@
  */
 
 /**
- * Views for displaying calendar information by the month.
+ * User views of the calendar data.
+ *
+ * The {@link MainWindow} hosts all views and offers an interface to switch between them.
  */
 
-namespace California.Views.Month {
+namespace California.View {
 
 private int init_count = 0;
 
@@ -16,22 +18,16 @@ public void init() throws Error {
     if (!Unit.do_init(ref init_count))
         return;
     
-    // unit initialization
-    Calendar.init();
-    Component.init();
-    
-    // internal initialization
-    Cell.init();
+    // subunit initialization
+    View.Month.init();
 }
 
 public void terminate() {
     if (!Unit.do_terminate(ref init_count))
         return;
     
-    Cell.terminate();
-    
-    Component.terminate();
-    Calendar.terminate();
+    View.Month.terminate();
 }
 
 }
+

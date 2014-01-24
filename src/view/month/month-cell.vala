@@ -4,7 +4,7 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Views.Month {
+namespace California.View.Month {
 
 /**
  * A single cell within a {@link MonthGrid}.
