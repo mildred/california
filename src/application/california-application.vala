@@ -57,9 +57,9 @@ public class Application : Gtk.Application {
     public override void startup() {
         base.startup();
         
-        // unit initialization
+        // internal unit initialization
         try {
-            View.init();
+            MainWindow.init();
         } catch (Error err) {
             error_message(_("Unable to open California: %s").printf(err.message));
             quit();
@@ -71,8 +71,11 @@ public class Application : Gtk.Application {
     
     // This method is invoked when the main loop terminates on the primary instance.
     public override void shutdown() {
-        // unit termination
-        View.terminate();
+        main_window.destroy();
+        main_window = null;
+        
+        // internal unit termination
+        MainWindow.terminate();
         
         base.shutdown();
     }
