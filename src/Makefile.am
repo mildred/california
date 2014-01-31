@@ -52,7 +52,7 @@ california_VALASOURCES = \
 	model/component/component-uid.vala \
 	\
 	view/view.vala \
-	view/view-host-interface.vala \
+	view/view-controller.vala \
 	\
 	view/month/month.vala \
 	view/month/month-host.vala \

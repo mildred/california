@@ -11,7 +11,7 @@ namespace California {
  */
 
 public class MainWindow : Gtk.ApplicationWindow {
-    private View.HostInterface current_host;
+    private View.Controller current_host;
     private View.Month.Host month_host = new View.Month.Host();
     
     public MainWindow(Application app) {
@@ -57,9 +57,9 @@ public class MainWindow : Gtk.ApplicationWindow {
         layout.pack_end(month_host, true, true, 0);
         
         // current host bindings
-        current_host.bind_property(View.HostInterface.PROP_CURRENT_LABEL, headerbar, "title",
+        current_host.bind_property(View.Controller.PROP_CURRENT_LABEL, headerbar, "title",
             BindingFlags.SYNC_CREATE);
-        current_host.bind_property(View.HostInterface.PROP_IS_VIEWING_TODAY, today, "sensitive",
+        current_host.bind_property(View.Controller.PROP_IS_VIEWING_TODAY, today, "sensitive",
             BindingFlags.SYNC_CREATE | BindingFlags.INVERT_BOOLEAN);
         
         add(layout);

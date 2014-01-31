@@ -12,7 +12,7 @@ namespace California.View.Month {
  * @see Cell
  */
 
-public class Host : Gtk.Grid, View.HostInterface {
+public class Host : Gtk.Grid, View.Controller {
     // days of the week
     public const int COLS = Calendar.DayOfWeek.COUNT;
     // calendar weeks to be displayed at any one time

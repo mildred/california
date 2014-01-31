@@ -7,14 +7,14 @@
 namespace California.View {
 
 /**
- * All hosts (view containers) need to implement this interface, giving them a generic interface
- * for a view controller to manipulate.
+ * All view controllers need to implement this interface, giving them a generic interface for the
+ * host window to manipulate.
  *
- * The host is expected to maintain a current date, which can be manipulated through this interface
- * and reports itself via properties.
+ * The controller is expected to maintain a current date, which can be manipulated through this
+ * interface and reports itself via properties.
  */
 
-public interface HostInterface : Object {
+public interface Controller : Object {
     public const string PROP_CURRENT_LABEL = "current-label";
     public const string PROP_IS_VIEWING_TODAY = "is-viewing-today";
     
