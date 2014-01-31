@@ -54,13 +54,6 @@ public class MonthOfYear : DateSpan {
     }
     
     /**
-     * Returns the {@link MonthYear} for the current time in the specified timezone.
-     */
-    public MonthOfYear.now(TimeZone tz = new TimeZone.local()) {
-        this(Month.current(tz), new Year.now(tz));
-    }
-    
-    /**
      * Returns the first {@link DayOfMonth} for the month in the associated year.
      */
     public DayOfMonth first_day_of_month() {

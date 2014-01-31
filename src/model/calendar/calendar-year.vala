@@ -37,13 +37,6 @@ public class Year : DateSpan {
         }
     }
     
-    /**
-     * Create a {@link Year} for the current time in the specified timezone.
-     */
-    public Year.now(TimeZone tz = new TimeZone.local()) {
-        this(new DateTime.now(tz).get_year());
-    }
-    
     internal Year.from_gdate(GLib.Date gdate) {
         assert(gdate.valid());
         

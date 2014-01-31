@@ -26,8 +26,6 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         // create GtkHeaderBar and pack it in
         Gtk.HeaderBar headerbar = new Gtk.HeaderBar();
-        headerbar.title = Application.TITLE;
-        headerbar.subtitle = Application.DESCRIPTION;
         
         Gtk.Button today = new Gtk.Button.with_label(_("Today"));
         today.clicked.connect(() => { current_host.today(); });
@@ -38,15 +36,15 @@ public class MainWindow : Gtk.ApplicationWindow {
         Gtk.Button next = new Gtk.Button.from_icon_name("go-next-symbolic", Gtk.IconSize.MENU);
         next.clicked.connect(() => { current_host.next(); });
         
-        Gtk.Label date_label = new Gtk.Label(null);
-        current_host.bind_property(View.HostInterface.PROP_CURRENT_LABEL, date_label, "label",
-            BindingFlags.SYNC_CREATE);
+        Gtk.Box nav_buttons = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        nav_buttons.get_style_context().add_class(Gtk.STYLE_CLASS_LINKED);
+        nav_buttons.get_style_context().add_class(Gtk.STYLE_CLASS_RAISED);
+        nav_buttons.pack_start(prev);
+        nav_buttons.pack_end(next);
         
         // pack left-side of window
         headerbar.pack_start(today);
-        headerbar.pack_start(prev);
-        headerbar.pack_start(next);
-        headerbar.pack_start(date_label);
+        headerbar.pack_start(nav_buttons);
         
         Gtk.Button new_event = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.MENU);
         new_event.tooltip_text = _("Create a new event");
@@ -57,6 +55,12 @@ public class MainWindow : Gtk.ApplicationWindow {
         Gtk.Box layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         layout.pack_start(headerbar, false, true, 0);
         layout.pack_end(month_host, true, true, 0);
+        
+        // current host bindings
+        current_host.bind_property(View.HostInterface.PROP_CURRENT_LABEL, headerbar, "title",
+            BindingFlags.SYNC_CREATE);
+        current_host.bind_property(View.HostInterface.PROP_IS_VIEWING_TODAY, today, "sensitive",
+            BindingFlags.SYNC_CREATE | BindingFlags.INVERT_BOOLEAN);
         
         add(layout);
     }

@@ -16,11 +16,18 @@ namespace California.View {
 
 public interface HostInterface : Object {
     public const string PROP_CURRENT_LABEL = "current-label";
+    public const string PROP_IS_VIEWING_TODAY = "is-viewing-today";
     
     /**
      * A user-visible string representing the current calendar view.
      */
     public abstract string current_label { get; protected set; }
+    
+    /**
+     * Flag indicating if the current calendar unit matches the unit the {@link today} method
+     * could jump to.
+     */
+    public abstract bool is_viewing_today { get; protected set; }
     
     /**
      * Move forward one calendar unit.

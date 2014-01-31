@@ -44,6 +44,11 @@ public class Host : Gtk.Grid, View.HostInterface {
      */
     public string current_label { get; protected set; }
     
+    /**
+     * @inheritDoc
+     */
+    public bool is_viewing_today { get; protected set; }
+    
     private Gee.HashMap<Calendar.Date, Cell> date_to_cell = new Gee.HashMap<Calendar.Date, Cell>();
     private Gee.ArrayList<Backing.CalendarSourceSubscription> subscriptions = new Gee.ArrayList<
         Backing.CalendarSourceSubscription>();
@@ -72,7 +77,8 @@ public class Host : Gtk.Grid, View.HostInterface {
         notify[PROP_SHOW_OUTSIDE_MONTH].connect(update_cells);
         
         // update now that signal handlers are in place
-        month_of_year = new Calendar.MonthOfYear.now();
+        month_of_year = Calendar.today.month_of_year();
+        is_viewing_today = true;
     }
     
     /**
@@ -95,7 +101,7 @@ public class Host : Gtk.Grid, View.HostInterface {
     public void today() {
         // since changing the date is expensive in terms of adding/removing subscriptions, only
         // update the property if it's actually different
-        Calendar.MonthOfYear now = new Calendar.MonthOfYear.now();
+        Calendar.MonthOfYear now = Calendar.today.month_of_year();
         if (!now.equal_to(month_of_year))
             month_of_year = now;
     }
@@ -140,6 +146,8 @@ public class Host : Gtk.Grid, View.HostInterface {
     
     private void on_month_of_year_changed() {
         current_label = month_of_year.full_name;
+        is_viewing_today = month_of_year.equal_to(Calendar.today.month_of_year());
+        
         update_cells();
         
         // generate new DateTimeSpan window for all calendar subscriptions
