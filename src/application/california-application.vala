@@ -18,6 +18,7 @@ public class Application : Gtk.Application {
     public const string COPYRIGHT = _("Copyright 2014 Yorba Foundation");
     public const string VERSION = PACKAGE_VERSION;
     public const string ID = "org.yorba.california";
+    public const string ICON_NAME = "x-office-calendar";
     
     public const string AUTHORS[] = {
         "Jim Nelson <jim@yorba.org>",
@@ -112,6 +113,7 @@ public class Application : Gtk.Application {
             "license-type", Gtk.License.LGPL_2_1,
             "version", VERSION,
             "title", _("About %s").printf(TITLE),
+            "logo-icon-name", ICON_NAME,
             /// Translators: add your name and email address to receive credit in the About dialog
             /// For example: Yamada Taro <yamada.taro@example.com>
             "translator-credits", _("translator-credits")

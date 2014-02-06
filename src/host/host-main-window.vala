@@ -20,6 +20,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         title = Application.TITLE;
         set_size_request(800, 600);
         set_default_size(1024, 768);
+        set_default_icon_name(Application.ICON_NAME);
         
         // start in Month view
         current_view = month_view;
