@@ -7,14 +7,14 @@
 namespace California.View {
 
 /**
- * All view controllers need to implement this interface, giving them a generic interface for the
- * host window to manipulate.
+ * All views need to offer this interface in their host, giving them a generic interface for the
+ * controller window to manipulate.
  *
- * The controller is expected to maintain a current date, which can be manipulated through this
- * interface and reports itself via properties.
+ * The Controllable is expected to maintain a current date, which can be manipulated through this
+ * interface and report itself via properties.
  */
 
-public interface Controller : Object {
+public interface Controllable : Object {
     public const string PROP_CURRENT_LABEL = "current-label";
     public const string PROP_IS_VIEWING_TODAY = "is-viewing-today";
     
@@ -30,6 +30,18 @@ public interface Controller : Object {
     public abstract bool is_viewing_today { get; protected set; }
     
     /**
+     * Default {@link Calendar.Date} for the calendar unit in view.
+     */
+    public abstract Calendar.Date default_date { get; protected set; }
+    
+    /**
+     * Signal from the {@link Controller} that an event should be created with the specified
+     * initial parameters.
+     */
+    public signal void request_create_event(Calendar.DateTimeSpan initial, Gtk.Widget relative_to,
+        Cairo.RectangleInt? for_location);
+    
+    /**
      * Move forward one calendar unit.
      */
     public abstract void next();
@@ -41,8 +53,10 @@ public interface Controller : Object {
     
     /**
      * Jump to calendar unit representing the current date.
+     *
+     * Returns the Gtk.Widget displaying the current date.
      */
-    public abstract void today();
+    public abstract Gtk.Widget today();
 }
 
 }

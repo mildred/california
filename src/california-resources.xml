@@ -3,5 +3,8 @@
     <gresource prefix="/org/yorba/california">
         <file compressed="true">rc/app-menu.interface</file>
     </gresource>
+    <gresource prefix="/org/yorba/california">
+        <file compressed="false">rc/create-event.ui</file>
+    </gresource>
 </gresources>
 

@@ -26,12 +26,13 @@ public Date today;
 
 private int init_count = 0;
 
-private static string FMT_MONTH_YEAR_FULL;
-private static string FMT_MONTH_YEAR_ABBREV;
-private static string FMT_MONTH_FULL;
-private static string FMT_MONTH_ABBREV;
-private static string FMT_DAY_OF_WEEK_FULL;
-private static string FMT_DAY_OF_WEEK_ABBREV;
+private static unowned string FMT_MONTH_YEAR_FULL;
+private static unowned string FMT_MONTH_YEAR_ABBREV;
+private static unowned string FMT_MONTH_FULL;
+private static unowned string FMT_MONTH_ABBREV;
+private static unowned string FMT_DAY_OF_WEEK_FULL;
+private static unowned string FMT_DAY_OF_WEEK_ABBREV;
+private static unowned string FMT_FULL_DATE;
 
 public void init() throws Error {
     if (!California.Unit.do_init(ref init_count))
@@ -46,6 +47,7 @@ public void init() throws Error {
     FMT_MONTH_ABBREV = _("%b");
     FMT_DAY_OF_WEEK_FULL = _("%A");
     FMT_DAY_OF_WEEK_ABBREV = _("%a");
+    FMT_FULL_DATE = _("%x");
     
     // internal initialization
     DayOfWeek.init();
@@ -66,13 +68,6 @@ public void terminate() {
     Month.terminate();
     DayOfMonth.terminate();
     DayOfWeek.terminate();
-    
-    FMT_MONTH_YEAR_FULL = null;
-    FMT_MONTH_YEAR_ABBREV = null;
-    FMT_MONTH_FULL = null;
-    FMT_MONTH_ABBREV = null;
-    FMT_DAY_OF_WEEK_FULL = null;
-    FMT_DAY_OF_WEEK_ABBREV = null;
 }
 
 }

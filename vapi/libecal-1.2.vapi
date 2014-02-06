@@ -17,8 +17,9 @@ namespace E {
 		[CCode (finish_name = "e_cal_client_connect_finish")]
 		public static async unowned E.Client connect (E.Source source, E.CalClientSourceType source_type, GLib.Cancellable cancellable) throws GLib.Error;
 		public static unowned E.Client connect_sync (E.Source source, E.CalClientSourceType source_type, GLib.Cancellable cancellable) throws GLib.Error;
+		[CCode (finish_name = "e_cal_client_create_object_finish")]
 		public async bool create_object (iCal.icalcomponent icalcomp, GLib.Cancellable? cancellable) throws GLib.Error;
-		public bool create_object_sync (iCal.icalcomponent icalcomp, string out_uid, GLib.Cancellable? cancellable) throws GLib.Error;
+		public bool create_object_sync (iCal.icalcomponent icalcomp, out string out_uid, GLib.Cancellable? cancellable) throws GLib.Error;
 		public void create_objects (GLib.SList icalcomps, GLib.Cancellable cancellable, GLib.AsyncReadyCallback callback);
 		public bool create_objects_finish (GLib.AsyncResult _result, GLib.SList out_uids) throws GLib.Error;
 		public bool create_objects_sync (GLib.SList icalcomps, GLib.SList out_uids, GLib.Cancellable cancellable) throws GLib.Error;

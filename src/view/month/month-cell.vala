@@ -10,14 +10,14 @@ namespace California.View.Month {
  * A single cell within a {@link MonthGrid}.
  */
 
-public class Cell : Gtk.DrawingArea {
+public class Cell : Gtk.EventBox {
     private const int TOP_LINE_FONT_SIZE_PT = 11;
     private const int LINE_FONT_SIZE_PT = 8;
     
     private const int TEXT_MARGIN_PX = 2;
     private const int LINE_SPACING_PX = 4;
     
-    public weak Host owner { get; private set; }
+    public weak Controllable owner { get; private set; }
     public int row { get; private set; }
     public int col { get; private set; }
     public Calendar.Date? date { get; set; default = null; }
@@ -36,14 +36,21 @@ public class Cell : Gtk.DrawingArea {
     private static int top_line_height_px = -1;
     private static int line_height_px = -1;
     
-    public Cell(Host owner, int row, int col) {
+    private Gtk.DrawingArea canvas = new Gtk.DrawingArea();
+    
+    public Cell(Controllable owner, int row, int col) {
         this.owner = owner;
         this.row = row;
         this.col = col;
         
+        // respond to mouse button events and wrap the EventBox around the DrawingArea, which is
+        // the real widget of interest
+        events |= Gdk.EventMask.BUTTON_PRESS_MASK;
+        add(canvas);
+        
         notify["date"].connect(queue_draw);
         
-        draw.connect(on_draw);
+        canvas.draw.connect(on_draw);
     }
     
     internal static void init() {
@@ -144,13 +151,13 @@ public class Cell : Gtk.DrawingArea {
         ctx.set_line_width(0.5);
         
         // only draw bottom line if not on the bottom row
-        if (row < Host.ROWS - 1) {
+        if (row < Controllable.ROWS - 1) {
             ctx.move_to(0, height);
             ctx.line_to(width, height);
         }
         
         // only draw right line if not on the right-most column
-        if (col < Host.COLS - 1) {
+        if (col < Controllable.COLS - 1) {
             ctx.move_to(width, 0);
             ctx.line_to(width, height);
         }
@@ -166,6 +173,9 @@ public class Cell : Gtk.DrawingArea {
         // represents the line number being drawn (zero-based for remaining lines)
         int line_number = 0;
         
+        // convert all times to local timezone
+        TimeZone local = new TimeZone.local();
+        
         // draw all-day events
         foreach (Component.Event event in all_day_events)
             draw_line_of_text(ctx, line_number++, RGBA_DAY_OF_MONTH, event.summary);
@@ -173,7 +183,7 @@ public class Cell : Gtk.DrawingArea {
         // draw timed events
         foreach (Component.Event event in timed_events) {
             draw_line_of_text(ctx, line_number++, RGBA_DAY_OF_MONTH, "%d %s".printf(
-                event.date_time_span.start_date_time.get_hour(), event.summary));
+                event.date_time_span.start_date_time.to_timezone(local).get_hour(), event.summary));
         }
         
         return true;

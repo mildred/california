@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.0 -->
+<interface>
+  <requires lib="gtk+" version="3.10"/>
+  <!-- interface-license-type gplv2 -->
+  <template class="CaliforniaHostCreateEvent" parent="GtkGrid">
+    <property name="name">grid</property>
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_left">8</property>
+    <property name="margin_right">8</property>
+    <property name="margin_top">8</property>
+    <property name="margin_bottom">8</property>
+    <property name="row_spacing">8</property>
+    <property name="column_homogeneous">True</property>
+    <child>
+      <object class="GtkLabel" id="title_label">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="ypad">8</property>
+        <property name="label" translatable="yes">New Event</property>
+        <property name="justify">center</property>
+        <property name="ellipsize">end</property>
+        <property name="width_chars">8</property>
+        <property name="max_width_chars">8</property>
+        <property name="lines">1</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+        </attributes>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+        <property name="width">2</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkEntry" id="summary_entry">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="has_focus">True</property>
+        <property name="max_length">64</property>
+        <property name="activates_default">True</property>
+        <property name="width_chars">24</property>
+        <property name="placeholder_text" translatable="yes">Untitled event</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
+        <property name="width">2</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="dt_selection_box">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">4</property>
+        <property name="baseline_position">top</property>
+        <child>
+          <object class="GtkLabel" id="from_label">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" comments="As in &quot;From &lt;date&gt; &lt;time&gt; to &lt;date&gt; &lt;time&gt;&quot;">From</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="dtstart_date_button">
+            <property name="label">dtstart</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="xalign">0.52999997138977051</property>
+            <signal name="clicked" handler="on_date_button_clicked" object="CaliforniaHostCreateEvent" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="dtstart_time_combo">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="to_label">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" comments="As in &quot;From &lt;date&gt; &lt;time&gt; to &lt;date&gt; &lt;time&gt;&quot;">to</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="dtend_date_button">
+            <property name="label">dtend</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <signal name="clicked" handler="on_date_button_clicked" object="CaliforniaHostCreateEvent" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="dtend_time_combo">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">5</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">2</property>
+        <property name="width">2</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="all_day_toggle">
+        <property name="label" translatable="yes">_All-day event</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="halign">end</property>
+        <property name="use_underline">True</property>
+        <property name="xalign">0</property>
+        <property name="image_position">right</property>
+        <property name="draw_indicator">True</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">3</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="create_button">
+        <property name="label" translatable="yes">_Create</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="can_default">True</property>
+        <property name="has_default">True</property>
+        <property name="receives_default">True</property>
+        <property name="halign">end</property>
+        <property name="valign">end</property>
+        <property name="margin_top">8</property>
+        <property name="use_underline">True</property>
+        <property name="xalign">0.56000000238418579</property>
+        <signal name="clicked" handler="on_create_clicked" object="CaliforniaHostCreateEvent" swapped="no"/>
+        <style>
+          <class name="suggested-action"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">5</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="calendar_box">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">8</property>
+        <child>
+          <object class="GtkLabel" id="calendar_label">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Calendar:</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="calendar_combo">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">4</property>
+        <property name="width">2</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+  </template>
+</interface>

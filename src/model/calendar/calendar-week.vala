@@ -68,7 +68,7 @@ public class Week : DateSpan {
      * Subtraction (adjusting to a past date) is acheived by using a negative quantity.
      */
     public Week adjust(int quantity) {
-        return start_date.adjust(quantity, Unit.WEEK).week_of(first_of_week);
+        return start_date.adjust(quantity, DateUnit.WEEK).week_of(first_of_week);
     }
     
     public override string to_string() {

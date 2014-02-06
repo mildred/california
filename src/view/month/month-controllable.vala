@@ -12,7 +12,7 @@ namespace California.View.Month {
  * @see Cell
  */
 
-public class Host : Gtk.Grid, View.Controller {
+public class Controllable : Gtk.Grid, View.Controllable {
     // days of the week
     public const int COLS = Calendar.DayOfWeek.COUNT;
     // calendar weeks to be displayed at any one time
@@ -49,11 +49,16 @@ public class Host : Gtk.Grid, View.Controller {
      */
     public bool is_viewing_today { get; protected set; }
     
+    /**
+     * @inheritDoc
+     */
+    public Calendar.Date default_date { get; protected set; }
+    
     private Gee.HashMap<Calendar.Date, Cell> date_to_cell = new Gee.HashMap<Calendar.Date, Cell>();
     private Gee.ArrayList<Backing.CalendarSourceSubscription> subscriptions = new Gee.ArrayList<
         Backing.CalendarSourceSubscription>();
     
-    public Host() {
+    public Controllable() {
         column_homogeneous = true;
         column_spacing = 0;
         row_homogeneous = true;
@@ -68,8 +73,13 @@ public class Host : Gtk.Grid, View.Controller {
         
         // pre-add grid elements for every cell, which are updated when the MonthYear changes
         for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLS; col++)
-                attach(new Cell(this, row, col), col, row, 1, 1);
+            for (int col = 0; col < COLS; col++) {
+                // mouse events are enabled in Cell's constructor, not here
+                Cell cell = new Cell(this, row, col);
+                cell.button_press_event.connect(on_cell_clicked);
+                
+                attach(cell, col, row, 1, 1);
+            }
         }
         
         notify[PROP_MONTH_OF_YEAR].connect(on_month_of_year_changed);
@@ -78,7 +88,6 @@ public class Host : Gtk.Grid, View.Controller {
         
         // update now that signal handlers are in place
         month_of_year = Calendar.today.month_of_year();
-        is_viewing_today = true;
     }
     
     /**
@@ -98,12 +107,16 @@ public class Host : Gtk.Grid, View.Controller {
     /**
      * @inheritDoc
      */
-    public void today() {
+    public Gtk.Widget today() {
         // since changing the date is expensive in terms of adding/removing subscriptions, only
         // update the property if it's actually different
         Calendar.MonthOfYear now = Calendar.today.month_of_year();
         if (!now.equal_to(month_of_year))
             month_of_year = now;
+        
+        assert(date_to_cell.has_key(Calendar.today));
+        
+        return date_to_cell.get(Calendar.today);
     }
     
     private Cell get_cell(int row, int col) {
@@ -148,6 +161,16 @@ public class Host : Gtk.Grid, View.Controller {
         current_label = month_of_year.full_name;
         is_viewing_today = month_of_year.equal_to(Calendar.today.month_of_year());
         
+        // default date is first of month unless displaying current month, in which case it's
+        // current date
+        try {
+            default_date = is_viewing_today ? Calendar.today
+                : month_of_year.date_for(month_of_year.first_day_of_month());
+        } catch (CalendarError calerr) {
+            // this should always work
+            error("Unable to set default date for %s: %s", month_of_year.to_string(), calerr.message);
+        }
+        
         update_cells();
         
         // generate new DateTimeSpan window for all calendar subscriptions
@@ -157,7 +180,7 @@ public class Host : Gtk.Grid, View.Controller {
         // clear current subscriptions and generate new subscriptions for new window
         subscriptions.clear();
         foreach (Backing.Store store in Backing.Manager.instance.get_stores()) {
-            foreach (Backing.Source source in store.get_sources_of_type(typeof (Backing.CalendarSource))) {
+            foreach (Backing.Source source in store.get_sources_of_type<Backing.CalendarSource>()) {
                 Backing.CalendarSource calendar = (Backing.CalendarSource) source;
                 calendar.subscribe_async.begin(window, null, on_subscribed);
             }
@@ -197,6 +220,30 @@ public class Host : Gtk.Grid, View.Controller {
             if (cell != null)
                 cell.remove_event(event);
         }
+    }
+    
+    private bool on_cell_clicked(Gtk.Widget widget, Gdk.EventButton event) {
+        // only interested in double-clicks, otherwise allow propagation
+        if (event.type != Gdk.EventType.2BUTTON_PRESS)
+            return false;
+        
+        Cell cell = (Cell) widget;
+        if (cell.date != null) {
+            DateTime start;
+            if(cell.date.equal_to(Calendar.today))
+                start = new DateTime.now(new TimeZone.local());
+            else
+                start = cell.date.to_date_time(new TimeZone.local(), 13, 0, 0);
+            
+            // identify location of click
+            Cairo.RectangleInt rect = Cairo.RectangleInt() { x = (int) event.x, y = (int) event.y,
+                width = 1, height = 1 };
+            
+            request_create_event(new Calendar.DateTimeSpan(start, start.add_hours(1)), widget, rect);
+        }
+        
+        // stop propagation
+        return true;
     }
 }
 

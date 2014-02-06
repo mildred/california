@@ -42,7 +42,7 @@ public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date>, S
             if (current == null)
                 current = first;
             else if (current.compare_to(last) < 0)
-                current = current.adjust(1, Unit.DAY);
+                current = current.adjust(1, DateUnit.DAY);
             else
                 return false;
             
@@ -61,7 +61,7 @@ public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date>, S
                 if (!fn(current))
                     return false;
                 
-                current = current.adjust(1, Unit.DAY);
+                current = current.adjust(1, DateUnit.DAY);
             }
             
             return true;

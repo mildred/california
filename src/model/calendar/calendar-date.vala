@@ -97,7 +97,7 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
         }
         
         // add six days and that's the last day of the week
-        Date end = start.adjust(DayOfWeek.COUNT - 1, Unit.DAY);
+        Date end = start.adjust(DayOfWeek.COUNT - 1, DateUnit.DAY);
         
         // get the numeric week of the year of this date
         int week_of_year;
@@ -174,38 +174,46 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
     }
     
     /**
+     * Returns a DateTime within the {@link Date} for the {@link WallTime}.
+     */
+    public DateTime to_date_wall_time(TimeZone tz, WallTime wall_time) {
+        return new DateTime(tz, year.value, month.value, day_of_month.value, wall_time.hour,
+            wall_time.minute, wall_time.second);
+    }
+    
+    /**
      * Returns a new {@link Date} adjusted from this Date by the specifed quantity of time.
      *
      * Subtraction (adjusting to a past date) is acheived by using a negative quantity.
      */
-    public Date adjust(int quantity, Unit unit) {
+    public Date adjust(int quantity, DateUnit unit) {
         if (quantity == 0)
             return this;
         
         GLib.Date clone = gdate;
         switch (unit) {
-            case Unit.DAY:
+            case DateUnit.DAY:
                 if (quantity > 0)
                     clone.add_days(quantity);
                 else
                     clone.subtract_days(-quantity);
             break;
             
-            case Unit.WEEK:
+            case DateUnit.WEEK:
                 if (quantity > 0)
                     clone.add_days(quantity * DayOfWeek.COUNT);
                 else
                     clone.subtract_days((-quantity) * DayOfWeek.COUNT);
             break;
             
-            case Unit.MONTH:
+            case DateUnit.MONTH:
                 if (quantity > 0)
                     clone.add_months(quantity);
                 else
                     clone.subtract_months(-quantity);
             break;
             
-            case Unit.YEAR:
+            case DateUnit.YEAR:
                 if (quantity > 0)
                     clone.add_years(quantity);
                 else
@@ -248,6 +256,13 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
         gdate.strftime(buf, fmt);
         
         return (string) buf;
+    }
+    
+    /**
+     * Returns the {@link Date} in a localized standardized format.
+     */
+    public string to_standard_string() {
+        return format(FMT_FULL_DATE);
     }
     
     public override string to_string() {

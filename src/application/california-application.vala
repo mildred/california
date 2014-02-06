@@ -29,7 +29,7 @@ public class Application : Gtk.Application {
         { "quit", on_quit }
     };
     
-    private MainWindow? main_window = null;
+    private Host.MainWindow? main_window = null;
     private File? exec_file = null;
     
     public Application() {
@@ -57,9 +57,9 @@ public class Application : Gtk.Application {
     public override void startup() {
         base.startup();
         
-        // internal unit initialization
+        // unit initialization
         try {
-            MainWindow.init();
+            Host.init();
         } catch (Error err) {
             error_message(_("Unable to open California: %s").printf(err.message));
             quit();
@@ -74,8 +74,8 @@ public class Application : Gtk.Application {
         main_window.destroy();
         main_window = null;
         
-        // internal unit termination
-        MainWindow.terminate();
+        // unit termination
+        Host.terminate();
         
         base.shutdown();
     }
@@ -84,7 +84,7 @@ public class Application : Gtk.Application {
     // secondary instance.  It is called after startup().
     public override void activate() {
         if (main_window == null) {
-            main_window = new MainWindow(this);
+            main_window = new Host.MainWindow(this);
             main_window.show_all();
         }
         

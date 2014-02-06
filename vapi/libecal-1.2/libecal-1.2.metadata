@@ -26,11 +26,11 @@ e_cal_client_connect async="1" finish_name="e_cal_client_connect_finish"
 
 e_cal_client_add_timezone async="1"
 
-e_cal_client_create_object async="1"
+e_cal_client_create_object async="1" finish_name="e_cal_client_create_object_finish"
 e_cal_client_create_object.cancellable nullable="1"
 e_cal_client_create_object_finish.uid is_out="1" value_owned="1"
 
-e_cal_client_create_object_sync.uid is_out="1" transfer_ownership="1"
+e_cal_client_create_object_sync.out_uid is_out="1" transfer_ownership="1" is_nullable="1"
 e_cal_client_create_object_sync.cancellable nullable="1"
 
 e_cal_client_discard_alarm async="1"

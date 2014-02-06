@@ -41,8 +41,14 @@ internal class EdsStore : Store {
         is_open = false;
     }
     
-    public override Gee.Collection<Source> get_sources() {
-        return sources.values.read_only_view;
+    public override Gee.List<Source> get_sources() {
+        Gee.List<Source> list = new Gee.ArrayList<Source>();
+        list.add_all(sources.values.read_only_view);
+        list.sort((a, b) => {
+            return strcmp(((Source) a).title, ((Source) b).title);
+        });
+        
+        return list;
     }
     
     private async void add_eds_source_async(E.Source eds_source) {

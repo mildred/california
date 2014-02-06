@@ -13,18 +13,14 @@ namespace California.Backing {
  */
 
 public abstract class Source : BaseObject {
-    private string desc;
+    public string title { get; private set; }
     
-    protected Source(string desc) {
-        this.desc = desc;
+    protected Source(string title) {
+        this.title = title;
     }
     
-    /**
-     * Asynchronously open the backing store.
-     */
-    
     public override string to_string() {
-        return desc;
+        return title;
     }
 }
 

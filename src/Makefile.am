@@ -8,11 +8,9 @@ AM_CPPFLAGS = \
 bin_PROGRAMS = california
 
 california_VALASOURCES = \
-	main.vala \
-	\
 	application/california-application.vala \
-	application/california-main-window.vala \
-	application/resource.vala \
+	application/california-resource.vala \
+	application/main.vala \
 	\
 	backing/backing.vala \
 	backing/backing-calendar-source.vala \
@@ -29,6 +27,10 @@ california_VALASOURCES = \
 	base/base-object.vala \
 	base/base-unit.vala \
 	\
+	host/host.vala \
+	host/host-create-event.vala \
+	host/host-main-window.vala \
+	\
 	model/calendar/calendar.vala \
 	model/calendar/calendar-date-span.vala \
 	model/calendar/calendar-date-time-span.vala \
@@ -41,6 +43,7 @@ california_VALASOURCES = \
 	model/calendar/calendar-month-of-year.vala \
 	model/calendar/calendar-span.vala \
 	model/calendar/calendar-unit.vala \
+	model/calendar/calendar-wall-time.vala \
 	model/calendar/calendar-week.vala \
 	model/calendar/calendar-week-span.vala \
 	model/calendar/calendar-year.vala \
@@ -49,14 +52,16 @@ california_VALASOURCES = \
 	model/component/component-error.vala \
 	model/component/component-event.vala \
 	model/component/component-instance.vala \
+	model/component/component-blank.vala \
 	model/component/component-uid.vala \
+	model/component/component-vtype.vala \
 	\
 	view/view.vala \
-	view/view-controller.vala \
+	view/view-controllable.vala \
 	\
 	view/month/month.vala \
-	view/month/month-host.vala \
 	view/month/month-cell.vala \
+	view/month/month-controllable.vala \
 	\
 	$(NULL)
 
@@ -66,10 +71,13 @@ california_SOURCES = \
 	$(NULL)
 
 california_RC = \
-	rc/app-menu.interface
+	rc/app-menu.interface \
+	rc/create-event.ui \
+	$(NULL)
 
 california_VALAFLAGS = \
-	--fatal-warnings -g --enable-checking --vapidir $(top_srcdir)/vapi\
+	--fatal-warnings -g --enable-checking --vapidir $(top_srcdir)/vapi --target-glib=2.38 \
+	--gresources=california-resources.xml \
 	--pkg gtk+-3.0 \
 	--pkg gio-2.0 \
 	--pkg posix \

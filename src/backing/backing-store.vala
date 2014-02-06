@@ -72,22 +72,27 @@ public abstract class Store : BaseObject {
     internal abstract async void close_async(Cancellable? cancellable) throws Error;
     
     /**
-     * Return a read-ony collection of all {@link Sources} managed by this {@link Store}.
+     * Return a read-ony list of all {@link Source}s managed by this {@link Store}.
+     *
+     * The Sources will be sorted by their titles in lexiographic order.
      *
      * @see get_sources_of_type
+     * @see Source.title
      */
-    public abstract Gee.Collection<Source> get_sources();
+    public abstract Gee.List<Source> get_sources();
     
     /**
-     * List all available {@link Sources} of a particular type.
+     * List all available {@link Source}s of a particular type.
      *
-     * Although of_type can be any GType, it obviously is most useful to pass {@link Source} or
+     * The Sources will be sorted by their titles in lexiographic order.
+     *
+     * Although any GType can be specified, it obviously is most useful to pass {@link Source} or
      * one of its subclasses.
      */
-    public virtual Gee.Collection<Source> get_sources_of_type(Type of_type) {
-        Gee.Collection<Source> result = new Gee.ArrayList<Source>();
+    public virtual Gee.List<G> get_sources_of_type<G>() {
+        Gee.List<G> result = new Gee.ArrayList<G>();
         foreach (Source source in get_sources()) {
-            if (source.get_type().is_a(of_type))
+            if (source.get_type().is_a(typeof(G)))
                 result.add(source);
         }
         

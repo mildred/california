@@ -14,14 +14,25 @@ namespace California.Backing {
  */
 
 public abstract class CalendarSource : Source {
-    protected CalendarSource(string desc) {
-        base (desc);
+    protected CalendarSource(string title) {
+        base (title);
     }
     
     /**
      * Obtain a {@link CalendarSourceSubscription} for the specified date window.
      */
     public abstract async CalendarSourceSubscription subscribe_async(Calendar.DateTimeSpan window,
+        Cancellable? cancellable = null) throws Error;
+    
+    /**
+     * Creates a new {@link Component} instance on the backing {@link CalendarSource}.
+     *
+     * Outstanding {@link CalendarSourceSubscriptions} will eventually report the generated
+     * instance when it's available.
+     *
+     * @returns The {@link Component.UID}.of the generated instance, if available.
+     */
+    public abstract async Component.UID? create_component_async(Component.Blank blank,
         Cancellable? cancellable = null) throws Error;
 }
 

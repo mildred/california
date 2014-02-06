@@ -111,6 +111,27 @@ public class Manager : BaseObject {
         return stores.read_only_view;
     }
     
+    /**
+     * Returns a list of all available {@link Source}s of a particular type.
+     *
+     * The list will be sorted by the Sources title in lexiographic order.
+     *
+     * Must only be called wheil the {@link Manager} is open.
+     *
+     * @see Store.get_sources_of_type
+     */
+    public Gee.List<G> get_sources_of_type<G>() {
+        Gee.List<G> sources = new Gee.ArrayList<G>();
+        foreach (Store store in stores)
+            sources.add_all(store.get_sources_of_type<G>());
+        
+        sources.sort((a, b) => {
+            return strcmp(((Source) a).title, ((Source) b).title);
+        });
+        
+        return sources;
+    }
+    
     public override string to_string() {
         return "Manager";
     }

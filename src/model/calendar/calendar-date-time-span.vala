@@ -30,6 +30,20 @@ public class DateTimeSpan : BaseObject, Gee.Comparable<DateTimeSpan>, Gee.Hashab
      */
     public DateTime end_date_time { get; private set; }
     
+    /**
+     * Starting {@link Calendar.Date} of the {@link DateTimeSpan}.
+     *
+     * @see end_date
+     */
+    public Date start_date { get; private set; }
+    
+    /**
+     * Ending {@link Calendar.Date} of the {@link DateTimeSpan}.
+     *
+     * @see start_date
+     */
+    public Date end_date { get; private set; }
+    
     public DateTimeSpan(DateTime start_date_time, DateTime end_date_time) {
         if (start_date_time.compare(end_date_time) <= 0) {
             this.start_date_time = start_date_time;
@@ -38,6 +52,9 @@ public class DateTimeSpan : BaseObject, Gee.Comparable<DateTimeSpan>, Gee.Hashab
             this.start_date_time = end_date_time;
             this.end_date_time = start_date_time;
         }
+        
+        start_date = new Date.from_date_time(start_date_time);
+        end_date = new Date.from_date_time(end_date_time);
     }
     
     public DateTimeSpan.from_date_span(DateSpan span, TimeZone tz) {

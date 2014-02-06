@@ -10,11 +10,22 @@ namespace California.Calendar {
  * An enumeration of various calendar units.
  */
 
-public enum Unit {
+public enum DateUnit {
     DAY,
     WEEK,
     MONTH,
     YEAR
+}
+
+/**
+ * An enumeration of various time units.
+ *
+ * @see WallTime
+ */
+public enum TimeUnit {
+    SECOND,
+    MINUTE,
+    HOUR
 }
 
 }

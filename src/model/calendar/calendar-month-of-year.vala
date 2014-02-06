@@ -81,7 +81,7 @@ public class MonthOfYear : DateSpan {
      * Subtraction (adjusting to a past date) is acheived by using a negative quantity.
      */
     public MonthOfYear adjust(int quantity) {
-        return start_date.adjust(quantity, Unit.MONTH).month_of_year();
+        return start_date.adjust(quantity, DateUnit.MONTH).month_of_year();
     }
     
     public override string to_string() {

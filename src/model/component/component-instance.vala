@@ -40,7 +40,7 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     /**
      * The current backing EDS component being represented by this {@link Instance}.
      */
-    protected E.CalComponent? eds_component { get; private set; default = null; }
+    protected E.CalComponent eds_component { get; private set; }
     
     /**
      * An {@link Instance} gleaned from an EDS calendar component object.
@@ -56,7 +56,7 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     protected Instance(E.CalComponent eds_component, E.CalComponentVType subclass_vtype) throws Error {
         if (subclass_vtype != eds_component.get_vtype()) {
             throw new ComponentError.MISMATCH("Cannot create VTYPE %s from component of VTYPE %s",
-                subclass_vtype, eds_component.get_vtype());
+                subclass_vtype.to_string(), eds_component.get_vtype().to_string());
         }
         
         // although base update() sets this, set it here in case it's referred to by the subclass
@@ -240,7 +240,7 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
         
         // if exclusive, drop back one day
         if (!dtend_inclusive)
-            end_date = end_date.adjust(-1, Calendar.Unit.DAY);
+            end_date = end_date.adjust(-1, Calendar.DateUnit.DAY);
         
         date_span = new Calendar.DateSpan(start_date, end_date);
         date_time_span = null;

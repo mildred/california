@@ -16,7 +16,7 @@ internal class EdsCalendarSource : CalendarSource {
     private E.CalClient? client = null;
     
     public EdsCalendarSource(E.Source eds_source, E.SourceCalendar eds_calendar) {
-        base ("E.SourceCalendar \"%s\"".printf(eds_source.display_name));
+        base (eds_source.display_name);
         
         this.eds_source = eds_source;
         this.eds_calendar = eds_calendar;
@@ -28,16 +28,20 @@ internal class EdsCalendarSource : CalendarSource {
             cancellable);
     }
     
-    // Invoked by EdsStore prior to making it available outside of unit
+    // Invoked by EdsStore when closing and dropping all its refs
     internal async void close_async(Cancellable? cancellable) throws Error {
         // no close -- just drop the ref
         client = null;
     }
     
-    public override async CalendarSourceSubscription subscribe_async(Calendar.DateTimeSpan window,
-        Cancellable? cancellable = null) throws Error {
+    private void check_open() throws BackingError {
         if (client == null)
             throw new BackingError.UNAVAILABLE("%s has been removed", to_string());
+    }
+    
+    public override async CalendarSourceSubscription subscribe_async(Calendar.DateTimeSpan window,
+        Cancellable? cancellable = null) throws Error {
+        check_open();
         
         // construct s-expression describing the CalClientView's purview
         string sexp = "occur-in-time-range? (make-time \"%s\") (make-time \"%s\")".printf(
@@ -48,6 +52,16 @@ internal class EdsCalendarSource : CalendarSource {
         yield client.get_view(sexp, cancellable, out view);
         
         return new EdsCalendarSourceSubscription(this, window, view);
+    }
+    
+    public override async Component.UID? create_component_async(Component.Blank blank,
+        Cancellable? cancellable = null) throws Error {
+        check_open();
+        
+        string? uid;
+        client.create_object_sync(blank.to_ical_component(), out uid, cancellable);
+        
+        return (uid != null && uid[0] != '\0') ? new Component.UID(uid) : null;
     }
 }
 
