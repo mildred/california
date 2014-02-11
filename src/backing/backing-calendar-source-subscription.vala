@@ -24,7 +24,7 @@ public abstract class CalendarSourceSubscription : BaseObject {
      *
      * This represents the span of time of interest for thie calendar source.
      */
-    public Calendar.DateTimeSpan window { get; private set; }
+    public Calendar.ExactTimeSpan window { get; private set; }
     
     /**
      * Indicates the subscription is running (started).
@@ -82,6 +82,23 @@ public abstract class CalendarSourceSubscription : BaseObject {
     public signal void event_altered(Component.Event event);
     
     /**
+     * Indicates than the event within the {@link date_window} has been dropped due to the
+     * {@link Source} going unavailable.
+     *
+     * Generally all the subscription's events will be reported one after another, but this
+     * shouldn't be relied upon.
+     *
+     * Since the Source is now unavailable, this indicates that the Subscription will not be
+     * very useful going forward.
+     *
+     * This issue is handled by this base class.  Subclasses should only call the notify method
+     * if they have another method of determining the Source is unavailable.  Even then, the
+     * best course is to call {@link Source.set_unavailable} and override
+     * {@link notify_events_dropped} to perform internal bookkeeping.
+     */
+    public signal void event_dropped(Component.Event event);
+    
+    /**
      * Fired if {@link start} failed.
      *
      * Because start() may require background operations to complete, it's possible for it to return
@@ -96,9 +113,11 @@ public abstract class CalendarSourceSubscription : BaseObject {
     private Gee.HashMap<Component.UID, Component.Event> events = new Gee.HashMap<
         Component.UID, Component.Event>();
     
-    protected CalendarSourceSubscription(CalendarSource calendar, Calendar.DateTimeSpan window) {
+    protected CalendarSourceSubscription(CalendarSource calendar, Calendar.ExactTimeSpan window) {
         this.calendar = calendar;
         this.window = window;
+        
+        calendar.notify[Source.PROP_IS_AVAILABLE].connect(on_source_unavailable);
     }
     
     /**
@@ -164,6 +183,17 @@ public abstract class CalendarSourceSubscription : BaseObject {
     }
     
     /**
+     * Notify that the {@link Component.Event}s have been dropped due to the {@link Source} going
+     * unavailable.
+     */
+    protected virtual void notify_event_dropped(Component.Event event) {
+        if (this.events.unset(event.uid))
+            event_dropped(event);
+        else
+            debug("Cannot notify dropped event %s in %s: not known", event.to_string(), to_string());
+    }
+    
+    /**
      * Start the subscription.
      *
      * Notification signals won't start until this is called.  This is to allow the caller a chance
@@ -193,6 +223,14 @@ public abstract class CalendarSourceSubscription : BaseObject {
      */
     public abstract void wait_until_started(MainContext context = MainContext.default(),
         Cancellable? cancellable = null) throws Error;
+    
+    private void on_source_unavailable() {
+        if (calendar.is_available)
+            return;
+        
+        foreach (Component.Event event in events.values.to_array())
+            notify_event_dropped(event);
+    }
     
     /**
      * Returns an {@link Component.Instance} for the {@link Component.UID}.

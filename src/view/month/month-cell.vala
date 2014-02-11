@@ -22,8 +22,8 @@ public class Cell : Gtk.EventBox {
     public int col { get; private set; }
     public Calendar.Date? date { get; set; default = null; }
     
-    private Gee.TreeSet<Component.Event> all_day_events = new Gee.TreeSet<Component.Event>();
-    private Gee.TreeSet<Component.Event> timed_events = new Gee.TreeSet<Component.Event>();
+    private Gee.TreeSet<Component.Event> days_events = new Gee.TreeSet<Component.Event>();
+    private Gee.HashMap<int, Component.Event> line_to_event = new Gee.HashMap<int, Component.Event>();
     
     // TODO: We may need to get these colors from the theme
     private static Gdk.RGBA RGBA_BORDER = { red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0 };
@@ -71,18 +71,11 @@ public class Cell : Gtk.EventBox {
     
     public void clear() {
         date = null;
-        timed_events.clear();
-        all_day_events.clear();
+        days_events.clear();
     }
     
     public void add_event(Component.Event event) {
-        bool added;
-        if (event.date_time_span != null)
-            added = timed_events.add(event);
-        else
-            added = all_day_events.add(event);
-        
-        if (!added)
+        if (!days_events.add(event))
             return;
         
         // subscribe to interesting mutable properties
@@ -94,11 +87,7 @@ public class Cell : Gtk.EventBox {
     }
     
     public void remove_event(Component.Event event) {
-        // just try to remove from both, for safety
-        bool removed = all_day_events.remove(event);
-        removed = timed_events.remove(event) || removed;
-        
-        if (!removed)
+        if (!days_events.remove(event))
             return;
         
         event.notify[Component.Event.PROP_SUMMARY].disconnect(queue_draw);
@@ -123,11 +112,8 @@ public class Cell : Gtk.EventBox {
         }
         
         // remove and add again to re-sort based on updated information
-        if (all_day_events.remove(event))
-            all_day_events.add(event);
-        
-        if (timed_events.remove(event))
-            timed_events.add(event);
+        if (days_events.remove(event))
+            days_events.add(event);
         
         queue_draw();
     }
@@ -172,18 +158,18 @@ public class Cell : Gtk.EventBox {
         
         // represents the line number being drawn (zero-based for remaining lines)
         int line_number = 0;
+        line_to_event.clear();
         
         // convert all times to local timezone
         TimeZone local = new TimeZone.local();
         
-        // draw all-day events
-        foreach (Component.Event event in all_day_events)
-            draw_line_of_text(ctx, line_number++, RGBA_DAY_OF_MONTH, event.summary);
-        
-        // draw timed events
-        foreach (Component.Event event in timed_events) {
-            draw_line_of_text(ctx, line_number++, RGBA_DAY_OF_MONTH, "%d %s".printf(
-                event.date_time_span.start_date_time.to_timezone(local).get_hour(), event.summary));
+        // draw all events in chronological order, all-day events first, storing lookup data
+        // as the "lines" are drawn
+        foreach (Component.Event event in days_events) {
+            string text = event.is_all_day ? event.summary : "%d %s".printf(
+                event.exact_time_span.start_exact_time.to_timezone(local).hour, event.summary);
+            draw_line_of_text(ctx, line_number, RGBA_DAY_OF_MONTH, text);
+            line_to_event.set(line_number++, event);
         }
         
         return true;
@@ -202,14 +188,9 @@ public class Cell : Gtk.EventBox {
         layout.get_pixel_size(out width, out line_height_px);
     }
     
-    // If line number is negative, the top line is drawn; otherwise, zero-based line numbers get
-    // "regular" treatment
-    private void draw_line_of_text(Cairo.Context ctx, int line_number, Gdk.RGBA rgba, string text) {
-        Pango.Layout layout = create_pango_layout(text);
-        layout.set_font_description((line_number < 0) ? top_line_font : line_font);
-        layout.set_ellipsize(Pango.EllipsizeMode.END);
-        layout.set_width((get_allocated_width() - (TEXT_MARGIN_PX * 2)) * Pango.SCALE);
-        
+    // Returns top y position of line; negative line numbers are treated as top line
+    // The number is currently not clamped to the height of the widget.
+    private int get_line_top_y(int line_number) {
         int y;
         if (line_number < 0) {
             y = TEXT_MARGIN_PX;
@@ -221,9 +202,37 @@ public class Cell : Gtk.EventBox {
             y += line_number * (line_height_px + LINE_SPACING_PX);
         }
         
+        return y;
+    }
+    
+    // If line number is negative, the top line is drawn; otherwise, zero-based line numbers get
+    // "regular" treatment
+    private void draw_line_of_text(Cairo.Context ctx, int line_number, Gdk.RGBA rgba, string text) {
+        Pango.Layout layout = create_pango_layout(text);
+        layout.set_font_description((line_number < 0) ? top_line_font : line_font);
+        layout.set_ellipsize(Pango.EllipsizeMode.END);
+        layout.set_width((get_allocated_width() - (TEXT_MARGIN_PX * 2)) * Pango.SCALE);
+        
         Gdk.cairo_set_source_rgba(ctx, rgba);
-        ctx.move_to(TEXT_MARGIN_PX, y);
+        ctx.move_to(TEXT_MARGIN_PX, get_line_top_y(line_number));
         Pango.cairo_show_layout(ctx, layout);
+    }
+    
+    /**
+     * Returns a hit result for {@link Component.Event}, if hit at all.
+     *
+     * The Gdk.Point must be relative to the widget's coordinate system.
+     */
+    public Component.Event? get_event_at(Gdk.Point point) {
+        int line_number = 0;
+        foreach (Component.Event event in days_events) {
+            int y = get_line_top_y(line_number++);
+            
+            if (point.y >= y && point.y < (y + line_height_px))
+                return event;
+        }
+        
+        return null;
     }
 }
 

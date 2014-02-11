@@ -39,14 +39,14 @@ internal class EdsCalendarSource : CalendarSource {
             throw new BackingError.UNAVAILABLE("%s has been removed", to_string());
     }
     
-    public override async CalendarSourceSubscription subscribe_async(Calendar.DateTimeSpan window,
+    public override async CalendarSourceSubscription subscribe_async(Calendar.ExactTimeSpan window,
         Cancellable? cancellable = null) throws Error {
         check_open();
         
         // construct s-expression describing the CalClientView's purview
         string sexp = "occur-in-time-range? (make-time \"%s\") (make-time \"%s\")".printf(
-            E.isodate_from_time_t((time_t) window.start_date_time.to_unix()),
-            E.isodate_from_time_t((time_t) window.end_date_time.to_unix()));
+            E.isodate_from_time_t(window.start_exact_time.to_time_t()),
+            E.isodate_from_time_t(window.end_exact_time.to_time_t()));
         
         E.CalClientView view;
         yield client.get_view(sexp, cancellable, out view);
@@ -58,10 +58,19 @@ internal class EdsCalendarSource : CalendarSource {
         Cancellable? cancellable = null) throws Error {
         check_open();
         
+        // TODO: Fix create_object() bindings so async is possible
         string? uid;
         client.create_object_sync(blank.to_ical_component(), out uid, cancellable);
         
         return (uid != null && uid[0] != '\0') ? new Component.UID(uid) : null;
+    }
+    
+    public override async void remove_component_async(Component.UID uid,
+        Cancellable? cancellable = null) throws Error {
+        check_open();
+        
+        // TODO: Fix remove_object() bindings so async is possible
+        client.remove_object_sync(uid.value, null, E.CalObjModType.THIS, cancellable);
     }
 }
 

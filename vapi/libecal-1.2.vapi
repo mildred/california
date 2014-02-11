@@ -65,7 +65,7 @@ namespace E {
 		public async bool receive_objects (iCal.icalcomponent icalcomp, GLib.Cancellable? cancellable) throws GLib.Error;
 		public bool receive_objects_sync (iCal.icalcomponent icalcomp, GLib.Cancellable? cancellable) throws GLib.Error;
 		public async bool remove_object (string uid, string rid, E.CalObjModType mod, GLib.Cancellable? cancellable) throws GLib.Error;
-		public bool remove_object_sync (string uid, string rid, E.CalObjModType mod, GLib.Cancellable? cancellable) throws GLib.Error;
+		public bool remove_object_sync (string uid, string? rid, E.CalObjModType mod, GLib.Cancellable? cancellable) throws GLib.Error;
 		public void remove_objects (GLib.SList ids, E.CalObjModType mod, GLib.Cancellable cancellable, GLib.AsyncReadyCallback callback);
 		public bool remove_objects_finish (GLib.AsyncResult _result) throws GLib.Error;
 		public bool remove_objects_sync (GLib.SList ids, E.CalObjModType mod, GLib.Cancellable cancellable) throws GLib.Error;
@@ -245,13 +245,7 @@ namespace E {
 		public void set_trigger (E.CalComponentAlarmTrigger trigger);
 	}
 	[CCode (cheader_filename = "libecal/libecal.h")]
-	[Compact]
-	public class CalObjModType {
-	}
-	[CCode (cheader_filename = "libecal/libecal.h")]
 	public interface TimezoneCache : GLib.Object {
-		public abstract void add_timezone (iCal.icaltimezone zone);
-		public abstract unowned iCal.icaltimezone get_timezone (string tzid);
 		public abstract unowned GLib.List list_timezones ();
 		public signal void timezone_added (void* zone);
 	}
@@ -460,6 +454,15 @@ namespace E {
 		CalModeLocal,
 		CalModeRemote,
 		CalModeAny
+	}
+	[CCode (cheader_filename = "libecal/libecal.h", cprefix = "E_CAL_OBJ_MOD_")]
+	[Flags]
+	public enum CalObjModType {
+		THIS,
+		THIS_AND_PRIOR,
+		THIS_AND_FUTURE,
+		ALL,
+		ONLY_THIS
 	}
 	[CCode (cheader_filename = "libecal/libecal.h", cprefix = "E_CAL_SET_MODE_", has_type_id = false)]
 	public enum CalSetModeStatus {

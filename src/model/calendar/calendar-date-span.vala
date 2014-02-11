@@ -85,6 +85,11 @@ public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date>, S
     public Date end_date { owned get { return _end_date; } }
     
     /**
+     * Convenience property indicating if the {@link DateSpan} spans only one day.
+     */
+    public bool is_same_day { get { return start_date.equal_to(end_date); } }
+    
+    /**
      * Create a {@link DateSpan} with the specified start and end dates.
      *
      * DateSpan will arrange the two dates so start_date is chronologically earlier (or the same
@@ -95,11 +100,11 @@ public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date>, S
     }
     
     /**
-     * Create a {@link DateSpan} from the {@link DateTimeSpan}.
+     * Create a {@link DateSpan} from the {@link ExactTimeSpan}.
      */
-    public DateSpan.from_date_time_span(DateTimeSpan date_time_span) {
-        init_span(new Date.from_date_time(date_time_span.start_date_time),
-            new Date.from_date_time(date_time_span.end_date_time));
+    public DateSpan.from_exact_time_span(ExactTimeSpan exact_time_span) {
+        init_span(new Date.from_exact_time(exact_time_span.start_exact_time),
+            new Date.from_exact_time(exact_time_span.end_exact_time));
     }
     
     /**

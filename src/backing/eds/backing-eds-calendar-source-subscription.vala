@@ -17,7 +17,7 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
     private Error? start_err = null;
     
     // Called from EdsCalendarSource.subscribe_async().  The CalClientView should not be started
-    public EdsCalendarSourceSubscription(EdsCalendarSource eds_calendar, Calendar.DateTimeSpan window,
+    public EdsCalendarSourceSubscription(EdsCalendarSource eds_calendar, Calendar.ExactTimeSpan window,
         E.CalClientView view) {
         base (eds_calendar, window);
         
@@ -84,8 +84,8 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
         
         // prime with the list of known events
         view.client.generate_instances(
-            (time_t) window.start_date_time.to_unix(),
-            (time_t) window.end_date_time.to_unix(),
+            window.start_exact_time.to_time_t(),
+            window.end_exact_time.to_time_t(),
             cancellable,
             on_instance_generated,
             on_generate_finished);
@@ -94,7 +94,7 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
     private bool on_instance_generated(E.CalComponent eds_component, time_t instance_start,
         time_t instance_end) {
         try {
-            Component.Event? event = Component.Instance.convert(eds_component) as Component.Event;
+            Component.Event? event = Component.Instance.convert(calendar, eds_component) as Component.Event;
             if (event != null)
                 notify_event_discovered(event);
         } catch (Error err) {
@@ -113,7 +113,7 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
         foreach (weak iCal.icalcomponent ical_component in objects) {
             E.CalComponent eds_component = new E.CalComponent.from_string(ical_component.as_ical_string());
             try {
-                Component.Event? event = Component.Instance.convert(eds_component) as Component.Event;
+                Component.Event? event = Component.Instance.convert(calendar, eds_component) as Component.Event;
                 if (event != null)
                     notify_event_added(event);
             } catch (Error err) {

@@ -60,6 +60,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         // current host bindings and signals
         current_view.request_create_event.connect(on_request_create_event);
+        current_view.request_display_event.connect(on_request_display_event);
         current_view.bind_property(View.Controllable.PROP_CURRENT_LABEL, headerbar, "title",
             BindingFlags.SYNC_CREATE);
         current_view.bind_property(View.Controllable.PROP_IS_VIEWING_TODAY, today, "sensitive",
@@ -68,10 +69,26 @@ public class MainWindow : Gtk.ApplicationWindow {
         add(layout);
     }
     
+    // Creates and shows a Gtk.Popover.
+    private Gtk.Popover show_popover(Gtk.Widget relative_to, Gdk.Point? for_location,
+        Gtk.Widget child) {
+        Gtk.Popover popover = new Gtk.Popover(relative_to);
+        if (for_location != null) {
+            popover.pointing_to = Cairo.RectangleInt() { x = for_location.x, y = for_location.y,
+                width = 1, height = 1 };
+        }
+        popover.add(child);
+        
+        popover.show_all();
+        
+        return popover;
+    }
+    
     private void on_new_event() {
         // start today and now, 1-hour event default
-        DateTime dtstart = new DateTime.now(new TimeZone.local());
-        Calendar.DateTimeSpan dtspan = new Calendar.DateTimeSpan(dtstart, dtstart.add_hours(1));
+        Calendar.ExactTime dtstart = Calendar.now();
+        Calendar.ExactTimeSpan dtspan = new Calendar.ExactTimeSpan(dtstart,
+            dtstart.adjust_time(1, Calendar.TimeUnit.HOUR));
         
         // revert to today's date and use the widget for the popover
         Gtk.Widget widget = current_view.today();
@@ -79,34 +96,45 @@ public class MainWindow : Gtk.ApplicationWindow {
         on_request_create_event(dtspan, widget, null);
     }
     
-    private void on_request_create_event(Calendar.DateTimeSpan initial, Gtk.Widget relative_to,
-        Cairo.RectangleInt? for_location) {
+    private void on_request_create_event(Calendar.ExactTimeSpan initial, Gtk.Widget relative_to,
+        Gdk.Point? for_location) {
         CreateEvent create_event = new CreateEvent(initial);
-        
-        Gtk.Popover popover = new Gtk.Popover(relative_to);
-        if (for_location != null)
-            popover.pointing_to = for_location;
-        popover.add(create_event);
+        Gtk.Popover popover = show_popover(relative_to, for_location, create_event);
         
         // when the new event is ready, that's what needs to be created
         create_event.notify[CreateEvent.PROP_NEW_EVENT].connect(() => {
             popover.destroy();
             
-            if (create_event.new_event != null && create_event.calendar_source != null) {
-                debug("creating...");
-                create_event.calendar_source.create_component_async.begin(create_event.new_event,
-                    null, on_create_event_completed);
-            }
+            if (create_event.new_event != null && create_event.calendar_source != null)
+                create_event_async.begin(create_event.calendar_source, create_event.new_event, null);
         });
-        
-        popover.show_all();
     }
     
-    private void on_create_event_completed(Object? source, AsyncResult result) {
+    private async void create_event_async(Backing.CalendarSource calendar_source, Component.Blank new_event,
+        Cancellable? cancellable) {
         try {
-            ((Backing.CalendarSource) source).create_component_async.end(result);
+            yield calendar_source.create_component_async(new_event, cancellable);
         } catch (Error err) {
             debug("Unable to create event: %s", err.message);
+        }
+    }
+    
+    private void on_request_display_event(Component.Event event, Gtk.Widget relative_to,
+        Gdk.Point? for_location) {
+        ShowEvent show_event = new ShowEvent(event);
+        Gtk.Popover popover = show_popover(relative_to, for_location, show_event);
+        
+        show_event.remove_event.connect(() => {
+            popover.destroy();
+            remove_event_async.begin(event, null);
+        });
+    }
+    
+    private async void remove_event_async(Component.Event event, Cancellable? cancellable) {
+        try {
+            yield event.calendar_source.remove_component_async(event.uid, cancellable);
+        } catch (Error err) {
+            debug("Unable to destroy event: %s", err.message);
         }
     }
 }

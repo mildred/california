@@ -21,6 +21,22 @@ namespace California.Calendar {
  */
 
 public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
+    /**
+     * Options for {@link to_pretty_string}.
+     */
+    [Flags]
+    public enum PrettyFlag {
+        NONE = 0,
+        /**
+         * Indicates that the returned string should use date abbreviations wherever possible.
+         */
+        ABBREV,
+        /**
+         * Indicates that the year should be included in the return date string.
+         */
+        INCLUDE_YEAR
+    }
+    
     public DayOfWeek day_of_week { get; private set; }
     public DayOfMonth day_of_month { get; private set; }
     public Month month { get; private set; }
@@ -47,13 +63,13 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
     }
     
     /**
-     * Creates a {@link Date} for the DateTime.
+     * Creates a {@link Date} for the {@link ExactTime}.
      */
-    public Date.from_date_time(DateTime date_time) {
-        // Can use for_checked() methods because DateTime can only be created with proper values
-        day_of_month = DayOfMonth.for_checked(date_time.get_day_of_month());
-        month = Month.for_checked(date_time.get_month());
-        year = new Year(date_time.get_year());
+    public Date.from_exact_time(ExactTime exact_time) {
+        // Can use for_checked() methods because ExactTime can only be created with proper values
+        day_of_month = exact_time.day_of_month;
+        month = exact_time.month;
+        year = exact_time.year;
         
         gdate.set_dmy(day_of_month.to_date_day(), month.to_date_month(), year.to_date_year());
         assert(gdate.valid());
@@ -65,7 +81,7 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
      * Creates a {@link Date} that corresponds to the current time in the specified timezone.
      */
     public Date.now(TimeZone tz) {
-        this.from_date_time(new DateTime.now(tz));
+        this.from_exact_time(new ExactTime.now(tz));
     }
     
     internal Date.from_gdate(GLib.Date gdate) {
@@ -144,41 +160,23 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
     }
     
     /**
-     * Returns the {@link Date} as the earliest DateTime possible for the specified TimeZone.
+     * Returns the {@link Date} as the earliest ExactTime possible for the specified TimeZone.
      *
-     * @see latest_date_time
-     * @see to_date_time
+     * @see latest_exact_time
      */
-    public DateTime earliest_date_time(TimeZone tz) {
-        return to_date_time(tz, 0, 0, 0.0);
+    public ExactTime earliest_exact_time(TimeZone tz) {
+        return new ExactTime(tz, this, WallTime.earliest);
     }
     
     /**
-     * Returns the {@link Date} as the latest DateTime possible for the specified TimeZone.
+     * Returns the {@link Date} as the latest {@link ExactTime} possible for the specified TimeZone.
      *
-     * By latest, the precision of DateTime.seconds will be 59.0.  If more precision is
-     * necessary, use {@link to_date_time}.
+     * By latest, the precision of ExactTime.seconds will be 59.0.
      *
-     * @see earliest_date_time
-     * @see to_date_time
+     * @see earliest_exact_time
      */
-    public DateTime latest_date_time(TimeZone tz) {
-        return to_date_time(tz, 23, 59, 59.0);
-    }
-    
-    /**
-     * Returns a DateTime within the {@link Date}.
-     */
-    public DateTime to_date_time(TimeZone tz, int hour, int minute, double seconds) {
-        return new DateTime(tz, year.value, month.value, day_of_month.value, hour, minute, seconds);
-    }
-    
-    /**
-     * Returns a DateTime within the {@link Date} for the {@link WallTime}.
-     */
-    public DateTime to_date_wall_time(TimeZone tz, WallTime wall_time) {
-        return new DateTime(tz, year.value, month.value, day_of_month.value, wall_time.hour,
-            wall_time.minute, wall_time.second);
+    public ExactTime latest_exact_time(TimeZone tz) {
+        return new ExactTime(tz, this, WallTime.latest);
     }
     
     /**
@@ -259,10 +257,27 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
     }
     
     /**
-     * Returns the {@link Date} in a localized standardized format.
+     * Returns the {@link Date} in a localized standardized format, i.e. "08/23/01"
      */
     public string to_standard_string() {
         return format(FMT_FULL_DATE);
+    }
+    
+    /**
+     * Returns the {@link Date} in a prettified, localized format according to supplied
+     * {@link PrettyFlag}s.
+     */
+    public string to_pretty_string(PrettyFlag flags) {
+        bool abbrev = (flags & PrettyFlag.ABBREV) != 0;
+        bool with_year = (flags & PrettyFlag.INCLUDE_YEAR) != 0;
+        
+        unowned string fmt;
+        if (abbrev)
+            fmt = with_year ? FMT_PRETTY_DATE_ABBREV : FMT_PRETTY_DATE_ABBREV_NO_YEAR;
+        else
+            fmt = with_year ? FMT_PRETTY_DATE : FMT_PRETTY_DATE_NO_YEAR;
+        
+        return format(fmt);
     }
     
     public override string to_string() {

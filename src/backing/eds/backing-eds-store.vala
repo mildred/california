@@ -80,6 +80,7 @@ internal class EdsStore : Store {
             assert(source != null);
             
             removed(source);
+            source.set_unavailable();
         }
         
         // close in background

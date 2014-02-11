@@ -26,11 +26,16 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     }
     
     /**
+     * The {@link Backing.CalendarSource} this {@link Instance} originated from.
+     */
+    public Backing.CalendarSource calendar_source { get; private set; }
+    
+    /**
      * The date-time stamp of the {@link Instance}.
      *
      * See [[https://tools.ietf.org/html/rfc5545#section-3.8.7.2]]
      */
-    public DateTime dtstamp { get; private set; }
+    public Calendar.ExactTime dtstamp { get; private set; }
     
     /**
      * The {@link UID} of the {@link Instance}.
@@ -53,12 +58,14 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      * If the E.CalComponent's VTYPE does not match the subclasses' VTYPE, ComponentError.MISMATCH
      * is thrown.
      */
-    protected Instance(E.CalComponent eds_component, E.CalComponentVType subclass_vtype) throws Error {
+    protected Instance(Backing.CalendarSource calendar_source, E.CalComponent eds_component,
+        E.CalComponentVType subclass_vtype) throws Error {
         if (subclass_vtype != eds_component.get_vtype()) {
             throw new ComponentError.MISMATCH("Cannot create VTYPE %s from component of VTYPE %s",
                 subclass_vtype.to_string(), eds_component.get_vtype().to_string());
         }
         
+        this.calendar_source = calendar_source;
         // although base update() sets this, set it here in case it's referred to by the subclass
         // as the "old" component during it's update()
         this.eds_component = eds_component;
@@ -69,7 +76,7 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
         
         iCal.icaltimetype ical_dtstamp;
         eds_component.get_dtstamp(out ical_dtstamp);
-        dtstamp = ical_to_datetime(&ical_dtstamp);
+        dtstamp = ical_to_exact_time(&ical_dtstamp);
         
         update(eds_component);
     }
@@ -103,10 +110,11 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      *
      * @returns null if the component is not represented in this namespace (yet).
      */
-    public static Component.Instance? convert(E.CalComponent eds_component) throws Error {
+    public static Component.Instance? convert(Backing.CalendarSource calendar_source,
+        E.CalComponent eds_component) throws Error {
         switch (eds_component.get_vtype()) {
             case E.CalComponentVType.EVENT:
-                return new Event(eds_component);
+                return new Event(calendar_source, eds_component);
             
             default:
                 debug("Unable to construct component %s: unimplemented",
@@ -124,41 +132,35 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      * will always be null.  In no case will both be null.
      * @throws CalendarError if the supplied values are out-of-range.
      */
-    public static DateFormat ical_to_datetime_or_date(iCal.icaltimetype *ical_dt, out DateTime? date_time,
-        out Calendar.Date? date) throws Error {
+    public static DateFormat ical_to_datetime_or_date(iCal.icaltimetype *ical_dt,
+        out Calendar.ExactTime? exact_time, out Calendar.Date? date) throws Error {
         if (iCal.icaltime_is_date(*ical_dt) == 0) {
-            date_time = ical_to_datetime(ical_dt);
+            exact_time = ical_to_exact_time(ical_dt);
             date = null;
             
             return DateFormat.DATE_TIME;
         }
         
         date = ical_to_date(ical_dt);
-        date_time = null;
+        exact_time = null;
         
         return DateFormat.DATE;
     }
     
     /**
-     * Convert an iCal.icaltimetype to a GLib.DateTime.
+     * Convert an iCal.icaltimetype to an {@link Calendar.ExactTime}.
      *
      * @throws CalendarError if the supplied values are out-of-range or invalid, ComponentError
      * if a DATE rather than a DATE-TIME.
      */
-    public static DateTime ical_to_datetime(iCal.icaltimetype *ical_dt) throws Error {
+    public static Calendar.ExactTime ical_to_exact_time(iCal.icaltimetype *ical_dt) throws Error {
         if (iCal.icaltime_is_date(*ical_dt) != 0) {
             throw new ComponentError.INVALID("iCalendar time type must be DATE-TIME: %s",
                 iCal.icaltime_as_ical_string(*ical_dt));
         }
         
-        DateTime date_time = new DateTime(ical_to_timezone(ical_dt), ical_dt.year, ical_dt.month,
+        return new Calendar.ExactTime.full(ical_to_timezone(ical_dt), ical_dt.year, ical_dt.month,
             ical_dt.day, ical_dt.hour, ical_dt.minute, ical_dt.second);
-        if (date_time == null) {
-            throw new ComponentError.INVALID("Invalid iCalendar time: %s",
-                iCal.icaltime_as_ical_string(*ical_dt));
-        }
-        
-        return date_time;
     }
     
     /**
@@ -190,52 +192,52 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     }
     
     /**
-     * Convert two iCal.icaltimetypes into a {@link Calendar.DateSpan} or a {@link Calendar.DateTimeSpan}
+     * Convert two iCal.icaltimetypes into a {@link Calendar.DateSpan} or a {@link Calendar.ExactTimeSpan}
      * depending on what they represent.
      *
-     * Note that if one is a {@link Calendar.Date} and the other is a DateTime, the DateTime is
-     * coerced into Date and a DateSpan is returned.
+     * Note that if one is a {@link Calendar.Date} and the other is a {@link ExactTime}, the
+     *  ExactTime is coerced into Date and a DateSpan is returned.
      *
      * dtend_inclusive indicates whether the ical_end_dt should be treated as inclusive or exclusive
      * of the span.  See the iCalendar specification for information on how each component should
      * treat the situation.  Exclusive only works for DATE values.
      *
-     * @returns {@link DateFormat} indicating if a DateSpan or a DateTimeSpan was returned via
+     * @returns {@link DateFormat} indicating if a DateSpan or a ExactTimeSpan was returned via
      * the out parameters.  The other will always be null.  In no case will both be null.
      * @throws CalendarError if any value is invalid or out-of-range.
      */
     public static DateFormat ical_to_span(bool dtend_inclusive, iCal.icaltimetype *ical_start_dt,
-        iCal.icaltimetype *ical_end_dt, out Calendar.DateTimeSpan date_time_span,
+        iCal.icaltimetype *ical_end_dt, out Calendar.ExactTimeSpan exact_time_span,
         out Calendar.DateSpan date_span) throws Error {
-        DateTime? start_date_time;
+        Calendar.ExactTime? start_exact_time;
         Calendar.Date? start_date;
-        ical_to_datetime_or_date(ical_start_dt, out start_date_time, out start_date);
+        ical_to_datetime_or_date(ical_start_dt, out start_exact_time, out start_date);
         
-        DateTime? end_date_time;
+        Calendar.ExactTime? end_exact_time;
         Calendar.Date? end_date;
-        ical_to_datetime_or_date(ical_end_dt, out end_date_time, out end_date);
+        ical_to_datetime_or_date(ical_end_dt, out end_exact_time, out end_date);
         
         // if both DATE-TIME, easy peasy
-        if (start_date_time != null && end_date_time != null) {
-            date_time_span = new Calendar.DateTimeSpan(start_date_time, end_date_time);
+        if (start_exact_time != null && end_exact_time != null) {
+            exact_time_span = new Calendar.ExactTimeSpan(start_exact_time, end_exact_time);
             date_span = null;
             
             return DateFormat.DATE_TIME;
         }
         
         // if one or the other DATE-TIME, coerce to DATE
-        if (start_date_time != null) {
+        if (start_exact_time != null) {
             // end is a DATE, do coercion
             assert(end_date != null);
             
-            start_date = new Calendar.Date.from_date_time(start_date_time);
-            start_date_time = null;
-        } else if (end_date_time != null) {
+            start_date = new Calendar.Date.from_exact_time(start_exact_time);
+            start_exact_time = null;
+        } else if (end_exact_time != null) {
             // start is a DATE, do coercion
             assert(start_date != null);
             
-            end_date = new Calendar.Date.from_date_time(end_date_time);
-            end_date_time = null;
+            end_date = new Calendar.Date.from_exact_time(end_exact_time);
+            end_exact_time = null;
         }
         
         // if exclusive, drop back one day
@@ -243,7 +245,7 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
             end_date = end_date.adjust(-1, Calendar.DateUnit.DAY);
         
         date_span = new Calendar.DateSpan(start_date, end_date);
-        date_time_span = null;
+        exact_time_span = null;
         
         return DateFormat.DATE;
     }

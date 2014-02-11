@@ -21,7 +21,7 @@ public abstract class CalendarSource : Source {
     /**
      * Obtain a {@link CalendarSourceSubscription} for the specified date window.
      */
-    public abstract async CalendarSourceSubscription subscribe_async(Calendar.DateTimeSpan window,
+    public abstract async CalendarSourceSubscription subscribe_async(Calendar.ExactTimeSpan window,
         Cancellable? cancellable = null) throws Error;
     
     /**
@@ -33,6 +33,15 @@ public abstract class CalendarSource : Source {
      * @returns The {@link Component.UID}.of the generated instance, if available.
      */
     public abstract async Component.UID? create_component_async(Component.Blank blank,
+        Cancellable? cancellable = null) throws Error;
+    
+    /**
+     * Destroys (removes) a {@link Component} instance on the backing {@link CalendarSource}.
+     *
+     * Outstanding {@link CalendarSourceSubscriptions} will eventually report the instance as
+     * removed.
+     */
+    public abstract async void remove_component_async(Component.UID uid,
         Cancellable? cancellable = null) throws Error;
 }
 

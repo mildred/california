@@ -59,7 +59,7 @@ public class CreateEvent : Gtk.Grid {
     private Calendar.Date end_date;
     private Gee.List<Backing.CalendarSource> calendar_sources;
     
-    public CreateEvent(Calendar.DateTimeSpan initial) {
+    public CreateEvent(Calendar.ExactTimeSpan initial) {
         // initialize start and end *dates*
         start_date = initial.start_date;
         dtstart_date_button.label = initial.start_date.to_standard_string();
@@ -68,15 +68,15 @@ public class CreateEvent : Gtk.Grid {
         dtend_date_button.label = initial.end_date.to_standard_string();
         
         // initialize start and end *time* (as in, wall clock time)
-        Calendar.WallTime initial_start = new Calendar.WallTime.from_date_time(initial.start_date_time);
-        Calendar.WallTime initial_end = new Calendar.WallTime.from_date_time(initial.end_date_time);
+        Calendar.WallTime initial_start = new Calendar.WallTime.from_exact_time(initial.start_exact_time);
+        Calendar.WallTime initial_end = new Calendar.WallTime.from_exact_time(initial.end_exact_time);
         Calendar.WallTime current = new Calendar.WallTime(START_HOUR, Calendar.WallTime.MIN_MINUTE, 0);
         Calendar.WallTime end = new Calendar.WallTime(END_HOUR, Calendar.WallTime.MAX_MINUTE, 0);
         int index = 0;
         int dtstart_active_index = -1, dtend_active_index = -1;
         bool rollover = false;
         while (current.compare_to(end) <= 0 && !rollover) {
-            string fmt = current.get_hhmm_label();
+            string fmt = current.to_pretty_string(Calendar.WallTime.PrettyFlag.NONE);
             
             dtstart_time_combo.append_text(fmt);
             dtend_time_combo.append_text(fmt);
@@ -150,10 +150,10 @@ public class CreateEvent : Gtk.Grid {
             blank.set_start_end_date(new Calendar.DateSpan(start_date, end_date));
         } else {
             TimeZone tz = new TimeZone.local();
-            blank.set_start_end_date_time(
-                new Calendar.DateTimeSpan(
-                    start_date.to_date_wall_time(tz, time_map.get(dtstart_time_combo.get_active_text())),
-                    end_date.to_date_wall_time(tz, time_map.get(dtend_time_combo.get_active_text()))
+            blank.set_start_end_exact_time(
+                new Calendar.ExactTimeSpan(
+                    new Calendar.ExactTime(tz, start_date, time_map.get(dtstart_time_combo.get_active_text())),
+                    new Calendar.ExactTime(tz, end_date, time_map.get(dtend_time_combo.get_active_text()))
                 )
             );
         }

@@ -12,6 +12,18 @@ namespace California.Calendar {
  */
 
 public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallTime> {
+    /**
+     * Options for {@link to_pretty_string}.
+     */
+    [Flags]
+    public enum PrettyFlag {
+        NONE = 0,
+        /**
+         * Indicates that the {@link seconds} property should be included in the string.
+         */
+        INCLUDE_SECONDS
+    }
+    
     public const int HOURS_PER_DAY = 24;
     public const int MIN_HOUR = 0;
     public const int MAX_HOUR = HOURS_PER_DAY - 1;
@@ -23,6 +35,16 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
     public const int SECONDS_PER_MINUTE = 60;
     public const int MIN_SECOND = 0;
     public const int MAX_SECOND = SECONDS_PER_MINUTE - 1;
+    
+    /**
+     * Earliest {@link WallTime} available.
+     */
+    public static WallTime earliest { get; private set; }
+    
+    /**
+     * Latest {@link WallTime} available.
+     */
+    public static WallTime latest { get; private set; }
     
     /**
      * Zero-based hour of the day in 24-hour (or "military") time.
@@ -68,13 +90,29 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
     }
     
     /**
-     * Generate a new {@link WallTime} with the DateTime's values.
+     * Generate a new {@link WallTime} with the {@link ExactTIme}'s values.
      *
      * Because date and timezone information is lost in this conversion, the caller should convert
-     * the DateTime to the desired timezone before constructing the WallTime.
+     * the ExactTime to the desired timezone before constructing the WallTime.
      */
-    public WallTime.from_date_time(DateTime date_time) {
-        this (date_time.get_hour(), date_time.get_minute(), date_time.get_second());
+    public WallTime.from_exact_time(ExactTime exact_time) {
+        this (exact_time.hour, exact_time.minute, exact_time.second);
+    }
+    
+    /**
+     * Called from Calendar.init().
+     */
+    internal static void init() {
+        earliest = new WallTime(MIN_HOUR, MIN_MINUTE, MIN_SECOND);
+        latest = new WallTime(MAX_HOUR, MAX_MINUTE, MAX_SECOND);
+    }
+    
+    /**
+     * Called from Calendar.terminate().
+     */
+    internal static void terminate() {
+        earliest = null;
+        latest = null;
     }
     
     /**
@@ -199,19 +237,14 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
     }
     
     /**
-     * Localized user-visible string for the hour and minute.
+     * Returns a prettified, localized user-visible string.
      */
-    public string get_hhmm_label() {
-        // TODO: localize this
-        return "%d:%02d%s".printf(12hour, minute, is_pm ? "pm" : "am");
-    }
-    
-    /**
-     * Localized user-visible string for the hour, minute, and second.
-     */
-    public string get_hhmmss_label() {
-        // TODO: localize this
-        return "%d:%02d:%02d%s".printf(12hour, minute, second, is_pm ? "pm" : "am");
+    public string to_pretty_string(PrettyFlag flags) {
+        // TODO: localize all this
+        if ((flags & PrettyFlag.INCLUDE_SECONDS) != 0)
+            return "%d:%02d:%02d%s".printf(12hour, minute, second, is_pm ? "pm" : "am");
+        else
+            return "%d:%02d%s".printf(12hour, minute, is_pm ? "pm" : "am");
     }
     
     public int compare_to(WallTime other) {
@@ -239,7 +272,7 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
     }
     
     public override string to_string() {
-        return get_hhmmss_label();
+        return to_pretty_string(PrettyFlag.INCLUDE_SECONDS);
     }
 }
 

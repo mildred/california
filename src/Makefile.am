@@ -30,14 +30,16 @@ california_VALASOURCES = \
 	host/host.vala \
 	host/host-create-event.vala \
 	host/host-main-window.vala \
+	host/host-show-event.vala \
 	\
 	model/calendar/calendar.vala \
 	model/calendar/calendar-date-span.vala \
-	model/calendar/calendar-date-time-span.vala \
 	model/calendar/calendar-day-of-month.vala \
 	model/calendar/calendar-day-of-week.vala \
 	model/calendar/calendar-date.vala \
 	model/calendar/calendar-error.vala \
+	model/calendar/calendar-exact-time.vala \
+	model/calendar/calendar-exact-time-span.vala \
 	model/calendar/calendar-first-of-week.vala \
 	model/calendar/calendar-month.vala \
 	model/calendar/calendar-month-of-year.vala \
@@ -73,6 +75,7 @@ california_SOURCES = \
 california_RC = \
 	rc/app-menu.interface \
 	rc/create-event.ui \
+	rc/show-event.ui \
 	$(NULL)
 
 california_VALAFLAGS = \

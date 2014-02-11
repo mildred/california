@@ -11,8 +11,6 @@
 
 E cprefix="E" lower_case_cprefix="e_" gir_version="1.2" gir_namespace="ECalendar" cheader_filename="libecal/libecal.h"
 
-ECalObjModType hidden="1"
-
 #--- sync with official vapi ---#
 
 ECal hidden="1" # deprecated@3.2
@@ -101,6 +99,7 @@ e_cal_client_get_sources.sources value_owned="1"
 
 e_cal_client_get_timezone async="1"
 e_cal_client_get_timezone.cancellable nullable="1"
+
 e_cal_client_get_timezone_finish.zone is_out="1" value_owned="1"
 e_cal_client_get_timezone_sync.cancellable nullable="1"
 e_cal_client_get_timezone_sync.zone is_out="1" value_owned="1"
@@ -122,6 +121,8 @@ e_cal_client_receive_objects_sync.cancellable nullable="1"
 
 e_cal_client_remove_object async="1"
 e_cal_client_remove_object.cancellable nullable="1"
+
+e_cal_client_remove_object_sync.rid nullable="1"
 e_cal_client_remove_object_sync.cancellable nullable="1"
 
 e_cal_client_send_objects async="1"
@@ -212,6 +213,7 @@ ECalComponentRange is_value_type="1"
 ECalComponentText is_value_type="1"
 
 CalObjInstance is_value_type="1"
+CalObjModType hidden="1"
 
 ECalRecurResolveTimezoneFn transfer_ownership="1"
 
@@ -221,6 +223,9 @@ ECalRecurInstanceFn.instance_start type_name="time_t"
 ECalRecurInstanceFn.instance_end type_name="time_t"
 
 ECalView hidden="1" # deprecated@3.2
+
+e_timezone_cache_get_timezone hidden="1"
+e_timezone_cache_add_timezone hidden="1"
 
 isodate_from_time_t transfer_ownership="1"
 isodate_from_time_t.t type_name="time_t"

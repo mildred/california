@@ -7,8 +7,8 @@
 /**
  * Calendar data modeling.
  *
- * Most of the classes here are immutable and defined as GObjects to make them easier to use in
- * Vala and with support libraries.  The "core" logic relies heavily on GLib's Date, Time, and
+ * Almost all of the classes here are immutable and defined as GObjects to make them easier to use
+ * in Vala and with support libraries.  The "core" logic relies heavily on GLib's Date, Time, and
  * DateTime classes.
  *
  * {@link Calendar.init} should be invoked prior to using any class in this namespace.  Call
@@ -33,6 +33,10 @@ private static unowned string FMT_MONTH_ABBREV;
 private static unowned string FMT_DAY_OF_WEEK_FULL;
 private static unowned string FMT_DAY_OF_WEEK_ABBREV;
 private static unowned string FMT_FULL_DATE;
+private static unowned string FMT_PRETTY_DATE;
+private static unowned string FMT_PRETTY_DATE_NO_YEAR;
+private static unowned string FMT_PRETTY_DATE_ABBREV;
+private static unowned string FMT_PRETTY_DATE_ABBREV_NO_YEAR;
 
 public void init() throws Error {
     if (!California.Unit.do_init(ref init_count))
@@ -48,11 +52,16 @@ public void init() throws Error {
     FMT_DAY_OF_WEEK_FULL = _("%A");
     FMT_DAY_OF_WEEK_ABBREV = _("%a");
     FMT_FULL_DATE = _("%x");
+    FMT_PRETTY_DATE = _("%A, %B %e, %Y");
+    FMT_PRETTY_DATE_NO_YEAR = _("%A, %B %e");
+    FMT_PRETTY_DATE_ABBREV = _("%a, %b %e, %y");
+    FMT_PRETTY_DATE_ABBREV_NO_YEAR = _("%a, %b %e");
     
     // internal initialization
     DayOfWeek.init();
     DayOfMonth.init();
     Month.init();
+    WallTime.init();
     
     // TODO: Tie this into the event loop so it's properly updated; also make it a property of
     // an instance so it can be monitored
@@ -65,9 +74,17 @@ public void terminate() {
     
     today = null;
     
+    WallTime.terminate();
     Month.terminate();
     DayOfMonth.terminate();
     DayOfWeek.terminate();
+}
+
+/**
+ * Returns the {@link ExactTime} of the local TimeZone.
+ */
+public ExactTime now() {
+    return new ExactTime.now(new TimeZone.local());
 }
 
 }

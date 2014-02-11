@@ -35,11 +35,17 @@ public interface Controllable : Object {
     public abstract Calendar.Date default_date { get; protected set; }
     
     /**
-     * Signal from the {@link Controller} that an event should be created with the specified
-     * initial parameters.
+     * Signal from the {@link Controllable} that a {@link Component.Event} should be created with
+     * the specified initial parameters.
      */
-    public signal void request_create_event(Calendar.DateTimeSpan initial, Gtk.Widget relative_to,
-        Cairo.RectangleInt? for_location);
+    public signal void request_create_event(Calendar.ExactTimeSpan initial, Gtk.Widget relative_to,
+        Gdk.Point? for_location);
+    
+    /**
+     * Signal from the {@link Controllable} to display a {@link Component.Event}.
+     */
+    public signal void request_display_event(Component.Event event, Gtk.Widget relative_to,
+        Gdk.Point? for_location);
     
     /**
      * Move forward one calendar unit.

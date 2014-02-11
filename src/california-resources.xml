@@ -6,5 +6,8 @@
     <gresource prefix="/org/yorba/california">
         <file compressed="false">rc/create-event.ui</file>
     </gresource>
+    <gresource prefix="/org/yorba/california">
+        <file compressed="false">rc/show-event.ui</file>
+    </gresource>
 </gresources>
 

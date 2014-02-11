@@ -173,8 +173,8 @@ public class Controllable : Gtk.Grid, View.Controllable {
         
         update_cells();
         
-        // generate new DateTimeSpan window for all calendar subscriptions
-        Calendar.DateTimeSpan window = new Calendar.DateTimeSpan.from_date_span(month_of_year,
+        // generate new ExactTimeSpan window for all calendar subscriptions
+        Calendar.ExactTimeSpan window = new Calendar.ExactTimeSpan.from_date_span(month_of_year,
             new TimeZone.local());
         
         // clear current subscriptions and generate new subscriptions for new window
@@ -197,6 +197,7 @@ public class Controllable : Gtk.Grid, View.Controllable {
             subscription.event_discovered.connect(on_event_added);
             subscription.event_added.connect(on_event_added);
             subscription.event_removed.connect(on_event_removed);
+            subscription.event_dropped.connect(on_event_removed);
             
             // this will start signals firing for event changes
             subscription.start();
@@ -223,24 +224,55 @@ public class Controllable : Gtk.Grid, View.Controllable {
     }
     
     private bool on_cell_clicked(Gtk.Widget widget, Gdk.EventButton event) {
-        // only interested in double-clicks, otherwise allow propagation
-        if (event.type != Gdk.EventType.2BUTTON_PRESS)
+        // only interested in left-clicks
+        if (event.button != 1)
             return false;
         
-        Cell cell = (Cell) widget;
-        if (cell.date != null) {
-            DateTime start;
-            if(cell.date.equal_to(Calendar.today))
-                start = new DateTime.now(new TimeZone.local());
-            else
-                start = cell.date.to_date_time(new TimeZone.local(), 13, 0, 0);
+        switch (event.type) {
+            case Gdk.EventType.BUTTON_PRESS:
+                return on_cell_single_clicked((Cell) widget, event);
             
-            // identify location of click
-            Cairo.RectangleInt rect = Cairo.RectangleInt() { x = (int) event.x, y = (int) event.y,
-                width = 1, height = 1 };
+            case Gdk.EventType.2BUTTON_PRESS:
+                return on_cell_double_clicked((Cell) widget, event);
             
-            request_create_event(new Calendar.DateTimeSpan(start, start.add_hours(1)), widget, rect);
+            default:
+                return false;
         }
+    }
+    
+    private bool on_cell_single_clicked(Cell cell, Gdk.EventButton button_event) {
+        Gdk.Point location = Gdk.Point() { x = (int) button_event.x, y = (int) button_event.y };
+        
+        Component.Event? event = cell.get_event_at(location);
+        if (event != null)
+            request_display_event(event, cell, location);
+        
+        // stop propagation if event found
+        return (event != null);
+    }
+    
+    private bool on_cell_double_clicked(Cell cell, Gdk.EventButton button_event) {
+        Gdk.Point location = Gdk.Point() { x = (int) button_event.x, y = (int) button_event.y };
+        
+        // if an existing event is double-clicked, ignore, as the single click handler is displaying
+        // it (but stop propagation)
+        if (cell.get_event_at(location) != null)
+            return true;
+        
+        // if no date, still avoid propagating event
+        if (cell.date == null)
+            return true;
+        
+        // TODO: Define default time better
+        Calendar.ExactTime start;
+        if(cell.date.equal_to(Calendar.today))
+            start = new Calendar.ExactTime.now(new TimeZone.local());
+        else
+            start = new Calendar.ExactTime(new TimeZone.local(), cell.date, new Calendar.WallTime(13, 0, 0));
+        
+        Calendar.ExactTime end = start.adjust_time(1, Calendar.TimeUnit.HOUR);
+        
+        request_create_event(new Calendar.ExactTimeSpan(start, end), cell, location);
         
         // stop propagation
         return true;

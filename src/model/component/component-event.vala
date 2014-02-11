@@ -29,15 +29,15 @@ public class Event : Instance, Gee.Comparable<Event> {
     public string? description { get; private set; default = null; }
     
     /**
-     * {@link Calendar.DateTimeSpan} of the {@link Event}'s dtstart and dtend.
+     * {@link Calendar.ExactTimeSpan} of the {@link Event}'s dtstart and dtend.
      *
      * This is only non-null if the VEVENT specifies a DATE-TIME for both properties, otherwise
      * {@link date_span} will be specified.
      */
-    public Calendar.DateTimeSpan? date_time_span { get; private set; default = null;}
+    public Calendar.ExactTimeSpan? exact_time_span { get; private set; default = null;}
     
     /**
-     * {@link Calendate.DateSpan} of the {@link Event}'s dtstart and dtend.
+     * {@link Calendar.DateSpan} of the {@link Event}'s dtstart and dtend.
      *
      * This is only non-null if the VEVENT defines a DATE for one or both properties.  Generally
      * this indicates an "all day" or multi-day event.
@@ -45,12 +45,17 @@ public class Event : Instance, Gee.Comparable<Event> {
     public Calendar.DateSpan? date_span { get; private set; default = null; }
     
     /**
+     * Convenience property for determining if an all-day event or not.
+     */
+    public bool is_all_day { get { return exact_time_span == null; } }
+    
+    /**
      * Create an {@link Event} {@link Component} from an EDS CalComponent object.
      *
      * Throws a BackingError if the E.CalComponent's VTYPE is not VEVENT.
      */
-    public Event(E.CalComponent eds_component) throws Error {
-        base (eds_component, E.CalComponentVType.EVENT);
+    public Event(Backing.CalendarSource calendar_source, E.CalComponent eds_component) throws Error {
+        base (calendar_source, eds_component, E.CalComponentVType.EVENT);
         
         // remainder of state is initialized in update()
     }
@@ -81,10 +86,10 @@ public class Event : Instance, Gee.Comparable<Event> {
             // convert start and end DATE/DATE-TIMEs to internal values ... note that VEVENT dtend
             // is non-inclusive (see https://tools.ietf.org/html/rfc5545#section-3.6.1)
             Calendar.DateSpan? date_span;
-            Calendar.DateTimeSpan? date_time_span;
-            switch (ical_to_span(false, eds_dtstart.value, eds_dtend.value, out date_time_span, out date_span)) {
+            Calendar.ExactTimeSpan? exact_time_span;
+            switch (ical_to_span(false, eds_dtstart.value, eds_dtend.value, out exact_time_span, out date_span)) {
                 case DateFormat.DATE_TIME:
-                    this.date_time_span = date_time_span;
+                    this.exact_time_span = exact_time_span;
                 break;
                 
                 case DateFormat.DATE:
@@ -107,7 +112,7 @@ public class Event : Instance, Gee.Comparable<Event> {
      * This will return a DateSpan whether the Event is a DATE or DATE-TIME VEVENT.
      */
     public Calendar.DateSpan get_event_date_span() {
-        return date_span ?? new Calendar.DateSpan.from_date_time_span(date_time_span);
+        return date_span ?? new Calendar.DateSpan.from_exact_time_span(exact_time_span);
     }
     
     /**
@@ -132,14 +137,14 @@ public class Event : Instance, Gee.Comparable<Event> {
         
         // starting time
         int compare;
-        if (date_time_span != null && other.date_time_span != null)
-            compare = date_time_span.compare_to(other.date_time_span);
+        if (exact_time_span != null && other.exact_time_span != null)
+            compare = exact_time_span.compare_to(other.exact_time_span);
         else if (date_span != null && other.date_span != null)
             compare = date_span.compare_to(other.date_span);
-        else if (date_time_span != null)
-            compare = new Calendar.DateSpan.from_date_time_span(date_time_span).compare_to(other.date_span);
+        else if (exact_time_span != null)
+            compare = new Calendar.DateSpan.from_exact_time_span(exact_time_span).compare_to(other.date_span);
         else
-            compare = date_span.compare_to(new Calendar.DateSpan.from_date_time_span(other.date_time_span));
+            compare = date_span.compare_to(new Calendar.DateSpan.from_exact_time_span(other.exact_time_span));
         
         if (compare != 0)
             return compare;
@@ -150,7 +155,7 @@ public class Event : Instance, Gee.Comparable<Event> {
             return compare;
         
         // dtstamp
-        compare = dtstamp.compare(other.dtstamp);
+        compare = dtstamp.compare_to(other.dtstamp);
         if (compare != 0)
             return compare;
         
@@ -160,7 +165,7 @@ public class Event : Instance, Gee.Comparable<Event> {
     
     public override string to_string() {
         return "Event \"%s\" (%s)".printf(summary,
-            date_time_span != null ? date_time_span.to_string() : date_span.to_string());
+            exact_time_span != null ? exact_time_span.to_string() : date_span.to_string());
     }
 }
 

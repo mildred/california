@@ -19,7 +19,7 @@ namespace California.Calendar {
  * Although not specified, it's expected that all Spans will also implement Gee.Comparable and
  * Gee.Hashable.
  *
- * Span is not designed for DateTime resolution.
+ * Span is not designed for {@link ExactTime} resolution.
  *
  * @see DateSpan
  * @see WeekSpan
@@ -48,21 +48,21 @@ public interface Span<G> : Object, Gee.Traversable<G>, Gee.Iterable<G> {
     public abstract G end();
     
     /**
-     * Returns the earliest DateTime for this {@link Span}.
+     * Returns the earliest {@link ExactTime} for this {@link Span}.
      *
-     * @see Date.earliest_date_time
+     * @see Date.earliest_exact_time
      */
-    public DateTime earliest_date_time(TimeZone tz) {
-        return start_date.earliest_date_time(tz);
+    public ExactTime earliest_exact_time(TimeZone tz) {
+        return start_date.earliest_exact_time(tz);
     }
     
     /**
-     * Returns the latest DateTime for this {@link Span}.
+     * Returns the latest {@link ExactTime} for this {@link Span}.
      *
-     * @see Date.latest_date_time
+     * @see Date.latest_exact_time
      */
-    public DateTime latest_date_time(TimeZone tz) {
-        return end_date.latest_date_time(tz);
+    public ExactTime latest_exact_time(TimeZone tz) {
+        return end_date.latest_exact_time(tz);
     }
     
     /**

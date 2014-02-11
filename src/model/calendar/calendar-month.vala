@@ -131,15 +131,6 @@ public class Month : BaseObject, Gee.Comparable<Month>, Gee.Hashable<Month> {
         return for_checked(gdate.get_month());
     }
     
-    /**
-     * Returns the current {@link Month}.
-     */
-    public static Month current(TimeZone tz = new TimeZone.local()) {
-        DateTime now = new DateTime.now(tz);
-        
-        return for_checked(now.get_month());
-    }
-    
     internal inline DateMonth to_date_month() {
         return (DateMonth) value;
     }
