@@ -20,8 +20,26 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
         NONE = 0,
         /**
          * Indicates that the {@link seconds} property should be included in the string.
+         *
+         * @see OPTIONAL_MINUTES
          */
-        INCLUDE_SECONDS
+        INCLUDE_SECONDS,
+        /**
+         * Include minutes only if the time is not on the hour.
+         *
+         * If minutes are not displayed, seconds will not be either.
+         */
+        OPTIONAL_MINUTES,
+        /**
+         * Only show meridian indicator if post-meridian.
+         *
+         * Ignored if displaying 24-hour time.
+         */
+        MERIDIAN_POST_ONLY,
+        /**
+         * Use brief meridian indicators.
+         */
+        BRIEF_MERIDIAN
     }
     
     public const int HOURS_PER_DAY = 24;
@@ -240,11 +258,29 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
      * Returns a prettified, localized user-visible string.
      */
     public string to_pretty_string(PrettyFlag flags) {
+        bool include_sec = (flags & PrettyFlag.INCLUDE_SECONDS) != 0;
+        bool optional_min = (flags & PrettyFlag.OPTIONAL_MINUTES) != 0;
+        bool meridian_post_only = (flags & PrettyFlag.MERIDIAN_POST_ONLY) != 0;
+        bool brief_meridian = (flags & PrettyFlag.BRIEF_MERIDIAN) != 0;
+        
         // TODO: localize all this
-        if ((flags & PrettyFlag.INCLUDE_SECONDS) != 0)
-            return "%d:%02d:%02d%s".printf(12hour, minute, second, is_pm ? "pm" : "am");
+        
+        unowned string pm = brief_meridian ? "p" : "pm";
+        unowned string am = brief_meridian ? "a" : "am";
+        
+        unowned string meridian;
+        if (meridian_post_only)
+            meridian = is_pm ? pm : "";
         else
-            return "%d:%02d%s".printf(12hour, minute, is_pm ? "pm" : "am");
+            meridian = is_pm? pm : am;
+        
+        if (optional_min && minute == 0)
+            return "%d%s".printf(12hour, meridian);
+        
+        if (!include_sec)
+            return "%d:%02d%s".printf(12hour, minute, meridian);
+        
+        return "%d:%02d:%02d%s".printf(12hour, minute, second, meridian);
     }
     
     public int compare_to(WallTime other) {

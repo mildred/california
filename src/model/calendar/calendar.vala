@@ -54,7 +54,7 @@ public void init() throws Error {
     FMT_FULL_DATE = _("%x");
     FMT_PRETTY_DATE = _("%A, %B %e, %Y");
     FMT_PRETTY_DATE_NO_YEAR = _("%A, %B %e");
-    FMT_PRETTY_DATE_ABBREV = _("%a, %b %e, %y");
+    FMT_PRETTY_DATE_ABBREV = _("%a, %b %e, %Y");
     FMT_PRETTY_DATE_ABBREV_NO_YEAR = _("%a, %b %e");
     
     // internal initialization

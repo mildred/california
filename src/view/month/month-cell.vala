@@ -17,6 +17,11 @@ public class Cell : Gtk.EventBox {
     private const int TEXT_MARGIN_PX = 2;
     private const int LINE_SPACING_PX = 4;
     
+    private const Calendar.WallTime.PrettyFlag PRETTY_TIME_FLAGS =
+        Calendar.WallTime.PrettyFlag.OPTIONAL_MINUTES
+        | Calendar.WallTime.PrettyFlag.MERIDIAN_POST_ONLY
+        | Calendar.WallTime.PrettyFlag.BRIEF_MERIDIAN;
+    
     public weak Controllable owner { get; private set; }
     public int row { get; private set; }
     public int col { get; private set; }
@@ -172,8 +177,14 @@ public class Cell : Gtk.EventBox {
         // draw all events in chronological order, all-day events first, storing lookup data
         // as the "lines" are drawn
         foreach (Component.Event event in days_events) {
-            string text = event.is_all_day ? event.summary : "%d %s".printf(
-                event.exact_time_span.start_exact_time.to_timezone(local).hour, event.summary);
+            string text;
+            if (event.is_all_day) {
+                text = event.summary;
+            } else {
+                Calendar.ExactTime local_start = event.exact_time_span.start_exact_time.to_timezone(local);
+                text = "%s %s".printf(local_start.to_pretty_time_string(PRETTY_TIME_FLAGS), event.summary);
+            }
+            
             draw_line_of_text(ctx, line_number, RGBA_DAY_OF_MONTH, text);
             line_to_event.set(line_number++, event);
         }
