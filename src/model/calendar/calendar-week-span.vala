@@ -14,28 +14,19 @@ namespace California.Calendar {
  * days outside of the DateSpan.
  */
 
-public class WeekSpan : BaseObject, Gee.Traversable<Week>, Gee.Iterable<Week>, Span<Week> {
-    private class WeekSpanIterator : BaseObject, Gee.Traversable<Week>, Gee.Iterator<Week> {
-        public bool read_only { get { return true; } }
-        public bool valid { get { return current != null; } }
-        
-        public WeekSpan owner;
+public class WeekSpan : BaseObject, Util.SimpleIterable<Week>, Span<Week> {
+    private class WeekSpanIterator : BaseObject, Util.SimpleIterator<Week> {
         public Week first;
         public Week last;
         public Week? current = null;
         
         public WeekSpanIterator(WeekSpan owner) {
-            this.owner = owner;
             first = owner.start();
             last = owner.end();
         }
         
         public new Week get() {
             return current;
-        }
-        
-        public bool has_next() {
-            return (current == null) ? true : current.start_date.compare_to(last.start_date) < 0;
         }
         
         public bool next() {
@@ -45,24 +36,6 @@ public class WeekSpan : BaseObject, Gee.Traversable<Week>, Gee.Iterable<Week>, S
                 current = current.adjust(1);
             else
                 return false;
-            
-            return true;
-        }
-        
-        public void remove() {
-            error("WeekSpanIterator is read-only");
-        }
-        
-        public bool @foreach(Gee.ForallFunc<Week> fn) {
-            if (current == null)
-                current = first;
-            
-            while (current.start_date.compare_to(last.start_date) <= 0) {
-                if (!fn(current))
-                    return false;
-                
-                current = current.adjust(1);
-            }
             
             return true;
         }
@@ -142,18 +115,8 @@ public class WeekSpan : BaseObject, Gee.Traversable<Week>, Gee.Iterable<Week>, S
     /**
      * Returns an Iterator for each {@link Week} (full and partial) in the {@link WeekSpan}.
      */
-    public Gee.Iterator<Week> iterator() {
+    public Util.SimpleIterator<Week> iterator() {
         return new WeekSpanIterator(this);
-    }
-    
-    /**
-     * Iterates over every {@link Week} in the {@link WeekSpan}, invoking the function for each
-     * until it returns false or the weeks are exhausted.
-     *
-     * @returns The last return value of fn.
-     */
-    public bool @foreach(Gee.ForallFunc<Week> fn) {
-        return iterator().foreach(fn);
     }
     
     public override string to_string() {

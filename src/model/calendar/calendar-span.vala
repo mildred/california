@@ -26,7 +26,7 @@ namespace California.Calendar {
  * @see MonthSpan
  */
 
-public interface Span<G> : Object, Gee.Traversable<G>, Gee.Iterable<G> {
+public interface Span<G> : BaseObject, Util.SimpleIterable<G> {
     /**
      * Returns the earliest {@link Date} within the {@link Span}.
      */

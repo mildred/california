@@ -15,6 +15,8 @@ namespace California.Util {
  *
  * This is not a substitute for a Gee.Iterator, but that class offers a lot of extra functionality
  * (such as removing elements) that's not always necessary or desireable.
+ *
+ * @see SimpleIterable
  */
 
 public interface SimpleIterator<G> : BaseObject {

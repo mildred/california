@@ -59,6 +59,7 @@ california_VALASOURCES = \
 	model/component/component-vtype.vala \
 	\
 	util/util-simple-iterator.vala \
+	util/util-simple-iterable.vala \
 	\
 	view/view.vala \
 	view/view-controllable.vala \

@@ -13,29 +13,20 @@ namespace California.Calendar {
  * {@link Week}s.
  */
 
-public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date>, Span<Date>,
-    Gee.Comparable<DateSpan>, Gee.Hashable<DateSpan> {
-    private class DateSpanIterator : BaseObject, Gee.Traversable<Date>, Gee.Iterator<Date> {
-        public bool read_only { get { return true; } }
-        public bool valid { get { return current != null; } }
-        
-        public DateSpan owner;
+public class DateSpan : BaseObject, Util.SimpleIterable<Date>, Span<Date>, Gee.Comparable<DateSpan>,
+    Gee.Hashable<DateSpan> {
+    private class DateSpanIterator : BaseObject, Util.SimpleIterator<Date> {
         public Date first;
         public Date last;
         public Date? current = null;
         
         public DateSpanIterator(DateSpan owner) {
-            this.owner = owner;
             first = owner.start_date;
             last = owner.end_date;
         }
         
         public new Date get() {
             return current;
-        }
-        
-        public bool has_next() {
-            return (current == null) ? true : current.compare_to(last) < 0;
         }
         
         public bool next() {
@@ -45,24 +36,6 @@ public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date>, S
                 current = current.adjust(1, DateUnit.DAY);
             else
                 return false;
-            
-            return true;
-        }
-        
-        public void remove() {
-            error("DateSpanIterator is read-only");
-        }
-        
-        public bool @foreach(Gee.ForallFunc<Date> fn) {
-            if (current == null)
-                current = first;
-            
-            while (current.compare_to(last) <= 0) {
-                if (!fn(current))
-                    return false;
-                
-                current = current.adjust(1, DateUnit.DAY);
-            }
             
             return true;
         }
@@ -166,18 +139,8 @@ public class DateSpan : BaseObject, Gee.Traversable<Date>, Gee.Iterable<Date>, S
     /**
      * Returns an Iterator for all {@link Date}s in the {@link DateSpan}.
      */
-    public Gee.Iterator<Date> iterator() {
+    public Util.SimpleIterator<Date> iterator() {
         return new DateSpanIterator(this);
-    }
-    
-    /**
-     * Iterates over each {@link Date} in the {@link DateSpan}, invoking the function for each
-     * one until it returns false or all Dates are exhausted.
-     *
-     * @returns The last return value of the function.
-     */
-    public bool @foreach(Gee.ForallFunc<Date> fn) {
-        return iterator().foreach(fn);
     }
     
     /**
