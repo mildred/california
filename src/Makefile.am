@@ -61,6 +61,8 @@ california_VALASOURCES = \
 	model/component/component-uid.vala \
 	model/component/component-vtype.vala \
 	\
+	util/util-string.vala \
+	\
 	view/view.vala \
 	view/view-controllable.vala \
 	\

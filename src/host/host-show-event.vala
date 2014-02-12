@@ -8,13 +8,6 @@ namespace California.Host {
 
 [GtkTemplate (ui = "/org/yorba/california/rc/show-event.ui")]
 public class ShowEvent : Gtk.Grid {
-    // Fields are laid out in the following order:
-    // summary, date/time span, description
-    private const string DESCRIPTION =
-"""<b>%s</b>
-<i>%s</i>
-<small>%s</small>""";
-    
     [GtkChild]
     private Gtk.Label text_label;
     
@@ -24,6 +17,18 @@ public class ShowEvent : Gtk.Grid {
     
     public ShowEvent(Component.Event event) {
         this.event = event;
+        
+        // Each string should end without whitespace; add_lf_lf will ensure each section is
+        // separated as long as there's preceding text
+        StringBuilder builder = new StringBuilder();
+        
+        // summary
+        if (!String.is_empty(event.summary))
+            add_lf_lf(builder).append_printf("<b>%s</b>", Markup.escape_text(event.summary));
+        
+        // description
+        if (!String.is_empty(event.description))
+            add_lf_lf(builder).append_printf("%s", Markup.escape_text(event.description));
         
         // if any dates are not in current year, display year in all dates
         Calendar.Date.PrettyFlag date_flags = Calendar.Date.PrettyFlag.NONE;
@@ -72,7 +77,17 @@ public class ShowEvent : Gtk.Grid {
             }
         }
         
-        text_label.label = DESCRIPTION.printf(event.summary ?? "", event.description ?? "", span);
+        add_lf_lf(builder).append_printf("<small>%s</small>", Markup.escape_text(span));
+        
+        text_label.label = builder.str;
+    }
+    
+    // Adds two linefeeds if there's existing text
+    private unowned StringBuilder add_lf_lf(StringBuilder builder) {
+        if (!String.is_empty(builder.str))
+            builder.append("\n\n");
+        
+        return builder;
     }
     
     [GtkCallback]
