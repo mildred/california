@@ -14,7 +14,7 @@ namespace California.Calendar {
  */
 
 public class DayOfWeek : BaseObject, Gee.Hashable<DayOfWeek> {
-    private class DayOfWeekIterator : BaseObject, Util.SimpleIterator<DayOfWeek> {
+    private class DayOfWeekIterator : BaseObject, Collection.SimpleIterator<DayOfWeek> {
         private DayOfWeek current;
         private int count = -1;
         
@@ -231,7 +231,7 @@ public class DayOfWeek : BaseObject, Gee.Hashable<DayOfWeek> {
     /**
      * Returns an Iterator for every day of the week, starting at {@link FirstOfWeek}.
      */
-    public static Util.SimpleIterator<DayOfWeek> iterator(FirstOfWeek first_of_week) {
+    public static Collection.SimpleIterator<DayOfWeek> iterator(FirstOfWeek first_of_week) {
         return new DayOfWeekIterator(first_of_week);
     }
     

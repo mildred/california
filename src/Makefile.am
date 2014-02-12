@@ -27,6 +27,9 @@ california_VALASOURCES = \
 	base/base-object.vala \
 	base/base-unit.vala \
 	\
+	collection/collection-simple-iterator.vala \
+	collection/collection-simple-iterable.vala \
+	\
 	host/host.vala \
 	host/host-create-event.vala \
 	host/host-main-window.vala \
@@ -57,9 +60,6 @@ california_VALASOURCES = \
 	model/component/component-blank.vala \
 	model/component/component-uid.vala \
 	model/component/component-vtype.vala \
-	\
-	util/util-simple-iterator.vala \
-	util/util-simple-iterable.vala \
 	\
 	view/view.vala \
 	view/view-controllable.vala \

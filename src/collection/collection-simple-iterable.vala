@@ -4,7 +4,7 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Util {
+namespace California.Collection {
 
 /**
  * A simple interface for a class that wants to expose read-only iteration of contained elements.

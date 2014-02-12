@@ -13,9 +13,9 @@ namespace California.Calendar {
  * {@link Week}s.
  */
 
-public class DateSpan : BaseObject, Util.SimpleIterable<Date>, Span<Date>, Gee.Comparable<DateSpan>,
+public class DateSpan : BaseObject, Collection.SimpleIterable<Date>, Span<Date>, Gee.Comparable<DateSpan>,
     Gee.Hashable<DateSpan> {
-    private class DateSpanIterator : BaseObject, Util.SimpleIterator<Date> {
+    private class DateSpanIterator : BaseObject, Collection.SimpleIterator<Date> {
         public Date first;
         public Date last;
         public Date? current = null;
@@ -139,7 +139,7 @@ public class DateSpan : BaseObject, Util.SimpleIterable<Date>, Span<Date>, Gee.C
     /**
      * Returns an Iterator for all {@link Date}s in the {@link DateSpan}.
      */
-    public Util.SimpleIterator<Date> iterator() {
+    public Collection.SimpleIterator<Date> iterator() {
         return new DateSpanIterator(this);
     }
     

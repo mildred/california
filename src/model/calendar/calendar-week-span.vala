@@ -14,8 +14,8 @@ namespace California.Calendar {
  * days outside of the DateSpan.
  */
 
-public class WeekSpan : BaseObject, Util.SimpleIterable<Week>, Span<Week> {
-    private class WeekSpanIterator : BaseObject, Util.SimpleIterator<Week> {
+public class WeekSpan : BaseObject, Collection.SimpleIterable<Week>, Span<Week> {
+    private class WeekSpanIterator : BaseObject, Collection.SimpleIterator<Week> {
         public Week first;
         public Week last;
         public Week? current = null;
@@ -115,7 +115,7 @@ public class WeekSpan : BaseObject, Util.SimpleIterable<Week>, Span<Week> {
     /**
      * Returns an Iterator for each {@link Week} (full and partial) in the {@link WeekSpan}.
      */
-    public Util.SimpleIterator<Week> iterator() {
+    public Collection.SimpleIterator<Week> iterator() {
         return new WeekSpanIterator(this);
     }
     
