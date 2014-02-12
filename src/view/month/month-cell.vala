@@ -136,6 +136,12 @@ public class Cell : Gtk.EventBox {
         Gdk.cairo_set_source_rgba(ctx, RGBA_BORDER);
         ctx.set_line_width(0.5);
         
+        // only draw top line if on the top row
+        if (row == 0) {
+            ctx.move_to(0, 0);
+            ctx.line_to(width, 0);
+        }
+        
         // only draw bottom line if not on the bottom row
         if (row < Controllable.ROWS - 1) {
             ctx.move_to(0, height);

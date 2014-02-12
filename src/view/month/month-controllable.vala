@@ -18,8 +18,10 @@ public class Controllable : Gtk.Grid, View.Controllable {
     // calendar weeks to be displayed at any one time
     public const int ROWS = 6;
     
+    // day of week labels are stored in the -1 row
+    private const int DOW_ROW = -1;
+    
     public const string PROP_MONTH_OF_YEAR = "month-of-year";
-    public const string PROP_FIRST_OF_WEEK = "first-of-week";
     public const string PROP_SHOW_OUTSIDE_MONTH = "show-outside-month";
     
     /**
@@ -30,9 +32,9 @@ public class Controllable : Gtk.Grid, View.Controllable {
     public Calendar.MonthOfYear month_of_year { get; private set; }
     
     /**
-     * The set first day of the week.
+     * @inheritDoc
      */
-    public Calendar.FirstOfWeek first_of_week { get; set; default = Calendar.FirstOfWeek.SUNDAY; }
+    public Calendar.FirstOfWeek first_of_week { get; set; }
     
     /**
      * Show days outside the current month.
@@ -61,7 +63,7 @@ public class Controllable : Gtk.Grid, View.Controllable {
     public Controllable() {
         column_homogeneous = true;
         column_spacing = 0;
-        row_homogeneous = true;
+        row_homogeneous = false;
         row_spacing = 0;
         
         // prep the grid with a fixed number of rows and columns
@@ -71,11 +73,22 @@ public class Controllable : Gtk.Grid, View.Controllable {
         for (int col = 0; col < COLS; col++)
             insert_column(0);
         
+        // pre-add grid elements for days of the week along the top row (using -1 as the row so the
+        // remainder of grid is "naturally" zero-based rows)
+        for (int col = 0; col < COLS; col++) {
+            Gtk.Label dow_cell = new Gtk.Label(null);
+            dow_cell.margin_top = 2;
+            dow_cell.margin_bottom = 2;
+            
+            attach(dow_cell, col, DOW_ROW, 1, 1);
+        }
+        
         // pre-add grid elements for every cell, which are updated when the MonthYear changes
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 // mouse events are enabled in Cell's constructor, not here
                 Cell cell = new Cell(this, row, col);
+                cell.expand = true;
                 cell.button_press_event.connect(on_cell_clicked);
                 
                 attach(cell, col, row, 1, 1);
@@ -83,11 +96,12 @@ public class Controllable : Gtk.Grid, View.Controllable {
         }
         
         notify[PROP_MONTH_OF_YEAR].connect(on_month_of_year_changed);
-        notify[PROP_FIRST_OF_WEEK].connect(update_cells);
+        notify[PROP_FIRST_OF_WEEK].connect(update_first_of_week);
         notify[PROP_SHOW_OUTSIDE_MONTH].connect(update_cells);
         
         // update now that signal handlers are in place
         month_of_year = Calendar.today.month_of_year();
+        first_of_week = Calendar.FirstOfWeek.SUNDAY;
     }
     
     /**
@@ -155,6 +169,18 @@ public class Controllable : Gtk.Grid, View.Controllable {
         int row = 0;
         foreach (Calendar.Week week in span)
             update_week(row++, week);
+    }
+    
+    private void update_first_of_week() {
+        // set label text in day of week row
+        int col = 0;
+        foreach (Calendar.DayOfWeek dow in Calendar.DayOfWeek.iterator(first_of_week)) {
+            Gtk.Label dow_cell = (Gtk.Label) get_child_at(col++, DOW_ROW);
+            dow_cell.label = dow.abbrev_name;
+        }
+        
+        // requires updating all the cells as well, since all dates have to be shifted
+        update_cells();
     }
     
     private void on_month_of_year_changed() {

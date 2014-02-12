@@ -14,6 +14,36 @@ namespace California.Calendar {
  */
 
 public class DayOfWeek : BaseObject, Gee.Hashable<DayOfWeek> {
+    private class DayOfWeekIterator : BaseObject, Util.SimpleIterator<DayOfWeek> {
+        private DayOfWeek current;
+        private int count = -1;
+        
+        public DayOfWeekIterator(FirstOfWeek first_of_week) {
+            current = first_of_week.as_day_of_week();
+        }
+        
+        public bool next() {
+            // because iterators are "off-track", next() is called first, so watch for that
+            if (count == -1) {
+                count = 0;
+                
+                return true;
+            }
+            
+            current = current.next();
+            
+            return (++count < COUNT);
+        }
+        
+        public new DayOfWeek get() {
+            return current;
+        }
+        
+        public override string to_string() {
+            return "DayOfWeekIterator";
+        }
+    }
+    
     public static DayOfWeek MON;
     public static DayOfWeek TUE;
     public static DayOfWeek WED;
@@ -39,6 +69,7 @@ public class DayOfWeek : BaseObject, Gee.Hashable<DayOfWeek> {
      */
     public string full_name { get; private set; }
     
+    // 1-based ordinals
     private int value_monday;
     private int value_sunday;
     
@@ -163,6 +194,45 @@ public class DayOfWeek : BaseObject, Gee.Hashable<DayOfWeek> {
             default:
                 assert_not_reached();
         }
+    }
+    
+    /**
+     * Returns the next {@link DayOfWeek}.
+     *
+     * This method will loop, hence it never returns null or another terminating indicator.
+     *
+     * @see prev
+     */
+    public DayOfWeek next() {
+        // first day of week doesn't matter for this operation, so use Monday
+        int next_value = value_monday + 1;
+        if (next_value > MAX)
+            next_value = MIN;
+        
+        return for_checked(next_value, FirstOfWeek.MONDAY);
+    }
+    
+    /**
+     * Returns the previous {@link DayOfWeek}.
+     *
+     * This method will loop, hence it never returns null or another terminating indicator.
+     *
+     * @see next
+     */
+    public DayOfWeek previous() {
+        // first day of week doesn't matter for this operation, so use Monday
+        int previous_value = value_monday - 1;
+        if (previous_value < MIN)
+            previous_value = MAX;
+        
+        return for_checked(previous_value, FirstOfWeek.MONDAY);
+    }
+    
+    /**
+     * Returns an Iterator for every day of the week, starting at {@link FirstOfWeek}.
+     */
+    public static Util.SimpleIterator<DayOfWeek> iterator(FirstOfWeek first_of_week) {
+        return new DayOfWeekIterator(first_of_week);
     }
     
     public bool equal_to(DayOfWeek other) {

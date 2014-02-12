@@ -11,6 +11,11 @@ namespace California.Host {
  */
 
 public class MainWindow : Gtk.ApplicationWindow {
+    private const string PROP_FIRST_OF_WEEK = "first-of-week";
+    
+    // Set as a property so it can be bound to the current View.Controllable
+    public Calendar.FirstOfWeek first_of_week { get; set; }
+    
     private View.Controllable current_view;
     private View.Month.Controllable month_view = new View.Month.Controllable();
     
@@ -65,6 +70,8 @@ public class MainWindow : Gtk.ApplicationWindow {
             BindingFlags.SYNC_CREATE);
         current_view.bind_property(View.Controllable.PROP_IS_VIEWING_TODAY, today, "sensitive",
             BindingFlags.SYNC_CREATE | BindingFlags.INVERT_BOOLEAN);
+        current_view.bind_property(View.Controllable.PROP_FIRST_OF_WEEK, this, PROP_FIRST_OF_WEEK,
+            BindingFlags.BIDIRECTIONAL);
         
         add(layout);
     }
