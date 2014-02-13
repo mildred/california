@@ -87,7 +87,9 @@ public class Event : Instance, Gee.Comparable<Event> {
             // is non-inclusive (see https://tools.ietf.org/html/rfc5545#section-3.6.1)
             Calendar.DateSpan? date_span;
             Calendar.ExactTimeSpan? exact_time_span;
-            switch (ical_to_span(false, eds_dtstart.value, eds_dtend.value, out exact_time_span, out date_span)) {
+            Instance.DateFormat format = ical_to_span(false, eds_dtstart.value, eds_dtstart.tzid,
+                eds_dtend.value, eds_dtend.tzid, out exact_time_span, out date_span);
+            switch (format) {
                 case DateFormat.DATE_TIME:
                     this.exact_time_span = exact_time_span;
                 break;

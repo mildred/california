@@ -76,7 +76,7 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
         
         iCal.icaltimetype ical_dtstamp;
         eds_component.get_dtstamp(out ical_dtstamp);
-        dtstamp = ical_to_exact_time(&ical_dtstamp);
+        dtstamp = ical_to_exact_time(&ical_dtstamp, null);
         
         update(eds_component);
     }
@@ -128,14 +128,17 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      * Convert an iCal.icaltimetype to a GLib.DateTime or {@link Calendar.Date}, depending on the
      * stored information.
      *
+     * The tzid can be supplied if the caller has better information than libical (available to
+     * EDS?)
+     *
      * @returns {@link DateFormat} indicating if Date or DateTime holds a reference.  The other
      * will always be null.  In no case will both be null.
      * @throws CalendarError if the supplied values are out-of-range.
      */
-    public static DateFormat ical_to_datetime_or_date(iCal.icaltimetype *ical_dt,
+    public static DateFormat ical_to_datetime_or_date(iCal.icaltimetype *ical_dt, string? tzid,
         out Calendar.ExactTime? exact_time, out Calendar.Date? date) throws Error {
         if (iCal.icaltime_is_date(*ical_dt) == 0) {
-            exact_time = ical_to_exact_time(ical_dt);
+            exact_time = ical_to_exact_time(ical_dt, tzid);
             date = null;
             
             return DateFormat.DATE_TIME;
@@ -150,16 +153,20 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     /**
      * Convert an iCal.icaltimetype to an {@link Calendar.ExactTime}.
      *
+     * The tzid can be supplied if the caller has better information about it (EDS holds it but
+     * it seems unavailable to libical).
+     *
      * @throws CalendarError if the supplied values are out-of-range or invalid, ComponentError
      * if a DATE rather than a DATE-TIME.
      */
-    public static Calendar.ExactTime ical_to_exact_time(iCal.icaltimetype *ical_dt) throws Error {
+    public static Calendar.ExactTime ical_to_exact_time(iCal.icaltimetype *ical_dt, string? tzid)
+        throws Error {
         if (iCal.icaltime_is_date(*ical_dt) != 0) {
             throw new ComponentError.INVALID("iCalendar time type must be DATE-TIME: %s",
                 iCal.icaltime_as_ical_string(*ical_dt));
         }
         
-        return new Calendar.ExactTime.full(ical_to_timezone(ical_dt), ical_dt.year, ical_dt.month,
+        return new Calendar.ExactTime.full(ical_to_timezone(ical_dt, tzid), ical_dt.year, ical_dt.month,
             ical_dt.day, ical_dt.hour, ical_dt.minute, ical_dt.second);
     }
     
@@ -181,14 +188,21 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     
     /**
      * Convert's an iCal.icaltimetype's timezone into a GLib.TimeZone.
+     *
+     * The tzid can be supplied if the caller has better information about it (EDS holds it but
+     * it seems unavailable to libical).
      */
-    public static TimeZone ical_to_timezone(iCal.icaltimetype *ical_dt) {
-        if (iCal.icaltime_is_utc(*ical_dt) != 0)
+    public static TimeZone ical_to_timezone(iCal.icaltimetype *ical_dt, string? tzid) {
+        // use libical's if not supplied
+        if (String.is_empty(tzid))
+            tzid = iCal.icaltime_get_tzid(*ical_dt);
+        
+        if (!String.is_empty(tzid))
+            return new TimeZone(tzid);
+        else if (iCal.icaltime_is_utc(*ical_dt) != 0)
             return new TimeZone.utc();
-        else if (ical_dt->zone == null)
-            return new TimeZone.local();
         else
-            return new TimeZone(ical_dt->zone->get_tznames());
+            return new TimeZone.local();
     }
     
     /**
@@ -196,7 +210,9 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      * depending on what they represent.
      *
      * Note that if one is a {@link Calendar.Date} and the other is a {@link ExactTime}, the
-     *  ExactTime is coerced into Date and a DateSpan is returned.
+     * ExactTime is coerced into Date and a DateSpan is returned.  tzid's need only be supplied
+     * if the caller has better information; EDS, for example, seems to hold better values than the
+     * ones available to libical (stripped?)
      *
      * dtend_inclusive indicates whether the ical_end_dt should be treated as inclusive or exclusive
      * of the span.  See the iCalendar specification for information on how each component should
@@ -207,15 +223,15 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      * @throws CalendarError if any value is invalid or out-of-range.
      */
     public static DateFormat ical_to_span(bool dtend_inclusive, iCal.icaltimetype *ical_start_dt,
-        iCal.icaltimetype *ical_end_dt, out Calendar.ExactTimeSpan exact_time_span,
-        out Calendar.DateSpan date_span) throws Error {
+        string? start_tzid, iCal.icaltimetype *ical_end_dt, string? end_tzid,
+        out Calendar.ExactTimeSpan exact_time_span, out Calendar.DateSpan date_span) throws Error {
         Calendar.ExactTime? start_exact_time;
         Calendar.Date? start_date;
-        ical_to_datetime_or_date(ical_start_dt, out start_exact_time, out start_date);
+        ical_to_datetime_or_date(ical_start_dt, start_tzid, out start_exact_time, out start_date);
         
         Calendar.ExactTime? end_exact_time;
         Calendar.Date? end_date;
-        ical_to_datetime_or_date(ical_end_dt, out end_exact_time, out end_date);
+        ical_to_datetime_or_date(ical_end_dt, end_tzid, out end_exact_time, out end_date);
         
         // if both DATE-TIME, easy peasy
         if (start_exact_time != null && end_exact_time != null) {

@@ -9,25 +9,43 @@ namespace California.Calendar {
 /**
  * An immutable representation of an exact moment of time on a particular calendar day.
  *
- * This uses GLib's DateTime class but adds some extra logic useful to California.
+ * This uses GLib's DateTime class but adds some extra logic useful to California, including
+ * storing the TimeZone used to generate the DateTime and making this object work well with Gee.
  *
  * "Exact" is limited, of course, to the precision of DateTime, but it's close enough for our needs.
  */
 
 public class ExactTime : BaseObject, Gee.Comparable<ExactTime>, Gee.Hashable<ExactTime> {
     public Year year { owned get { return new Year(date_time.get_year()); } }
-    
     public Month month { owned get { return Month.for_checked(date_time.get_month()); } }
-    
     public DayOfMonth day_of_month { owned get { return DayOfMonth.for_checked(date_time.get_day_of_month()); } }
     
+    /**
+     * Zero-based hour of day.
+     */
     public int hour { get { return date_time.get_hour(); } }
     
+    /**
+     * Zero-based minute of {@link hour}.
+     */
     public int minute { get { return date_time.get_minute(); } }
     
+    /**
+     * Zero-based second of the [@link minute}.
+     */
     public int second { get { return date_time.get_second(); } }
     
+    /**
+     * True if daylight savings is in effect at this moment of time.
+     */
     public bool is_dst { get { return date_time.is_daylight_savings(); } }
+    
+    /**
+     * The timezone used to generate this moment of time.
+     *
+     * @see to_timezone
+     */
+    public TimeZone tz { get; private set; }
     
     private DateTime date_time;
     
@@ -45,10 +63,12 @@ public class ExactTime : BaseObject, Gee.Comparable<ExactTime>, Gee.Hashable<Exa
         date_time = new DateTime.now(tz);
         if (date_time == null)
             error("DateTime.now failed");
+        this.tz = tz;
     }
     
-    public ExactTime.from_date_time(DateTime date_time) {
+    public ExactTime.from_date_time(DateTime date_time, TimeZone tz) {
         this.date_time = date_time;
+        this.tz = tz;
     }
     
     private void init(TimeZone tz, int year, int month, int day, int hour, int minute, double second) {
@@ -57,6 +77,7 @@ public class ExactTime : BaseObject, Gee.Comparable<ExactTime>, Gee.Hashable<Exa
             error("Invalid specified DateTime: %02d/%02d/%d %02d:%02d:%02lf",
                 day, month, year, hour, minute, second);
         }
+        this.tz = tz;
     }
     
     /**
@@ -70,13 +91,13 @@ public class ExactTime : BaseObject, Gee.Comparable<ExactTime>, Gee.Hashable<Exa
         
         switch (unit) {
             case TimeUnit.HOUR:
-                return new ExactTime.from_date_time(date_time.add_hours(quantity));
+                return new ExactTime.from_date_time(date_time.add_hours(quantity), tz);
             
             case TimeUnit.MINUTE:
-                return new ExactTime.from_date_time(date_time.add_minutes(quantity));
+                return new ExactTime.from_date_time(date_time.add_minutes(quantity), tz);
             
             case TimeUnit.SECOND:
-                return new ExactTime.from_date_time(date_time.add_seconds(quantity));
+                return new ExactTime.from_date_time(date_time.add_seconds(quantity), tz);
             
             default:
                 assert_not_reached();
@@ -94,16 +115,16 @@ public class ExactTime : BaseObject, Gee.Comparable<ExactTime>, Gee.Hashable<Exa
         
         switch (unit) {
             case DateUnit.YEAR:
-                return new ExactTime.from_date_time(date_time.add_years(quantity));
+                return new ExactTime.from_date_time(date_time.add_years(quantity), tz);
             
             case DateUnit.MONTH:
-                return new ExactTime.from_date_time(date_time.add_months(quantity));
+                return new ExactTime.from_date_time(date_time.add_months(quantity), tz);
             
             case DateUnit.WEEK:
-                return new ExactTime.from_date_time(date_time.add_weeks(quantity));
+                return new ExactTime.from_date_time(date_time.add_weeks(quantity), tz);
             
             case DateUnit.DAY:
-                return new ExactTime.from_date_time(date_time.add_days(quantity));
+                return new ExactTime.from_date_time(date_time.add_days(quantity), tz);
             
             default:
                 assert_not_reached();
@@ -120,8 +141,8 @@ public class ExactTime : BaseObject, Gee.Comparable<ExactTime>, Gee.Hashable<Exa
     /**
      * See DateTime.to_timezone.
      */
-    public ExactTime to_timezone(TimeZone tz) {
-        return new ExactTime.from_date_time(date_time.to_timezone(tz));
+    public ExactTime to_timezone(TimeZone new_tz) {
+        return new ExactTime.from_date_time(date_time.to_timezone(new_tz), new_tz);
     }
     
     /**
