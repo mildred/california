@@ -10,9 +10,16 @@ namespace California.Component {
  * A mutable iCalendar component that has a definitive instance within a calendar.
  *
  * By "instance", this means {@link Event}s, To-Do's, Journals, and Free/Busy components.  In other
- * words, components which allocate a specific span of time within a calendar.  Some of thse
+ * words, components which allocate a specific item within a calendar.  Some of thse
  * components may be recurring, in which case any particular instance is merely a generated
  * representation of that recurrance.
+ *
+ * Mutability is achieved two separate ways.  One is to call {@link full_update} supplying a new
+ * iCal component to update an existing one (verified by UID and RID).  This will update all
+ * fields.
+ *
+ * The second is to update the mutable properties themselves, which will then update the underlying
+ * iCal component.
  *
  * Alarms are contained within Instance components.  Timezones are handled separately.
  *
@@ -20,6 +27,13 @@ namespace California.Component {
  */
 
 public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
+    public const string PROP_CALENDAR_SOURCE = "calendar-source";
+    public const string PROP_DTSTAMP = "dtstamp";
+    public const string PROP_UID = "uid";
+    public const string PROP_ICAL_COMPONENT = "ical-component";
+    
+    protected const string PROP_IN_FULL_UPDATE = "in-full-update";
+    
     public enum DateFormat {
         DATE_TIME,
         DATE
@@ -27,58 +41,109 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     
     /**
      * The {@link Backing.CalendarSource} this {@link Instance} originated from.
+     *
+     * This will initialize as null if created as a {@link blank} Instance.
      */
-    public Backing.CalendarSource calendar_source { get; private set; }
+    public Backing.CalendarSource? calendar_source { get; set; default = null; }
     
     /**
      * The date-time stamp of the {@link Instance}.
      *
+     * Any update to the Instance will result in this being updated as well.  It cannot be set
+     * manually.
+     *
      * See [[https://tools.ietf.org/html/rfc5545#section-3.8.7.2]]
+     *
+     * @see notify_altered
      */
-    public Calendar.ExactTime dtstamp { get; private set; }
+    public Calendar.ExactTime? dtstamp { get; private set; default = null; }
     
     /**
      * The {@link UID} of the {@link Instance}.
+     *
+     * This element is immutable, as it represents the identify of this Instance.
      */
     public UID uid { get; private set; }
     
     /**
-     * The current backing EDS component being represented by this {@link Instance}.
+     * The iCal component being represented by this {@link Instance}.
      */
-    protected E.CalComponent eds_component { get; private set; }
+    private iCal.icalcomponent _ical_component;
+    public iCal.icalcomponent ical_component { get { return _ical_component; } }
     
     /**
-     * An {@link Instance} gleaned from an EDS calendar component object.
+     * True if inside {@link full_update}.
      *
-     * This contructor will call {@link update}, which gives the subclass a single code path for
-     * updating its properties and internal state.  Anything which should not be updated by an
-     * external invocation of update() (such as immutable data) should update that state after
-     * the base constructor returns.
-     *
-     * If the E.CalComponent's VTYPE does not match the subclasses' VTYPE, ComponentError.MISMATCH
-     * is thrown.
+     * Subclasses want to ignore updates to various properties (their own and {@link Instance}'s)
+     * if this is true.
      */
-    protected Instance(Backing.CalendarSource calendar_source, E.CalComponent eds_component,
-        E.CalComponentVType subclass_vtype) throws Error {
-        if (subclass_vtype != eds_component.get_vtype()) {
+    protected bool in_full_update { get; private set; default = false; }
+    
+    /**
+     * Fired when an {@link Instance} is altered in any way.
+     *
+     * Although "notify" is probably good enough for most situations (and tells the subscriber
+     * which property changed), there's no guarantee that all fields in subclasses of Instance
+     * will be stored in properties, so this is the final word on knowing when an Instance has
+     * been altered.
+     *
+     * Subclasses should use {@link notify_altered} rather than firing this signal directly.
+     */
+    public signal void altered(bool from_full_update);
+    
+    /**
+     * An {@link Instance} representing an iCal component.
+     *
+     * This contructor will call {@link full_update}, which gives the subclass a single code path
+     *for updating its properties and internal state.  Anything which should not be updated by an
+     * external invocation of full_update() (such as immutable data) should update that state after
+     * the base constructor returns.
+     */
+    protected Instance(Backing.CalendarSource calendar_source, iCal.icalcomponent ical_component,
+        iCal.icalcomponent_kind kind) throws Error {
+        if (ical_component.isa() != kind) {
             throw new ComponentError.MISMATCH("Cannot create VTYPE %s from component of VTYPE %s",
-                subclass_vtype.to_string(), eds_component.get_vtype().to_string());
+                kind.to_string(), ical_component.isa().to_string());
         }
         
         this.calendar_source = calendar_source;
-        // although base update() sets this, set it here in case it's referred to by the subclass
+        // although base update() sets this, set it here in case it's referred to by the subclasses
         // as the "old" component during it's update()
-        this.eds_component = eds_component;
+        _ical_component = ical_component.clone();
         
-        unowned string uid_string;
-        eds_component.get_uid(out uid_string);
-        uid = new UID(uid_string);
+        // this needs to be stored before calling update() or the equality check there will fail
+        uid = new UID(_ical_component.get_uid());
         
-        iCal.icaltimetype ical_dtstamp;
-        eds_component.get_dtstamp(out ical_dtstamp);
-        dtstamp = ical_to_exact_time(&ical_dtstamp, null);
+        full_update(_ical_component);
+    }
+    
+    /**
+     * Creates a blank {@link Instance} for a new iCal component with a generated {@link uid}.
+     *
+     * Unlike the primary constructor, this will not call {@link full_update}.
+     */
+    protected Instance.blank(iCal.icalcomponent_kind kind) {
+        _ical_component = new iCal.icalcomponent(kind);
+        uid = Component.UID.generate();
+        _ical_component.set_uid(uid.value);
+    }
+    
+    /**
+     * Fires the {@link altered} signal, allowing for subclasses to update internal state before
+     * or after the trigger.
+     */
+    protected virtual void notify_altered(bool from_full_update) {
+        altered(from_full_update);
         
-        update(eds_component);
+        // only update dtstamp if not altered by a full update (as dtstamp is updated there)
+        if (from_full_update)
+            return;
+        
+        dtstamp = Calendar.now();
+        
+        iCal.icaltimetype ical_dtstamp = {};
+        exact_time_to_ical(dtstamp, &ical_dtstamp);
+        ical_component.set_dtstamp(ical_dtstamp);
     }
     
     /**
@@ -88,21 +153,46 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      * signals to update subscribers.
      *
      * This is also called by the Instance base class constructor to give subclasses a single
-     * code path for updating their state.  It's highly recommended the subclass call the base
-     * class update() first to allow it to do basic sanity checking before proceeding to update
-     * its own state.
+     * code path for updating their state.
      *
      * @throws BackingError if eds_component is not for this Instance.
      */
-    public virtual void update(E.CalComponent eds_component) throws Error {
-        unowned string uid_string;
-        eds_component.get_uid(out uid_string);
-        Component.UID uid = new Component.UID(uid_string);
+    public void full_update(iCal.icalcomponent ical_component) throws Error {
+        in_full_update = true;
         
-        if (!this.uid.equal_to(uid)) {
-            throw new BackingError.MISMATCH("Attempt to update component %s with component %s",
-                this.uid.to_string(), uid.to_string());
+        bool notify = false;
+        try {
+            update_from_component(ical_component);
+            notify = true;
+        } finally {
+            in_full_update = false;
+            
+            // notify when !in_full_update
+            if (notify)
+                notify_altered(true);
         }
+    }
+    
+    /**
+     * The "real" update method that should be overridden by subclasses to update their fields.
+     *
+     * It's highly recommended the subclass call the base class update_from_component() first to
+     * allow it to do basic sanity checking before proceeding to update its own state.
+     *
+     * @see full_update
+     */
+    protected virtual void update_from_component(iCal.icalcomponent ical_component) throws Error {
+        Component.UID other_uid = new Component.UID(ical_component.get_uid());
+        if (!uid.equal_to(other_uid)) {
+            throw new BackingError.MISMATCH("Attempt to update component %s with component %s",
+                this.uid.to_string(), other_uid.to_string());
+        }
+        
+        iCal.icaltimetype ical_dtstamp = ical_component.get_dtstamp();
+        dtstamp = ical_to_exact_time(&ical_dtstamp);
+        
+        if (_ical_component != ical_component)
+            _ical_component = ical_component.clone();
     }
     
     /**
@@ -111,14 +201,14 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      * @returns null if the component is not represented in this namespace (yet).
      */
     public static Component.Instance? convert(Backing.CalendarSource calendar_source,
-        E.CalComponent eds_component) throws Error {
-        switch (eds_component.get_vtype()) {
-            case E.CalComponentVType.EVENT:
-                return new Event(calendar_source, eds_component);
+        iCal.icalcomponent ical_component) throws Error {
+        switch (ical_component.isa()) {
+            case iCal.icalcomponent_kind.VEVENT_COMPONENT:
+                return new Event(calendar_source, ical_component);
             
             default:
                 debug("Unable to construct component %s: unimplemented",
-                    eds_component.get_vtype().to_string());
+                    ical_component.isa().to_string());
                 
                 return null;
         }
@@ -128,17 +218,14 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      * Convert an iCal.icaltimetype to a GLib.DateTime or {@link Calendar.Date}, depending on the
      * stored information.
      *
-     * The tzid can be supplied if the caller has better information than libical (available to
-     * EDS?)
-     *
      * @returns {@link DateFormat} indicating if Date or DateTime holds a reference.  The other
      * will always be null.  In no case will both be null.
      * @throws CalendarError if the supplied values are out-of-range.
      */
-    public static DateFormat ical_to_datetime_or_date(iCal.icaltimetype *ical_dt, string? tzid,
+    public static DateFormat ical_to_datetime_or_date(iCal.icaltimetype *ical_dt,
         out Calendar.ExactTime? exact_time, out Calendar.Date? date) throws Error {
         if (iCal.icaltime_is_date(*ical_dt) == 0) {
-            exact_time = ical_to_exact_time(ical_dt, tzid);
+            exact_time = ical_to_exact_time(ical_dt);
             date = null;
             
             return DateFormat.DATE_TIME;
@@ -153,20 +240,17 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     /**
      * Convert an iCal.icaltimetype to an {@link Calendar.ExactTime}.
      *
-     * The tzid can be supplied if the caller has better information about it (EDS holds it but
-     * it seems unavailable to libical).
-     *
      * @throws CalendarError if the supplied values are out-of-range or invalid, ComponentError
      * if a DATE rather than a DATE-TIME.
      */
-    public static Calendar.ExactTime ical_to_exact_time(iCal.icaltimetype *ical_dt, string? tzid)
+    public static Calendar.ExactTime ical_to_exact_time(iCal.icaltimetype *ical_dt)
         throws Error {
         if (iCal.icaltime_is_date(*ical_dt) != 0) {
             throw new ComponentError.INVALID("iCalendar time type must be DATE-TIME: %s",
                 iCal.icaltime_as_ical_string(*ical_dt));
         }
         
-        return new Calendar.ExactTime.full(ical_to_timezone(ical_dt, tzid), ical_dt.year, ical_dt.month,
+        return new Calendar.ExactTime.full(ical_to_timezone(ical_dt), ical_dt.year, ical_dt.month,
             ical_dt.day, ical_dt.hour, ical_dt.minute, ical_dt.second);
     }
     
@@ -189,14 +273,11 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     /**
      * Convert's an iCal.icaltimetype's timezone into a GLib.TimeZone.
      *
-     * The tzid can be supplied if the caller has better information about it (EDS holds it but
-     * it seems unavailable to libical).
+     * TODO: This is currently broken with EDS, which supplies the TZID out-of-band.
      */
-    public static TimeZone ical_to_timezone(iCal.icaltimetype *ical_dt, string? tzid) {
+    public static TimeZone ical_to_timezone(iCal.icaltimetype *ical_dt) {
         // use libical's if not supplied
-        if (String.is_empty(tzid))
-            tzid = iCal.icaltime_get_tzid(*ical_dt);
-        
+        string? tzid = iCal.icaltime_get_tzid(*ical_dt);
         if (!String.is_empty(tzid))
             return new TimeZone(tzid);
         else if (iCal.icaltime_is_utc(*ical_dt) != 0)
@@ -209,11 +290,6 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      * Convert two iCal.icaltimetypes into a {@link Calendar.DateSpan} or a {@link Calendar.ExactTimeSpan}
      * depending on what they represent.
      *
-     * Note that if one is a {@link Calendar.Date} and the other is a {@link ExactTime}, the
-     * ExactTime is coerced into Date and a DateSpan is returned.  tzid's need only be supplied
-     * if the caller has better information; EDS, for example, seems to hold better values than the
-     * ones available to libical (stripped?)
-     *
      * dtend_inclusive indicates whether the ical_end_dt should be treated as inclusive or exclusive
      * of the span.  See the iCalendar specification for information on how each component should
      * treat the situation.  Exclusive only works for DATE values.
@@ -223,15 +299,21 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      * @throws CalendarError if any value is invalid or out-of-range.
      */
     public static DateFormat ical_to_span(bool dtend_inclusive, iCal.icaltimetype *ical_start_dt,
-        string? start_tzid, iCal.icaltimetype *ical_end_dt, string? end_tzid,
-        out Calendar.ExactTimeSpan exact_time_span, out Calendar.DateSpan date_span) throws Error {
+        iCal.icaltimetype *ical_end_dt, out Calendar.ExactTimeSpan exact_time_span,
+        out Calendar.DateSpan date_span) throws Error {
+        if (ical_start_dt == null)
+            throw new ComponentError.INVALID("NULL ical_start_dt");
+        
+        if (ical_end_dt == null)
+            throw new ComponentError.INVALID("NULL ical_end_dt");
+        
         Calendar.ExactTime? start_exact_time;
         Calendar.Date? start_date;
-        ical_to_datetime_or_date(ical_start_dt, start_tzid, out start_exact_time, out start_date);
+        ical_to_datetime_or_date(ical_start_dt, out start_exact_time, out start_date);
         
         Calendar.ExactTime? end_exact_time;
         Calendar.Date? end_date;
-        ical_to_datetime_or_date(ical_end_dt, end_tzid, out end_exact_time, out end_date);
+        ical_to_datetime_or_date(ical_end_dt, out end_exact_time, out end_date);
         
         // if both DATE-TIME, easy peasy
         if (start_exact_time != null && end_exact_time != null) {
@@ -266,6 +348,48 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
         return DateFormat.DATE;
     }
     
+    public static void date_to_ical(Calendar.Date date, iCal.icaltimetype *ical_dt) {
+        ical_dt->year = date.year.value;
+        ical_dt->month = date.month.value;
+        ical_dt->day = date.day_of_month.value;
+        ical_dt->hour = 0;
+        ical_dt->minute = 0;
+        ical_dt->second = 0;
+        ical_dt->is_utc = 0;
+        ical_dt->is_date = 1;
+        ical_dt->is_daylight = 0;
+        ical_dt->zone = null;
+    }
+    
+    public static void date_span_to_ical(Calendar.DateSpan date_span, iCal.icaltimetype *ical_dtstart,
+        iCal.icaltimetype *ical_dtend) {
+        date_to_ical(date_span.start_date, ical_dtstart);
+        date_to_ical(date_span.end_date, ical_dtend);
+    }
+    
+    public static void exact_time_to_ical(Calendar.ExactTime exact_time, iCal.icaltimetype *ical_dt) {
+        ical_dt->year = exact_time.year.value;
+        ical_dt->month = exact_time.month.value;
+        ical_dt->day = exact_time.day_of_month.value;
+        ical_dt->hour = exact_time.hour;
+        ical_dt->minute = exact_time.minute;
+        ical_dt->second = exact_time.second;
+        ical_dt->is_utc = 0;
+        ical_dt->is_date = 0;
+        ical_dt->is_daylight = exact_time.is_dst ? 1 : 0;
+        ical_dt->zone = iCal.icaltimezone.get_builtin_timezone_from_tzid(exact_time.tzid);
+    }
+    
+    public static void exact_time_span_to_ical(Calendar.ExactTimeSpan exact_time_span,
+        iCal.icaltimetype *ical_dtstart, iCal.icaltimetype *ical_dtend) {
+        exact_time_to_ical(exact_time_span.start_exact_time, ical_dtstart);
+        exact_time_to_ical(exact_time_span.end_exact_time, ical_dtend);
+    }
+    
+    /**
+     * Equality is defined as {@link Component.Instance}s having the same UID (and, when available,
+     * RID), nothing more.
+     */
     public bool equal_to(Instance other) {
         return (this != other) ? uid.equal_to(other.uid) : true;
     }

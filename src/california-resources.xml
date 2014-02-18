@@ -4,7 +4,7 @@
         <file compressed="true">rc/app-menu.interface</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
-        <file compressed="false">rc/create-event.ui</file>
+        <file compressed="false">rc/create-update-event.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
         <file compressed="false">rc/show-event.ui</file>

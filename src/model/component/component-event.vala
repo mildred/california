@@ -15,24 +15,27 @@ namespace California.Component {
 public class Event : Instance, Gee.Comparable<Event> {
     public const string PROP_SUMMARY = "summary";
     public const string PROP_DESCRIPTION = "description";
-    public const string PROP_DATE_TIME_SPAN = "date-time-span";
+    public const string PROP_EXACT_TIME_SPAN = "exact-time-span";
     public const string PROP_DATE_SPAN = "date-span";
+    public const string PROP_IS_ALL_DAY = "is-all-day";
     
     /**
      * Summary (title) of {@link Event}.
      */
-    public string? summary { get; private set; default = null; }
+    public string? summary { get; set; default = null; }
     
     /**
      * Description of {@link Event}.
      */
-    public string? description { get; private set; default = null; }
+    public string? description { get; set; default = null; }
     
     /**
      * {@link Calendar.ExactTimeSpan} of the {@link Event}'s dtstart and dtend.
      *
      * This is only non-null if the VEVENT specifies a DATE-TIME for both properties, otherwise
      * {@link date_span} will be specified.
+     *
+     * @see set_exact_time_span
      */
     public Calendar.ExactTimeSpan? exact_time_span { get; private set; default = null;}
     
@@ -41,71 +44,122 @@ public class Event : Instance, Gee.Comparable<Event> {
      *
      * This is only non-null if the VEVENT defines a DATE for one or both properties.  Generally
      * this indicates an "all day" or multi-day event.
+     *
+     * @see set_date_span
      */
     public Calendar.DateSpan? date_span { get; private set; default = null; }
     
     /**
      * Convenience property for determining if an all-day event or not.
      */
-    public bool is_all_day { get { return exact_time_span == null; } }
+    public bool is_all_day { get; private set; }
     
     /**
      * Create an {@link Event} {@link Component} from an EDS CalComponent object.
      *
      * Throws a BackingError if the E.CalComponent's VTYPE is not VEVENT.
      */
-    public Event(Backing.CalendarSource calendar_source, E.CalComponent eds_component) throws Error {
-        base (calendar_source, eds_component, E.CalComponentVType.EVENT);
+    public Event(Backing.CalendarSource calendar_source, iCal.icalcomponent ical_component) throws Error {
+        base (calendar_source, ical_component, iCal.icalcomponent_kind.VEVENT_COMPONENT);
         
-        // remainder of state is initialized in update()
+        // remainder of state is initialized in update_from_component()
+        
+        // watch for changes to mutable properties, update ical_component when they change
+        notify.connect(on_notify);
+    }
+    
+    /**
+     * Creates a "blank" {@link Event} with a generated {@link uid}.
+     *
+     * A {@link Calendar.DateSpan} or a {@link Calendar.ExactTimeSpan} must be specified in order
+     * to generate a minimally-valid Event.
+     */
+    public Event.blank() {
+        base.blank(iCal.icalcomponent_kind.VEVENT_COMPONENT);
+        
+        notify.connect(on_notify);
     }
     
     /**
      * @inheritDoc
      */
-    public override void update(E.CalComponent eds_component) throws Error {
-        base.update(eds_component);
+    protected override void update_from_component(iCal.icalcomponent ical_component) throws Error {
+        base.update_from_component(ical_component);
         
-        E.CalComponentText text;
-        eds_component.get_summary(out text);
-        summary = text.value;
+        summary = ical_component.get_summary();
+        description = ical_component.get_description();
         
-        // Events can hold at most one description
-        unowned SList<E.CalComponentText?> text_list;
-        eds_component.get_description_list(out text_list);
-        if (text_list != null && text_list.data != null)
-            description = text_list.data.value;
-        E.CalComponent.free_text_list(text_list);
-        
-        E.CalComponentDateTime eds_dtstart = {};
-        E.CalComponentDateTime eds_dtend = {};
-        try {
-            eds_component.get_dtstart(ref eds_dtstart);
-            eds_component.get_dtend(ref eds_dtend);
+        iCal.icaltimetype ical_dtstart = ical_component.get_dtstart();
+        iCal.icaltimetype ical_dtend = ical_component.get_dtend();
+        // convert start and end DATE/DATE-TIMEs to internal values ... note that VEVENT dtend
+        // is non-inclusive (see https://tools.ietf.org/html/rfc5545#section-3.6.1)
+        Calendar.DateSpan? date_span;
+        Calendar.ExactTimeSpan? exact_time_span;
+        Instance.DateFormat format = ical_to_span(false, &ical_dtstart, &ical_dtend,
+            out exact_time_span, out date_span);
+        switch (format) {
+            case DateFormat.DATE_TIME:
+                set_event_exact_time_span(exact_time_span);
+            break;
             
-            // convert start and end DATE/DATE-TIMEs to internal values ... note that VEVENT dtend
-            // is non-inclusive (see https://tools.ietf.org/html/rfc5545#section-3.6.1)
-            Calendar.DateSpan? date_span;
-            Calendar.ExactTimeSpan? exact_time_span;
-            Instance.DateFormat format = ical_to_span(false, eds_dtstart.value, eds_dtstart.tzid,
-                eds_dtend.value, eds_dtend.tzid, out exact_time_span, out date_span);
-            switch (format) {
-                case DateFormat.DATE_TIME:
-                    this.exact_time_span = exact_time_span;
-                break;
-                
-                case DateFormat.DATE:
-                    this.date_span = date_span;
-                break;
-                
-                default:
-                    assert_not_reached();
-            }
-        } finally {
-            // TODO: Ok to free dt structs that haven't been filled-in?
-            E.CalComponent.free_datetime(eds_dtstart);
-            E.CalComponent.free_datetime(eds_dtend);
+            case DateFormat.DATE:
+                set_event_date_span(date_span);
+            break;
+            
+            default:
+                assert_not_reached();
         }
+        
+        // need to set this here because on_notify() doesn't update inside full update
+        is_all_day = (date_span != null);
+    }
+    
+    private void on_notify(ParamSpec pspec) {
+        // ignore if inside a full update
+        if (in_full_update)
+            return;
+        
+        bool altered = true;
+        switch (pspec.name) {
+            case PROP_SUMMARY:
+                ical_component.set_summary(summary);
+            break;
+            
+            case PROP_DESCRIPTION:
+                ical_component.set_description(description);
+            break;
+            
+            case PROP_EXACT_TIME_SPAN:
+            case PROP_DATE_SPAN:
+                // set_exact_time_span() and set_date_span() guarantee that only one of the other
+                // will be set, but the change isn't atomic and it's possible that both will be
+                // set or unset
+                if ((date_span == null && exact_time_span == null)
+                    || (date_span != null && exact_time_span != null)) {
+                    return;
+                }
+                
+                iCal.icaltimetype ical_dtstart = {};
+                iCal.icaltimetype ical_dtend = {};
+                if (exact_time_span != null)
+                    exact_time_span_to_ical(exact_time_span, &ical_dtstart, &ical_dtend);
+                else
+                    date_span_to_ical(date_span, &ical_dtstart, &ical_dtend);
+                
+                ical_component.set_dtstart(ical_dtstart);
+                ical_component.set_dtend(ical_dtend);
+                
+                // updating here guarantees it's always accurate
+                is_all_day = (date_span != null);
+            break;
+            
+            default:
+                altered = false;
+            break;
+        }
+        
+        if (altered)
+            notify_altered(false);
     }
     
     /**
@@ -115,6 +169,30 @@ public class Event : Instance, Gee.Comparable<Event> {
      */
     public Calendar.DateSpan get_event_date_span() {
         return date_span ?? new Calendar.DateSpan.from_exact_time_span(exact_time_span);
+    }
+    
+    /**
+     * Sets the {@link Event} as a DATE VEVENT.
+     *
+     * {@link date_span} will be set and {@link exact_time_span} will be unset.
+     *
+     * @see set_event_exact_time_span
+     */
+    public void set_event_date_span(Calendar.DateSpan date_span) {
+        this.date_span = date_span;
+        exact_time_span = null;
+    }
+    
+    /**
+     * Sets the {@link Event} as a DATE-TIME VEVENT.
+     *
+     * {@link exact_time_span} will be set and {@link date_span} will be unset.
+     *
+     * @see set_event_date_span
+     */
+    public void set_event_exact_time_span(Calendar.ExactTimeSpan exact_time_span) {
+        this.exact_time_span = exact_time_span;
+        date_span = null;
     }
     
     /**
@@ -136,6 +214,13 @@ public class Event : Instance, Gee.Comparable<Event> {
     public int compare_to(Event other) {
         if (this == other)
             return 0;
+        
+        // sort all-day events before timed events
+        if (is_all_day && !other.is_all_day)
+            return -1;
+        
+        if (!is_all_day && other.is_all_day)
+            return 1;
         
         // starting time
         int compare;

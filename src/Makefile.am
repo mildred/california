@@ -31,7 +31,7 @@ california_VALASOURCES = \
 	collection/collection-simple-iterable.vala \
 	\
 	host/host.vala \
-	host/host-create-event.vala \
+	host/host-create-update-event.vala \
 	host/host-main-window.vala \
 	host/host-show-event.vala \
 	\
@@ -57,7 +57,6 @@ california_VALASOURCES = \
 	model/component/component-error.vala \
 	model/component/component-event.vala \
 	model/component/component-instance.vala \
-	model/component/component-blank.vala \
 	model/component/component-uid.vala \
 	model/component/component-vtype.vala \
 	\
@@ -79,7 +78,7 @@ california_SOURCES = \
 
 california_RC = \
 	rc/app-menu.interface \
-	rc/create-event.ui \
+	rc/create-update-event.ui \
 	rc/show-event.ui \
 	$(NULL)
 

@@ -14,16 +14,6 @@ namespace California.Component {
 
 public enum VType {
     EVENT;
-    
-    internal iCal.icalcomponent_kind to_kind() {
-        switch (this) {
-            case EVENT:
-                return iCal.icalcomponent_kind.VEVENT_COMPONENT;
-            
-            default:
-                assert_not_reached();
-        }
-    }
 }
 
 }

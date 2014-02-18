@@ -47,6 +47,13 @@ public class ExactTime : BaseObject, Gee.Comparable<ExactTime>, Gee.Hashable<Exa
      */
     public TimeZone tz { get; private set; }
     
+    /**
+     * The TZID for the current time's timezone.
+     *
+     * @see tz
+     */
+    public unowned string tzid { get { return date_time.get_timezone_abbreviation(); } }
+    
     private DateTime date_time;
     
     public ExactTime(TimeZone tz, Date date, WallTime time) {
@@ -170,6 +177,13 @@ public class ExactTime : BaseObject, Gee.Comparable<ExactTime>, Gee.Hashable<Exa
     
     public uint hash() {
         return date_time.hash();
+    }
+    
+    /**
+     * See DateTime.format() for specifiers.
+     */
+    public string format(string fmt) {
+        return date_time.format(fmt);
     }
     
     public override string to_string() {

@@ -67,6 +67,13 @@ public class ExactTimeSpan : BaseObject, Gee.Comparable<ExactTimeSpan>, Gee.Hash
     }
     
     /**
+     * Returns the {@link DateSpan} of this exact time span.
+     */
+    public Calendar.DateSpan get_date_span() {
+        return new Calendar.DateSpan(start_date, end_date);
+    }
+    
+    /**
      * Compares the {@link start_exact_time} of two {@link ExactTimeSpan}s.
      */
     public int compare_to(ExactTimeSpan other) {

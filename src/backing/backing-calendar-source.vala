@@ -32,7 +32,16 @@ public abstract class CalendarSource : Source {
      *
      * @returns The {@link Component.UID}.of the generated instance, if available.
      */
-    public abstract async Component.UID? create_component_async(Component.Blank blank,
+    public abstract async Component.UID? create_component_async(Component.Instance instance,
+        Cancellable? cancellable = null) throws Error;
+    
+    /**
+     * Updates an existing {@link Component} instance on the backing {@link CalendarSource}.
+     *
+     * Outstanding {@link CalendarSourceSubscriptions} will eventually report the changes when
+     * ready.
+     */
+    public abstract async void update_component_async(Component.Instance instance,
         Cancellable? cancellable = null) throws Error;
     
     /**

@@ -183,7 +183,7 @@ e_cal_component_get_url.url is_out="1" value_owned="0"
 
 e_cal_component_set_completed.t type_name="iCal.icaltimetype"
 e_cal_component_set_created.t type_name="iCal.icaltimetype"
-e_cal_component_set_dtstamp.t type_name="iCal.icaltimetype"
+e_cal_component_set_dtstamp.t type_name="iCal.icaltimetype*"
 e_cal_component_set_geo.geo type_name="iCal.icalgeotype"
 e_cal_component_set_icalcomponent.icalcomp value_owned="1"
 e_cal_component_set_last_modified.t type_name="iCal.icaltimetype"

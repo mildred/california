@@ -13,10 +13,23 @@ namespace California.Component {
  */
 
 public class UID : BaseObject, Gee.Hashable<UID>, Gee.Comparable<UID> {
+    private static uint32 serial_number = 0;
+    
     public string value { get; private set; }
     
     public UID(string value) {
         this.value = value;
+    }
+    
+    public static UID generate() {
+        // Borrowed liberally from EDS' e_cal_component_gen_uid
+        return new UID("%s-%d-%d-%d-%08X@%s".printf(
+            Calendar.now().format("%FT%H:%M:%S%z"),
+            Posix.getpid(),
+            (int) Posix.getgid(),
+            (int) Posix.getppid(),
+            serial_number++,
+            Environment.get_host_name()));
     }
     
     public uint hash() {

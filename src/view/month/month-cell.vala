@@ -86,7 +86,7 @@ public class Cell : Gtk.EventBox {
         // subscribe to interesting mutable properties
         event.notify[Component.Event.PROP_SUMMARY].connect(queue_draw);
         event.notify[Component.Event.PROP_DATE_SPAN].connect(on_span_updated);
-        event.notify[Component.Event.PROP_DATE_TIME_SPAN].connect(on_span_updated);
+        event.notify[Component.Event.PROP_EXACT_TIME_SPAN].connect(on_span_updated);
         
         queue_draw();
     }
@@ -97,7 +97,7 @@ public class Cell : Gtk.EventBox {
         
         event.notify[Component.Event.PROP_SUMMARY].disconnect(queue_draw);
         event.notify[Component.Event.PROP_DATE_SPAN].disconnect(on_span_updated);
-        event.notify[Component.Event.PROP_DATE_TIME_SPAN].disconnect(on_span_updated);
+        event.notify[Component.Event.PROP_EXACT_TIME_SPAN].disconnect(on_span_updated);
         
         queue_draw();
     }
@@ -108,16 +108,11 @@ public class Cell : Gtk.EventBox {
         
         Component.Event event = (Component.Event) object;
         
-        // remove from cell if no longer in this day
-        if (!(date in event.get_event_date_span())) {
+        // remove from cell if no longer in this day, otherwise remove and add again to days_events
+        // to re-sort
+        if (!(date in event.get_event_date_span()))
             remove_event(event);
-            queue_draw();
-            
-            return;
-        }
-        
-        // remove and add again to re-sort based on updated information
-        if (days_events.remove(event))
+        else if (days_events.remove(event))
             days_events.add(event);
         
         queue_draw();

@@ -197,7 +197,7 @@ namespace E {
 		public void set_created (iCal.icaltimetype t);
 		public void set_description_list (GLib.SList text_list);
 		public void set_dtend (E.CalComponentDateTime dt);
-		public void set_dtstamp (iCal.icaltimetype t);
+		public void set_dtstamp (iCal.icaltimetype* t);
 		public void set_dtstart (E.CalComponentDateTime dt);
 		public void set_due (E.CalComponentDateTime dt);
 		public void set_exdate_list (GLib.SList exdate_list);

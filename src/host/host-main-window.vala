@@ -92,37 +92,65 @@ public class MainWindow : Gtk.ApplicationWindow {
     }
     
     private void on_new_event() {
-        // start today and now, 1-hour event default
-        Calendar.ExactTime dtstart = Calendar.now();
-        Calendar.ExactTimeSpan dtspan = new Calendar.ExactTimeSpan(dtstart,
-            dtstart.adjust_time(1, Calendar.TimeUnit.HOUR));
+        // create all-day event for today
+        Calendar.DateSpan initial = new Calendar.DateSpan(Calendar.today, Calendar.today);
         
         // revert to today's date and use the widget for the popover
         Gtk.Widget widget = current_view.today();
         
-        on_request_create_event(dtspan, widget, null);
+        create_event(null, initial, null, widget, null);
     }
     
     private void on_request_create_event(Calendar.ExactTimeSpan initial, Gtk.Widget relative_to,
         Gdk.Point? for_location) {
-        CreateEvent create_event = new CreateEvent(initial);
-        Gtk.Popover popover = show_popover(relative_to, for_location, create_event);
+        create_event(initial, null, null, relative_to, for_location);
+    }
+    
+    private void create_event(Calendar.ExactTimeSpan? time_span, Calendar.DateSpan? date_span,
+        Component.Event? existing, Gtk.Widget relative_to, Gdk.Point? for_location) {
+        assert(time_span != null || date_span != null || existing != null);
         
-        // when the new event is ready, that's what needs to be created
-        create_event.notify[CreateEvent.PROP_NEW_EVENT].connect(() => {
+        CreateUpdateEvent create_update_event;
+        if (time_span != null)
+            create_update_event = new CreateUpdateEvent(time_span);
+        else if (date_span != null)
+            create_update_event = new CreateUpdateEvent.all_day(date_span);
+        else
+            create_update_event = new CreateUpdateEvent.update(existing);
+        
+        Gtk.Popover popover = show_popover(relative_to, for_location, create_update_event);
+        
+        create_update_event.create_event.connect((event) => {
             popover.destroy();
-            
-            if (create_event.new_event != null && create_event.calendar_source != null)
-                create_event_async.begin(create_event.calendar_source, create_event.new_event, null);
+            create_event_async.begin(event, null);
+        });
+        
+        create_update_event.update_event.connect((original_source, event) => {
+            popover.destroy();
+            // TODO: Delete from original source if not the same as the new source
+            update_event_async.begin(event, null);
         });
     }
     
-    private async void create_event_async(Backing.CalendarSource calendar_source, Component.Blank new_event,
-        Cancellable? cancellable) {
+    private async void create_event_async(Component.Event event, Cancellable? cancellable) {
+        if (event.calendar_source == null)
+            return;
+        
         try {
-            yield calendar_source.create_component_async(new_event, cancellable);
+            yield event.calendar_source.create_component_async(event, cancellable);
         } catch (Error err) {
             debug("Unable to create event: %s", err.message);
+        }
+    }
+    
+    private async void update_event_async(Component.Event event, Cancellable? cancellable) {
+        if (event.calendar_source == null)
+            return;
+        
+        try {
+            yield event.calendar_source.update_component_async(event, cancellable);
+        } catch (Error err) {
+            debug("Unable to update event: %s", err.message);
         }
     }
     
@@ -134,6 +162,11 @@ public class MainWindow : Gtk.ApplicationWindow {
         show_event.remove_event.connect(() => {
             popover.destroy();
             remove_event_async.begin(event, null);
+        });
+        
+        show_event.update_event.connect(() => {
+            popover.destroy();
+            create_event(null, null, event, relative_to, for_location);
         });
     }
     

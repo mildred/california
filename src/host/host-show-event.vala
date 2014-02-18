@@ -15,6 +15,8 @@ public class ShowEvent : Gtk.Grid {
     
     public signal void remove_event(Component.Event event);
     
+    public signal void update_event(Component.Event event);
+    
     public ShowEvent(Component.Event event) {
         this.event = event;
         
@@ -93,6 +95,11 @@ public class ShowEvent : Gtk.Grid {
     [GtkCallback]
     private void on_remove_button_clicked() {
         remove_event(event);
+    }
+    
+    [GtkCallback]
+    private void on_update_button_clicked() {
+        update_event(event);
     }
 }
 

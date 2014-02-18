@@ -64,8 +64,8 @@ namespace iCal {
 		public unowned iCal.icalcompiter begin_component (iCal.icalcomponent_kind kind);
 		[CCode (cname = "icalcomponent_check_restrictions")]
 		public int check_restrictions ();
-		[CCode (cname = "icalcomponent_new_clone", has_construct_function = false)]
-		public icalcomponent.clone (iCal.icalcomponent component);
+		[CCode (cname = "icalcomponent_new_clone")]
+		public icalcomponent clone ();
 		[CCode (cname = "icalcomponent_convert_errors")]
 		public void convert_errors ();
 		[CCode (cname = "icalcomponent_count_components")]
@@ -181,7 +181,7 @@ namespace iCal {
 		[CCode (cname = "icalcomponent_set_summary")]
 		public void set_summary (string v);
 		[CCode (cname = "icalcomponent_set_uid")]
-		public void set_uid (string v);
+		public void set_uid (string? v);
 		[CCode (cname = "icalcomponent_string_to_kind")]
 		public static iCal.icalcomponent_kind string_to_kind (string str);
 		[CCode (cname = "icalcomponent_strip_errors")]

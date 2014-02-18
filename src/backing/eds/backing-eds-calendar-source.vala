@@ -54,15 +54,23 @@ internal class EdsCalendarSource : CalendarSource {
         return new EdsCalendarSourceSubscription(this, window, view);
     }
     
-    public override async Component.UID? create_component_async(Component.Blank blank,
+    public override async Component.UID? create_component_async(Component.Instance instance,
         Cancellable? cancellable = null) throws Error {
         check_open();
         
         // TODO: Fix create_object() bindings so async is possible
         string? uid;
-        client.create_object_sync(blank.to_ical_component(), out uid, cancellable);
+        client.create_object_sync(instance.ical_component, out uid, cancellable);
         
         return (uid != null && uid[0] != '\0') ? new Component.UID(uid) : null;
+    }
+    
+    public override async void update_component_async(Component.Instance instance,
+        Cancellable? cancellable = null) throws Error {
+        check_open();
+        
+        // TODO: Fix modify_object() bindings so async is possible
+        client.modify_object_sync(instance.ical_component, E.CalObjModType.THIS, cancellable);
     }
     
     public override async void remove_component_async(Component.UID uid,
