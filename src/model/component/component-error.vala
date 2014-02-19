@@ -18,7 +18,11 @@ public errordomain ComponentError {
     /**
      * A mismatch of some kind (DATE for DATE-TIME, etc.)
      */
-    MISMATCH
+    MISMATCH,
+    /**
+     * A value, parameter, or property is unavailable.
+     */
+    UNAVAILABLE
 }
 
 }

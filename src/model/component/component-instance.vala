@@ -34,11 +34,6 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     
     protected const string PROP_IN_FULL_UPDATE = "in-full-update";
     
-    public enum DateFormat {
-        DATE_TIME,
-        DATE
-    }
-    
     /**
      * The {@link Backing.CalendarSource} this {@link Instance} originated from.
      *
@@ -188,8 +183,9 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
                 this.uid.to_string(), other_uid.to_string());
         }
         
-        iCal.icaltimetype ical_dtstamp = ical_component.get_dtstamp();
-        dtstamp = ical_to_exact_time(&ical_dtstamp);
+        DateTime dt_stamp = new DateTime(ical_component, iCal.icalproperty_kind.DTSTAMP_PROPERTY);
+        if (!dt_stamp.is_date)
+            dtstamp = dt_stamp.to_exact_time();
         
         if (_ical_component != ical_component)
             _ical_component = ical_component.clone();
@@ -215,140 +211,9 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     }
     
     /**
-     * Convert an iCal.icaltimetype to a GLib.DateTime or {@link Calendar.Date}, depending on the
-     * stored information.
-     *
-     * @returns {@link DateFormat} indicating if Date or DateTime holds a reference.  The other
-     * will always be null.  In no case will both be null.
-     * @throws CalendarError if the supplied values are out-of-range.
+     * Convenience method to convert a {@link Calendar.Date} to an iCal DATE.
      */
-    public static DateFormat ical_to_datetime_or_date(iCal.icaltimetype *ical_dt,
-        out Calendar.ExactTime? exact_time, out Calendar.Date? date) throws Error {
-        if (iCal.icaltime_is_date(*ical_dt) == 0) {
-            exact_time = ical_to_exact_time(ical_dt);
-            date = null;
-            
-            return DateFormat.DATE_TIME;
-        }
-        
-        date = ical_to_date(ical_dt);
-        exact_time = null;
-        
-        return DateFormat.DATE;
-    }
-    
-    /**
-     * Convert an iCal.icaltimetype to an {@link Calendar.ExactTime}.
-     *
-     * @throws CalendarError if the supplied values are out-of-range or invalid, ComponentError
-     * if a DATE rather than a DATE-TIME.
-     */
-    public static Calendar.ExactTime ical_to_exact_time(iCal.icaltimetype *ical_dt)
-        throws Error {
-        if (iCal.icaltime_is_date(*ical_dt) != 0) {
-            throw new ComponentError.INVALID("iCalendar time type must be DATE-TIME: %s",
-                iCal.icaltime_as_ical_string(*ical_dt));
-        }
-        
-        return new Calendar.ExactTime.full(ical_to_timezone(ical_dt), ical_dt.year, ical_dt.month,
-            ical_dt.day, ical_dt.hour, ical_dt.minute, ical_dt.second);
-    }
-    
-    /**
-     * Convert an iCal.icaltimetype to a {@link Calendar.Date}.
-     *
-     * @throws CalendarError if the supplied values are out-of-range or invalid, ComponentError
-     * if a DATE-TIME rather than a DATE.
-     */
-    public static Calendar.Date ical_to_date(iCal.icaltimetype *ical_dt) throws Error {
-        if (iCal.icaltime_is_date(*ical_dt) == 0) {
-            throw new ComponentError.INVALID("iCalendar time type must be DATE: %s",
-                iCal.icaltime_as_ical_string(*ical_dt));
-        }
-        
-        return new Calendar.Date(Calendar.DayOfMonth.for(ical_dt.day),
-            Calendar.Month.for(ical_dt.month), new Calendar.Year(ical_dt.year));
-    }
-    
-    /**
-     * Convert's an iCal.icaltimetype's timezone into a GLib.TimeZone.
-     *
-     * TODO: This is currently broken with EDS, which supplies the TZID out-of-band.
-     */
-    public static TimeZone ical_to_timezone(iCal.icaltimetype *ical_dt) {
-        // use libical's if not supplied
-        string? tzid = iCal.icaltime_get_tzid(*ical_dt);
-        if (!String.is_empty(tzid))
-            return new TimeZone(tzid);
-        else if (iCal.icaltime_is_utc(*ical_dt) != 0)
-            return new TimeZone.utc();
-        else
-            return new TimeZone.local();
-    }
-    
-    /**
-     * Convert two iCal.icaltimetypes into a {@link Calendar.DateSpan} or a {@link Calendar.ExactTimeSpan}
-     * depending on what they represent.
-     *
-     * dtend_inclusive indicates whether the ical_end_dt should be treated as inclusive or exclusive
-     * of the span.  See the iCalendar specification for information on how each component should
-     * treat the situation.  Exclusive only works for DATE values.
-     *
-     * @returns {@link DateFormat} indicating if a DateSpan or a ExactTimeSpan was returned via
-     * the out parameters.  The other will always be null.  In no case will both be null.
-     * @throws CalendarError if any value is invalid or out-of-range.
-     */
-    public static DateFormat ical_to_span(bool dtend_inclusive, iCal.icaltimetype *ical_start_dt,
-        iCal.icaltimetype *ical_end_dt, out Calendar.ExactTimeSpan exact_time_span,
-        out Calendar.DateSpan date_span) throws Error {
-        if (ical_start_dt == null)
-            throw new ComponentError.INVALID("NULL ical_start_dt");
-        
-        if (ical_end_dt == null)
-            throw new ComponentError.INVALID("NULL ical_end_dt");
-        
-        Calendar.ExactTime? start_exact_time;
-        Calendar.Date? start_date;
-        ical_to_datetime_or_date(ical_start_dt, out start_exact_time, out start_date);
-        
-        Calendar.ExactTime? end_exact_time;
-        Calendar.Date? end_date;
-        ical_to_datetime_or_date(ical_end_dt, out end_exact_time, out end_date);
-        
-        // if both DATE-TIME, easy peasy
-        if (start_exact_time != null && end_exact_time != null) {
-            exact_time_span = new Calendar.ExactTimeSpan(start_exact_time, end_exact_time);
-            date_span = null;
-            
-            return DateFormat.DATE_TIME;
-        }
-        
-        // if one or the other DATE-TIME, coerce to DATE
-        if (start_exact_time != null) {
-            // end is a DATE, do coercion
-            assert(end_date != null);
-            
-            start_date = new Calendar.Date.from_exact_time(start_exact_time);
-            start_exact_time = null;
-        } else if (end_exact_time != null) {
-            // start is a DATE, do coercion
-            assert(start_date != null);
-            
-            end_date = new Calendar.Date.from_exact_time(end_exact_time);
-            end_exact_time = null;
-        }
-        
-        // if exclusive, drop back one day
-        if (!dtend_inclusive)
-            end_date = end_date.adjust(-1, Calendar.DateUnit.DAY);
-        
-        date_span = new Calendar.DateSpan(start_date, end_date);
-        exact_time_span = null;
-        
-        return DateFormat.DATE;
-    }
-    
-    public static void date_to_ical(Calendar.Date date, iCal.icaltimetype *ical_dt) {
+    protected static void date_to_ical(Calendar.Date date, iCal.icaltimetype *ical_dt) {
         ical_dt->year = date.year.value;
         ical_dt->month = date.month.value;
         ical_dt->day = date.day_of_month.value;
@@ -361,13 +226,19 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
         ical_dt->zone = null;
     }
     
-    public static void date_span_to_ical(Calendar.DateSpan date_span, iCal.icaltimetype *ical_dtstart,
+    /**
+     * Convenience method to convert a {@link Calendar.DateSpan} to a pair of iCal DATEs.
+     */
+    protected static void date_span_to_ical(Calendar.DateSpan date_span, iCal.icaltimetype *ical_dtstart,
         iCal.icaltimetype *ical_dtend) {
         date_to_ical(date_span.start_date, ical_dtstart);
         date_to_ical(date_span.end_date, ical_dtend);
     }
     
-    public static void exact_time_to_ical(Calendar.ExactTime exact_time, iCal.icaltimetype *ical_dt) {
+    /**
+     * Convenience method to convert a {@link Calendar.ExactTime} to an iCal DATE-TIME.
+     */
+    protected static void exact_time_to_ical(Calendar.ExactTime exact_time, iCal.icaltimetype *ical_dt) {
         ical_dt->year = exact_time.year.value;
         ical_dt->month = exact_time.month.value;
         ical_dt->day = exact_time.day_of_month.value;
@@ -377,10 +248,14 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
         ical_dt->is_utc = 0;
         ical_dt->is_date = 0;
         ical_dt->is_daylight = exact_time.is_dst ? 1 : 0;
-        ical_dt->zone = iCal.icaltimezone.get_builtin_timezone_from_tzid(exact_time.tzid);
+        ical_dt->zone = iCal.icaltimezone.get_builtin_timezone_from_offset(exact_time.utc_offset,
+            exact_time.tzid);
     }
     
-    public static void exact_time_span_to_ical(Calendar.ExactTimeSpan exact_time_span,
+    /**
+     * Convenience method to convert a {@link Calendar.ExactTimeSpan} to a pair of iCal DATE-TIMEs.
+     */
+    protected static void exact_time_span_to_ical(Calendar.ExactTimeSpan exact_time_span,
         iCal.icaltimetype *ical_dtstart, iCal.icaltimetype *ical_dtend) {
         exact_time_to_ical(exact_time_span.start_exact_time, ical_dtstart);
         exact_time_to_ical(exact_time_span.end_exact_time, ical_dtend);

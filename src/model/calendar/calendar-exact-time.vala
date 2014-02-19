@@ -50,19 +50,31 @@ public class ExactTime : BaseObject, Gee.Comparable<ExactTime>, Gee.Hashable<Exa
     /**
      * The TZID for the current time's timezone.
      *
+     * TZID is (generally) three-letter acronyms, i.e. "PST" for Pacific Standard Time.
+     *
      * @see tz
      */
     public unowned string tzid { get { return date_time.get_timezone_abbreviation(); } }
     
+    /**
+     * The offset (in seconds) from UTC.
+     */
+    public int32 utc_offset { get { return (int32) (date_time.get_utc_offset() / 1000000L); } }
+    
     private DateTime date_time;
     
     public ExactTime(TimeZone tz, Date date, WallTime time) {
-        init(tz, date.year.value, date.month.value, date.day_of_month.value,
-            time.hour, time.minute, time.second);
+        try {
+            init(tz, date.year.value, date.month.value, date.day_of_month.value,
+                time.hour, time.minute, time.second);
+        } catch (CalendarError calerr) {
+            // this uses checked objects, so shouldn't happen
+            error("%s", calerr.message);
+        }
     }
     
     public ExactTime.full(TimeZone tz, int year, int month, int day, int hour, int minute,
-        double second) {
+        double second) throws CalendarError {
         init(tz, year, month, day, hour, minute, second);
     }
     
@@ -78,10 +90,11 @@ public class ExactTime : BaseObject, Gee.Comparable<ExactTime>, Gee.Hashable<Exa
         this.tz = tz;
     }
     
-    private void init(TimeZone tz, int year, int month, int day, int hour, int minute, double second) {
+    private void init(TimeZone tz, int year, int month, int day, int hour, int minute, double second)
+        throws CalendarError {
         date_time = new DateTime(tz, year, month, day, hour, minute, second);
         if (date_time == null) {
-            error("Invalid specified DateTime: %02d/%02d/%d %02d:%02d:%02lf",
+            throw new CalendarError.INVALID("Invalid specified DateTime: %02d/%02d/%d %02d:%02d:%02lf",
                 day, month, year, hour, minute, second);
         }
         this.tz = tz;

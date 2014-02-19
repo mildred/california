@@ -54,6 +54,7 @@ california_VALASOURCES = \
 	model/calendar/calendar-year.vala \
 	\
 	model/component/component.vala \
+	model/component/component-date-time.vala \
 	model/component/component-error.vala \
 	model/component/component-event.vala \
 	model/component/component-instance.vala \

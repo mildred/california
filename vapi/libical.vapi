@@ -103,7 +103,7 @@ namespace iCal {
 		[CCode (cname = "icalcomponent_get_first_component")]
 		public unowned iCal.icalcomponent get_first_component (iCal.icalcomponent_kind kind);
 		[CCode (cname = "icalcomponent_get_first_property")]
-		public unowned iCal.icalproperty get_first_property (iCal.icalproperty_kind kind);
+		public unowned iCal.icalproperty? get_first_property (iCal.icalproperty_kind kind);
 		[CCode (cname = "icalcomponent_get_first_real_component")]
 		public unowned iCal.icalcomponent get_first_real_component ();
 		[CCode (cname = "icalcomponent_get_inner")]
@@ -335,7 +335,7 @@ namespace iCal {
 		[CCode (cname = "icalparameter_get_sentby")]
 		public unowned string get_sentby ();
 		[CCode (cname = "icalparameter_get_tzid")]
-		public unowned string get_tzid ();
+		public unowned string? get_tzid ();
 		[CCode (cname = "icalparameter_get_value")]
 		public iCal.icalparameter_value get_value ();
 		[CCode (cname = "icalparameter_get_x")]

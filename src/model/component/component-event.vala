@@ -89,25 +89,18 @@ public class Event : Instance, Gee.Comparable<Event> {
         summary = ical_component.get_summary();
         description = ical_component.get_description();
         
-        iCal.icaltimetype ical_dtstart = ical_component.get_dtstart();
-        iCal.icaltimetype ical_dtend = ical_component.get_dtend();
+        DateTime dt_start = new DateTime(ical_component, iCal.icalproperty_kind.DTSTART_PROPERTY);
+        DateTime dt_end = new DateTime(ical_component, iCal.icalproperty_kind.DTEND_PROPERTY);
         // convert start and end DATE/DATE-TIMEs to internal values ... note that VEVENT dtend
         // is non-inclusive (see https://tools.ietf.org/html/rfc5545#section-3.6.1)
         Calendar.DateSpan? date_span;
         Calendar.ExactTimeSpan? exact_time_span;
-        Instance.DateFormat format = ical_to_span(false, &ical_dtstart, &ical_dtend,
-            out exact_time_span, out date_span);
-        switch (format) {
-            case DateFormat.DATE_TIME:
-                set_event_exact_time_span(exact_time_span);
-            break;
-            
-            case DateFormat.DATE:
-                set_event_date_span(date_span);
-            break;
-            
-            default:
-                assert_not_reached();
+        DateTime.to_span(dt_start, dt_end, false, out date_span, out exact_time_span);
+        if (exact_time_span != null) {
+            set_event_exact_time_span(exact_time_span);
+        } else {
+            assert(date_span != null);
+            set_event_date_span(date_span);
         }
         
         // need to set this here because on_notify() doesn't update inside full update
