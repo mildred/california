@@ -77,25 +77,22 @@ public class MainWindow : Gtk.ApplicationWindow {
         add(layout);
     }
     
-    // Creates and shows a Gtk.Popover.
-    private Gtk.Popover show_popover(Gtk.Widget relative_to, Gdk.Point? for_location,
+    private Gtk.Widget show_interaction(Gtk.Widget relative_to, Gdk.Point? for_location,
         Gtk.Widget child) {
-        Gtk.Popover popover = new Gtk.Popover(relative_to);
-        if (for_location != null) {
-            popover.pointing_to = Cairo.RectangleInt() { x = for_location.x, y = for_location.y,
-                width = 1, height = 1 };
-        }
-        popover.add(child);
+        Gtk.Dialog dialog = new Gtk.Dialog();
+        dialog.transient_for = this;
+        dialog.modal = true;
+        ((Gtk.Box) dialog.get_content_area()).pack_start(child, true, true, 0);
         
-        popover.closed.connect(on_popover_closed);
+        dialog.close.connect(on_interaction_dismissed);
         
-        popover.show_all();
+        dialog.show_all();
         
-        return popover;
+        return dialog;
     }
     
-    private void on_popover_closed(Gtk.Popover popover) {
-        // reset View.Controllable state whenever the popover is dismissed
+    private void on_interaction_dismissed() {
+        // reset View.Controllable state whenever the interaction is dismissed
         current_view.unselect_all();
     }
     
@@ -129,15 +126,15 @@ public class MainWindow : Gtk.ApplicationWindow {
         else
             create_update_event = new CreateUpdateEvent.update(existing);
         
-        Gtk.Popover popover = show_popover(relative_to, for_location, create_update_event);
+        Gtk.Widget interaction = show_interaction(relative_to, for_location, create_update_event);
         
         create_update_event.create_event.connect((event) => {
-            popover.destroy();
+            interaction.destroy();
             create_event_async.begin(event, null);
         });
         
         create_update_event.update_event.connect((original_source, event) => {
-            popover.destroy();
+            interaction.destroy();
             // TODO: Delete from original source if not the same as the new source
             update_event_async.begin(event, null);
         });
@@ -168,15 +165,15 @@ public class MainWindow : Gtk.ApplicationWindow {
     private void on_request_display_event(Component.Event event, Gtk.Widget relative_to,
         Gdk.Point? for_location) {
         ShowEvent show_event = new ShowEvent(event);
-        Gtk.Popover popover = show_popover(relative_to, for_location, show_event);
+        Gtk.Widget interaction = show_interaction(relative_to, for_location, show_event);
         
         show_event.remove_event.connect(() => {
-            popover.destroy();
+            interaction.destroy();
             remove_event_async.begin(event, null);
         });
         
         show_event.update_event.connect(() => {
-            popover.destroy();
+            interaction.destroy();
             create_event(null, null, event, relative_to, for_location);
         });
     }
