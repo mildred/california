@@ -64,7 +64,8 @@ public class MainWindow : Gtk.ApplicationWindow {
         layout.pack_end(month_view, true, true, 0);
         
         // current host bindings and signals
-        current_view.request_create_event.connect(on_request_create_event);
+        current_view.request_create_timed_event.connect(on_request_create_timed_event);
+        current_view.request_create_all_day_event.connect(on_request_create_all_day_event);
         current_view.request_display_event.connect(on_request_display_event);
         current_view.bind_property(View.Controllable.PROP_CURRENT_LABEL, headerbar, "title",
             BindingFlags.SYNC_CREATE);
@@ -86,9 +87,16 @@ public class MainWindow : Gtk.ApplicationWindow {
         }
         popover.add(child);
         
+        popover.closed.connect(on_popover_closed);
+        
         popover.show_all();
         
         return popover;
+    }
+    
+    private void on_popover_closed(Gtk.Popover popover) {
+        // reset View.Controllable state whenever the popover is dismissed
+        current_view.unselect_all();
     }
     
     private void on_new_event() {
@@ -96,14 +104,17 @@ public class MainWindow : Gtk.ApplicationWindow {
         Calendar.DateSpan initial = new Calendar.DateSpan(Calendar.today, Calendar.today);
         
         // revert to today's date and use the widget for the popover
-        Gtk.Widget widget = current_view.today();
-        
-        create_event(null, initial, null, widget, null);
+        create_event(null, initial, null, current_view.today(), null);
     }
     
-    private void on_request_create_event(Calendar.ExactTimeSpan initial, Gtk.Widget relative_to,
+    private void on_request_create_timed_event(Calendar.ExactTimeSpan initial, Gtk.Widget relative_to,
         Gdk.Point? for_location) {
         create_event(initial, null, null, relative_to, for_location);
+    }
+    
+    private void on_request_create_all_day_event(Calendar.DateSpan initial, Gtk.Widget relative_to,
+        Gdk.Point? for_location) {
+        create_event(null, initial, null, relative_to, for_location);
     }
     
     private void create_event(Calendar.ExactTimeSpan? time_span, Calendar.DateSpan? date_span,

@@ -42,10 +42,17 @@ public interface Controllable : Object {
     public abstract Calendar.FirstOfWeek first_of_week { get; set; }
     
     /**
-     * Signal from the {@link Controllable} that a {@link Component.Event} should be created with
-     * the specified initial parameters.
+     * Signal from the {@link Controllable} that a DATE-TIME {@link Component.Event} should be
+     * created with the specified initial parameters.
      */
-    public signal void request_create_event(Calendar.ExactTimeSpan initial, Gtk.Widget relative_to,
+    public signal void request_create_timed_event(Calendar.ExactTimeSpan initial, Gtk.Widget relative_to,
+        Gdk.Point? for_location);
+    
+    /**
+     * Signal from the {@link Controllable} that a DATE {@link Component.Event} should be
+     * created with the specified initial parameters.
+     */
+    public signal void request_create_all_day_event(Calendar.DateSpan initial, Gtk.Widget relative_to,
         Gdk.Point? for_location);
     
     /**
@@ -70,6 +77,14 @@ public interface Controllable : Object {
      * Returns the Gtk.Widget displaying the current date.
      */
     public abstract Gtk.Widget today();
+    
+    /**
+     * If the view supports a notion of selection, this unselects all selected items.
+     *
+     * The view controller will use this to clear selection after completing a request (for example,
+     * when creating or displaying events).
+     */
+    public abstract void unselect_all();
 }
 
 }

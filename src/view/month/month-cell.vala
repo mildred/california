@@ -25,7 +25,38 @@ public class Cell : Gtk.EventBox {
     public weak Controllable owner { get; private set; }
     public int row { get; private set; }
     public int col { get; private set; }
-    public Calendar.Date? date { get; set; default = null; }
+    
+    // to avoid lots of redraws, only queue_draw() if set changes value
+    private Calendar.Date? _date = null;
+    public Calendar.Date? date {
+        get {
+            return _date;
+        }
+        
+        set {
+            if ((_date == null || value == null) && _date != value)
+                queue_draw();
+            else if (_date != null && value != null && !_date.equal_to(value))
+                queue_draw();
+            
+            _date = value;
+        }
+    }
+    
+    // to avoid lots of redraws, only queue_draw() if set changes value
+    private bool _selected = false;
+    public bool selected {
+        get {
+            return _selected;
+        }
+        
+        set {
+            if (_selected != value)
+                queue_draw();
+            
+            _selected = value;
+        }
+    }
     
     private Gee.TreeSet<Component.Event> days_events = new Gee.TreeSet<Component.Event>();
     private Gee.HashMap<int, Component.Event> line_to_event = new Gee.HashMap<int, Component.Event>();
@@ -35,6 +66,7 @@ public class Cell : Gtk.EventBox {
     private static Gdk.RGBA RGBA_DAY_OF_MONTH = { red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0 };
     private static Gdk.RGBA RGBA_DAY_OUTSIDE_MONTH = { red: 0.6, green: 0.6, blue: 0.6, alpha: 1.0 };
     private static Gdk.RGBA RGBA_CURRENT_DAY = { red: 0.0, green: 0.25, blue: 0.50, alpha: 0.10 };
+    private static Gdk.RGBA RGBA_SELECTED = { red: 0.0, green: 0.50, blue: 0.50, alpha: 0.10 };
     
     private static Pango.FontDescription top_line_font;
     private static Pango.FontDescription line_font;
@@ -48,12 +80,12 @@ public class Cell : Gtk.EventBox {
         this.row = row;
         this.col = col;
         
-        // respond to mouse button events and wrap the EventBox around the DrawingArea, which is
-        // the real widget of interest
-        events |= Gdk.EventMask.BUTTON_PRESS_MASK;
+        // wrap the EventBox around the DrawingArea, which is the real widget of interest for this
+        // class
         add(canvas);
         
         notify["date"].connect(queue_draw);
+        notify["selected"].connect(queue_draw);
         
         canvas.draw.connect(on_draw);
     }
@@ -72,6 +104,13 @@ public class Cell : Gtk.EventBox {
     internal static void terminate() {
         top_line_font = null;
         line_font = null;
+    }
+    
+    /**
+     * Returns true if the point at x,y is within the {@link Cell}'s width and height.
+     */
+    public bool is_hit(int x, int y) {
+        return x >= 0 && x < get_allocated_width() && y >= 0 && y < get_allocated_height();
     }
     
     public void clear() {
@@ -123,8 +162,11 @@ public class Cell : Gtk.EventBox {
         if (line_height_px < 0 || top_line_height_px < 0)
             calculate_extents(out top_line_height_px, out line_height_px);
         
-        // shade background if cell represents today
-        if (date != null && date.equal_to(Calendar.today)) {
+        // shade background of cell for selection or if today
+        if (selected) {
+            Gdk.cairo_set_source_rgba(ctx, RGBA_SELECTED);
+            ctx.paint();
+        } else if (date != null && date.equal_to(Calendar.today)) {
             Gdk.cairo_set_source_rgba(ctx, RGBA_CURRENT_DAY);
             ctx.paint();
         }

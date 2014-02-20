@@ -132,12 +132,14 @@ public class Event : Instance, Gee.Comparable<Event> {
                     return;
                 }
                 
+                // DTEND is non-inclusive for VEVENTs, see
+                // https://tools.ietf.org/html/rfc5545#section-3.6.1
                 iCal.icaltimetype ical_dtstart = {};
                 iCal.icaltimetype ical_dtend = {};
                 if (exact_time_span != null)
                     exact_time_span_to_ical(exact_time_span, &ical_dtstart, &ical_dtend);
                 else
-                    date_span_to_ical(date_span, &ical_dtstart, &ical_dtend);
+                    date_span_to_ical(date_span, false, &ical_dtstart, &ical_dtend);
                 
                 ical_component.set_dtstart(ical_dtstart);
                 ical_component.set_dtend(ical_dtend);
