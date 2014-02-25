@@ -74,6 +74,15 @@ public class ExactTimeSpan : BaseObject, Gee.Comparable<ExactTimeSpan>, Gee.Hash
     }
     
     /**
+     * Returns a new {@link ExactTimeSpan} with both {@link start_date_time} and
+     * {@link end_date_time} converted to the supplied TimeZone.
+     */
+    public ExactTimeSpan to_timezone(TimeZone new_tz) {
+        return new ExactTimeSpan(start_exact_time.to_timezone(new_tz),
+            end_exact_time.to_timezone(new_tz));
+    }
+    
+    /**
      * Compares the {@link start_exact_time} of two {@link ExactTimeSpan}s.
      */
     public int compare_to(ExactTimeSpan other) {

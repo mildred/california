@@ -55,7 +55,8 @@ public class ShowEvent : Gtk.Grid {
                     date_span.end_date.to_pretty_string(date_flags));
             }
         } else {
-            Calendar.ExactTimeSpan exact_time_span = event.exact_time_span;
+            Calendar.ExactTimeSpan exact_time_span = event.exact_time_span.to_timezone(
+                new TimeZone.local());
             if (exact_time_span.is_same_day) {
                 // Single-day timed event, print "<full date>\n<full start time> to <full end time>",
                 // including year if not current year
