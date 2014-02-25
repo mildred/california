@@ -27,8 +27,34 @@ california_VALASOURCES = \
 	base/base-object.vala \
 	base/base-unit.vala \
 	\
+	calendar/calendar.vala \
+	calendar/calendar-date-span.vala \
+	calendar/calendar-day-of-month.vala \
+	calendar/calendar-day-of-week.vala \
+	calendar/calendar-date.vala \
+	calendar/calendar-error.vala \
+	calendar/calendar-exact-time.vala \
+	calendar/calendar-exact-time-span.vala \
+	calendar/calendar-first-of-week.vala \
+	calendar/calendar-month.vala \
+	calendar/calendar-month-of-year.vala \
+	calendar/calendar-span.vala \
+	calendar/calendar-unit.vala \
+	calendar/calendar-wall-time.vala \
+	calendar/calendar-week.vala \
+	calendar/calendar-week-span.vala \
+	calendar/calendar-year.vala \
+	\
 	collection/collection-simple-iterator.vala \
 	collection/collection-simple-iterable.vala \
+	\
+	component/component.vala \
+	component/component-date-time.vala \
+	component/component-error.vala \
+	component/component-event.vala \
+	component/component-instance.vala \
+	component/component-uid.vala \
+	component/component-vtype.vala \
 	\
 	host/host.vala \
 	host/host-calendar-popup.vala \
@@ -36,32 +62,6 @@ california_VALASOURCES = \
 	host/host-main-window.vala \
 	host/host-popup.vala \
 	host/host-show-event.vala \
-	\
-	model/calendar/calendar.vala \
-	model/calendar/calendar-date-span.vala \
-	model/calendar/calendar-day-of-month.vala \
-	model/calendar/calendar-day-of-week.vala \
-	model/calendar/calendar-date.vala \
-	model/calendar/calendar-error.vala \
-	model/calendar/calendar-exact-time.vala \
-	model/calendar/calendar-exact-time-span.vala \
-	model/calendar/calendar-first-of-week.vala \
-	model/calendar/calendar-month.vala \
-	model/calendar/calendar-month-of-year.vala \
-	model/calendar/calendar-span.vala \
-	model/calendar/calendar-unit.vala \
-	model/calendar/calendar-wall-time.vala \
-	model/calendar/calendar-week.vala \
-	model/calendar/calendar-week-span.vala \
-	model/calendar/calendar-year.vala \
-	\
-	model/component/component.vala \
-	model/component/component-date-time.vala \
-	model/component/component-error.vala \
-	model/component/component-event.vala \
-	model/component/component-instance.vala \
-	model/component/component-uid.vala \
-	model/component/component-vtype.vala \
 	\
 	util/util-string.vala \
 	\
