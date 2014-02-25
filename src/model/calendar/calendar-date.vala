@@ -226,6 +226,15 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
     }
     
     /**
+     * Returns the difference (in days) between this {@link Date} and another Date.
+     *
+     * If the supplied Date is earlier than this one, a negative value will be returned.
+     */
+    public int difference(Date other) {
+        return (this != other) ? gdate.days_between(other.gdate) : 0;
+    }
+    
+    /**
      * Returns a {@link Date} clamped between the two supplied Dates, inclusive.
      */
     public Date clamp(Date min, Date max) {

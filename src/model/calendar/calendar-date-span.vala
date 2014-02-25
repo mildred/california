@@ -151,6 +151,43 @@ public class DateSpan : BaseObject, Collection.SimpleIterable<Date>, Span<Date>,
     }
     
     /**
+     * Returns the absolute number of days this {@link DateSpan} represents.
+     */
+    public int duration() {
+        return start_date.difference(end_date).abs();
+    }
+    
+    /**
+     * Adjusts the start of the {@link DateSpan} preserving the span duration.
+     *
+     * Since DateSpan always guarantees the {@link start_date} will be before the {@link end_date},
+     * it's sometimes desirable to manipulate the start_date and preserve the duration between its
+     * original value and the end_date.
+     *
+     * @see adjust_end_date
+     */
+    public DateSpan adjust_start_date(Calendar.Date new_start_date) {
+        int diff = start_date.difference(end_date);
+        
+        return new DateSpan(new_start_date, new_start_date.adjust(diff, DateUnit.DAY));
+    }
+    
+    /**
+     * Adjusts the end of the {@link DateSpan} preserving the span duration.
+     *
+     * Since DateSpan always guarantees the {@link start_date} will be before the {@link end_date},
+     * it's sometimes desirable to manipulate the end_date and preserve the duration between its
+     * original value and the start_date.
+     *
+     * @see adjust_start_date
+     */
+    public DateSpan adjust_end_date(Calendar.Date new_end_date) {
+        int diff = end_date.difference(start_date);
+        
+        return new DateSpan(new_end_date.adjust(diff, DateUnit.DAY), new_end_date);
+    }
+    
+    /**
      * Compares two {@link DateSpan}s by their {@link start_date}.
      */
     public int compare_to(DateSpan other) {

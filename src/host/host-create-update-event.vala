@@ -12,6 +12,8 @@ namespace California.Host {
 
 [GtkTemplate (ui = "/org/yorba/california/rc/create-update-event.ui")]
 public class CreateUpdateEvent : Gtk.Grid {
+    public const string PROP_SELECTED_DATE_SPAN = "selected-date-span";
+    
     private const int START_HOUR = 0;
     private const int END_HOUR = 23;
     private const int MIN_DIVISIONS = 15;
@@ -43,13 +45,16 @@ public class CreateUpdateEvent : Gtk.Grid {
     [GtkChild]
     private Gtk.Button accept_button;
     
+    public Calendar.DateSpan selected_date_span { get; set; }
+    
     private new Component.Event event;
     private Gee.HashMap<string, Calendar.WallTime> time_map = new Gee.HashMap<string, Calendar.WallTime>();
     private Gee.List<Backing.CalendarSource> calendar_sources;
     private Backing.CalendarSource? original_calendar_source;
     private Backing.CalendarSource? selected_calendar_source;
-    private Calendar.DateSpan selected_date_span;
     private bool is_update = false;
+    private Gtk.Button? last_date_button_touched = null;
+    private bool both_date_buttons_touched = false;
     
     public signal void create_event(Component.Event event);
     
@@ -86,6 +91,11 @@ public class CreateUpdateEvent : Gtk.Grid {
         if (event.summary != null)
             summary_entry.text = event.summary;
         
+        notify[PROP_SELECTED_DATE_SPAN].connect(() => {
+            dtstart_date_button.label = selected_date_span.start_date.to_standard_string();
+            dtend_date_button.label = selected_date_span.end_date.to_standard_string();
+        });
+        
         // date/date-time must be set in the Event prior to this call
         Calendar.WallTime initial_start_time, initial_end_time;
         if (event.exact_time_span != null) {
@@ -102,9 +112,6 @@ public class CreateUpdateEvent : Gtk.Grid {
             initial_end_time = new Calendar.WallTime.from_exact_time(
                 Calendar.now().adjust_time(1, Calendar.TimeUnit.HOUR));
         }
-        
-        dtstart_date_button.label = selected_date_span.start_date.to_standard_string();
-        dtend_date_button.label = selected_date_span.end_date.to_standard_string();
         
         // initialize start and end time (as in, wall clock time)
         Calendar.WallTime current = new Calendar.WallTime(START_HOUR, Calendar.WallTime.MIN_MINUTE, 0);
@@ -183,6 +190,39 @@ public class CreateUpdateEvent : Gtk.Grid {
     
     [GtkCallback]
     private void on_date_button_clicked(Gtk.Button button) {
+        bool is_dtstart = (button == dtstart_date_button);
+        
+        // if both buttons have been touched, go into free-selection mode with the dates, otherwise
+        // respect the original span duration
+        both_date_buttons_touched =
+            both_date_buttons_touched
+            || (last_date_button_touched != null && last_date_button_touched != button);
+        
+        CalendarPopup popup = new CalendarPopup(button,
+            is_dtstart ? selected_date_span.start_date : selected_date_span.end_date);
+        
+        popup.date_selected.connect((date) => {
+            // if both buttons touched, use free date selection, otherwise respect the original
+            // span duration
+            if (both_date_buttons_touched) {
+                selected_date_span = new Calendar.DateSpan(
+                    is_dtstart ? date : selected_date_span.start_date,
+                    !is_dtstart ? date : selected_date_span.end_date
+                );
+            } else {
+                selected_date_span = is_dtstart
+                    ? selected_date_span.adjust_start_date(date)
+                    : selected_date_span.adjust_end_date(date);
+            }
+        });
+        
+        popup.dismissed.connect(() => {
+            popup.destroy();
+        });
+        
+        popup.show_all();
+        
+        last_date_button_touched = button;
     }
     
     [GtkCallback]

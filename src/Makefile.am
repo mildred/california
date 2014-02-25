@@ -31,8 +31,10 @@ california_VALASOURCES = \
 	collection/collection-simple-iterable.vala \
 	\
 	host/host.vala \
+	host/host-calendar-popup.vala \
 	host/host-create-update-event.vala \
 	host/host-main-window.vala \
+	host/host-popup.vala \
 	host/host-show-event.vala \
 	\
 	model/calendar/calendar.vala \
