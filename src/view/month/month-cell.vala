@@ -19,7 +19,7 @@ public class Cell : Gtk.EventBox {
     
     private const Calendar.WallTime.PrettyFlag PRETTY_TIME_FLAGS =
         Calendar.WallTime.PrettyFlag.OPTIONAL_MINUTES
-        | Calendar.WallTime.PrettyFlag.BRIEF_MERIDIAN;
+        | Calendar.WallTime.PrettyFlag.BRIEF_MERIDIEM;
     
     public weak Controllable owner { get; private set; }
     public int row { get; private set; }

@@ -31,15 +31,15 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
          */
         OPTIONAL_MINUTES,
         /**
-         * Only show meridian indicator if post-meridian.
+         * Only show meridiem indicator if post-meridiem.
          *
          * Ignored if displaying 24-hour time.
          */
-        MERIDIAN_POST_ONLY,
+        MERIDIEM_POST_ONLY,
         /**
-         * Use brief meridian indicators.
+         * Use brief meridiem indicators.
          */
-        BRIEF_MERIDIAN
+        BRIEF_MERIDIEM
     }
     
     public const int HOURS_PER_DAY = 24;
@@ -85,7 +85,7 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
     public int second { get; private set; }
     
     /**
-     * Indicates if post-meridian.
+     * Indicates if post-meridiem.
      */
     public bool is_pm { get { return hour >= 12; } }
     
@@ -260,27 +260,27 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
     public string to_pretty_string(PrettyFlag flags) {
         bool include_sec = (flags & PrettyFlag.INCLUDE_SECONDS) != 0;
         bool optional_min = (flags & PrettyFlag.OPTIONAL_MINUTES) != 0;
-        bool meridian_post_only = (flags & PrettyFlag.MERIDIAN_POST_ONLY) != 0;
-        bool brief_meridian = (flags & PrettyFlag.BRIEF_MERIDIAN) != 0;
+        bool meridiem_post_only = (flags & PrettyFlag.MERIDIEM_POST_ONLY) != 0;
+        bool brief_meridiem = (flags & PrettyFlag.BRIEF_MERIDIEM) != 0;
         
         // TODO: localize all this
         
-        unowned string pm = brief_meridian ? "p" : "pm";
-        unowned string am = brief_meridian ? "a" : "am";
+        unowned string pm = brief_meridiem ? "p" : "pm";
+        unowned string am = brief_meridiem ? "a" : "am";
         
-        unowned string meridian;
-        if (meridian_post_only)
-            meridian = is_pm ? pm : "";
+        unowned string meridiem;
+        if (meridiem_post_only)
+            meridiem = is_pm ? pm : "";
         else
-            meridian = is_pm? pm : am;
+            meridiem = is_pm? pm : am;
         
         if (optional_min && minute == 0)
-            return "%d%s".printf(12hour, meridian);
+            return "%d%s".printf(12hour, meridiem);
         
         if (!include_sec)
-            return "%d:%02d%s".printf(12hour, minute, meridian);
+            return "%d:%02d%s".printf(12hour, minute, meridiem);
         
-        return "%d:%02d:%02d%s".printf(12hour, minute, second, meridian);
+        return "%d:%02d:%02d%s".printf(12hour, minute, second, meridiem);
     }
     
     public int compare_to(WallTime other) {
