@@ -17,6 +17,8 @@ public class Cell : Gtk.EventBox {
     private const int TEXT_MARGIN_PX = 2;
     private const int LINE_SPACING_PX = 4;
     
+    private const string KEY_TOOLTIP = "california-view-month-cell-tooltip";
+    
     private const Calendar.WallTime.PrettyFlag PRETTY_TIME_FLAGS =
         Calendar.WallTime.PrettyFlag.OPTIONAL_MINUTES
         | Calendar.WallTime.PrettyFlag.BRIEF_MERIDIEM;
@@ -78,6 +80,9 @@ public class Cell : Gtk.EventBox {
         this.owner = owner;
         this.row = row;
         this.col = col;
+        
+        // see query_tooltip() for implementation
+        has_tooltip = true;
         
         // wrap the EventBox around the DrawingArea, which is the real widget of interest for this
         // class
@@ -156,6 +161,20 @@ public class Cell : Gtk.EventBox {
         queue_draw();
     }
     
+    public override bool query_tooltip(int x, int y, bool keyboard_mode, Gtk.Tooltip tooltip) {
+        Component.Event? event = get_event_at(Gdk.Point() { x = x, y = y });
+        if (event == null)
+            return false;
+        
+        string? tooltip_text = event.get_data<string?>(KEY_TOOLTIP);
+        if (String.is_empty(tooltip_text))
+            return false;
+        
+        tooltip.set_text(tooltip_text);
+        
+        return true;
+    }
+    
     private bool on_draw(Cairo.Context ctx) {
         // calculate extents if not already calculated;
         if (line_height_px < 0 || top_line_height_px < 0)
@@ -221,8 +240,9 @@ public class Cell : Gtk.EventBox {
                 text = "%s %s".printf(local_start.to_pretty_time_string(PRETTY_TIME_FLAGS), event.summary);
             }
             
-            draw_line_of_text(ctx, line_number, RGBA_DAY_OF_MONTH, text);
+            Pango.Layout layout = draw_line_of_text(ctx, line_number, RGBA_DAY_OF_MONTH, text);
             line_to_event.set(line_number++, event);
+            event.set_data<string?>(KEY_TOOLTIP, layout.is_ellipsized() ? text : null);
         }
         
         return true;
@@ -260,7 +280,7 @@ public class Cell : Gtk.EventBox {
     
     // If line number is negative, the top line is drawn; otherwise, zero-based line numbers get
     // "regular" treatment
-    private void draw_line_of_text(Cairo.Context ctx, int line_number, Gdk.RGBA rgba, string text) {
+    private Pango.Layout draw_line_of_text(Cairo.Context ctx, int line_number, Gdk.RGBA rgba, string text) {
         Pango.Layout layout = create_pango_layout(text);
         layout.set_font_description((line_number < 0) ? top_line_font : line_font);
         layout.set_ellipsize(Pango.EllipsizeMode.END);
@@ -269,6 +289,8 @@ public class Cell : Gtk.EventBox {
         Gdk.cairo_set_source_rgba(ctx, rgba);
         ctx.move_to(TEXT_MARGIN_PX, get_line_top_y(line_number));
         Pango.cairo_show_layout(ctx, layout);
+        
+        return layout;
     }
     
     /**
