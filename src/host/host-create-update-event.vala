@@ -101,8 +101,10 @@ public class CreateUpdateEvent : Gtk.Grid {
         if (event.exact_time_span != null) {
             all_day_toggle.active = false;
             selected_date_span = event.exact_time_span.get_date_span();
-            initial_start_time = new Calendar.WallTime.from_exact_time(event.exact_time_span.start_exact_time);
-            initial_end_time = new Calendar.WallTime.from_exact_time(event.exact_time_span.end_exact_time);
+            initial_start_time = new Calendar.WallTime.from_exact_time(
+                event.exact_time_span.start_exact_time.to_timezone(new TimeZone.local()));
+            initial_end_time = new Calendar.WallTime.from_exact_time(
+                event.exact_time_span.end_exact_time.to_timezone(new TimeZone.local()));
         } else {
             assert(event.date_span != null);
             
