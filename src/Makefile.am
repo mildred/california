@@ -32,13 +32,17 @@ california_VALASOURCES = \
 	calendar/calendar-day-of-month.vala \
 	calendar/calendar-day-of-week.vala \
 	calendar/calendar-date.vala \
+	calendar/calendar-dbus.vala \
 	calendar/calendar-error.vala \
 	calendar/calendar-exact-time.vala \
 	calendar/calendar-exact-time-span.vala \
 	calendar/calendar-first-of-week.vala \
 	calendar/calendar-month.vala \
 	calendar/calendar-month-of-year.vala \
+	calendar/calendar-olson-zone.vala \
 	calendar/calendar-span.vala \
+	calendar/calendar-system.vala \
+	calendar/calendar-timezone.vala \
 	calendar/calendar-unit.vala \
 	calendar/calendar-wall-time.vala \
 	calendar/calendar-week.vala \

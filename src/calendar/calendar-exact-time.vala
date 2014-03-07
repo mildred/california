@@ -10,7 +10,8 @@ namespace California.Calendar {
  * An immutable representation of an exact moment of time on a particular calendar day.
  *
  * This uses GLib's DateTime class but adds some extra logic useful to California, including
- * storing the TimeZone used to generate the DateTime and making this object work well with Gee.
+ * storing the {@link Timezone} used to generate the DateTime and making this object work well with
+ * Gee.
  *
  * "Exact" is limited, of course, to the precision of DateTime, but it's close enough for our needs.
  */
@@ -41,16 +42,16 @@ public class ExactTime : BaseObject, Gee.Comparable<ExactTime>, Gee.Hashable<Exa
     public bool is_dst { get { return date_time.is_daylight_savings(); } }
     
     /**
-     * The timezone used to generate this moment of time.
+     * The {@link Timezone} used to generate this moment of time.
      *
      * @see to_timezone
      */
-    public TimeZone tz { get; private set; }
+    public Timezone tz { get; private set; }
     
     /**
-     * The TZID for the current time's timezone.
+     * A human-oriented string representing the current time's time zone as an abbreviation.
      *
-     * TZID is (generally) three-letter acronyms, i.e. "PST" for Pacific Standard Time.
+     * This value should ''not'' be used to generate an {@link OlsonZone}.
      *
      * @see tz
      */
@@ -63,7 +64,7 @@ public class ExactTime : BaseObject, Gee.Comparable<ExactTime>, Gee.Hashable<Exa
     
     private DateTime date_time;
     
-    public ExactTime(TimeZone tz, Date date, WallTime time) {
+    public ExactTime(Timezone tz, Date date, WallTime time) {
         try {
             init(tz, date.year.value, date.month.value, date.day_of_month.value,
                 time.hour, time.minute, time.second);
@@ -73,26 +74,26 @@ public class ExactTime : BaseObject, Gee.Comparable<ExactTime>, Gee.Hashable<Exa
         }
     }
     
-    public ExactTime.full(TimeZone tz, int year, int month, int day, int hour, int minute,
+    public ExactTime.full(Timezone tz, int year, int month, int day, int hour, int minute,
         double second) throws CalendarError {
         init(tz, year, month, day, hour, minute, second);
     }
     
-    public ExactTime.now(TimeZone tz) {
-        date_time = new DateTime.now(tz);
+    public ExactTime.now(Timezone tz) {
+        date_time = new DateTime.now(tz.time_zone);
         if (date_time == null)
             error("DateTime.now failed");
         this.tz = tz;
     }
     
-    public ExactTime.from_date_time(DateTime date_time, TimeZone tz) {
+    public ExactTime.from_date_time(DateTime date_time, Timezone tz) {
         this.date_time = date_time;
         this.tz = tz;
     }
     
-    private void init(TimeZone tz, int year, int month, int day, int hour, int minute, double second)
+    private void init(Timezone tz, int year, int month, int day, int hour, int minute, double second)
         throws CalendarError {
-        date_time = new DateTime(tz, year, month, day, hour, minute, second);
+        date_time = new DateTime(tz.time_zone, year, month, day, hour, minute, second);
         if (date_time == null) {
             throw new CalendarError.INVALID("Invalid specified DateTime: %02d/%02d/%d %02d:%02d:%02lf",
                 day, month, year, hour, minute, second);
@@ -161,8 +162,8 @@ public class ExactTime : BaseObject, Gee.Comparable<ExactTime>, Gee.Hashable<Exa
     /**
      * See DateTime.to_timezone.
      */
-    public ExactTime to_timezone(TimeZone new_tz) {
-        return new ExactTime.from_date_time(date_time.to_timezone(new_tz), new_tz);
+    public ExactTime to_timezone(Timezone new_tz) {
+        return new ExactTime.from_date_time(date_time.to_timezone(new_tz.time_zone), new_tz);
     }
     
     /**

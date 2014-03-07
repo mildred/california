@@ -57,7 +57,7 @@ namespace iCal {
 		[CCode (cname = "icalcomponent_add_property")]
 		public void add_property (iCal.icalproperty property);
 		[CCode (cname = "icalcomponent_as_ical_string")]
-		public unowned string as_ical_string ();
+		public string as_ical_string ();
 		[CCode (cname = "icalcomponent_as_ical_string_r")]
 		public unowned string as_ical_string_r ();
 		[CCode (cname = "icalcomponent_begin_component")]

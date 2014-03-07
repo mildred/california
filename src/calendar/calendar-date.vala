@@ -78,9 +78,9 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
     }
     
     /**
-     * Creates a {@link Date} that corresponds to the current time in the specified timezone.
+     * Creates a {@link Date} that corresponds to the current time in the specified {@link Timezone}.
      */
-    public Date.now(TimeZone tz) {
+    public Date.now(Timezone tz) {
         this.from_exact_time(new ExactTime.now(tz));
     }
     
@@ -160,22 +160,23 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
     }
     
     /**
-     * Returns the {@link Date} as the earliest ExactTime possible for the specified TimeZone.
+     * Returns the {@link Date} as the earliest ExactTime possible for the specified {@link Timezone}.
      *
      * @see latest_exact_time
      */
-    public ExactTime earliest_exact_time(TimeZone tz) {
+    public ExactTime earliest_exact_time(Timezone tz) {
         return new ExactTime(tz, this, WallTime.earliest);
     }
     
     /**
-     * Returns the {@link Date} as the latest {@link ExactTime} possible for the specified TimeZone.
+     * Returns the {@link Date} as the latest {@link ExactTime} possible for the specified
+     * {@link Timezone}.
      *
      * By latest, the precision of ExactTime.seconds will be 59.0.
      *
      * @see earliest_exact_time
      */
-    public ExactTime latest_exact_time(TimeZone tz) {
+    public ExactTime latest_exact_time(Timezone tz) {
         return new ExactTime(tz, this, WallTime.latest);
     }
     

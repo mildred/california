@@ -17,13 +17,6 @@
 
 namespace California.Calendar {
 
-/**
- * The current date according to the local timezone.
- *
- * This currently does not update as the program executes.
- */
-public Date today;
-
 private int init_count = 0;
 
 private static unowned string FMT_MONTH_YEAR_FULL;
@@ -57,34 +50,30 @@ public void init() throws Error {
     FMT_PRETTY_DATE_ABBREV = _("%a, %b %e, %Y");
     FMT_PRETTY_DATE_ABBREV_NO_YEAR = _("%a, %b %e");
     
+    // This init() throws an IOError, so perform before others to prevent unnecessary unwinding
+    System.preinit();
+    
     // internal initialization
+    OlsonZone.init();
     DayOfWeek.init();
     DayOfMonth.init();
     Month.init();
     WallTime.init();
-    
-    // TODO: Tie this into the event loop so it's properly updated; also make it a property of
-    // an instance so it can be monitored
-    today = new Date.now(new TimeZone.local());
+    System.init();
+    Timezone.init();
 }
 
 public void terminate() {
     if (!California.Unit.do_terminate(ref init_count))
         return;
     
-    today = null;
-    
+    Timezone.terminate();
+    System.terminate();
     WallTime.terminate();
     Month.terminate();
     DayOfMonth.terminate();
     DayOfWeek.terminate();
-}
-
-/**
- * Returns the {@link ExactTime} of the local TimeZone.
- */
-public ExactTime now() {
-    return new ExactTime.now(new TimeZone.local());
+    OlsonZone.terminate();
 }
 
 }

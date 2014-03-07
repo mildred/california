@@ -184,7 +184,7 @@ public class Cell : Gtk.EventBox {
         if (selected) {
             Gdk.cairo_set_source_rgba(ctx, RGBA_SELECTED);
             ctx.paint();
-        } else if (date != null && date.equal_to(Calendar.today)) {
+        } else if (date != null && date.equal_to(Calendar.System.today)) {
             Gdk.cairo_set_source_rgba(ctx, RGBA_CURRENT_DAY);
             ctx.paint();
         }
@@ -226,17 +226,15 @@ public class Cell : Gtk.EventBox {
         int line_number = 0;
         line_to_event.clear();
         
-        // convert all times to local timezone
-        TimeZone local = new TimeZone.local();
-        
         // draw all events in chronological order, all-day events first, storing lookup data
-        // as the "lines" are drawn
+        // as the "lines" are drawn ... make sure to convert them all to local timezone
         foreach (Component.Event event in days_events) {
             string text;
             if (event.is_all_day) {
                 text = event.summary;
             } else {
-                Calendar.ExactTime local_start = event.exact_time_span.start_exact_time.to_timezone(local);
+                Calendar.ExactTime local_start = event.exact_time_span.start_exact_time.to_timezone(
+                    Calendar.Timezone.local);
                 text = "%s %s".printf(local_start.to_pretty_time_string(PRETTY_TIME_FLAGS), event.summary);
             }
             

@@ -52,7 +52,7 @@ public interface Span<G> : BaseObject, Collection.SimpleIterable<G> {
      *
      * @see Date.earliest_exact_time
      */
-    public ExactTime earliest_exact_time(TimeZone tz) {
+    public ExactTime earliest_exact_time(Timezone tz) {
         return start_date.earliest_exact_time(tz);
     }
     
@@ -61,7 +61,7 @@ public interface Span<G> : BaseObject, Collection.SimpleIterable<G> {
      *
      * @see Date.latest_exact_time
      */
-    public ExactTime latest_exact_time(TimeZone tz) {
+    public ExactTime latest_exact_time(Timezone tz) {
         return end_date.latest_exact_time(tz);
     }
     

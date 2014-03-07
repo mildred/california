@@ -10,12 +10,12 @@ public class DateTime : BaseObject {
     /**
      * The TZID for the iCal component and property kind.
      *
-     * TZID in libical means Olson city timezone.  A null tzid indicates floating time or a DATE.
+     * TZID in libical means Olson city timezone.  A null zone indicates floating time or a DATE.
      *
      * @see is_floating_time
      * @see is_date
      */
-    public string? tzid { get; private set; default = null; }
+    public Calendar.OlsonZone? zone { get; private set; default = null; }
     
     /**
      * Indicates if this {@link DateTime} is for UTC time.
@@ -27,7 +27,7 @@ public class DateTime : BaseObject {
      *
      * See [[https://tools.ietf.org/html/rfc5545#section-3.8.3.1]]
      */
-    public bool is_floating { get { return tzid == null && !is_date; } }
+    public bool is_floating { get { return zone == null && !is_date; } }
     
     /**
      * Indicates if this is a DATE rather than a DATE-TIME.
@@ -78,7 +78,7 @@ public class DateTime : BaseObject {
         
         unowned iCal.icalparameter? param = prop.get_first_parameter(iCal.icalparameter_kind.TZID_PARAMETER);
         if (param != null)
-            tzid = param.get_tzid();
+            zone = new Calendar.OlsonZone(param.get_tzid());
     }
     
     /**
@@ -108,22 +108,22 @@ public class DateTime : BaseObject {
     }
     
     /**
-     * Returns a TimeZone for the DATE-TIME.
+     * Returns a {@link Timezone} for the DATE-TIME.
      *
      * Returns null if {@link is_date} is true.  Returns the local timezone if {@link is_floating}
      * is true.  Returns the timezone for UTC if {@link is_utc} is true.
      */
-    public TimeZone? get_timezone() {
+    public Calendar.Timezone? get_timezone() {
         if (is_date)
             return null;
         
         if (is_utc)
-            return new TimeZone.utc();
+            return Calendar.Timezone.utc;
         
-        if (is_floating || tzid == null)
-            return new TimeZone.local();
+        if (is_floating || zone == null)
+            return Calendar.Timezone.local;
         
-        return new TimeZone(tzid);
+        return new Calendar.Timezone(zone);
     }
     
     /**

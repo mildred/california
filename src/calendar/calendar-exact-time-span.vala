@@ -11,7 +11,7 @@ namespace California.Calendar {
  *
  * This is conceptually similar to {@link DateSpan}, but (currently) doesn't allow for iteration.
  *
- * Note that there's no checking for matching TimeZones; in the future, these times may be
+ * Note that there's no checking for matching Timezones; in the future, these times may be
  * normalized to UTC.
  */
 
@@ -62,7 +62,7 @@ public class ExactTimeSpan : BaseObject, Gee.Comparable<ExactTimeSpan>, Gee.Hash
         end_date = new Date.from_exact_time(end_exact_time);
     }
     
-    public ExactTimeSpan.from_date_span(DateSpan span, TimeZone tz) {
+    public ExactTimeSpan.from_date_span(DateSpan span, Timezone tz) {
         this (span.earliest_exact_time(tz), span.latest_exact_time(tz));
     }
     
@@ -75,9 +75,9 @@ public class ExactTimeSpan : BaseObject, Gee.Comparable<ExactTimeSpan>, Gee.Hash
     
     /**
      * Returns a new {@link ExactTimeSpan} with both {@link start_date_time} and
-     * {@link end_date_time} converted to the supplied TimeZone.
+     * {@link end_date_time} converted to the supplied {@link Timezone}.
      */
-    public ExactTimeSpan to_timezone(TimeZone new_tz) {
+    public ExactTimeSpan to_timezone(Timezone new_tz) {
         return new ExactTimeSpan(start_exact_time.to_timezone(new_tz),
             end_exact_time.to_timezone(new_tz));
     }

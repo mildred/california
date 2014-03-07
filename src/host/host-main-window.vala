@@ -98,7 +98,7 @@ public class MainWindow : Gtk.ApplicationWindow {
     
     private void on_new_event() {
         // create all-day event for today
-        Calendar.DateSpan initial = new Calendar.DateSpan(Calendar.today, Calendar.today);
+        Calendar.DateSpan initial = new Calendar.DateSpan(Calendar.System.today, Calendar.System.today);
         
         // revert to today's date and use the widget for the popover
         create_event(null, initial, null, current_view.today(), null);

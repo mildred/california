@@ -108,7 +108,7 @@ public class Controllable : Gtk.Grid, View.Controllable {
         notify[PROP_SHOW_OUTSIDE_MONTH].connect(update_cells);
         
         // update now that signal handlers are in place
-        month_of_year = Calendar.today.month_of_year();
+        month_of_year = Calendar.System.today.month_of_year();
         first_of_week = Calendar.FirstOfWeek.SUNDAY;
     }
     
@@ -132,13 +132,13 @@ public class Controllable : Gtk.Grid, View.Controllable {
     public Gtk.Widget today() {
         // since changing the date is expensive in terms of adding/removing subscriptions, only
         // update the property if it's actually different
-        Calendar.MonthOfYear now = Calendar.today.month_of_year();
+        Calendar.MonthOfYear now = Calendar.System.today.month_of_year();
         if (!now.equal_to(month_of_year))
             month_of_year = now;
         
-        assert(date_to_cell.has_key(Calendar.today));
+        assert(date_to_cell.has_key(Calendar.System.today));
         
-        return date_to_cell.get(Calendar.today);
+        return date_to_cell.get(Calendar.System.today);
     }
     
     /**
@@ -231,12 +231,12 @@ public class Controllable : Gtk.Grid, View.Controllable {
     
     private void on_month_of_year_changed() {
         current_label = month_of_year.full_name;
-        is_viewing_today = month_of_year.equal_to(Calendar.today.month_of_year());
+        is_viewing_today = month_of_year.equal_to(Calendar.System.today.month_of_year());
         
         // default date is first of month unless displaying current month, in which case it's
         // current date
         try {
-            default_date = is_viewing_today ? Calendar.today
+            default_date = is_viewing_today ? Calendar.System.today
                 : month_of_year.date_for(month_of_year.first_day_of_month());
         } catch (CalendarError calerr) {
             // this should always work
@@ -247,7 +247,7 @@ public class Controllable : Gtk.Grid, View.Controllable {
         
         // generate new ExactTimeSpan window for all calendar subscriptions
         Calendar.ExactTimeSpan window = new Calendar.ExactTimeSpan.from_date_span(month_of_year,
-            new TimeZone.local());
+            Calendar.Timezone.local);
         
         // clear current subscriptions and generate new subscriptions for new window
         subscriptions.clear();
@@ -405,10 +405,10 @@ public class Controllable : Gtk.Grid, View.Controllable {
         
         // TODO: Define default time better
         Calendar.ExactTime start;
-        if(release_cell.date.equal_to(Calendar.today)) {
-            start = new Calendar.ExactTime.now(new TimeZone.local());
+        if(release_cell.date.equal_to(Calendar.System.today)) {
+            start = new Calendar.ExactTime.now(Calendar.Timezone.local);
         } else {
-            start = new Calendar.ExactTime(new TimeZone.local(), release_cell.date,
+            start = new Calendar.ExactTime(Calendar.Timezone.local, release_cell.date,
                 new Calendar.WallTime(13, 0, 0));
         }
         

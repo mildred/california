@@ -24,7 +24,7 @@ public class UID : BaseObject, Gee.Hashable<UID>, Gee.Comparable<UID> {
     public static UID generate() {
         // Borrowed liberally from EDS' e_cal_component_gen_uid
         return new UID("%s-%d-%d-%d-%08X@%s".printf(
-            Calendar.now().format("%FT%H:%M:%S%z"),
+            Calendar.System.now.format("%FT%H:%M:%S%z"),
             Posix.getpid(),
             (int) Posix.getgid(),
             (int) Posix.getppid(),

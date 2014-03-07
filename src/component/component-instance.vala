@@ -134,7 +134,7 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
         if (from_full_update)
             return;
         
-        dtstamp = Calendar.now();
+        dtstamp = Calendar.System.now;
         
         iCal.icaltimetype ical_dtstamp = {};
         exact_time_to_ical(dtstamp, &ical_dtstamp);
@@ -250,11 +250,12 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
         ical_dt->hour = exact_time.hour;
         ical_dt->minute = exact_time.minute;
         ical_dt->second = exact_time.second;
-        ical_dt->is_utc = 0;
+        ical_dt->is_utc = exact_time.tz.is_utc ? 1 : 0;
         ical_dt->is_date = 0;
         ical_dt->is_daylight = exact_time.is_dst ? 1 : 0;
-        ical_dt->zone = iCal.icaltimezone.get_builtin_timezone_from_offset(exact_time.utc_offset,
-            exact_time.tzid);
+        ical_dt->zone = iCal.icaltimezone.get_builtin_timezone(exact_time.tz.zone.value);
+        if (ical_dt->zone == null)
+            message("Unable to get builtin iCal timezone for %s", exact_time.tz.zone.to_string());
     }
     
     /**

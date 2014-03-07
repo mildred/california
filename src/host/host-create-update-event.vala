@@ -102,17 +102,17 @@ public class CreateUpdateEvent : Gtk.Grid {
             all_day_toggle.active = false;
             selected_date_span = event.exact_time_span.get_date_span();
             initial_start_time = new Calendar.WallTime.from_exact_time(
-                event.exact_time_span.start_exact_time.to_timezone(new TimeZone.local()));
+                event.exact_time_span.start_exact_time.to_timezone(Calendar.Timezone.local));
             initial_end_time = new Calendar.WallTime.from_exact_time(
-                event.exact_time_span.end_exact_time.to_timezone(new TimeZone.local()));
+                event.exact_time_span.end_exact_time.to_timezone(Calendar.Timezone.local));
         } else {
             assert(event.date_span != null);
             
             all_day_toggle.active = true;
             selected_date_span = event.date_span;
-            initial_start_time = new Calendar.WallTime.from_exact_time(Calendar.now());
+            initial_start_time = new Calendar.WallTime.from_exact_time(Calendar.System.now);
             initial_end_time = new Calendar.WallTime.from_exact_time(
-                Calendar.now().adjust_time(1, Calendar.TimeUnit.HOUR));
+                Calendar.System.now.adjust_time(1, Calendar.TimeUnit.HOUR));
         }
         
         // initialize start and end time (as in, wall clock time)
@@ -239,8 +239,9 @@ public class CreateUpdateEvent : Gtk.Grid {
             event.set_event_date_span(selected_date_span);
         } else {
             // use existing timezone unless not specified in original event
-            TimeZone tz = (event.exact_time_span != null) ? event.exact_time_span.start_exact_time.tz
-                : new TimeZone.local();
+            Calendar.Timezone tz = (event.exact_time_span != null)
+                ? event.exact_time_span.start_exact_time.tz
+                : Calendar.Timezone.local;
             event.set_event_exact_time_span(
                 new Calendar.ExactTimeSpan(
                     new Calendar.ExactTime(tz, selected_date_span.start_date,

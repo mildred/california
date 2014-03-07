@@ -35,8 +35,8 @@ public class ShowEvent : Gtk.Grid {
         // if any dates are not in current year, display year in all dates
         Calendar.Date.PrettyFlag date_flags = Calendar.Date.PrettyFlag.NONE;
         Calendar.DateSpan date_span = event.get_event_date_span();
-        if (!date_span.start_date.year.equal_to(Calendar.today.year)
-            || !date_span.end_date.year.equal_to(Calendar.today.year)) {
+        if (!date_span.start_date.year.equal_to(Calendar.System.today.year)
+            || !date_span.end_date.year.equal_to(Calendar.System.today.year)) {
             date_flags |= Calendar.Date.PrettyFlag.INCLUDE_YEAR;
         }
         
@@ -56,7 +56,7 @@ public class ShowEvent : Gtk.Grid {
             }
         } else {
             Calendar.ExactTimeSpan exact_time_span = event.exact_time_span.to_timezone(
-                new TimeZone.local());
+                Calendar.Timezone.local);
             if (exact_time_span.is_same_day) {
                 // Single-day timed event, print "<full date>\n<full start time> to <full end time>",
                 // including year if not current year
