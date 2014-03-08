@@ -62,7 +62,7 @@ internal class EdsCalendarSource : CalendarSource {
         string? uid;
         client.create_object_sync(instance.ical_component, out uid, cancellable);
         
-        return (uid != null && uid[0] != '\0') ? new Component.UID(uid) : null;
+        return !String.is_empty(uid) ? new Component.UID(uid) : null;
     }
     
     public override async void update_component_async(Component.Instance instance,

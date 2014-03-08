@@ -9,19 +9,17 @@ namespace California.Component {
 /**
  * A mutable iCalendar component that has a definitive instance within a calendar.
  *
- * By "instance", this means {@link Event}s, To-Do's, Journals, and Free/Busy components.  In other
- * words, components which allocate a specific item within a calendar.  Some of thse
- * components may be recurring, in which case any particular instance is merely a generated
- * representation of that recurrance.
+ * By "instance", this means {@link Event}s, To-do's, and Journal components.  In other words,
+ * components which allocate a specific amount of time within a calendar.  (Free/Busy does allow
+ * for time to be published/reserved, but this implementation doesn't deal with that component.)
  *
  * Mutability is achieved two separate ways.  One is to call {@link full_update} supplying a new
- * iCal component to update an existing one (verified by UID and RID).  This will update all
- * fields.
+ * iCal component to update an existing one (verified by UID).  This will update all fields.
  *
  * The second is to update the mutable properties themselves, which will then update the underlying
  * iCal component.
  *
- * Alarms are contained within Instance components.  Timezones are handled separately.
+ * Alarms will be contained within Instance components.  Timezones are handled separately.
  *
  * Instance also offers a number of methods to convert iCal structures into internal objects.
  */
@@ -31,6 +29,8 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     public const string PROP_DTSTAMP = "dtstamp";
     public const string PROP_UID = "uid";
     public const string PROP_ICAL_COMPONENT = "ical-component";
+    public const string PROP_RID = "rid";
+    public const string PROP_SEQUENCE = "sequence";
     
     protected const string PROP_IN_FULL_UPDATE = "in-full-update";
     
@@ -59,6 +59,27 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      * This element is immutable, as it represents the identify of this Instance.
      */
     public UID uid { get; private set; }
+    
+    /**
+     * The RECURRENCE-ID of a recurring component.
+     *
+     * See [[https://tools.ietf.org/html/rfc5545#section-3.8.4.4]]
+     */
+    public Component.DateTime? rid { get; set; default = null; }
+    
+    /**
+     * Returns true if the {@link Recurrable} is in fact a recurring instance.
+     *
+     * @see rid
+     */
+    public bool is_recurring { get { return rid != null; } }
+    
+    /**
+     * The SEQUENCE of a VEVENT, VTODO, or VJOURNAL.
+     *
+     * See [[https://tools.ietf.org/html/rfc5545#section-3.8.7.4]]
+     */
+    public int sequence { get; set; default = 0; }
     
     /**
      * The iCal component being represented by this {@link Instance}.
@@ -110,6 +131,9 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
         uid = new UID(_ical_component.get_uid());
         
         full_update(_ical_component);
+        
+        // watch for property changes and update ical_component when happens
+        notify.connect(on_notify);
     }
     
     /**
@@ -121,6 +145,8 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
         _ical_component = new iCal.icalcomponent(kind);
         uid = Component.UID.generate();
         _ical_component.set_uid(uid.value);
+        
+        notify.connect(on_notify);
     }
     
     /**
@@ -187,8 +213,48 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
         if (!dt_stamp.is_date)
             dtstamp = dt_stamp.to_exact_time();
         
+        try {
+            rid = new DateTime(ical_component, iCal.icalproperty_kind.RECURRENCEID_PROPERTY);
+        } catch (ComponentError comperr) {
+            // ignore if unavailable
+            if (!(comperr is ComponentError.UNAVAILABLE))
+                throw comperr;
+            
+            rid = null;
+        }
+        
+        sequence = ical_component.get_sequence();
+        
+        // save own copy of component; no ownership transferrance w/ current bindings
         if (_ical_component != ical_component)
             _ical_component = ical_component.clone();
+    }
+    
+    private void on_notify(ParamSpec pspec) {
+        // don't worry if in full update, that call is supposed to update properties
+        if (in_full_update)
+            return;
+        
+        bool altered = true;
+        switch (pspec.name) {
+            case PROP_RID:
+                if (rid == null)
+                    remove_all_properties(iCal.icalproperty_kind.RECURRENCEID_PROPERTY);
+                else
+                    ical_component.set_recurrenceid(rid.dt);
+            break;
+            
+            case PROP_SEQUENCE:
+                ical_component.set_sequence(sequence);
+            break;
+            
+            default:
+                altered = false;
+            break;
+        }
+        
+        if (altered)
+            notify_altered(false);
     }
     
     /**
@@ -268,14 +334,36 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     }
     
     /**
-     * Equality is defined as {@link Component.Instance}s having the same UID (and, when available,
-     * RID), nothing more.
+     * Convenience method to remove all instances of a property from {@link ical_component}.
+     *
+     * @returns The number of properties found with the specified kind.
      */
-    public bool equal_to(Instance other) {
+    protected int remove_all_properties(iCal.icalproperty_kind kind) {
+        int count = 0;
+        unowned iCal.icalproperty? prop;
+        while ((prop = ical_component.get_first_property(kind)) != null) {
+            ical_component.remove_property(prop);
+            count++;
+        }
+        
+        return count;
+    }
+    
+    /**
+     * Equality is defined as {@link Component.Instance}s having the same UID.
+     *
+     * Subclasses should override this and {@link hash} if more definite equality is necessary.
+     */
+    public virtual bool equal_to(Instance other) {
         return (this != other) ? uid.equal_to(other.uid) : true;
     }
     
-    public uint hash() {
+    /**
+     * Hash is calculated using the {@link Instance} {@link UID}.
+     *
+     * Subclasses should override if they override {@link equal_to}.
+     */
+    public virtual uint hash() {
         return uid.hash();
     }
 }

@@ -66,6 +66,13 @@ public interface Span<G> : BaseObject, Collection.SimpleIterable<G> {
     }
     
     /**
+     * Converts the {@link Span} into a {@link DateSpan}.
+     */
+    public DateSpan to_date_span() {
+        return new DateSpan(start_date, end_date);
+    }
+    
+    /**
      * true if the {@link Span} contains the specified {@link Date}.
      *
      * This is named to conform to Vala's rule for automatic syntax support.  This allows for the

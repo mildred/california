@@ -241,12 +241,66 @@ public class Event : Instance, Gee.Comparable<Event> {
         if (compare != 0)
             return compare;
         
+        // if recurring, go by sequence number, as the UID and RID are the same for all instances
+        if (is_recurring) {
+            compare = sequence - other.sequence;
+            if (compare != 0)
+                return compare;
+        }
+        
         // stabilize with UIDs
         return uid.compare_to(other.uid);
     }
     
+    public override bool equal_to(Component.Instance other) {
+        Component.Event? other_event = other as Component.Event;
+        if (other_event == null)
+            return false;
+        
+        if (this == other_event)
+            return true;
+        
+        if (is_recurring != other_event.is_recurring)
+            return false;
+        
+        if (is_recurring && !rid.equal_to(other_event.rid))
+            return false;
+        
+        if (sequence != other_event.sequence)
+            return false;
+        
+        if (exact_time_span != null && other_event.exact_time_span != null
+            && !exact_time_span.equal_to(other_event.exact_time_span)) {
+            return false;
+        }
+        
+        if (date_span != null && other_event.date_span != null
+            && !date_span.equal_to(other_event.date_span)) {
+            return false;
+        }
+        
+        if (exact_time_span != null
+            && !new Calendar.DateSpan.from_exact_time_span(exact_time_span).equal_to(other_event.date_span)) {
+            return false;
+        }
+        
+        if (!date_span.equal_to(new Calendar.DateSpan.from_exact_time_span(other_event.exact_time_span))) {
+            return false;
+        }
+        
+        return base.equal_to(other);
+    }
+    
+    public override uint hash() {
+        return uid.hash() ^ ((rid != null) ? rid.hash() : 0) ^ sequence;
+    }
+    
     public override string to_string() {
-        return "Event \"%s\" (%s)".printf(summary,
+        return "Event %s/rid=%s/%d \"%s\" (%s)".printf(
+            uid.to_string(),
+            (rid != null) ? rid.to_string() : "(no-recurring)",
+            sequence,
+            summary,
             exact_time_span != null ? exact_time_span.to_string() : date_span.to_string());
     }
 }

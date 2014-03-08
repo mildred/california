@@ -97,7 +97,7 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
             Component.Event? event = Component.Instance.convert(calendar, eds_component.get_icalcomponent())
                 as Component.Event;
             if (event != null)
-                notify_event_discovered(event);
+                notify_instance_discovered(event);
         } catch (Error err) {
             debug("Unable to generate discovered event for %s: %s", to_string(), err.message);
         }
@@ -115,7 +115,7 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
             try {
                 Component.Event? event = Component.Instance.convert(calendar, ical_component) as Component.Event;
                 if (event != null)
-                    notify_event_added(event);
+                    notify_instance_added(event);
             } catch (Error err) {
                 debug("Unable to generate added event for %s: %s", to_string(), err.message);
             }
@@ -136,13 +136,13 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
                 debug("Unable to update event %s: %s", event.to_string(), err.message);
             }
             
-            notify_event_altered(event);
+            notify_instance_altered(event);
         }
     }
     
     private void on_objects_removed(SList<weak E.CalComponentId?> ids) {
         foreach (weak E.CalComponentId id in ids)
-            notify_event_removed(new Component.UID(id.uid));
+            notify_instance_removed(new Component.UID(id.uid));
     }
 }
 

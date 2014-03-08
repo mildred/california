@@ -37,12 +37,17 @@ public class Controllable : Gtk.Grid, View.Controllable {
     /**
      * @inheritDoc
      */
-    public Calendar.FirstOfWeek first_of_week { get; set; }
+    public Calendar.FirstOfWeek first_of_week { get; set; default = Calendar.FirstOfWeek.SUNDAY; }
     
     /**
      * Show days outside the current month.
      */
     public bool show_outside_month { get; set; default = true; }
+    
+    /**
+     * The span of dates being displayed.
+     */
+    public Calendar.DateSpan window { get; private set; }
     
     /**
      * @inheritDoc
@@ -109,7 +114,6 @@ public class Controllable : Gtk.Grid, View.Controllable {
         
         // update now that signal handlers are in place
         month_of_year = Calendar.System.today.month_of_year();
-        first_of_week = Calendar.FirstOfWeek.SUNDAY;
     }
     
     /**
@@ -215,6 +219,9 @@ public class Controllable : Gtk.Grid, View.Controllable {
         int row = 0;
         foreach (Calendar.Week week in span)
             update_week(row++, week);
+        
+        // update the window being displayed
+        window = span.to_date_span();
     }
     
     private void update_first_of_week() {
@@ -227,6 +234,7 @@ public class Controllable : Gtk.Grid, View.Controllable {
         
         // requires updating all the cells as well, since all dates have to be shifted
         update_cells();
+        update_subscription();
     }
     
     private void on_month_of_year_changed() {
@@ -244,9 +252,12 @@ public class Controllable : Gtk.Grid, View.Controllable {
         }
         
         update_cells();
-        
-        // generate new ExactTimeSpan window for all calendar subscriptions
-        Calendar.ExactTimeSpan window = new Calendar.ExactTimeSpan.from_date_span(month_of_year,
+        update_subscription();
+    }
+    
+    private void update_subscription() {
+        // convert DateSpan window into an ExactTimeSpan, which is what the subscription wants
+        Calendar.ExactTimeSpan time_window = new Calendar.ExactTimeSpan.from_date_span(window,
             Calendar.Timezone.local);
         
         // clear current subscriptions and generate new subscriptions for new window
@@ -254,7 +265,7 @@ public class Controllable : Gtk.Grid, View.Controllable {
         foreach (Backing.Store store in Backing.Manager.instance.get_stores()) {
             foreach (Backing.Source source in store.get_sources_of_type<Backing.CalendarSource>()) {
                 Backing.CalendarSource calendar = (Backing.CalendarSource) source;
-                calendar.subscribe_async.begin(window, null, on_subscribed);
+                calendar.subscribe_async.begin(time_window, null, on_subscribed);
             }
         }
     }
@@ -266,10 +277,10 @@ public class Controllable : Gtk.Grid, View.Controllable {
             Backing.CalendarSourceSubscription subscription = calendar.subscribe_async.end(result);
             subscriptions.add(subscription);
             
-            subscription.event_discovered.connect(on_event_added);
-            subscription.event_added.connect(on_event_added);
-            subscription.event_removed.connect(on_event_removed);
-            subscription.event_dropped.connect(on_event_removed);
+            subscription.instance_discovered.connect(on_instance_added);
+            subscription.instance_added.connect(on_instance_added);
+            subscription.instance_removed.connect(on_instance_removed);
+            subscription.instance_dropped.connect(on_instance_removed);
             
             // this will start signals firing for event changes
             subscription.start();
@@ -278,7 +289,11 @@ public class Controllable : Gtk.Grid, View.Controllable {
         }
     }
     
-    private void on_event_added(Component.Event event) {
+    private void on_instance_added(Component.Instance instance) {
+        Component.Event? event = instance as Component.Event;
+        if (event == null)
+            return;
+        
         // add event to every date it represents
         foreach (Calendar.Date date in event.get_event_date_span()) {
             Cell? cell = date_to_cell.get(date);
@@ -287,7 +302,11 @@ public class Controllable : Gtk.Grid, View.Controllable {
         }
     }
     
-    private void on_event_removed(Component.Event event) {
+    private void on_instance_removed(Component.Instance instance) {
+        Component.Event? event = instance as Component.Event;
+        if (event == null)
+            return;
+        
         foreach (Calendar.Date date in event.get_event_date_span()) {
             Cell? cell = date_to_cell.get(date);
             if (cell != null)

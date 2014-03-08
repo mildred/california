@@ -41,35 +41,36 @@ public abstract class CalendarSourceSubscription : BaseObject {
     public bool active { get; protected set; default = false; }
     
     /**
-     * Fired as existing {@link Component.Event}s are discovered when starting a subscription.
+     * Fired as existing {@link Component.Instance}s are discovered when starting a subscription.
      *
      * This is fired while {@link start} is working, either in the foreground or in the background.
      * It won't fire until start() is invoked.
      */
-    public signal void event_discovered(Component.Event event);
+    public signal void instance_discovered(Component.Instance instance);
     
     /**
-     * Indicates that an event within the {@link window} has been added to the calendar.
+     * Indicates that an {@link Instance} within the {@link window} has been added to the calendar.
      *
      * The signal is fired for both local additions (added through this interface) and remote
      * additions.
      *
      * This signal won't fire until {@link start} is called.
      */
-    public signal void event_added(Component.Event event);
+    public signal void instance_added(Component.Instance instance);
     
     /**
-     * Indicates that an event within the {@link date_window} has been removed from the calendar.
+     * Indicates that an {@link Instance} within the {@link date_window} has been removed from the
+     * calendar.
      *
      * The signal is fired for both local removals (added through this interface) and remote
      * removals.
      *
      * This signal won't fire until {@link start} is called.
      */
-    public signal void event_removed(Component.Event event);
+    public signal void instance_removed(Component.Instance instance);
     
     /**
-     * Indicates that an event within the {@link date_window} has been altered.
+     * Indicates that an {@link Instance} within the {@link date_window} has been altered.
      *
      * This is fired after the alterations have been made.  Since the {@link Component.Instance}s
      * are mutable, it's possible to monitor their properties for changes and be notified that way.
@@ -79,13 +80,13 @@ public abstract class CalendarSourceSubscription : BaseObject {
      *
      * This signal won't fire until {@link start} is called.
      */
-    public signal void event_altered(Component.Event event);
+    public signal void instance_altered(Component.Instance instance);
     
     /**
-     * Indicates than the event within the {@link date_window} has been dropped due to the
-     * {@link Source} going unavailable.
+     * Indicates than the {@link Instance} within the {@link date_window} has been dropped due to
+     * the {@link Source} going unavailable.
      *
-     * Generally all the subscription's events will be reported one after another, but this
+     * Generally all the subscription's instances will be reported one after another, but this
      * shouldn't be relied upon.
      *
      * Since the Source is now unavailable, this indicates that the Subscription will not be
@@ -96,7 +97,7 @@ public abstract class CalendarSourceSubscription : BaseObject {
      * best course is to call {@link Source.set_unavailable} and override
      * {@link notify_events_dropped} to perform internal bookkeeping.
      */
-    public signal void event_dropped(Component.Event event);
+    public signal void instance_dropped(Component.Instance instance);
     
     /**
      * Fired if {@link start} failed.
@@ -110,8 +111,10 @@ public abstract class CalendarSourceSubscription : BaseObject {
      */
     public signal void start_failed(Error err);
     
-    private Gee.HashMap<Component.UID, Component.Event> events = new Gee.HashMap<
-        Component.UID, Component.Event>();
+    // Although Component.Instance has no simple notion of one UID for multiple instances, its
+    // subclasses (i.e. Event) do
+    private Gee.HashMultiMap<Component.UID, Component.Instance> instances = new Gee.HashMultiMap<
+        Component.UID, Component.Instance>();
     
     protected CalendarSourceSubscription(CalendarSource calendar, Calendar.ExactTimeSpan window) {
         this.calendar = calendar;
@@ -121,7 +124,8 @@ public abstract class CalendarSourceSubscription : BaseObject {
     }
     
     /**
-     * Add a pre-existing {@link Component.Event} to the subscription and notify subscribers.
+     * Add a @link Component.Instance} discovered while starting the subscription to the
+     * internal collection of instances and notify subscribers.
      *
      * As with the other notify_*() methods, subclasses should invoke this method to fire the
      * signal rather than do it directly.  This gives {@link CalenderSourceSubscription} the
@@ -129,68 +133,89 @@ public abstract class CalendarSourceSubscription : BaseObject {
      *
      * It can also be overridden by a subclass to take action before or after the signal is fired.
      *
-     * @see event_discovered
+     * @see instance_discovered
      */
-    protected virtual void notify_event_discovered(Component.Event event) {
-        if (!events.has_key(event.uid)) {
-            events.set(event.uid, event);
-            event_discovered(event);
-        } else {
-            debug("Cannot add discovered event %s to %s: already known", event.to_string(), to_string());
-        }
-    }
-    
-    /**
-     * Add a new {@link Component.Event} to the subscription and notify subscribers.
-     *
-     * @see notify_event_discovered
-     * @see event_added
-     */
-    protected virtual void notify_event_added(Component.Event event) {
-        if (!events.has_key(event.uid)) {
-            events.set(event.uid, event);
-            event_added(event);
-        } else {
-            debug("Cannot add event %s to %s: already known", event.to_string(), to_string());
-        }
-    }
-    
-    /**
-     * Remove an {@link Component.Event} from the subscription and notify subscribers.
-     *
-     * @see notify_event_discovered
-     * @see event_removed
-     */
-    protected virtual void notify_event_removed(Component.UID uid) {
-        Component.Event? event;
-        if (events.unset(uid, out event))
-            event_removed(event);
+    protected virtual void notify_instance_discovered(Component.Instance instance) {
+        if (add_instance(instance))
+            instance_discovered(instance);
         else
+            debug("Cannot add discovered component %s to %s: already known", instance.to_string(), to_string());
+    }
+    
+    /**
+     * Add a new {@link Component.Instance} to the subscription and notify subscribers.
+     *
+     * @see notify_instance_discovered
+     * @see instance_added
+     */
+    protected virtual void notify_instance_added(Component.Instance instance) {
+        if (add_instance(instance))
+            instance_added(instance);
+        else
+            debug("Cannot add component %s to %s: already known", instance.to_string(), to_string());
+    }
+    
+    /**
+     * Remove an {@link Component.Instance} from the subscription and notify subscribers.
+     *
+     * @see notify_instance_discovered
+     * @see instance_removed
+     */
+    protected virtual void notify_instance_removed(Component.UID uid) {
+        Gee.Collection<Component.Instance> removed_instances;
+        if (remove_instance(uid, out removed_instances)) {
+            foreach (Component.Instance instance in removed_instances)
+                instance_removed(instance);
+        } else {
             debug("Cannot remove UID %s from %s: not known", uid.to_string(), to_string());
+        }
     }
     
     /**
-     * Update an altered {@link Component.Event} and notify subscribers.
+     * Update an altered {@link Component.Instance} and notify subscribers.
      *
-     * @see notify_event_discovered
-     * @see event_altered
+     * @see notify_instance_discovered
+     * @see instance_altered
      */
-    protected virtual void notify_event_altered(Component.Event event) {
-        if (events.has_key(event.uid))
-            event_altered(event);
+    protected virtual void notify_instance_altered(Component.Instance instance) {
+        if (instances.contains(instance.uid))
+            instance_altered(instance);
         else
-            debug("Cannot notify altered event %s in %s: not known", event.to_string(), to_string());
+            debug("Cannot notify altered component %s in %s: not known", instance.to_string(), to_string());
     }
     
     /**
-     * Notify that the {@link Component.Event}s have been dropped due to the {@link Source} going
+     * Notify that the {@link Component.Instance}s have been dropped due to the {@link Source} going
      * unavailable.
      */
-    protected virtual void notify_event_dropped(Component.Event event) {
-        if (this.events.unset(event.uid))
-            event_dropped(event);
-        else
-            debug("Cannot notify dropped event %s in %s: not known", event.to_string(), to_string());
+    protected virtual void notify_instance_dropped(Component.Instance instance) {
+        Gee.Collection<Component.Instance> removed_instances;
+        if (remove_instance(instance.uid, out removed_instances)) {
+            foreach (Component.Instance removed_instance in removed_instances)
+                instance_dropped(removed_instance);
+        } else {
+            debug("Cannot notify dropped component %s in %s: not known", instance.to_string(), to_string());
+        }
+    }
+    
+    private bool add_instance(Component.Instance instance) {
+        bool already_exists = instances.get(instance.uid).contains(instance);
+        if (!already_exists)
+            instances.set(instance.uid, instance);
+        
+        return !already_exists;
+    }
+    
+    private bool remove_instance(Component.UID uid, out Gee.Collection<Component.Instance> removed_instances) {
+        bool removed = instances.contains(uid);
+        if (removed) {
+            removed_instances = instances.get(uid);
+            instances.remove_all(uid);
+        } else {
+            removed_instances = new Gee.ArrayList<Component.Instance>();
+        }
+        
+        return removed;
     }
     
     /**
@@ -228,24 +253,19 @@ public abstract class CalendarSourceSubscription : BaseObject {
         if (calendar.is_available)
             return;
         
-        foreach (Component.Event event in events.values.to_array())
-            notify_event_dropped(event);
+        // Use to_array() so no iteration troubles when notify_instance_dropped removes it from
+        // the multimap
+        foreach (Component.Instance instance in instances.get_values().to_array())
+            notify_instance_dropped(instance);
     }
     
     /**
-     * Returns an {@link Component.Instance} for the {@link Component.UID}.
+     * Returns all {@link Component.Instance}s for the {@link Component.UID}.
      *
      * @returns null if the UID has not been seen.
      */
-    public Component.Instance? for_uid(Component.UID uid) {
-        return events.get(uid);
-    }
-    
-    /**
-     * Returns a read-only Map of all known {@link Component.Event}s.
-     */
-    public Gee.Map<Component.UID, Component.Event> get_events() {
-        return events.read_only_view;
+    public Gee.Collection<Component.Instance>? for_uid(Component.UID uid) {
+        return instances.contains(uid) ? instances.get(uid) : null;
     }
     
     public override string to_string() {

@@ -6,7 +6,15 @@
 
 namespace California.Component {
 
-public class DateTime : BaseObject {
+/**
+ * An immutable representation of iCal's DATE and DATE-TIME property, which are often used
+ * interchangeably.
+ *
+ * See [[https://tools.ietf.org/html/rfc5545#section-3.3.4]] and
+ * [[https://tools.ietf.org/html/rfc5545#section-3.3.5]]
+ */
+
+public class DateTime : BaseObject, Gee.Hashable<DateTime>, Gee.Comparable<DateTime> {
     /**
      * The TZID for the iCal component and property kind.
      *
@@ -42,10 +50,21 @@ public class DateTime : BaseObject {
     public iCal.icaltimetype dt;
     
     /**
+     * The iCal property type ("kind") for {@link dt}.
+     */
+    public iCal.icalproperty_kind kind;
+    
+    /**
      * Creates a new {@link DateTime} for the iCal component of the property kind.
      *
-     * Note that DTSTART_PROPERTY, DTEND_PROPERTY, and DTSTAMP_PROPERTY are the only properties
-     * currently supported.
+     * Note that the only properties currently supported are:
+     * * DTSTART_PROPERTY
+     * * DTEND_PROPERTY
+     * * DTSTAMP_PROPERTY
+     * * RECURRENCEID_PROPERTY
+     *
+     * @throws ComponentError.UNAVAILABLE if not found
+     * @throws ComponentError.INVALID if not a valid DATE or DATE-TIME
      */
     public DateTime(iCal.icalcomponent ical_component, iCal.icalproperty_kind ical_prop_kind)
         throws ComponentError {
@@ -66,6 +85,10 @@ public class DateTime : BaseObject {
                 dt = prop.get_dtend();
             break;
             
+            case iCal.icalproperty_kind.RECURRENCEID_PROPERTY:
+                dt = prop.get_recurrenceid();
+            break;
+            
             default:
                 assert_not_reached();
         }
@@ -79,6 +102,8 @@ public class DateTime : BaseObject {
         unowned iCal.icalparameter? param = prop.get_first_parameter(iCal.icalparameter_kind.TZID_PARAMETER);
         if (param != null)
             zone = new Calendar.OlsonZone(param.get_tzid());
+        
+        kind = ical_prop_kind;
     }
     
     /**
@@ -184,6 +209,21 @@ public class DateTime : BaseObject {
         
         date_span = new Calendar.DateSpan(start_date, end_date);
         exact_time_span = null;
+    }
+    
+    public int compare_to(Component.DateTime other) {
+        return (this != other) ? iCal.icaltime_compare(dt, other.dt) : 0;
+    }
+    
+    public bool equal_to(Component.DateTime other) {
+        return (this != other) ? iCal.icaltime_compare(dt, other.dt) == 0 : true;
+    }
+    
+    public uint hash() {
+        // iCal doesn't supply a hashing function, so here goes
+        iCal.icaltimetype utc = iCal.icaltime_convert_to_zone(dt, iCal.icaltimezone.get_utc_timezone());
+        
+        return Memory.hash(&utc, sizeof(iCal.icaltimetype));
     }
     
     public override string to_string() {

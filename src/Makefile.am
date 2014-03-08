@@ -67,6 +67,7 @@ california_VALASOURCES = \
 	host/host-popup.vala \
 	host/host-show-event.vala \
 	\
+	util/util-memory.vala \
 	util/util-string.vala \
 	\
 	view/view.vala \

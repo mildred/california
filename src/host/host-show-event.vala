@@ -11,6 +11,12 @@ public class ShowEvent : Gtk.Grid {
     [GtkChild]
     private Gtk.Label text_label;
     
+    [GtkChild]
+    private Gtk.Button update_button;
+    
+    [GtkChild]
+    private Gtk.Button remove_button;
+    
     private new Component.Event event;
     
     public signal void remove_event(Component.Event event);
@@ -83,6 +89,15 @@ public class ShowEvent : Gtk.Grid {
         add_lf_lf(builder).append_printf("<small>%s</small>", Markup.escape_text(span));
         
         text_label.label = builder.str;
+        
+        // don't current support updating or removing recurring events properly; see
+        // https://bugzilla.gnome.org/show_bug.cgi?id=725786
+        // https://bugzilla.gnome.org/show_bug.cgi?id=725787
+        bool visible = !event.is_recurring;
+        update_button.visible = visible;
+        update_button.no_show_all = !visible;
+        remove_button.visible = visible;
+        remove_button.no_show_all = !visible;
     }
     
     // Adds two linefeeds if there's existing text
