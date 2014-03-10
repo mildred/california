@@ -1,0 +1,171 @@
+# Spanish translation for california.
+# Copyright (C) 2014 california's COPYRIGHT HOLDER
+# This file is distributed under the same license as the california package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: california master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=california&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2014-03-10 13:36+0000\n"
+"PO-Revision-Date: 2014-03-10 17:48+0100\n"
+"Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
+"Language-Team: Español <gnome-es-list@gnome.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Generator: Gtranslator 2.91.5\n"
+
+#: ../src/application/california-application.vala:17
+msgid "Desktop Calendar"
+msgstr "Calendario del escritorio"
+
+#: ../src/application/california-application.vala:18
+msgid "Copyright 2014 Yorba Foundation"
+msgstr "Copyright 2014 Fundación Yorba"
+
+#: ../src/application/california-application.vala:65
+#, c-format
+msgid "Unable to open California: %s"
+msgstr "No se pudo abrir California: %s"
+
+#: ../src/application/california-application.vala:115
+#, c-format
+msgid "About %s"
+msgstr "Acerca de %s"
+
+#. / Translators: add your name and email address to receive credit in the About dialog
+#. / For example: Yamada Taro <yamada.taro@example.com>
+#: ../src/application/california-application.vala:119
+msgid "translator-credits"
+msgstr "Daniel Mustieles <daniel.mustieles@gmail.com>, 2014"
+
+#. TODO: Properly fetch these from gettext() so the user's locale is respected (not just their
+#. language)
+#. TODO: Translator comments explaining these are strftime formatted strings
+#: ../src/calendar/calendar.vala:41
+msgid "%B %Y"
+msgstr "%B %Y"
+
+#: ../src/calendar/calendar.vala:42
+msgid "%b %Y"
+msgstr "%b %Y"
+
+#: ../src/calendar/calendar.vala:43
+msgid "%B"
+msgstr "%B"
+
+#: ../src/calendar/calendar.vala:44
+msgid "%b"
+msgstr "%b"
+
+#: ../src/calendar/calendar.vala:45
+#, c-format
+msgid "%A"
+msgstr "%A"
+
+#: ../src/calendar/calendar.vala:46
+#, c-format
+msgid "%a"
+msgstr "%a"
+
+#: ../src/calendar/calendar.vala:47
+#, c-format
+msgid "%x"
+msgstr "%x"
+
+#: ../src/calendar/calendar.vala:48
+msgid "%A, %B %e, %Y"
+msgstr "%A, %B %e, %Y"
+
+#: ../src/calendar/calendar.vala:49
+msgid "%A, %B %e"
+msgstr "%A, %B %e"
+
+#: ../src/calendar/calendar.vala:50
+msgid "%a, %b %e, %Y"
+msgstr "%a, %b %e, %Y"
+
+#: ../src/calendar/calendar.vala:51
+msgid "%a, %b %e"
+msgstr "%a, %b %e"
+
+#: ../src/host/host-create-update-event.vala:83
+msgid "Update Event"
+msgstr "Actualizar evento"
+
+#: ../src/host/host-create-update-event.vala:84 ../src/rc/show-event.ui.h:2
+msgid "_Update"
+msgstr "_Actualizar"
+
+#. start in Month view
+#. create GtkHeaderBar and pack it in
+#: ../src/host/host-main-window.vala:36
+msgid "Today"
+msgstr "Hoy"
+
+#: ../src/host/host-main-window.vala:56
+msgid "Create a new event for today"
+msgstr "Crear un evento nuevo para hoy"
+
+#. All-day event spanning days, print "<abbrev date> to <abbrev date>"
+#. / Prints a span of dates, i.e. "January 3 to January 6"
+#. Single-day timed event, print "<full date>\n<full start time> to <full end time>",
+#. including year if not current year
+#. / Prints a span of time, i.e. "3:30pm to 4:30pm"
+#: ../src/host/host-show-event.vala:60 ../src/host/host-show-event.vala:70
+#, c-format
+msgid "%s to %s"
+msgstr "%s a %s"
+
+#. Multi-day timed event, print "<full time>, <full date>" on both lines,
+#. including year if either not current year
+#. / Prints two full time and date strings on separate lines, i.e.:
+#. / 12 January 2012, 3:30pm
+#. / 13 January 2013, 6:30am
+#: ../src/host/host-show-event.vala:81
+#, c-format
+msgid ""
+"%s, %s\n"
+"%s, %s"
+msgstr ""
+"%s, %s\n"
+"%s, %s"
+
+#: ../src/rc/create-update-event.ui.h:1
+msgid "New Event"
+msgstr "Evento nuevo"
+
+#: ../src/rc/create-update-event.ui.h:2
+msgid "Untitled event"
+msgstr "Evento sin título"
+
+#. As in "From <date> <time> to <date> <time>"
+#: ../src/rc/create-update-event.ui.h:4
+msgid "From"
+msgstr "De"
+
+#. As in "From <date> <time> to <date> <time>"
+#: ../src/rc/create-update-event.ui.h:6
+msgid "to"
+msgstr "a"
+
+#: ../src/rc/create-update-event.ui.h:7
+msgid "_All-day event"
+msgstr "_Todo el día"
+
+#: ../src/rc/create-update-event.ui.h:8
+msgid "_Create"
+msgstr "_Crear"
+
+#: ../src/rc/create-update-event.ui.h:9
+msgid "Calendar:"
+msgstr "Calendario:"
+
+#: ../src/rc/show-event.ui.h:1
+msgid "_Remove"
+msgstr "_Quitar"
