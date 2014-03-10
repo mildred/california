@@ -17,6 +17,8 @@ public class Application : Gtk.Application {
     public const string DESCRIPTION = _("Desktop Calendar");
     public const string COPYRIGHT = _("Copyright 2014 Yorba Foundation");
     public const string VERSION = PACKAGE_VERSION;
+    public const string WEBSITE_NAME = _("Visit California's home page");
+    public const string WEBSITE_URL = "https://wiki.gnome.org/Apps/California";
     public const string ID = "org.yorba.california";
     public const string ICON_NAME = "x-office-calendar";
     
@@ -103,8 +105,6 @@ public class Application : Gtk.Application {
     }
     
     private void on_about() {
-        // TODO: "website"
-        // TODO: "website-label"
         Gtk.show_about_dialog(main_window,
             "program-name", TITLE,
             "comments", DESCRIPTION,
@@ -114,6 +114,8 @@ public class Application : Gtk.Application {
             "version", VERSION,
             "title", _("About %s").printf(TITLE),
             "logo-icon-name", ICON_NAME,
+            "website", WEBSITE_URL,
+            "website-label", WEBSITE_NAME,
             /// Translators: add your name and email address to receive credit in the About dialog
             /// For example: Yamada Taro <yamada.taro@example.com>
             "translator-credits", _("translator-credits")
