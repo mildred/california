@@ -105,6 +105,7 @@ california_VALAFLAGS = \
 
 california_CFLAGS = \
 	-DGETTEXT_PACKAGE=\""california"\" \
+	-DPREFIX=\"$(prefix)\" \
 	$(NULL)
 
 california-resources.c: $(california_RC) california-resources.xml

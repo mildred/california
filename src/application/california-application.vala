@@ -5,6 +5,8 @@
  */
 
 extern const string PACKAGE_VERSION;
+extern const string GETTEXT_PACKAGE;
+extern const string PREFIX;
 
 namespace California {
 
@@ -13,7 +15,7 @@ namespace California {
  */
 
 public class Application : Gtk.Application {
-    public const string TITLE = "California";
+    public const string TITLE = _("California");
     public const string DESCRIPTION = _("Desktop Calendar");
     public const string COPYRIGHT = _("Copyright 2014 Yorba Foundation");
     public const string VERSION = PACKAGE_VERSION;
@@ -59,6 +61,13 @@ public class Application : Gtk.Application {
     // This method is invoked when the primary instance is first started.
     public override void startup() {
         base.startup();
+        
+        // prep gettext before initialize various units
+        Intl.setlocale(LocaleCategory.ALL, "");
+        Intl.bindtextdomain(GETTEXT_PACKAGE,
+            File.new_for_path(PREFIX).get_child("share").get_child("locale").get_path());
+        Intl.bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+        Intl.textdomain(GETTEXT_PACKAGE);
         
         // unit initialization
         try {
