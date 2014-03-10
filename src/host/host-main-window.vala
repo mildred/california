@@ -32,6 +32,8 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         // create GtkHeaderBar and pack it in
         Gtk.HeaderBar headerbar = new Gtk.HeaderBar();
+        headerbar.show_close_button = true;
+        set_titlebar (headerbar);
         
         bool rtl = get_direction () == Gtk.TextDirection.RTL;
         
@@ -62,7 +64,6 @@ public class MainWindow : Gtk.ApplicationWindow {
         headerbar.pack_end(new_event);
         
         Gtk.Box layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-        layout.pack_start(headerbar, false, true, 0);
         layout.pack_end(month_view, true, true, 0);
         
         // current host bindings and signals
