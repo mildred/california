@@ -1,0 +1,168 @@
+# Hebrew translations for california package.
+# Copyright (C) 2014 THE california'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the california package.
+# יוסף אור בוצ׳קו <yoseforb@gnome.org>, 2014.
+# Yosef Or Boczko <yoseforb@gnome.org>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: california 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-03-10 21:31+0200\n"
+"PO-Revision-Date: 2014-03-10 21:59+0200\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
+"Language-Team: עברית <>\n"
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Gtranslator 2.91.6\n"
+
+#: ../src/application/california-application.vala:17
+msgid "Desktop Calendar"
+msgstr "לוח שנה שולחני"
+
+#: ../src/application/california-application.vala:18
+msgid "Copyright 2014 Yorba Foundation"
+msgstr "כל הזכויות שמורות 2014 Yorba Foundation"
+
+#: ../src/application/california-application.vala:65
+#, c-format
+msgid "Unable to open California: %s"
+msgstr "לא ניתן לפתוח את California: ‏%s"
+
+#: ../src/application/california-application.vala:115
+#, c-format
+msgid "About %s"
+msgstr "על אודות  %s"
+
+#. / Translators: add your name and email address to receive credit in the About dialog
+#. / For example: Yamada Taro <yamada.taro@example.com>
+#: ../src/application/california-application.vala:119
+msgid "translator-credits"
+msgstr "יוסף אור בוצ׳קו <yoseforb@gnome.org>"
+
+#. TODO: Properly fetch these from gettext() so the user's locale is respected (not just their
+#. language)
+#. TODO: Translator comments explaining these are strftime formatted strings
+#: ../src/calendar/calendar.vala:41
+msgid "%B %Y"
+msgstr "%B %Y"
+
+#: ../src/calendar/calendar.vala:42
+msgid "%b %Y"
+msgstr "%b %Y"
+
+#: ../src/calendar/calendar.vala:43
+msgid "%B"
+msgstr "%B"
+
+#: ../src/calendar/calendar.vala:44
+msgid "%b"
+msgstr "%b"
+
+#: ../src/calendar/calendar.vala:45
+#, c-format
+msgid "%A"
+msgstr "%A"
+
+#: ../src/calendar/calendar.vala:46
+#, c-format
+msgid "%a"
+msgstr "%a"
+
+#: ../src/calendar/calendar.vala:47
+#, c-format
+msgid "%x"
+msgstr "%x"
+
+#: ../src/calendar/calendar.vala:48
+msgid "%A, %B %e, %Y"
+msgstr "%A ה־%e ב%B, %Y"
+
+#: ../src/calendar/calendar.vala:49
+msgid "%A, %B %e"
+msgstr "%A ה־%e ב%B"
+
+#: ../src/calendar/calendar.vala:50
+msgid "%a, %b %e, %Y"
+msgstr "%a ה־%e ב%b, %Y"
+
+#: ../src/calendar/calendar.vala:51
+msgid "%a, %b %e"
+msgstr "%a ה־%e ב%b"
+
+#: ../src/host/host-create-update-event.vala:83
+msgid "Update Event"
+msgstr "עדכון אירוע"
+
+#: ../src/host/host-create-update-event.vala:84 ../src/rc/show-event.ui.h:2
+msgid "_Update"
+msgstr "_עדכון"
+
+#: ../src/host/host-main-window.vala:40
+msgid "Today"
+msgstr "היום"
+
+#: ../src/host/host-main-window.vala:60
+msgid "Create a new event for today"
+msgstr "יצירת אירוע חדש להיום"
+
+#. All-day event spanning days, print "<abbrev date> to <abbrev date>"
+#. / Prints a span of dates, i.e. "January 3 to January 6"
+#. Single-day timed event, print "<full date>\n<full start time> to <full end time>",
+#. including year if not current year
+#. / Prints a span of time, i.e. "3:30pm to 4:30pm"
+#: ../src/host/host-show-event.vala:60 ../src/host/host-show-event.vala:70
+#, c-format
+msgid "%s to %s"
+msgstr "%s עד %s"
+
+#. Multi-day timed event, print "<full time>, <full date>" on both lines,
+#. including year if either not current year
+#. / Prints two full time and date strings on separate lines, i.e.:
+#. / 12 January 2012, 3:30pm
+#. / 13 January 2013, 6:30am
+#: ../src/host/host-show-event.vala:81
+#, c-format
+msgid ""
+"%s, %s\n"
+"%s, %s"
+msgstr ""
+"%s, %s\n"
+"%s, %s"
+
+#: ../src/rc/create-update-event.ui.h:1
+msgid "New Event"
+msgstr "אירוע חדש"
+
+#: ../src/rc/create-update-event.ui.h:2
+msgid "Untitled event"
+msgstr "אירוע ללא כותרת"
+
+#. As in "From <date> <time> to <date> <time>"
+#: ../src/rc/create-update-event.ui.h:4
+msgid "From"
+msgstr "מאת"
+
+#. As in "From <date> <time> to <date> <time>"
+#: ../src/rc/create-update-event.ui.h:6
+msgid "to"
+msgstr "אל"
+
+#: ../src/rc/create-update-event.ui.h:7
+msgid "_All-day event"
+msgstr "אירוע במשך _כל היום"
+
+#: ../src/rc/create-update-event.ui.h:8
+msgid "_Create"
+msgstr "_יצירה"
+
+#: ../src/rc/create-update-event.ui.h:9
+msgid "Calendar:"
+msgstr "לוח שנה:"
+
+#: ../src/rc/show-event.ui.h:1
+msgid "_Remove"
+msgstr "_הסרה"
