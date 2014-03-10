@@ -39,9 +39,11 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="has_focus">True</property>
+        <property name="is_focus">True</property>
         <property name="max_length">64</property>
         <property name="activates_default">True</property>
         <property name="width_chars">24</property>
+        <property name="caps_lock_warning">False</property>
         <property name="placeholder_text" translatable="yes">Untitled event</property>
       </object>
       <packing>
@@ -74,7 +76,7 @@
             <property name="label">dtstart</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="receives_default">False</property>
             <property name="xalign">0.52999997138977051</property>
             <signal name="clicked" handler="on_date_button_clicked" object="CaliforniaHostCreateUpdateEvent" swapped="no"/>
           </object>
@@ -160,31 +162,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkButton" id="accept_button">
-        <property name="label" translatable="yes">_Create</property>
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="can_default">True</property>
-        <property name="has_default">True</property>
-        <property name="receives_default">True</property>
-        <property name="halign">end</property>
-        <property name="valign">end</property>
-        <property name="margin_top">8</property>
-        <property name="use_underline">True</property>
-        <property name="xalign">0.56000000238418579</property>
-        <signal name="clicked" handler="on_accept_clicked" object="CaliforniaHostCreateUpdateEvent" swapped="no"/>
-        <style>
-          <class name="suggested-action"/>
-        </style>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">5</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkBox" id="calendar_box">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -222,7 +199,62 @@
       </packing>
     </child>
     <child>
-      <placeholder/>
+      <object class="GtkButtonBox" id="button_box">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">baseline</property>
+        <property name="valign">baseline</property>
+        <property name="margin_top">8</property>
+        <property name="spacing">8</property>
+        <property name="homogeneous">True</property>
+        <property name="baseline_position">bottom</property>
+        <property name="layout_style">end</property>
+        <child>
+          <object class="GtkButton" id="cancel_button">
+            <property name="label" translatable="yes">_Cancel</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="can_default">True</property>
+            <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
+            <property name="image_position">bottom</property>
+            <signal name="clicked" handler="on_cancel_button_clicked" object="CaliforniaHostCreateUpdateEvent" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="accept_button">
+            <property name="label" translatable="yes">C_reate</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="can_default">True</property>
+            <property name="has_default">True</property>
+            <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
+            <property name="image_position">bottom</property>
+            <signal name="clicked" handler="on_accept_clicked" object="CaliforniaHostCreateUpdateEvent" swapped="no"/>
+            <style>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">5</property>
+        <property name="width">2</property>
+        <property name="height">1</property>
+      </packing>
     </child>
     <child>
       <placeholder/>

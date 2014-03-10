@@ -7,7 +7,9 @@
 namespace California.Host {
 
 [GtkTemplate (ui = "/org/yorba/california/rc/show-event.ui")]
-public class ShowEvent : Gtk.Grid {
+public class ShowEvent : Gtk.Grid, Interaction {
+    public Gtk.Widget? default_widget { get { return close_button; } }
+    
     [GtkChild]
     private Gtk.Label text_label;
     
@@ -16,6 +18,9 @@ public class ShowEvent : Gtk.Grid {
     
     [GtkChild]
     private Gtk.Button remove_button;
+    
+    [GtkChild]
+    private Gtk.Button close_button;
     
     private new Component.Event event;
     
@@ -111,11 +116,18 @@ public class ShowEvent : Gtk.Grid {
     [GtkCallback]
     private void on_remove_button_clicked() {
         remove_event(event);
+        dismissed();
     }
     
     [GtkCallback]
     private void on_update_button_clicked() {
         update_event(event);
+        dismissed();
+    }
+    
+    [GtkCallback]
+    private void on_close_button_clicked() {
+        dismissed();
     }
 }
 

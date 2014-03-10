@@ -81,22 +81,26 @@ public class MainWindow : Gtk.ApplicationWindow {
     }
     
     private Gtk.Widget show_interaction(Gtk.Widget relative_to, Gdk.Point? for_location,
-        Gtk.Widget child) {
+        Interaction child) {
         Gtk.Dialog dialog = new Gtk.Dialog();
         dialog.transient_for = this;
         dialog.modal = true;
         ((Gtk.Box) dialog.get_content_area()).pack_start(child, true, true, 0);
         
-        dialog.close.connect(on_interaction_dismissed);
+        // make sure it's closed and cleaned up when all's said and done
+        child.dismissed.connect(() => dialog.destroy());
+        
+        // when the dialog closes, reset View.Controllable state (selection is maintained while
+        // use is viewing/editing Interaction)
+        dialog.close.connect(() => current_view.unselect_all());
         
         dialog.show_all();
         
+        // the default widget is lost in the shuffle, reestablish its primacy
+        if (child.default_widget != null)
+            child.default_widget.grab_default();
+        
         return dialog;
-    }
-    
-    private void on_interaction_dismissed() {
-        // reset View.Controllable state whenever the interaction is dismissed
-        current_view.unselect_all();
     }
     
     private void on_new_event() {
@@ -129,15 +133,13 @@ public class MainWindow : Gtk.ApplicationWindow {
         else
             create_update_event = new CreateUpdateEvent.update(existing);
         
-        Gtk.Widget interaction = show_interaction(relative_to, for_location, create_update_event);
+        show_interaction(relative_to, for_location, create_update_event);
         
         create_update_event.create_event.connect((event) => {
-            interaction.destroy();
             create_event_async.begin(event, null);
         });
         
         create_update_event.update_event.connect((original_source, event) => {
-            interaction.destroy();
             // TODO: Delete from original source if not the same as the new source
             update_event_async.begin(event, null);
         });
@@ -168,15 +170,13 @@ public class MainWindow : Gtk.ApplicationWindow {
     private void on_request_display_event(Component.Event event, Gtk.Widget relative_to,
         Gdk.Point? for_location) {
         ShowEvent show_event = new ShowEvent(event);
-        Gtk.Widget interaction = show_interaction(relative_to, for_location, show_event);
+        show_interaction(relative_to, for_location, show_event);
         
         show_event.remove_event.connect(() => {
-            interaction.destroy();
             remove_event_async.begin(event, null);
         });
         
         show_event.update_event.connect(() => {
-            interaction.destroy();
             create_event(null, null, event, relative_to, for_location);
         });
     }

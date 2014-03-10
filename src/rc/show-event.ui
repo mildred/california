@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 -->
+<!-- Generated with glade 3.16.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
-  <!-- interface-license-type gplv2 -->
   <template class="CaliforniaHostShowEvent" parent="GtkGrid">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -46,16 +45,16 @@
             <property name="label" translatable="yes">_Remove</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="receives_default">False</property>
             <property name="use_underline">True</property>
-            <property name="image_position">right</property>
+            <property name="image_position">bottom</property>
             <signal name="clicked" handler="on_remove_button_clicked" object="CaliforniaHostShowEvent" swapped="no"/>
             <style>
               <class name="destructive-action"/>
             </style>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
@@ -65,15 +64,35 @@
             <property name="label" translatable="yes">_Update</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="can_default">True</property>
             <property name="receives_default">True</property>
             <property name="use_underline">True</property>
+            <property name="image_position">bottom</property>
             <signal name="clicked" handler="on_update_button_clicked" object="CaliforniaHostShowEvent" swapped="no"/>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="close_button">
+            <property name="label" translatable="yes">_Close</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="can_default">True</property>
+            <property name="has_default">True</property>
+            <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
+            <property name="image_position">bottom</property>
+            <signal name="clicked" handler="on_close_button_clicked" object="CaliforniaHostShowEvent" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="pack_type">end</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>

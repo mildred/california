@@ -63,6 +63,7 @@ california_VALASOURCES = \
 	host/host.vala \
 	host/host-calendar-popup.vala \
 	host/host-create-update-event.vala \
+	host/host-interaction.vala \
 	host/host-main-window.vala \
 	host/host-popup.vala \
 	host/host-show-event.vala \

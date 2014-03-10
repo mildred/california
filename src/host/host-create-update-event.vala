@@ -11,12 +11,14 @@ namespace California.Host {
  */
 
 [GtkTemplate (ui = "/org/yorba/california/rc/create-update-event.ui")]
-public class CreateUpdateEvent : Gtk.Grid {
+public class CreateUpdateEvent : Gtk.Grid, Interaction {
     public const string PROP_SELECTED_DATE_SPAN = "selected-date-span";
     
     private const int START_HOUR = 0;
     private const int END_HOUR = 23;
     private const int MIN_DIVISIONS = 15;
+    
+    public Gtk.Widget? default_widget { get { return accept_button; } }
     
     [GtkChild]
     private Gtk.Label title_label;
@@ -256,6 +258,13 @@ public class CreateUpdateEvent : Gtk.Grid {
             update_event(original_calendar_source, event);
         else
             create_event(event);
+        
+        dismissed();
+    }
+    
+    [GtkCallback]
+    private void on_cancel_button_clicked() {
+        dismissed();
     }
 }
 
