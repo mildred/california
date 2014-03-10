@@ -33,13 +33,15 @@ public class MainWindow : Gtk.ApplicationWindow {
         // create GtkHeaderBar and pack it in
         Gtk.HeaderBar headerbar = new Gtk.HeaderBar();
         
+        bool rtl = get_direction () == Gtk.TextDirection.RTL;
+        
         Gtk.Button today = new Gtk.Button.with_label(_("Today"));
         today.clicked.connect(() => { current_view.today(); });
         
-        Gtk.Button prev = new Gtk.Button.from_icon_name("go-previous-symbolic", Gtk.IconSize.MENU);
+        Gtk.Button prev = new Gtk.Button.from_icon_name(rtl ? "go-previous-rtl-symbolic" : "go-previous-symbolic", Gtk.IconSize.MENU);
         prev.clicked.connect(() => { current_view.prev(); });
         
-        Gtk.Button next = new Gtk.Button.from_icon_name("go-next-symbolic", Gtk.IconSize.MENU);
+        Gtk.Button next = new Gtk.Button.from_icon_name(rtl ? "go-next-rtl-symbolic" : "go-next-symbolic", Gtk.IconSize.MENU);
         next.clicked.connect(() => { current_view.next(); });
         
         Gtk.Box nav_buttons = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
