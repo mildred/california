@@ -16,6 +16,10 @@ namespace California.Calendar {
  */
 
 public class System : BaseObject {
+    private const string CLOCK_FORMAT_SCHEMA = "org.gnome.desktop.interface";
+    private const string CLOCK_FORMAT_KEY = "clock-format";
+    private const string CLOCK_FORMAT_24H = "24h";
+    
     public static System instance { get; private set; }
     
     /**
@@ -56,6 +60,13 @@ public class System : BaseObject {
     private static DBus.Properties timedated_properties;
     
     /**
+     * Fired when {@link is_24hr} changes.
+     *
+     * This means the user has changed the their clock format configuration.
+     */
+    public signal void is_24hr_changed(bool new_is_24hr);
+    
+    /**
      * Fired when {@link zone} changes.
      *
      * This generally indicates that the user has changed system time zone manually or that the
@@ -68,6 +79,8 @@ public class System : BaseObject {
      */
     public signal void timezone_changed(Timezone new_timezone);
     
+    private Settings system_clock_format_schema = new Settings(CLOCK_FORMAT_SCHEMA);
+    
     private System() {
         zone = new OlsonZone(timedated_service.timezone);
         timezone = new Timezone(zone);
@@ -76,8 +89,14 @@ public class System : BaseObject {
         // to be notified of changes as they occur
         timedated_properties.properties_changed.connect(on_timedated_properties_changed);
         
-        // TODO: Fetch and update from GNOME settings
-        is_24hr = false;
+        is_24hr = system_clock_format_schema.get_string(CLOCK_FORMAT_KEY) == CLOCK_FORMAT_24H;
+        system_clock_format_schema.changed[CLOCK_FORMAT_KEY].connect(() => {
+            bool new_is_24hr = system_clock_format_schema.get_string(CLOCK_FORMAT_KEY) == CLOCK_FORMAT_24H;
+            if (new_is_24hr != is_24hr) {
+                is_24hr = new_is_24hr;
+                is_24hr_changed(is_24hr);
+            }
+        });
         
         // TODO: Tie this into the event loop so it's properly updated
         today = new Date.now(Timezone.local);

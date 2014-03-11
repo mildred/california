@@ -31,6 +31,15 @@ public class ShowEvent : Gtk.Grid, Interaction {
     public ShowEvent(Component.Event event) {
         this.event = event;
         
+        build_display();
+        Calendar.System.instance.is_24hr_changed.connect(build_display);
+    }
+    
+    ~ShowEvent() {
+        Calendar.System.instance.is_24hr_changed.disconnect(build_display);
+    }
+    
+    private void build_display() {
         // Each string should end without whitespace; add_lf_lf will ensure each section is
         // separated as long as there's preceding text
         StringBuilder builder = new StringBuilder();

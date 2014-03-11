@@ -36,6 +36,8 @@ private static unowned string FMT_PM;
 private static unowned string FMT_BRIEF_PM;
 private static unowned string FMT_12HOUR_MIN_MERIDIEM;
 private static unowned string FMT_12HOUR_MIN_SEC_MERIDIEM;
+private static unowned string FMT_24HOUR_MIN;
+private static unowned string FMT_24HOUR_MIN_SEC;
 
 public void init() throws Error {
     if (!California.Unit.do_init(ref init_count))
@@ -123,6 +125,12 @@ public void init() throws Error {
     /// (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
     /// format user settings to be honored)
     FMT_12HOUR_MIN_SEC_MERIDIEM = _("%d:%02d:%02d%s");
+    
+    /// The 24-hour time with minutes, i.e. "17:06"
+    FMT_24HOUR_MIN = _("%d:%02d");
+    
+    /// The 24-hour time with minutes and seconds, i.e. "17:06:31"
+    FMT_24HOUR_MIN_SEC = _("%d:%02d:%02d");
     
     // return LC_MESSAGES back to proper locale and return LANGUAGE environment variable
     if (messages_locale != null)

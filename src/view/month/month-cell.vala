@@ -90,8 +90,13 @@ public class Cell : Gtk.EventBox {
         
         notify["date"].connect(queue_draw);
         notify["selected"].connect(queue_draw);
+        Calendar.System.instance.is_24hr_changed.connect(on_24hr_changed);
         
         canvas.draw.connect(on_draw);
+    }
+    
+    ~Cell() {
+        Calendar.System.instance.is_24hr_changed.disconnect(on_24hr_changed);
     }
     
     internal static void init() {
@@ -143,6 +148,15 @@ public class Cell : Gtk.EventBox {
         event.notify[Component.Event.PROP_EXACT_TIME_SPAN].disconnect(on_span_updated);
         
         queue_draw();
+    }
+    
+    public bool has_events() {
+        return days_events.size > 0;
+    }
+    
+    private void on_24hr_changed() {
+        if (has_events())
+            queue_draw();
     }
     
     private void on_span_updated(Object object, ParamSpec param) {

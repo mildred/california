@@ -256,18 +256,23 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
     
     /**
      * Returns a prettified, localized user-visible string.
+     *
+     * The string respects {@link System.is_24hr}.
      */
     public string to_pretty_string(PrettyFlag flags) {
         bool include_sec = (flags & PrettyFlag.INCLUDE_SECONDS) != 0;
         bool optional_min = (flags & PrettyFlag.OPTIONAL_MINUTES) != 0;
         bool meridiem_post_only = (flags & PrettyFlag.MERIDIEM_POST_ONLY) != 0;
         bool brief_meridiem = (flags & PrettyFlag.BRIEF_MERIDIEM) != 0;
+        bool is_24hr = System.is_24hr;
         
         unowned string pm = brief_meridiem ? FMT_BRIEF_PM : FMT_PM;
         unowned string am = brief_meridiem ? FMT_BRIEF_AM : FMT_AM;
         
         unowned string meridiem;
-        if (meridiem_post_only)
+        if (is_24hr)
+            meridiem = "";
+        else if (meridiem_post_only)
             meridiem = is_pm ? pm : "";
         else
             meridiem = is_pm? pm : am;
@@ -276,10 +281,19 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
         // isn't something that varies between locales, on the assumption that the user has
         // specified 12-hour time to begin with
         if (optional_min && minute == 0)
-            return "%d%s".printf(12hour, meridiem);
+            return "%d%s".printf(is_24hr ? hour : 12hour, meridiem);
         
-        if (!include_sec)
+        if (!include_sec) {
+            // hour and minutes only
+            if (is_24hr)
+                return FMT_24HOUR_MIN.printf(hour, minute);
+            
             return FMT_12HOUR_MIN_MERIDIEM.printf(12hour, minute, meridiem);
+        }
+        
+        // the full package
+        if (is_24hr)
+            return FMT_24HOUR_MIN_SEC.printf(hour, minute, second);
         
         return FMT_12HOUR_MIN_SEC_MERIDIEM.printf(12hour, minute, second, meridiem);
     }
@@ -304,7 +318,7 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
     }
     
     public uint hash() {
-        // since each unit is >= 60, give each 6 bits (2^6 = 64) of space
+        // since each unit is < 60, give each 6 bits (2^6 = 64) of space
         return ((uint) hour << 12) | ((uint) minute << 6) | (uint) second;
     }
     
