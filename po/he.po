@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-10 21:31+0200\n"
-"PO-Revision-Date: 2014-03-10 21:59+0200\n"
+"POT-Creation-Date: 2014-03-11 04:10+0200\n"
+"PO-Revision-Date: 2014-03-11 04:13+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -19,85 +19,124 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
-#: ../src/application/california-application.vala:17
+#: ../src/application/california-application.vala:18
+msgid "California"
+msgstr "California"
+
+#: ../src/application/california-application.vala:19
 msgid "Desktop Calendar"
 msgstr "לוח שנה שולחני"
 
-#: ../src/application/california-application.vala:18
+#: ../src/application/california-application.vala:20
 msgid "Copyright 2014 Yorba Foundation"
 msgstr "כל הזכויות שמורות 2014 Yorba Foundation"
 
-#: ../src/application/california-application.vala:65
+#: ../src/application/california-application.vala:22
+msgid "Visit California's home page"
+msgstr "ביקור בדף הבית של California"
+
+#: ../src/application/california-application.vala:76
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "לא ניתן לפתוח את California: ‏%s"
 
-#: ../src/application/california-application.vala:115
+#: ../src/application/california-application.vala:124
 #, c-format
 msgid "About %s"
 msgstr "על אודות  %s"
 
 #. / Translators: add your name and email address to receive credit in the About dialog
 #. / For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:119
+#: ../src/application/california-application.vala:130
 msgid "translator-credits"
 msgstr "יוסף אור בוצ׳קו <yoseforb@gnome.org>"
 
-#. TODO: Properly fetch these from gettext() so the user's locale is respected (not just their
-#. language)
-#. TODO: Translator comments explaining these are strftime formatted strings
-#: ../src/calendar/calendar.vala:41
+#. / The month and year according to locale preferences, i.e. "March 2014"
+#. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+#: ../src/calendar/calendar.vala:74
 msgid "%B %Y"
 msgstr "%B %Y"
 
-#: ../src/calendar/calendar.vala:42
+#. / The abbreviated month and year according to locale preferences, i.e. "Mar 2014"
+#. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+#: ../src/calendar/calendar.vala:78
 msgid "%b %Y"
 msgstr "%b %Y"
 
-#: ../src/calendar/calendar.vala:43
-msgid "%B"
-msgstr "%B"
-
-#: ../src/calendar/calendar.vala:44
-msgid "%b"
-msgstr "%b"
-
-#: ../src/calendar/calendar.vala:45
-#, c-format
-msgid "%A"
-msgstr "%A"
-
-#: ../src/calendar/calendar.vala:46
-#, c-format
-msgid "%a"
-msgstr "%a"
-
-#: ../src/calendar/calendar.vala:47
-#, c-format
-msgid "%x"
-msgstr "%x"
-
-#: ../src/calendar/calendar.vala:48
+#. / A "pretty" date according to locale preferences, i.e. "Monday, March 10, 2014"
+#. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+#: ../src/calendar/calendar.vala:82
 msgid "%A, %B %e, %Y"
 msgstr "%A ה־%e ב%B, %Y"
 
-#: ../src/calendar/calendar.vala:49
+#. / A "pretty" date with no year according to locale preferences, i.e. "Monday, March 10"
+#. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+#: ../src/calendar/calendar.vala:86
 msgid "%A, %B %e"
 msgstr "%A ה־%e ב%B"
 
-#: ../src/calendar/calendar.vala:50
+#. / A "pretty" date abbreviated according to locale preferences, i.e. "Mon, Mar 10, 2014"
+#. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+#: ../src/calendar/calendar.vala:90
 msgid "%a, %b %e, %Y"
 msgstr "%a ה־%e ב%b, %Y"
 
-#: ../src/calendar/calendar.vala:51
+#. / A "pretty" date abbreviated and no year according to locale preferences, i.e.
+#. / "Mon, Mar 10"
+#. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+#: ../src/calendar/calendar.vala:95
 msgid "%a, %b %e"
 msgstr "%a ה־%e ב%b"
 
-#: ../src/host/host-create-update-event.vala:83
+#. / Ante meridiem
+#. / (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+#. / format user settings to be honored)
+#: ../src/calendar/calendar.vala:100
+msgid "am"
+msgstr "am"
+
+#. / Brief ante meridiem, i.e. "am" -> "a"
+#. / (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+#. / format user settings to be honored)
+#: ../src/calendar/calendar.vala:105
+msgid "a"
+msgstr "a"
+
+#. / Post meridiem
+#. / (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+#. / format user settings to be honored)
+#: ../src/calendar/calendar.vala:110
+msgid "pm"
+msgstr "pm"
+
+#. / Brief post meridiem, i.e. "pm" -> "p"
+#. / (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+#. / format user settings to be honored)
+#: ../src/calendar/calendar.vala:115
+msgid "p"
+msgstr "p"
+
+#. / The 12-hour time with minute and meridiem ("am" or "pm"), i.e. "5:06pm"
+#. / (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+#. / format user settings to be honored)
+#: ../src/calendar/calendar.vala:120
+#, c-format
+msgid "%d:%02d%s"
+msgstr "%d:%02d%s"
+
+#. / The 12-hour time with minute, seconds, and meridiem ("am" or "pm"), i.e. "5:06:31pm"
+#. / (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+#. / format user settings to be honored)
+#: ../src/calendar/calendar.vala:125
+#, c-format
+msgid "%d:%02d:%02d%s"
+msgstr "%d:%02d:%02d%s"
+
+#: ../src/host/host-create-update-event.vala:85
 msgid "Update Event"
 msgstr "עדכון אירוע"
 
-#: ../src/host/host-create-update-event.vala:84 ../src/rc/show-event.ui.h:2
+#: ../src/host/host-create-update-event.vala:86 ../src/rc/show-event.ui.h:2
 msgid "_Update"
 msgstr "_עדכון"
 
@@ -114,7 +153,7 @@ msgstr "יצירת אירוע חדש להיום"
 #. Single-day timed event, print "<full date>\n<full start time> to <full end time>",
 #. including year if not current year
 #. / Prints a span of time, i.e. "3:30pm to 4:30pm"
-#: ../src/host/host-show-event.vala:60 ../src/host/host-show-event.vala:70
+#: ../src/host/host-show-event.vala:65 ../src/host/host-show-event.vala:75
 #, c-format
 msgid "%s to %s"
 msgstr "%s עד %s"
@@ -124,7 +163,7 @@ msgstr "%s עד %s"
 #. / Prints two full time and date strings on separate lines, i.e.:
 #. / 12 January 2012, 3:30pm
 #. / 13 January 2013, 6:30am
-#: ../src/host/host-show-event.vala:81
+#: ../src/host/host-show-event.vala:86
 #, c-format
 msgid ""
 "%s, %s\n"
@@ -132,6 +171,14 @@ msgid ""
 msgstr ""
 "%s, %s\n"
 "%s, %s"
+
+#: ../src/rc/app-menu.interface.h:1
+msgid "_About"
+msgstr "על _אודות"
+
+#: ../src/rc/app-menu.interface.h:2
+msgid "_Quit"
+msgstr "_יציאה"
 
 #: ../src/rc/create-update-event.ui.h:1
 msgid "New Event"
@@ -144,25 +191,45 @@ msgstr "אירוע ללא כותרת"
 #. As in "From <date> <time> to <date> <time>"
 #: ../src/rc/create-update-event.ui.h:4
 msgid "From"
-msgstr "מאת"
+msgstr "מ"
 
 #. As in "From <date> <time> to <date> <time>"
 #: ../src/rc/create-update-event.ui.h:6
 msgid "to"
-msgstr "אל"
+msgstr "עד"
 
 #: ../src/rc/create-update-event.ui.h:7
 msgid "_All-day event"
 msgstr "אירוע במשך _כל היום"
 
 #: ../src/rc/create-update-event.ui.h:8
-msgid "_Create"
-msgstr "_יצירה"
-
-#: ../src/rc/create-update-event.ui.h:9
 msgid "Calendar:"
 msgstr "לוח שנה:"
+
+#: ../src/rc/create-update-event.ui.h:9
+msgid "_Cancel"
+msgstr "_ביטול"
+
+#: ../src/rc/create-update-event.ui.h:10
+msgid "C_reate"
+msgstr "_יצירה"
 
 #: ../src/rc/show-event.ui.h:1
 msgid "_Remove"
 msgstr "_הסרה"
+
+#: ../src/rc/show-event.ui.h:3
+msgid "_Close"
+msgstr "_סגירה"
+
+#~ msgid "%B"
+#~ msgstr "%B"
+
+#~ msgid "%b"
+#~ msgstr "%b"
+
+#~ msgid "%A"
+#~ msgstr "%A"
+
+#~ msgid "%x"
+#~ msgstr "%x"
