@@ -30,25 +30,105 @@ private static unowned string FMT_PRETTY_DATE;
 private static unowned string FMT_PRETTY_DATE_NO_YEAR;
 private static unowned string FMT_PRETTY_DATE_ABBREV;
 private static unowned string FMT_PRETTY_DATE_ABBREV_NO_YEAR;
+private static unowned string FMT_AM;
+private static unowned string FMT_BRIEF_AM;
+private static unowned string FMT_PM;
+private static unowned string FMT_BRIEF_PM;
+private static unowned string FMT_12HOUR_MIN_MERIDIEM;
+private static unowned string FMT_12HOUR_MIN_SEC_MERIDIEM;
 
 public void init() throws Error {
     if (!California.Unit.do_init(ref init_count))
         return;
     
-    // TODO: Properly fetch these from gettext() so the user's locale is respected (not just their
-    // language)
-    // TODO: Translator comments explaining these are strftime formatted strings
+    // Ripped from Shotwell proposed patch for localizing time (http://redmine.yorba.org/issues/2462)
+    // courtesy Marcel Stimberg.  Another example may be found here:
+    // http://bazaar.launchpad.net/~indicator-applet-developers/indicator-datetime/trunk.12.10/view/head:/src/utils.c
+    
+    // Because setlocale() is a process-wide setting, need to cache strings at startup, otherwise
+    // risk problems with threading
+    
+    string? messages_locale = Intl.setlocale(LocaleCategory.MESSAGES, null);
+    string? time_locale = Intl.setlocale(LocaleCategory.TIME, null);
+    
+    // LANGUAGE must be unset before changing locales, as it trumps all the LC_* variables
+    string? language_env = Environment.get_variable("LANGUAGE");
+    if (language_env != null)
+        Environment.unset_variable("LANGUAGE");
+    
+    // Swap LC_TIME's setting into LC_MESSAGE's.  This allows performing lookups of time-based values
+    // from a different translation file, useful in mixed-locale settings
+    if (time_locale != null)
+        Intl.setlocale(LocaleCategory.MESSAGES, time_locale);
+    
+    // These are not marked for translation because they involve no ordering of format specifiers
+    // and strftime handles translating them to the locale
+    FMT_MONTH_FULL = "%B";
+    FMT_MONTH_ABBREV = "%b";
+    FMT_DAY_OF_WEEK_FULL = "%A";
+    FMT_DAY_OF_WEEK_ABBREV = "%a";
+    FMT_FULL_DATE = "%x";
+    
+    /// The month and year according to locale preferences, i.e. "March 2014"
+    /// See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
     FMT_MONTH_YEAR_FULL = _("%B %Y");
+    
+    /// The abbreviated month and year according to locale preferences, i.e. "Mar 2014"
+    /// See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
     FMT_MONTH_YEAR_ABBREV = _("%b %Y");
-    FMT_MONTH_FULL = _("%B");
-    FMT_MONTH_ABBREV = _("%b");
-    FMT_DAY_OF_WEEK_FULL = _("%A");
-    FMT_DAY_OF_WEEK_ABBREV = _("%a");
-    FMT_FULL_DATE = _("%x");
+    
+    /// A "pretty" date according to locale preferences, i.e. "Monday, March 10, 2014"
+    /// See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
     FMT_PRETTY_DATE = _("%A, %B %e, %Y");
+    
+    /// A "pretty" date with no year according to locale preferences, i.e. "Monday, March 10"
+    /// See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
     FMT_PRETTY_DATE_NO_YEAR = _("%A, %B %e");
+    
+    /// A "pretty" date abbreviated according to locale preferences, i.e. "Mon, Mar 10, 2014"
+    /// See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
     FMT_PRETTY_DATE_ABBREV = _("%a, %b %e, %Y");
+    
+    /// A "pretty" date abbreviated and no year according to locale preferences, i.e.
+    /// "Mon, Mar 10"
+    /// See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
     FMT_PRETTY_DATE_ABBREV_NO_YEAR = _("%a, %b %e");
+    
+    /// Ante meridiem
+    /// (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+    /// format user settings to be honored)
+    FMT_AM = _("am");
+    
+    /// Brief ante meridiem, i.e. "am" -> "a"
+    /// (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+    /// format user settings to be honored)
+    FMT_BRIEF_AM = _("a");
+    
+    /// Post meridiem
+    /// (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+    /// format user settings to be honored)
+    FMT_PM = _("pm");
+    
+    /// Brief post meridiem, i.e. "pm" -> "p"
+    /// (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+    /// format user settings to be honored)
+    FMT_BRIEF_PM = _("p");
+    
+    /// The 12-hour time with minute and meridiem ("am" or "pm"), i.e. "5:06pm"
+    /// (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+    /// format user settings to be honored)
+    FMT_12HOUR_MIN_MERIDIEM = _("%d:%02d%s");
+    
+    /// The 12-hour time with minute, seconds, and meridiem ("am" or "pm"), i.e. "5:06:31pm"
+    /// (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+    /// format user settings to be honored)
+    FMT_12HOUR_MIN_SEC_MERIDIEM = _("%d:%02d:%02d%s");
+    
+    // return LC_MESSAGES back to proper locale and return LANGUAGE environment variable
+    if (messages_locale != null)
+        Intl.setlocale(LocaleCategory.MESSAGES, messages_locale);
+    if (language_env != null)
+        Environment.set_variable("LANGUAGE", language_env, true);
     
     // This init() throws an IOError, so perform before others to prevent unnecessary unwinding
     System.preinit();

@@ -263,10 +263,8 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
         bool meridiem_post_only = (flags & PrettyFlag.MERIDIEM_POST_ONLY) != 0;
         bool brief_meridiem = (flags & PrettyFlag.BRIEF_MERIDIEM) != 0;
         
-        // TODO: localize all this
-        
-        unowned string pm = brief_meridiem ? "p" : "pm";
-        unowned string am = brief_meridiem ? "a" : "am";
+        unowned string pm = brief_meridiem ? FMT_BRIEF_PM : FMT_PM;
+        unowned string am = brief_meridiem ? FMT_BRIEF_AM : FMT_AM;
         
         unowned string meridiem;
         if (meridiem_post_only)
@@ -274,13 +272,16 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
         else
             meridiem = is_pm? pm : am;
         
+        // Not marked for translation on thw assumption that a 12-hour hour followed by the meridiem
+        // isn't something that varies between locales, on the assumption that the user has
+        // specified 12-hour time to begin with
         if (optional_min && minute == 0)
             return "%d%s".printf(12hour, meridiem);
         
         if (!include_sec)
-            return "%d:%02d%s".printf(12hour, minute, meridiem);
+            return FMT_12HOUR_MIN_MERIDIEM.printf(12hour, minute, meridiem);
         
-        return "%d:%02d:%02d%s".printf(12hour, minute, second, meridiem);
+        return FMT_12HOUR_MIN_SEC_MERIDIEM.printf(12hour, minute, second, meridiem);
     }
     
     public int compare_to(WallTime other) {
