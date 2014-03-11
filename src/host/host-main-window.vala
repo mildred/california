@@ -87,12 +87,12 @@ public class MainWindow : Gtk.ApplicationWindow {
         dialog.modal = true;
         ((Gtk.Box) dialog.get_content_area()).pack_start(child, true, true, 0);
         
-        // make sure it's closed and cleaned up when all's said and done
-        child.dismissed.connect(() => dialog.destroy());
-        
         // when the dialog closes, reset View.Controllable state (selection is maintained while
-        // use is viewing/editing Interaction)
-        dialog.close.connect(() => current_view.unselect_all());
+        // use is viewing/editing Interaction) and destroy widgets
+        child.dismissed.connect(() => {
+            current_view.unselect_all();
+            dialog.destroy();
+        });
         
         dialog.show_all();
         
