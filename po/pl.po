@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-10 14:30+0100\n"
-"PO-Revision-Date: 2014-03-10 14:32+0100\n"
+"POT-Creation-Date: 2014-03-11 02:18+0100\n"
+"PO-Revision-Date: 2014-03-11 02:20+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -23,27 +23,35 @@ msgstr ""
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: Poland\n"
 
-#: ../src/application/california-application.vala:17
+#: ../src/application/california-application.vala:18
+msgid "California"
+msgstr "California"
+
+#: ../src/application/california-application.vala:19
 msgid "Desktop Calendar"
 msgstr "Kalendarz"
 
-#: ../src/application/california-application.vala:18
+#: ../src/application/california-application.vala:20
 msgid "Copyright 2014 Yorba Foundation"
 msgstr "Copyright 2014 Fundacja Yorba"
 
-#: ../src/application/california-application.vala:65
+#: ../src/application/california-application.vala:22
+msgid "Visit California's home page"
+msgstr "Witryna programu California"
+
+#: ../src/application/california-application.vala:76
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "Nie można otworzyć programu California: %s"
 
-#: ../src/application/california-application.vala:115
+#: ../src/application/california-application.vala:124
 #, c-format
 msgid "About %s"
 msgstr "O programie %s"
 
 #. / Translators: add your name and email address to receive credit in the About dialog
 #. / For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:119
+#: ../src/application/california-application.vala:130
 msgid "translator-credits"
 msgstr ""
 "Piotr Drąg <piotrdrag@gmail.com>, 2014\n"
@@ -99,21 +107,19 @@ msgstr "%a, %e %b %Y"
 msgid "%a, %b %e"
 msgstr "%a, %e %b"
 
-#: ../src/host/host-create-update-event.vala:83
+#: ../src/host/host-create-update-event.vala:85
 msgid "Update Event"
 msgstr "Zaktualizuj wydarzenie"
 
-#: ../src/host/host-create-update-event.vala:84 ../src/rc/show-event.ui.h:2
+#: ../src/host/host-create-update-event.vala:86 ../src/rc/show-event.ui.h:2
 msgid "_Update"
 msgstr "Z_aktualizuj"
 
-#. start in Month view
-#. create GtkHeaderBar and pack it in
-#: ../src/host/host-main-window.vala:36
+#: ../src/host/host-main-window.vala:40
 msgid "Today"
 msgstr "Dzisiaj"
 
-#: ../src/host/host-main-window.vala:56
+#: ../src/host/host-main-window.vala:60
 msgid "Create a new event for today"
 msgstr "Tworzy nowe wydarzenie na dzisiaj"
 
@@ -122,7 +128,7 @@ msgstr "Tworzy nowe wydarzenie na dzisiaj"
 #. Single-day timed event, print "<full date>\n<full start time> to <full end time>",
 #. including year if not current year
 #. / Prints a span of time, i.e. "3:30pm to 4:30pm"
-#: ../src/host/host-show-event.vala:60 ../src/host/host-show-event.vala:70
+#: ../src/host/host-show-event.vala:65 ../src/host/host-show-event.vala:75
 #, c-format
 msgid "%s to %s"
 msgstr "%s do %s"
@@ -132,7 +138,7 @@ msgstr "%s do %s"
 #. / Prints two full time and date strings on separate lines, i.e.:
 #. / 12 January 2012, 3:30pm
 #. / 13 January 2013, 6:30am
-#: ../src/host/host-show-event.vala:81
+#: ../src/host/host-show-event.vala:86
 #, c-format
 msgid ""
 "%s, %s\n"
@@ -140,6 +146,14 @@ msgid ""
 msgstr ""
 "%s, %s\n"
 "%s, %s"
+
+#: ../src/rc/app-menu.interface.h:1
+msgid "_About"
+msgstr "_O programie"
+
+#: ../src/rc/app-menu.interface.h:2
+msgid "_Quit"
+msgstr "Za_kończ"
 
 #: ../src/rc/create-update-event.ui.h:1
 msgid "New Event"
@@ -164,13 +178,21 @@ msgid "_All-day event"
 msgstr "Wydarzenie _całodniowe"
 
 #: ../src/rc/create-update-event.ui.h:8
-msgid "_Create"
-msgstr "U_twórz"
-
-#: ../src/rc/create-update-event.ui.h:9
 msgid "Calendar:"
 msgstr "Kalendarz:"
+
+#: ../src/rc/create-update-event.ui.h:9
+msgid "_Cancel"
+msgstr "_Anuluj"
+
+#: ../src/rc/create-update-event.ui.h:10
+msgid "C_reate"
+msgstr "U_twórz"
 
 #: ../src/rc/show-event.ui.h:1
 msgid "_Remove"
 msgstr "_Usuń"
+
+#: ../src/rc/show-event.ui.h:3
+msgid "_Close"
+msgstr "Za_mknij"
