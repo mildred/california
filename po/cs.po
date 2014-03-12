@@ -1,0 +1,235 @@
+# Czech translation for california.
+# Copyright (C) 2014 california's COPYRIGHT HOLDER
+# This file is distributed under the same license as the california package.
+# Marek Černocký <marek@manet.cz>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: california master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=california&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2014-03-12 12:54+0000\n"
+"PO-Revision-Date: 2014-03-12 17:15+0100\n"
+"Last-Translator: Marek Černocký <marek@manet.cz>\n"
+"Language-Team: Czech <gnome-cs-list@gnome.org>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Gtranslator 2.91.6\n"
+
+#: ../src/application/california-application.vala:18
+msgid "California"
+msgstr "California"
+
+#: ../src/application/california-application.vala:19
+msgid "Desktop Calendar"
+msgstr "Počítačový kalendář"
+
+#: ../src/application/california-application.vala:20
+msgid "Copyright 2014 Yorba Foundation"
+msgstr "Copyright 2014 Yorba Foundation"
+
+#: ../src/application/california-application.vala:22
+msgid "Visit California's home page"
+msgstr "Navštívit domovskou stránku California"
+
+#: ../src/application/california-application.vala:76
+#, c-format
+msgid "Unable to open California: %s"
+msgstr "Nelze otevřít aplikaci California: %s"
+
+#: ../src/application/california-application.vala:124
+#, c-format
+msgid "About %s"
+msgstr "O aplikaci %s"
+
+#. / Translators: add your name and email address to receive credit in the About dialog
+#. / For example: Yamada Taro <yamada.taro@example.com>
+#: ../src/application/california-application.vala:130
+msgid "translator-credits"
+msgstr "Marek Černocký <marek@manet.cz>"
+
+#. / The month and year according to locale preferences, i.e. "March 2014"
+#. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+#: ../src/calendar/calendar.vala:76
+msgid "%B %Y"
+msgstr "%B %Y"
+
+#. / The abbreviated month and year according to locale preferences, i.e. "Mar 2014"
+#. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+#: ../src/calendar/calendar.vala:80
+msgid "%b %Y"
+msgstr "%b %Y"
+
+#. / A "pretty" date according to locale preferences, i.e. "Monday, March 10, 2014"
+#. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+#: ../src/calendar/calendar.vala:84
+msgid "%A, %B %e, %Y"
+msgstr "%A, %e. %B %Y"
+
+#. / A "pretty" date with no year according to locale preferences, i.e. "Monday, March 10"
+#. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+#: ../src/calendar/calendar.vala:88
+msgid "%A, %B %e"
+msgstr "%A, %e. %B"
+
+#. / A "pretty" date abbreviated according to locale preferences, i.e. "Mon, Mar 10, 2014"
+#. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+#: ../src/calendar/calendar.vala:92
+msgid "%a, %b %e, %Y"
+msgstr "%a, %e. %b %Y"
+
+#. / A "pretty" date abbreviated and no year according to locale preferences, i.e.
+#. / "Mon, Mar 10"
+#. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+#: ../src/calendar/calendar.vala:97
+msgid "%a, %b %e"
+msgstr "%a, %e. %b"
+
+#. / Ante meridiem
+#. / (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+#. / format user settings to be honored)
+#: ../src/calendar/calendar.vala:102
+msgid "am"
+msgstr "dop."
+
+#. / Brief ante meridiem, i.e. "am" -> "a"
+#. / (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+#. / format user settings to be honored)
+#: ../src/calendar/calendar.vala:107
+msgid "a"
+msgstr "d."
+
+#. / Post meridiem
+#. / (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+#. / format user settings to be honored)
+#: ../src/calendar/calendar.vala:112
+msgid "pm"
+msgstr "odp."
+
+#. / Brief post meridiem, i.e. "pm" -> "p"
+#. / (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+#. / format user settings to be honored)
+#: ../src/calendar/calendar.vala:117
+msgid "p"
+msgstr "o."
+
+#. / The 12-hour time with minute and meridiem ("am" or "pm"), i.e. "5:06pm"
+#. / (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+#. / format user settings to be honored)
+#: ../src/calendar/calendar.vala:122
+#, c-format
+msgid "%d:%02d%s"
+msgstr "%d∶%02d %s"
+
+#. / The 12-hour time with minute, seconds, and meridiem ("am" or "pm"), i.e. "5:06:31pm"
+#. / (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+#. / format user settings to be honored)
+#: ../src/calendar/calendar.vala:127
+#, c-format
+msgid "%d:%02d:%02d%s"
+msgstr "%d∶%02d∶%02d %s"
+
+#. / The 24-hour time with minutes, i.e. "17:06"
+#: ../src/calendar/calendar.vala:130
+#, c-format
+msgid "%d:%02d"
+msgstr "%d∶%02d"
+
+#. / The 24-hour time with minutes and seconds, i.e. "17:06:31"
+#: ../src/calendar/calendar.vala:133
+#, c-format
+msgid "%d:%02d:%02d"
+msgstr "%d∶%02d∶%02d"
+
+#: ../src/host/host-create-update-event.vala:85
+msgid "Update Event"
+msgstr "Aktualizace události"
+
+#: ../src/host/host-create-update-event.vala:86 ../src/rc/show-event.ui.h:2
+msgid "_Update"
+msgstr "Akt_ualizovat"
+
+#: ../src/host/host-main-window.vala:40
+msgid "Today"
+msgstr "Dnes"
+
+#: ../src/host/host-main-window.vala:60
+msgid "Create a new event for today"
+msgstr "Vytvořit novou událost pro dnešní den"
+
+#. All-day event spanning days, print "<abbrev date> to <abbrev date>"
+#. / Prints a span of dates, i.e. "January 3 to January 6"
+#. Single-day timed event, print "<full date>\n<full start time> to <full end time>",
+#. including year if not current year
+#. / Prints a span of time, i.e. "3:30pm to 4:30pm"
+#: ../src/host/host-show-event.vala:74 ../src/host/host-show-event.vala:84
+#, c-format
+msgid "%s to %s"
+msgstr "%s až %s"
+
+#. Multi-day timed event, print "<full time>, <full date>" on both lines,
+#. including year if either not current year
+#. / Prints two full time and date strings on separate lines, i.e.:
+#. / 12 January 2012, 3:30pm
+#. / 13 January 2013, 6:30am
+#: ../src/host/host-show-event.vala:95
+#, c-format
+msgid ""
+"%s, %s\n"
+"%s, %s"
+msgstr ""
+"%s, %s\n"
+"%s, %s"
+
+#: ../src/rc/app-menu.interface.h:1
+msgid "_About"
+msgstr "O _aplikaci"
+
+#: ../src/rc/app-menu.interface.h:2
+msgid "_Quit"
+msgstr "U_končit"
+
+#: ../src/rc/create-update-event.ui.h:1
+msgid "New Event"
+msgstr "Nová událost"
+
+#: ../src/rc/create-update-event.ui.h:2
+msgid "Untitled event"
+msgstr "Nepojmenovaná událost"
+
+#. As in "From <date> <time> to <date> <time>"
+#: ../src/rc/create-update-event.ui.h:4
+msgid "From"
+msgstr "Od"
+
+#. As in "From <date> <time> to <date> <time>"
+#: ../src/rc/create-update-event.ui.h:6
+msgid "to"
+msgstr "do"
+
+#: ../src/rc/create-update-event.ui.h:7
+msgid "_All-day event"
+msgstr "_Celodenní událost"
+
+#: ../src/rc/create-update-event.ui.h:8
+msgid "Calendar:"
+msgstr "Kalendář:"
+
+#: ../src/rc/create-update-event.ui.h:9
+msgid "_Cancel"
+msgstr "_Zrušit"
+
+#: ../src/rc/create-update-event.ui.h:10
+msgid "C_reate"
+msgstr "_Vytvořit"
+
+#: ../src/rc/show-event.ui.h:1
+msgid "_Remove"
+msgstr "_Smazat"
+
+#: ../src/rc/show-event.ui.h:3
+msgid "_Close"
+msgstr "_Zavřít"
