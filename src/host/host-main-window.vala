@@ -32,8 +32,12 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         // create GtkHeaderBar and pack it in
         Gtk.HeaderBar headerbar = new Gtk.HeaderBar();
+#if !ENABLE_UNITY
+        // Unity doesn't support GtkHeaderBar-as-title-bar very well yet; when set, the main
+        // window can't be resized no matter what additional GtkWindow properties are set
         headerbar.show_close_button = true;
-        set_titlebar (headerbar);
+        set_titlebar(headerbar);
+#endif
         
         bool rtl = get_direction () == Gtk.TextDirection.RTL;
         
@@ -64,6 +68,9 @@ public class MainWindow : Gtk.ApplicationWindow {
         headerbar.pack_end(new_event);
         
         Gtk.Box layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+#if ENABLE_UNITY
+        layout.pack_start(headerbar, false, true, 0);
+#endif
         layout.pack_end(month_view, true, true, 0);
         
         // current host bindings and signals

@@ -38,9 +38,36 @@ PKG_CHECK_MODULES(CALIFORNIA, \
 AC_SUBST(CALIFORNIA_CFLAGS)
 AC_SUBST(CALIFORNIA_LIBS)
 
+#
+# configure switches
+#
+# Unity support
+#
+
+AC_MSG_CHECKING([Unity support])
+AC_ARG_ENABLE(
+	unity,
+	[  --enable-unity          enable Unity support [[default=disabled]]],
+	[ unity=$enableval ],
+	[ unity=no ]
+)
+
+AC_MSG_RESULT($unity)
+AM_CONDITIONAL(ENABLE_UNITY, test "x$unity" = "xyes")
+
+#
+# /configure switches
+#
+
 AC_CONFIG_FILES([
 	Makefile
 	src/Makefile
 	po/Makefile.in])
 
 AC_OUTPUT
+
+AC_MSG_RESULT([
+Options:
+	Unity support:		$unity
+])
+
