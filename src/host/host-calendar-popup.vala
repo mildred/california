@@ -42,7 +42,10 @@ public class CalendarPopup : Popup {
         calendar.year = initial_date.year.value;
         
         calendar.day_selected.connect(on_day_selected);
-        calendar.day_selected_double_click.connect(on_day_selected);
+        calendar.day_selected_double_click.connect(() => {
+            on_day_selected();
+            dismiss();
+        });
         
         add(calendar);
     }
@@ -62,7 +65,6 @@ public class CalendarPopup : Popup {
         }
         
         date_selected(date);
-        dismiss();
     }
 }
 
