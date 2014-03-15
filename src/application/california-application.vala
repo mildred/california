@@ -29,7 +29,12 @@ public class Application : Gtk.Application {
         null
     };
     
+    public const string ACTION_CALENDAR_MANAGER = "app.calendar-manager";
+    public const string ACTION_ABOUT = "app.about";
+    public const string ACTION_QUIT = "app.quit";
+    
     private static const ActionEntry[] action_entries = {
+        { "calendar-manager", on_calendar_manager },
         { "about", on_about },
         { "quit", on_quit }
     };
@@ -72,6 +77,7 @@ public class Application : Gtk.Application {
         // unit initialization
         try {
             Host.init();
+            Manager.init();
         } catch (Error err) {
             error_message(_("Unable to open California: %s").printf(err.message));
             quit();
@@ -87,6 +93,7 @@ public class Application : Gtk.Application {
         main_window = null;
         
         // unit termination
+        Manager.terminate();
         Host.terminate();
         
         base.shutdown();
@@ -111,6 +118,10 @@ public class Application : Gtk.Application {
             Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "%s", msg);
         dialog.run();
         dialog.destroy();
+    }
+    
+    private void on_calendar_manager() {
+        Manager.Window.display(main_window);
     }
     
     private void on_about() {

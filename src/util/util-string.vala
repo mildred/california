@@ -12,5 +12,9 @@ public inline bool is_empty(string? str) {
     return (str == null) || (str[0] == NUL);
 }
 
+public int stricmp(string a, string b) {
+    return strcmp(a.casefold(), b.casefold());
+}
+
 }
 

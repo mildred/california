@@ -22,17 +22,17 @@ namespace California.Host {
 
 public interface Interaction : Gtk.Widget {
     /**
+     * The default widget for the {@link Interaction}.
+     */
+    public abstract Gtk.Widget? default_widget { get; }
+    
+    /**
      * Fired when the user has cancelled, closed, or dismissed the {@link Interaction}.
      *
      * This should be called by implementing classes even if other signals suggest or imply that
      * the Interaction is dismissed, so a single signal handler can deal with cleanup.
      */
     public signal void dismissed();
-    
-    /**
-     * The default widget for the {@link Interaction}.
-     */
-    public abstract Gtk.Widget? default_widget { get; }
 }
 
 }

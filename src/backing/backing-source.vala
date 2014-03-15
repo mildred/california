@@ -18,6 +18,8 @@ namespace California.Backing {
 
 public abstract class Source : BaseObject {
     public const string PROP_IS_AVAILABLE = "is-available";
+    public const string PROP_TITLE = "title";
+    public const string PROP_VISIBLE = "visible";
     
     /**
      * True if the {@link Source} is unavailable for use due to being removed from it's
@@ -34,6 +36,18 @@ public abstract class Source : BaseObject {
      * A user-visible name for the {@link Source}.
      */
     public string title { get; private set; }
+    
+    /**
+     * Whether the {@link Source} should be visible to the user.
+     *
+     * The caller should monitor this setting to decide whether or not to display the Source's
+     * associated inforamtion.  Hiding a Source does not mean that a Source subscription won't
+     * continue generating information.  Likewise, a hidden Source can still accept operations
+     * like adding and removing objects.
+     *
+     * @see CalendarSourceSubscription
+     */
+    public bool visible { get; set; }
     
     protected Source(string title) {
         this.title = title;

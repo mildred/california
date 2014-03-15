@@ -243,6 +243,9 @@ public class Cell : Gtk.EventBox {
         // draw all events in chronological order, all-day events first, storing lookup data
         // as the "lines" are drawn ... make sure to convert them all to local timezone
         foreach (Component.Event event in days_events) {
+            if (!event.calendar_source.visible)
+                continue;
+            
             string text;
             if (event.is_all_day) {
                 text = event.summary;

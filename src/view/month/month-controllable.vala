@@ -265,6 +265,7 @@ public class Controllable : Gtk.Grid, View.Controllable {
         foreach (Backing.Store store in Backing.Manager.instance.get_stores()) {
             foreach (Backing.Source source in store.get_sources_of_type<Backing.CalendarSource>()) {
                 Backing.CalendarSource calendar = (Backing.CalendarSource) source;
+                calendar.notify[Backing.Source.PROP_VISIBLE].connect(queue_draw);
                 calendar.subscribe_async.begin(time_window, null, on_subscribed);
             }
         }

@@ -4,6 +4,12 @@
         <file compressed="true">rc/app-menu.interface</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
+        <file compressed="false">rc/calendar-manager-list.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
+        <file compressed="false">rc/calendar-manager-list-item.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
         <file compressed="false">rc/create-update-event.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">

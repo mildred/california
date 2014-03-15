@@ -11,15 +11,80 @@ namespace California.Backing {
  */
 
 internal class EdsCalendarSource : CalendarSource {
+    private const int UPDATE_DELAY_MSEC = 500;
+    
     private E.Source eds_source;
     private E.SourceCalendar eds_calendar;
     private E.CalClient? client = null;
+    private uint source_write_id = 0;
+    private Cancellable? source_write_cancellable = null;
     
     public EdsCalendarSource(E.Source eds_source, E.SourceCalendar eds_calendar) {
         base (eds_source.display_name);
         
         this.eds_source = eds_source;
         this.eds_calendar = eds_calendar;
+        
+        // use unidirectional bindings so source updates (writing) only occurs when changed from
+        // within the app
+        eds_calendar.bind_property("selected", this, PROP_VISIBLE, BindingFlags.SYNC_CREATE);
+        
+        // when changed within the app, need to write it back out
+        notify[PROP_VISIBLE].connect(on_visible_changed);
+    }
+    
+    ~EdsCalendarSource() {
+        cancel_source_write();
+    }
+    
+    private void on_visible_changed() {
+        // only schedule source writes if something actually changed
+        if (eds_calendar.selected == visible)
+            return;
+        
+        eds_calendar.selected = visible;
+        schedule_source_write("visible=%s".printf(visible.to_string()));
+    }
+    
+    private void schedule_source_write(string reason) {
+        cancel_source_write();
+        
+        debug("Scheduling update of %s due to %s...", to_string(), reason);
+        source_write_cancellable = new Cancellable();
+        source_write_id = Timeout.add(UPDATE_DELAY_MSEC, on_background_write_source, Priority.LOW);
+    }
+    
+    private void cancel_source_write() {
+        if (source_write_id != 0) {
+            GLib.Source.remove(source_write_id);
+            source_write_id = 0;
+        }
+        
+        if (source_write_cancellable != null) {
+            source_write_cancellable.cancel();
+            source_write_cancellable = null;
+        }
+    }
+    
+    private bool on_background_write_source() {
+        // in essence, say this is no longer scheduled ... for now, allow another write to be
+        // scheduled while this one is occurring
+        source_write_id = 0;
+        Cancellable? cancellable = source_write_cancellable;
+        source_write_cancellable = null;
+        
+        if (cancellable == null || cancellable.is_cancelled())
+            return false;
+        
+        try {
+            debug("Updating EDS source %s...", to_string());
+            // TODO: Fix bindings to use async variant
+            eds_source.write_sync(cancellable);
+        } catch (Error err) {
+            debug("Error updating EDS source %s: %s", to_string(), err.message);
+        }
+        
+        return false;
     }
     
     // Invoked by EdsStore prior to making it available outside of unit

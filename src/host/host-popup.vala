@@ -30,7 +30,7 @@ public class Popup : Gtk.Window {
      * The GtkWidget must be realized when this is invoked.
      */
     public Popup(Gtk.Widget relative_to) {
-        Object (type:Gtk.WindowType.TOPLEVEL);
+        Object(type:Gtk.WindowType.TOPLEVEL);
         
         assert(relative_to.get_realized());
         this.relative_to = relative_to;

@@ -65,8 +65,14 @@ california_VALASOURCES = \
 	host/host-create-update-event.vala \
 	host/host-interaction.vala \
 	host/host-main-window.vala \
+	host/host-modal-window.vala \
 	host/host-popup.vala \
 	host/host-show-event.vala \
+	\
+	manager/manager.vala \
+	manager/manager-calendar-list.vala \
+	manager/manager-calendar-list-item.vala \
+	manager/manager-window.vala \
 	\
 	util/util-memory.vala \
 	util/util-string.vala \
@@ -87,6 +93,8 @@ california_SOURCES = \
 
 california_RC = \
 	rc/app-menu.interface \
+	rc/calendar-manager-list.ui \
+	rc/calendar-manager-list-item.ui \
 	rc/create-update-event.ui \
 	rc/show-event.ui \
 	$(NULL)

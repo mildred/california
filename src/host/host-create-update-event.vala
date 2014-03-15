@@ -168,6 +168,9 @@ public class CreateUpdateEvent : Gtk.Grid, Interaction {
         index = 0;
         int calendar_source_index = 0;
         foreach (Backing.Source source in calendar_sources) {
+            if (!source.visible)
+                continue;
+            
             calendar_combo.append_text(source.title);
             if (source == event.calendar_source)
                 calendar_source_index = index;

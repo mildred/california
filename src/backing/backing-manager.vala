@@ -116,7 +116,7 @@ public class Manager : BaseObject {
      *
      * The list will be sorted by the Sources title in lexiographic order.
      *
-     * Must only be called wheil the {@link Manager} is open.
+     * Must only be called while the {@link Manager} is open.
      *
      * @see Store.get_sources_of_type
      */
@@ -126,7 +126,7 @@ public class Manager : BaseObject {
             sources.add_all(store.get_sources_of_type<G>());
         
         sources.sort((a, b) => {
-            return strcmp(((Source) a).title, ((Source) b).title);
+            return String.stricmp(((Source) a).title, ((Source) b).title);
         });
         
         return sources;

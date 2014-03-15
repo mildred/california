@@ -64,8 +64,14 @@ public class MainWindow : Gtk.ApplicationWindow {
         new_event.tooltip_text = _("Create a new event for today");
         new_event.clicked.connect(on_new_event);
         
+        Gtk.Button calendars = new Gtk.Button.from_icon_name("x-office-calendar-symbolic",
+            Gtk.IconSize.MENU);
+        calendars.tooltip_text = _("Calendars (Ctrl+L)");
+        calendars.set_action_name(Application.ACTION_CALENDAR_MANAGER);
+        
         // pack right-side of window
         headerbar.pack_end(new_event);
+        headerbar.pack_end(calendars);
         
         Gtk.Box layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 #if ENABLE_UNITY
@@ -87,27 +93,18 @@ public class MainWindow : Gtk.ApplicationWindow {
         add(layout);
     }
     
-    private Gtk.Widget show_interaction(Gtk.Widget relative_to, Gdk.Point? for_location,
+    private void show_interaction(Gtk.Widget relative_to, Gdk.Point? for_location,
         Interaction child) {
-        Gtk.Dialog dialog = new Gtk.Dialog();
-        dialog.transient_for = this;
-        dialog.modal = true;
-        ((Gtk.Box) dialog.get_content_area()).pack_start(child, true, true, 0);
+        ModalWindow modal_window = new ModalWindow(this);
+        modal_window.content_area.add(child);
         
         // when the dialog closes, reset View.Controllable state (selection is maintained while
         // use is viewing/editing Interaction) and destroy widgets
-        child.dismissed.connect(() => {
-            current_view.unselect_all();
-            dialog.destroy();
-        });
+        child.dismissed.connect(() => current_view.unselect_all());
         
-        dialog.show_all();
-        
-        // the default widget is lost in the shuffle, reestablish its primacy
-        if (child.default_widget != null)
-            child.default_widget.grab_default();
-        
-        return dialog;
+        modal_window.show_all();
+        modal_window.run();
+        modal_window.destroy();
     }
     
     private void on_new_event() {
@@ -140,8 +137,6 @@ public class MainWindow : Gtk.ApplicationWindow {
         else
             create_update_event = new CreateUpdateEvent.update(existing);
         
-        show_interaction(relative_to, for_location, create_update_event);
-        
         create_update_event.create_event.connect((event) => {
             create_event_async.begin(event, null);
         });
@@ -150,6 +145,8 @@ public class MainWindow : Gtk.ApplicationWindow {
             // TODO: Delete from original source if not the same as the new source
             update_event_async.begin(event, null);
         });
+        
+        show_interaction(relative_to, for_location, create_update_event);
     }
     
     private async void create_event_async(Component.Event event, Cancellable? cancellable) {
@@ -177,7 +174,6 @@ public class MainWindow : Gtk.ApplicationWindow {
     private void on_request_display_event(Component.Event event, Gtk.Widget relative_to,
         Gdk.Point? for_location) {
         ShowEvent show_event = new ShowEvent(event);
-        show_interaction(relative_to, for_location, show_event);
         
         show_event.remove_event.connect(() => {
             remove_event_async.begin(event, null);
@@ -186,6 +182,8 @@ public class MainWindow : Gtk.ApplicationWindow {
         show_event.update_event.connect(() => {
             create_event(null, null, event, relative_to, for_location);
         });
+        
+        show_interaction(relative_to, for_location, show_event);
     }
     
     private async void remove_event_async(Component.Event event, Cancellable? cancellable) {
