@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-03-12 23:54+0000\n"
-"PO-Revision-Date: 2014-03-12 23:13-0300\n"
+"POT-Creation-Date: 2014-03-15 00:30+0000\n"
+"PO-Revision-Date: 2014-03-14 21:42-0300\n"
 "Last-Translator: Rafael Ferreira <rafael.f.f1@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: ../src/application/california-application.vala:18
 msgid "California"
-msgstr "California"
+msgstr "Califórnia"
 
 #: ../src/application/california-application.vala:19
 msgid "Desktop Calendar"
@@ -35,19 +35,19 @@ msgstr "Copyright 2014 Yorba Foundation"
 msgid "Visit California's home page"
 msgstr "Visite a página web do Califórnia"
 
-#: ../src/application/california-application.vala:76
+#: ../src/application/california-application.vala:82
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "Não foi possível abrir Califórnia: %s"
 
-#: ../src/application/california-application.vala:124
+#: ../src/application/california-application.vala:135
 #, c-format
 msgid "About %s"
 msgstr "Sobre %s"
 
 #. / Translators: add your name and email address to receive credit in the About dialog
 #. / For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:130
+#: ../src/application/california-application.vala:141
 msgid "translator-credits"
 msgstr "Rafael Ferreira <rafael.f.f1@gmail.com>"
 
@@ -99,7 +99,6 @@ msgstr "am"
 #. / (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. / format user settings to be honored)
 #: ../src/calendar/calendar.vala:107
-#| msgid "%a"
 msgid "a"
 msgstr "a"
 
@@ -161,6 +160,10 @@ msgstr "Hoje"
 msgid "Create a new event for today"
 msgstr "Cria em novo evento para hoje"
 
+#: ../src/host/host-main-window.vala:69
+msgid "Calendars (Ctrl+L)"
+msgstr "Agendas (Ctrl+L)"
+
 #. All-day event spanning days, print "<abbrev date> to <abbrev date>"
 #. / Prints a span of dates, i.e. "January 3 to January 6"
 #. Single-day timed event, print "<full date>\n<full start time> to <full end time>",
@@ -186,11 +189,15 @@ msgstr ""
 "%s, %s"
 
 #: ../src/rc/app-menu.interface.h:1
-#| msgid "About %s"
+#| msgid "Calendar:"
+msgid "_Calendars"
+msgstr "A_gendas"
+
+#: ../src/rc/app-menu.interface.h:2
 msgid "_About"
 msgstr "S_obre"
 
-#: ../src/rc/app-menu.interface.h:2
+#: ../src/rc/app-menu.interface.h:3
 msgid "_Quit"
 msgstr "_Sair"
 
@@ -225,7 +232,6 @@ msgid "_Cancel"
 msgstr "_Cancelar"
 
 #: ../src/rc/create-update-event.ui.h:10
-#| msgid "_Create"
 msgid "C_reate"
 msgstr "C_riar"
 
