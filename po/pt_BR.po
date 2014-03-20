@@ -2,22 +2,23 @@
 # Copyright (C) 2014 california's COPYRIGHT HOLDER
 # This file is distributed under the same license as the california package.
 # Rafael Ferreira <rafael.f.f1@gmail.com>, 2014.
+# Enrico Nicoletto <liverig@gmail.com>, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-03-15 00:30+0000\n"
-"PO-Revision-Date: 2014-03-14 21:42-0300\n"
-"Last-Translator: Rafael Ferreira <rafael.f.f1@gmail.com>\n"
+"POT-Creation-Date: 2014-03-20 22:15+0000\n"
+"PO-Revision-Date: 2014-03-20 20:28-0300\n"
+"Last-Translator: Enrico Nicoletto <liverig@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 1.6.3\n"
 
 #: ../src/application/california-application.vala:18
 msgid "California"
@@ -189,7 +190,6 @@ msgstr ""
 "%s, %s"
 
 #: ../src/rc/app-menu.interface.h:1
-#| msgid "Calendar:"
 msgid "_Calendars"
 msgstr "A_gendas"
 
@@ -200,6 +200,15 @@ msgstr "S_obre"
 #: ../src/rc/app-menu.interface.h:3
 msgid "_Quit"
 msgstr "_Sair"
+
+#: ../src/rc/calendar-manager-list.ui.h:1 ../src/rc/show-event.ui.h:3
+msgid "_Close"
+msgstr "_Fechar"
+
+#: ../src/rc/calendar-manager-list-item.ui.h:1
+#| msgid "Calendar:"
+msgid "Calendar color"
+msgstr "Cor da agenda"
 
 #: ../src/rc/create-update-event.ui.h:1
 msgid "New Event"
@@ -238,10 +247,6 @@ msgstr "C_riar"
 #: ../src/rc/show-event.ui.h:1
 msgid "_Remove"
 msgstr "_Remover"
-
-#: ../src/rc/show-event.ui.h:3
-msgid "_Close"
-msgstr "_Fechar"
 
 #~ msgid "%B"
 #~ msgstr "%B"
