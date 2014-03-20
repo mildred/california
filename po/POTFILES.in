@@ -7,5 +7,6 @@ src/host/host-main-window.vala
 src/host/host-show-event.vala
 [type: gettext/glade]src/rc/app-menu.interface
 [type: gettext/glade]src/rc/calendar-manager-list.ui
+[type: gettext/glade]src/rc/calendar-manager-list-item.ui
 [type: gettext/glade]src/rc/create-update-event.ui
 [type: gettext/glade]src/rc/show-event.ui
