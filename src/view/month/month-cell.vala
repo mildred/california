@@ -255,7 +255,8 @@ public class Cell : Gtk.EventBox {
                 text = "%s %s".printf(local_start.to_pretty_time_string(PRETTY_TIME_FLAGS), event.summary);
             }
             
-            Pango.Layout layout = draw_line_of_text(ctx, line_number, RGBA_DAY_OF_MONTH, text);
+            Pango.Layout layout = draw_line_of_text(ctx, line_number, event.calendar_source.color_as_rgba(),
+                text);
             line_to_event.set(line_number++, event);
             event.set_data<string?>(KEY_TOOLTIP, layout.is_ellipsized() ? text : null);
         }
@@ -314,12 +315,12 @@ public class Cell : Gtk.EventBox {
      * The Gdk.Point must be relative to the widget's coordinate system.
      */
     public Component.Event? get_event_at(Gdk.Point point) {
-        int line_number = 0;
-        foreach (Component.Event event in days_events) {
-            int y = get_line_top_y(line_number++);
-            
+        for (int line_number = 0; line_number < line_to_event.size; line_number++) {
+            int y = get_line_top_y(line_number);
             if (point.y >= y && point.y < (y + line_height_px))
-                return event;
+                return line_to_event.get(line_number);
+            
+            line_number++;
         }
         
         return null;

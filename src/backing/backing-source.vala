@@ -20,6 +20,7 @@ public abstract class Source : BaseObject {
     public const string PROP_IS_AVAILABLE = "is-available";
     public const string PROP_TITLE = "title";
     public const string PROP_VISIBLE = "visible";
+    public const string PROP_COLOR = "color";
     
     /**
      * True if the {@link Source} is unavailable for use due to being removed from it's
@@ -49,6 +50,12 @@ public abstract class Source : BaseObject {
      */
     public bool visible { get; set; }
     
+    /**
+     * The suggested color to use when displaying the {@link Source} or information about or from
+     * it.
+     */
+    public string color { get; set; }
+    
     protected Source(string title) {
         this.title = title;
     }
@@ -63,6 +70,32 @@ public abstract class Source : BaseObject {
      */
     internal void set_unavailable() {
         is_available = false;
+    }
+    
+    /**
+     * Returns the current {@link color} setting as a Gdk.Color.
+     *
+     * If the color string is unparseable, returns a Gdk.Color that corresponds to "dressy-black".
+     */
+    public Gdk.Color color_as_rgb() {
+        return Gfx.rgb_string_to_rgb(color, Gdk.Color() { red = 0, green = 0, blue = 0 }, null);
+    }
+    
+    /**
+     * Returns the current {@link color} setting as a Gdk.RGBA.
+     *
+     * If the color string is unparseable, returns a Gdk.RGBA that corresponds to "dressy-black".
+     */
+    public Gdk.RGBA color_as_rgba() {
+        return Gfx.rgb_string_to_rgba(color,
+            Gdk.RGBA() { red = 0.0, green = 0.0, blue = 0.0, alpha = 1.0 },  null);
+    }
+    
+    /**
+     * Set the {@link color} property to the string representation of the Gdk.RGBA structure.
+     */
+    public void set_color_to_rgba(Gdk.RGBA rgba) {
+        color = Gfx.rgb_to_uint8_rgb_string(Gfx.rgba_to_rgb(rgba));
     }
     
     public override string to_string() {

@@ -62,6 +62,7 @@ california_VALASOURCES = \
 	\
 	host/host.vala \
 	host/host-calendar-popup.vala \
+	host/host-color-chooser-popup.vala \
 	host/host-create-update-event.vala \
 	host/host-interaction.vala \
 	host/host-main-window.vala \
@@ -74,6 +75,7 @@ california_VALASOURCES = \
 	manager/manager-calendar-list-item.vala \
 	manager/manager-window.vala \
 	\
+	util/util-gfx.vala \
 	util/util-memory.vala \
 	util/util-string.vala \
 	\
@@ -121,6 +123,10 @@ california_VALAFLAGS = \
 california_CFLAGS = \
 	-DGETTEXT_PACKAGE=\""california"\" \
 	-DPREFIX=\"$(prefix)\" \
+	$(NULL)
+
+LIBS = \
+	-lm \
 	$(NULL)
 
 california-resources.c: $(california_RC) california-resources.xml
