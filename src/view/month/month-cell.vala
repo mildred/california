@@ -91,12 +91,14 @@ public class Cell : Gtk.EventBox {
         notify["date"].connect(queue_draw);
         notify["selected"].connect(queue_draw);
         Calendar.System.instance.is_24hr_changed.connect(on_24hr_changed);
+        Calendar.System.instance.today_changed.connect(on_today_changed);
         
         canvas.draw.connect(on_draw);
     }
     
     ~Cell() {
         Calendar.System.instance.is_24hr_changed.disconnect(on_24hr_changed);
+        Calendar.System.instance.today_changed.disconnect(on_today_changed);
     }
     
     internal static void init() {
@@ -156,6 +158,12 @@ public class Cell : Gtk.EventBox {
     
     private void on_24hr_changed() {
         if (has_events())
+            queue_draw();
+    }
+    
+    private void on_today_changed(Calendar.Date old_today, Calendar.Date new_today) {
+        // need to know re: redrawing background color to indicate current day
+        if (date != null && (date.equal_to(old_today) || date.equal_to(new_today)))
             queue_draw();
     }
     

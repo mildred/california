@@ -111,9 +111,14 @@ public class Controllable : Gtk.Grid, View.Controllable {
         notify[PROP_MONTH_OF_YEAR].connect(on_month_of_year_changed);
         notify[PROP_FIRST_OF_WEEK].connect(update_first_of_week);
         notify[PROP_SHOW_OUTSIDE_MONTH].connect(update_cells);
+        Calendar.System.instance.today_changed.connect(on_today_changed);
         
         // update now that signal handlers are in place
         month_of_year = Calendar.System.today.month_of_year();
+    }
+    
+    ~Controllable() {
+        Calendar.System.instance.today_changed.disconnect(on_today_changed);
     }
     
     /**
@@ -237,9 +242,18 @@ public class Controllable : Gtk.Grid, View.Controllable {
         update_subscription();
     }
     
+    private void update_is_viewing_today() {
+        is_viewing_today = month_of_year.equal_to(Calendar.System.today.month_of_year());
+    }
+    
+    private void on_today_changed() {
+        // don't update view but indicate if it's still in view
+        update_is_viewing_today();
+    }
+    
     private void on_month_of_year_changed() {
         current_label = month_of_year.full_name;
-        is_viewing_today = month_of_year.equal_to(Calendar.System.today.month_of_year());
+        update_is_viewing_today();
         
         // default date is first of month unless displaying current month, in which case it's
         // current date

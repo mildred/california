@@ -20,12 +20,16 @@ public class System : BaseObject {
     private const string CLOCK_FORMAT_KEY = "clock-format";
     private const string CLOCK_FORMAT_24H = "24h";
     
+    private const int CHECK_DATE_PRIORITY = Priority.LOW;
+    private const int MIN_CHECK_DATE_INTERVAL_SEC = 1;
+    private const int MAX_CHECK_DATE_INTERVAL_SEC = 30;
+    
     public static System instance { get; private set; }
     
     /**
      * The current date according to the local timezone.
      *
-     * TODO: This currently does not update as the program executes.
+     * @see today_changed
      */
     public static Date today { get; private set; }
     
@@ -60,6 +64,14 @@ public class System : BaseObject {
     private static DBus.Properties timedated_properties;
     
     /**
+     * Fired when {@link today} changes.
+     *
+     * This indicates that the system time has crossed midnight (potentially either direction since
+     * clock adjustments can happen for a variety of reasons).
+     */
+    public signal void today_changed(Calendar.Date old_today, Calendar.Date new_today);
+    
+    /**
      * Fired when {@link is_24hr} changes.
      *
      * This means the user has changed the their clock format configuration.
@@ -72,14 +84,15 @@ public class System : BaseObject {
      * This generally indicates that the user has changed system time zone manually or that the
      * system detected the change through geolocation services.
      */
-    public signal void zone_changed(OlsonZone new_zone);
+    public signal void zone_changed(OlsonZone old_zone, OlsonZone new_zone);
     
     /**
      * Fired when {@link local_timezone} changes due to system configuration changes.
      */
-    public signal void timezone_changed(Timezone new_timezone);
+    public signal void timezone_changed(Timezone old_timezone, Timezone new_timezone);
     
     private Settings system_clock_format_schema = new Settings(CLOCK_FORMAT_SCHEMA);
+    private uint date_timer_id = 0;
     
     private System() {
         zone = new OlsonZone(timedated_service.timezone);
@@ -89,6 +102,7 @@ public class System : BaseObject {
         // to be notified of changes as they occur
         timedated_properties.properties_changed.connect(on_timedated_properties_changed);
         
+        // monitor 12/24-hr setting for changes and update
         is_24hr = system_clock_format_schema.get_string(CLOCK_FORMAT_KEY) == CLOCK_FORMAT_24H;
         system_clock_format_schema.changed[CLOCK_FORMAT_KEY].connect(() => {
             bool new_is_24hr = system_clock_format_schema.get_string(CLOCK_FORMAT_KEY) == CLOCK_FORMAT_24H;
@@ -98,8 +112,19 @@ public class System : BaseObject {
             }
         });
         
-        // TODO: Tie this into the event loop so it's properly updated
+        // timezone change can potentially update "today"; unless there's a system event we can
+        // trap to indicate when the date has changed, use the event loop to check once every so
+        // often, but also attempt to calculate time until midnight to change along with it ...
+        // this may seem wasteful, but since the date can change for a lot of reasons (user
+        // intervention, clock drift, NTP, etc.) this is a simple way to stay on top of things
         today = new Date.now(Timezone.local);
+        date_timer_id = Timeout.add_seconds_full(CHECK_DATE_PRIORITY, next_check_today_interval_sec(),
+            check_today_changed);
+    }
+    
+    ~System() {
+        if (date_timer_id != 0)
+            Source.remove(date_timer_id);
     }
     
     internal static void preinit() throws IOError {
@@ -123,15 +148,58 @@ public class System : BaseObject {
         HashTable<string, Variant> changed_properties_values, string[] changed_properties) {
         if (changed_properties_values.contains(DBus.timedated.PROP_TIMEZONE)
             || DBus.timedated.PROP_TIMEZONE in changed_properties) {
+            OlsonZone old_zone = zone;
             zone = new OlsonZone(timedated_service.timezone);
-            timezone = new Timezone(zone);
             debug("New local zone: %s", zone.to_string());
+            
+            Timezone old_timezone = timezone;
+            timezone = new Timezone(zone);
             
             // fire signals last in case a subscriber monitoring zone thinks that local_timezone
             // has also changed
-            zone_changed(zone);
-            timezone_changed(timezone);
+            zone_changed(old_zone, zone);
+            timezone_changed(old_timezone, timezone);
+            
+            // update current date, if necessary
+            update_today();
         }
+    }
+    
+    private int next_check_today_interval_sec() {
+        // get the amount of time until midnight, adding one back to account for the second needed
+        // to cross into the next day, and another one because this isn't rocket science but a
+        // best-effort kind of thing
+        ExactTime last_sec_of_day = new ExactTime(Timezone.local, today, WallTime.latest);
+        int64 sec_to_midnight = last_sec_of_day.difference(new ExactTime.now(Timezone.local)) + 2;
+        
+        // clamp values to (a) ensure zero is never passed to Timeout.add_seconds(), which could
+        // cause brief racing around midnight if close (but not close enough) to the appointed hour,
+        // and (b) not too far out in case the user changes the date and would like to see the
+        // change in California at some reasonable interval
+        return (int) sec_to_midnight.clamp(MIN_CHECK_DATE_INTERVAL_SEC, MAX_CHECK_DATE_INTERVAL_SEC);
+    }
+    
+    // See note in constructor for logic behind this SourceFunc
+    private bool check_today_changed() {
+        update_today();
+        
+        // reschedule w/ the next interval
+        date_timer_id = Timeout.add_seconds_full(CHECK_DATE_PRIORITY, next_check_today_interval_sec(),
+            check_today_changed);
+        
+        return false;
+    }
+    
+    private void update_today() {
+        Date new_today = new Date.now(Timezone.local);
+        if (new_today.equal_to(today))
+            return;
+        
+        Date old_today = today;
+        today = new_today;
+        debug("Date changed: %s", new_today.to_string());
+        
+        today_changed(old_today, new_today);
     }
     
     public override string to_string() {

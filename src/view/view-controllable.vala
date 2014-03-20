@@ -28,6 +28,9 @@ public interface Controllable : Object {
     /**
      * Flag indicating if the current calendar unit matches the unit the {@link today} method
      * could jump to.
+     *
+     * This value should update dynamically as {@link Calendar.System.today} changes.  There's no
+     * requirement for the {@link Controllable} to change its view as the day changes, however.
      */
     public abstract bool is_viewing_today { get; protected set; }
     

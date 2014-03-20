@@ -153,6 +153,15 @@ public class ExactTime : BaseObject, Gee.Comparable<ExactTime>, Gee.Hashable<Exa
     }
     
     /**
+     * Returns the difference (in seconds) between this {@link ExactTime} and another ExactTime.
+     *
+     * If the supplied ExactTime is earlier than this one, a negative value will be returned.
+     */
+    public int64 difference(ExactTime other) {
+        return date_time.difference(other.date_time) / TimeSpan.SECOND;
+    }
+    
+    /**
      * See DateTime.to_unix_time.
      */
     public time_t to_time_t() {

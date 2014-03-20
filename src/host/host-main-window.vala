@@ -41,7 +41,8 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         bool rtl = get_direction () == Gtk.TextDirection.RTL;
         
-        Gtk.Button today = new Gtk.Button.with_label(_("Today"));
+        Gtk.Button today = new Gtk.Button.with_label(_("_Today"));
+        today.use_underline = true;
         today.clicked.connect(() => { current_view.today(); });
         
         Gtk.Button prev = new Gtk.Button.from_icon_name(rtl ? "go-previous-rtl-symbolic" : "go-previous-symbolic", Gtk.IconSize.MENU);

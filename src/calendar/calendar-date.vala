@@ -34,7 +34,12 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
         /**
          * Indicates that the year should be included in the return date string.
          */
-        INCLUDE_YEAR
+        INCLUDE_YEAR,
+        /**
+         * Indicates that the localized string for "Today" should not be used if the date matches
+         * {@link System.today}.
+         */
+        NO_TODAY
     }
     
     public DayOfWeek day_of_week { get; private set; }
@@ -276,10 +281,17 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
     /**
      * Returns the {@link Date} in a prettified, localized format according to supplied
      * {@link PrettyFlag}s.
+     *
+     * Returns "Today" (localized) if this matches {@link System.today} unless the NO_TODAY flag
+     * or INCLUDE_YEAR flag is specified.
      */
     public string to_pretty_string(PrettyFlag flags) {
         bool abbrev = (flags & PrettyFlag.ABBREV) != 0;
         bool with_year = (flags & PrettyFlag.INCLUDE_YEAR) != 0;
+        bool no_today = (flags & PrettyFlag.NO_TODAY) != 0;
+        
+        if (!no_today && !with_year && equal_to(System.today))
+            return _("Today");
         
         unowned string fmt;
         if (abbrev)

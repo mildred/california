@@ -33,10 +33,12 @@ public class ShowEvent : Gtk.Grid, Interaction {
         
         build_display();
         Calendar.System.instance.is_24hr_changed.connect(build_display);
+        Calendar.System.instance.today_changed.connect(build_display);
     }
     
     ~ShowEvent() {
         Calendar.System.instance.is_24hr_changed.disconnect(build_display);
+        Calendar.System.instance.today_changed.disconnect(build_display);
     }
     
     private void build_display() {
