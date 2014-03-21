@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-17 10:07+0200\n"
-"PO-Revision-Date: 2014-03-17 10:09+0200\n"
+"POT-Creation-Date: 2014-03-21 03:16+0200\n"
+"PO-Revision-Date: 2014-03-21 03:18+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -35,19 +35,19 @@ msgstr "כל הזכויות שמורות 2014 Yorba Foundation"
 msgid "Visit California's home page"
 msgstr "ביקור בדף הבית של California"
 
-#: ../src/application/california-application.vala:82
+#: ../src/application/california-application.vala:89
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "לא ניתן לפתוח את California: ‏%s"
 
-#: ../src/application/california-application.vala:135
+#: ../src/application/california-application.vala:142
 #, c-format
 msgid "About %s"
 msgstr "על אודות  %s"
 
 #. / Translators: add your name and email address to receive credit in the About dialog
 #. / For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:141
+#: ../src/application/california-application.vala:148
 msgid "translator-credits"
 msgstr "יוסף אור בוצ׳קו <yoseforb@gnome.org>"
 
@@ -152,15 +152,27 @@ msgstr "עדכון אירוע"
 msgid "_Update"
 msgstr "_עדכון"
 
-#: ../src/host/host-main-window.vala:44
-msgid "Today"
-msgstr "היום"
-
-#: ../src/host/host-main-window.vala:64
-msgid "Create a new event for today"
-msgstr "יצירת אירוע חדש להיום"
-
 #: ../src/host/host-main-window.vala:69
+msgid "_Today"
+msgstr "_היום"
+
+#: ../src/host/host-main-window.vala:71
+msgid "Jump to today's date (Ctrl+T)"
+msgstr "קפיצה לתאריך של היום (Ctrl+א)"
+
+#: ../src/host/host-main-window.vala:76
+msgid "Previous (Alt+Left)"
+msgstr "הקודם (Alt+שמאל)"
+
+#: ../src/host/host-main-window.vala:81
+msgid "Next (Alt+Right)"
+msgstr "הבא (Alt+ימין)"
+
+#: ../src/host/host-main-window.vala:95
+msgid "Create a new event (Ctrl+N)"
+msgstr "יצירת אירוע חדש (Ctrl+מ)"
+
+#: ../src/host/host-main-window.vala:100
 msgid "Calendars (Ctrl+L)"
 msgstr "לוחות שנה (Ctrl+ך)"
 
@@ -169,7 +181,7 @@ msgstr "לוחות שנה (Ctrl+ך)"
 #. Single-day timed event, print "<full date>\n<full start time> to <full end time>",
 #. including year if not current year
 #. / Prints a span of time, i.e. "3:30pm to 4:30pm"
-#: ../src/host/host-show-event.vala:74 ../src/host/host-show-event.vala:84
+#: ../src/host/host-show-event.vala:76 ../src/host/host-show-event.vala:86
 #, c-format
 msgid "%s to %s"
 msgstr "%s עד %s"
@@ -179,7 +191,7 @@ msgstr "%s עד %s"
 #. / Prints two full time and date strings on separate lines, i.e.:
 #. / 12 January 2012, 3:30pm
 #. / 13 January 2013, 6:30am
-#: ../src/host/host-show-event.vala:95
+#: ../src/host/host-show-event.vala:97
 #, c-format
 msgid ""
 "%s, %s\n"
@@ -203,6 +215,10 @@ msgstr "_יציאה"
 #: ../src/rc/calendar-manager-list.ui.h:1 ../src/rc/show-event.ui.h:3
 msgid "_Close"
 msgstr "_סגירה"
+
+#: ../src/rc/calendar-manager-list-item.ui.h:1
+msgid "Calendar color"
+msgstr "צבע לוח שנה"
 
 #: ../src/rc/create-update-event.ui.h:1
 msgid "New Event"
