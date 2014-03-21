@@ -327,8 +327,6 @@ public class Cell : Gtk.EventBox {
             int y = get_line_top_y(line_number);
             if (point.y >= y && point.y < (y + line_height_px))
                 return line_to_event.get(line_number);
-            
-            line_number++;
         }
         
         return null;
