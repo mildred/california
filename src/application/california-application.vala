@@ -33,6 +33,13 @@ public class Application : Gtk.Application {
     public const string ACTION_ABOUT = "app.about";
     public const string ACTION_QUIT = "app.quit";
     
+    private static Application? _instance = null;
+    public static Application instance {
+        get {
+            return (_instance != null) ? _instance : _instance = new Application();
+        }
+    }
+    
     private static const ActionEntry[] action_entries = {
         { "calendar-manager", on_calendar_manager },
         { "about", on_about },
@@ -42,7 +49,7 @@ public class Application : Gtk.Application {
     private Host.MainWindow? main_window = null;
     private File? exec_file = null;
     
-    public Application() {
+    private Application() {
         Object (application_id: ID);
     }
     

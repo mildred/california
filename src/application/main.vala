@@ -5,6 +5,6 @@
  */
 
 int main(string[] args) {
-    return new California.Application().run(args);
+    return California.Application.instance.run(args);
 }
 

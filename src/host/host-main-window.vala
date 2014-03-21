@@ -13,6 +13,25 @@ namespace California.Host {
 public class MainWindow : Gtk.ApplicationWindow {
     private const string PROP_FIRST_OF_WEEK = "first-of-week";
     
+    private const string ACTION_NEW_EVENT = "win.new-event";
+    private const string ACCEL_NEW_EVENT = "<Primary>n";
+    
+    private const string ACTION_JUMP_TO_TODAY = "win.jump-to-today";
+    private const string ACCEL_JUMP_TO_TODAY = "<Primary>t";
+    
+    private const string ACTION_NEXT = "win.next";
+    private const string ACCEL_NEXT = "<Alt>Right";
+    
+    private const string ACTION_PREVIOUS = "win.previous";
+    private const string ACCEL_PREVIOUS = "<Alt>Left";
+    
+    private static const ActionEntry[] action_entries = {
+        { "new-event", on_new_event },
+        { "jump-to-today", on_jump_to_today },
+        { "next", on_next },
+        { "previous", on_previous }
+    };
+    
     // Set as a property so it can be bound to the current View.Controllable
     public Calendar.FirstOfWeek first_of_week { get; set; }
     
@@ -26,6 +45,12 @@ public class MainWindow : Gtk.ApplicationWindow {
         set_size_request(800, 600);
         set_default_size(1024, 768);
         set_default_icon_name(Application.ICON_NAME);
+        
+        add_action_entries(action_entries, this);
+        Application.instance.add_accelerator(ACCEL_NEW_EVENT, ACTION_NEW_EVENT, null);
+        Application.instance.add_accelerator(ACCEL_JUMP_TO_TODAY, ACTION_JUMP_TO_TODAY, null);
+        Application.instance.add_accelerator(ACCEL_NEXT, ACTION_NEXT, null);
+        Application.instance.add_accelerator(ACCEL_PREVIOUS, ACTION_PREVIOUS, null);
         
         // start in Month view
         current_view = month_view;
@@ -43,13 +68,18 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         Gtk.Button today = new Gtk.Button.with_label(_("_Today"));
         today.use_underline = true;
-        today.clicked.connect(() => { current_view.today(); });
+        today.tooltip_text = _("Jump to today's date (Ctrl+T)");
+        today.set_action_name(ACTION_JUMP_TO_TODAY);
         
-        Gtk.Button prev = new Gtk.Button.from_icon_name(rtl ? "go-previous-rtl-symbolic" : "go-previous-symbolic", Gtk.IconSize.MENU);
-        prev.clicked.connect(() => { current_view.prev(); });
+        Gtk.Button prev = new Gtk.Button.from_icon_name(rtl ? "go-previous-rtl-symbolic" : "go-previous-symbolic",
+            Gtk.IconSize.MENU);
+        prev.tooltip_text = _("Previous (Alt+Left)");
+        prev.set_action_name(ACTION_PREVIOUS);
         
-        Gtk.Button next = new Gtk.Button.from_icon_name(rtl ? "go-next-rtl-symbolic" : "go-next-symbolic", Gtk.IconSize.MENU);
-        next.clicked.connect(() => { current_view.next(); });
+        Gtk.Button next = new Gtk.Button.from_icon_name(rtl ? "go-next-rtl-symbolic" : "go-next-symbolic",
+            Gtk.IconSize.MENU);
+        next.tooltip_text = _("Next (Alt+Right)");
+        next.set_action_name(ACTION_NEXT);
         
         Gtk.Box nav_buttons = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         nav_buttons.get_style_context().add_class(Gtk.STYLE_CLASS_LINKED);
@@ -62,8 +92,8 @@ public class MainWindow : Gtk.ApplicationWindow {
         headerbar.pack_start(nav_buttons);
         
         Gtk.Button new_event = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.MENU);
-        new_event.tooltip_text = _("Create a new event for today");
-        new_event.clicked.connect(on_new_event);
+        new_event.tooltip_text = _("Create a new event (Ctrl+N)");
+        new_event.set_action_name(ACTION_NEW_EVENT);
         
         Gtk.Button calendars = new Gtk.Button.from_icon_name("x-office-calendar-symbolic",
             Gtk.IconSize.MENU);
@@ -114,6 +144,18 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         // revert to today's date and use the widget for the popover
         create_event(null, initial, null, current_view.today(), null);
+    }
+    
+    private void on_jump_to_today() {
+        current_view.today();
+    }
+    
+    private void on_next() {
+        current_view.next();
+    }
+    
+    private void on_previous() {
+        current_view.prev();
     }
     
     private void on_request_create_timed_event(Calendar.ExactTimeSpan initial, Gtk.Widget relative_to,
