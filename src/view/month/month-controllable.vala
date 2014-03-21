@@ -37,7 +37,7 @@ public class Controllable : Gtk.Grid, View.Controllable {
     /**
      * @inheritDoc
      */
-    public Calendar.FirstOfWeek first_of_week { get; set; default = Calendar.FirstOfWeek.SUNDAY; }
+    public Calendar.FirstOfWeek first_of_week { get; set; }
     
     /**
      * Show days outside the current month.
@@ -115,6 +115,7 @@ public class Controllable : Gtk.Grid, View.Controllable {
         
         // update now that signal handlers are in place
         month_of_year = Calendar.System.today.month_of_year();
+        first_of_week = Calendar.FirstOfWeek.SUNDAY;
     }
     
     ~Controllable() {
