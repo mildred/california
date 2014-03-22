@@ -56,7 +56,7 @@ public class ShowEvent : Gtk.Grid, Interaction {
         
         // if any dates are not in current year, display year in all dates
         Calendar.Date.PrettyFlag date_flags = Calendar.Date.PrettyFlag.NONE;
-        Calendar.DateSpan date_span = event.get_event_date_span();
+        Calendar.DateSpan date_span = event.get_event_date_span(Calendar.Timezone.local);
         if (!date_span.start_date.year.equal_to(Calendar.System.today.year)
             || !date_span.end_date.year.equal_to(Calendar.System.today.year)) {
             date_flags |= Calendar.Date.PrettyFlag.INCLUDE_YEAR;

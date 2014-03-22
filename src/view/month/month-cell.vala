@@ -175,7 +175,7 @@ public class Cell : Gtk.EventBox {
         
         // remove from cell if no longer in this day, otherwise remove and add again to days_events
         // to re-sort
-        if (!(date in event.get_event_date_span()))
+        if (!(date in event.get_event_date_span(Calendar.Timezone.local)))
             remove_event(event);
         else if (days_events.remove(event))
             days_events.add(event);

@@ -311,7 +311,7 @@ public class Controllable : Gtk.Grid, View.Controllable {
             return;
         
         // add event to every date it represents
-        foreach (Calendar.Date date in event.get_event_date_span()) {
+        foreach (Calendar.Date date in event.get_event_date_span(Calendar.Timezone.local)) {
             Cell? cell = date_to_cell.get(date);
             if (cell != null)
                 cell.add_event(event);
@@ -323,7 +323,7 @@ public class Controllable : Gtk.Grid, View.Controllable {
         if (event == null)
             return;
         
-        foreach (Calendar.Date date in event.get_event_date_span()) {
+        foreach (Calendar.Date date in event.get_event_date_span(Calendar.Timezone.local)) {
             Cell? cell = date_to_cell.get(date);
             if (cell != null)
                 cell.remove_event(event);

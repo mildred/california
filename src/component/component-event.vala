@@ -162,8 +162,12 @@ public class Event : Instance, Gee.Comparable<Event> {
      *
      * This will return a DateSpan whether the Event is a DATE or DATE-TIME VEVENT.
      */
-    public Calendar.DateSpan get_event_date_span() {
-        return date_span ?? new Calendar.DateSpan.from_exact_time_span(exact_time_span);
+    public Calendar.DateSpan get_event_date_span(Calendar.Timezone? tz) {
+        if (date_span != null)
+            return date_span;
+        
+        return new Calendar.DateSpan.from_exact_time_span(
+            tz != null ? exact_time_span.to_timezone(tz) : exact_time_span);
     }
     
     /**

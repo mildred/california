@@ -210,7 +210,7 @@ public class ExactTime : BaseObject, Gee.Comparable<ExactTime>, Gee.Hashable<Exa
     }
     
     public override string to_string() {
-        return date_time.to_string();
+        return "%s/%s".printf(date_time.to_string(), tz.to_string());
     }
 }
 
