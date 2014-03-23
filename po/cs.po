@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-03-15 00:30+0000\n"
-"PO-Revision-Date: 2014-03-16 09:57+0100\n"
+"POT-Creation-Date: 2014-03-21 00:58+0000\n"
+"PO-Revision-Date: 2014-03-23 12:56+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -35,19 +35,19 @@ msgstr "Copyright 2014 Yorba Foundation"
 msgid "Visit California's home page"
 msgstr "Navštívit domovskou stránku California"
 
-#: ../src/application/california-application.vala:82
+#: ../src/application/california-application.vala:89
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "Nelze otevřít aplikaci California: %s"
 
-#: ../src/application/california-application.vala:135
+#: ../src/application/california-application.vala:142
 #, c-format
 msgid "About %s"
 msgstr "O aplikaci %s"
 
 #. / Translators: add your name and email address to receive credit in the About dialog
 #. / For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:141
+#: ../src/application/california-application.vala:148
 msgid "translator-credits"
 msgstr "Marek Černocký <marek@manet.cz>"
 
@@ -152,15 +152,27 @@ msgstr "Aktualizace události"
 msgid "_Update"
 msgstr "Akt_ualizovat"
 
-#: ../src/host/host-main-window.vala:44
-msgid "Today"
-msgstr "Dnes"
-
-#: ../src/host/host-main-window.vala:64
-msgid "Create a new event for today"
-msgstr "Vytvořit novou událost pro dnešní den"
-
 #: ../src/host/host-main-window.vala:69
+msgid "_Today"
+msgstr "_Dnes"
+
+#: ../src/host/host-main-window.vala:71
+msgid "Jump to today's date (Ctrl+T)"
+msgstr "Přejít na dnešní datum (Ctrl+T)"
+
+#: ../src/host/host-main-window.vala:76
+msgid "Previous (Alt+Left)"
+msgstr "Předchozí (alt+←)"
+
+#: ../src/host/host-main-window.vala:81
+msgid "Next (Alt+Right)"
+msgstr "Následující (Alt+→)"
+
+#: ../src/host/host-main-window.vala:95
+msgid "Create a new event (Ctrl+N)"
+msgstr "Vytvořit novou událost (Ctrl+N)"
+
+#: ../src/host/host-main-window.vala:100
 msgid "Calendars (Ctrl+L)"
 msgstr "Kalendáře (Ctrl+L)"
 
@@ -169,7 +181,7 @@ msgstr "Kalendáře (Ctrl+L)"
 #. Single-day timed event, print "<full date>\n<full start time> to <full end time>",
 #. including year if not current year
 #. / Prints a span of time, i.e. "3:30pm to 4:30pm"
-#: ../src/host/host-show-event.vala:74 ../src/host/host-show-event.vala:84
+#: ../src/host/host-show-event.vala:76 ../src/host/host-show-event.vala:86
 #, c-format
 msgid "%s to %s"
 msgstr "%s až %s"
@@ -179,7 +191,7 @@ msgstr "%s až %s"
 #. / Prints two full time and date strings on separate lines, i.e.:
 #. / 12 January 2012, 3:30pm
 #. / 13 January 2013, 6:30am
-#: ../src/host/host-show-event.vala:95
+#: ../src/host/host-show-event.vala:97
 #, c-format
 msgid ""
 "%s, %s\n"
@@ -199,6 +211,14 @@ msgstr "O _aplikaci"
 #: ../src/rc/app-menu.interface.h:3
 msgid "_Quit"
 msgstr "U_končit"
+
+#: ../src/rc/calendar-manager-list.ui.h:1 ../src/rc/show-event.ui.h:3
+msgid "_Close"
+msgstr "_Zavřít"
+
+#: ../src/rc/calendar-manager-list-item.ui.h:1
+msgid "Calendar color"
+msgstr "Barva kalendáře"
 
 #: ../src/rc/create-update-event.ui.h:1
 msgid "New Event"
@@ -237,7 +257,3 @@ msgstr "_Vytvořit"
 #: ../src/rc/show-event.ui.h:1
 msgid "_Remove"
 msgstr "_Smazat"
-
-#: ../src/rc/show-event.ui.h:3
-msgid "_Close"
-msgstr "_Zavřít"
