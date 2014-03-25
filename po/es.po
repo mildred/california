@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-03-15 00:30+0000\n"
-"PO-Revision-Date: 2014-03-19 17:43+0100\n"
+"POT-Creation-Date: 2014-03-21 00:58+0000\n"
+"PO-Revision-Date: 2014-03-25 16:24+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -36,19 +36,19 @@ msgstr "Copyright 2014 Fundación Yorba"
 msgid "Visit California's home page"
 msgstr "Visitar la página web de California"
 
-#: ../src/application/california-application.vala:82
+#: ../src/application/california-application.vala:89
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "No se pudo abrir California: %s"
 
-#: ../src/application/california-application.vala:135
+#: ../src/application/california-application.vala:142
 #, c-format
 msgid "About %s"
 msgstr "Acerca de %s"
 
 #. / Translators: add your name and email address to receive credit in the About dialog
 #. / For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:141
+#: ../src/application/california-application.vala:148
 msgid "translator-credits"
 msgstr "Daniel Mustieles <daniel.mustieles@gmail.com>, 2014"
 
@@ -153,15 +153,29 @@ msgstr "Actualizar evento"
 msgid "_Update"
 msgstr "_Actualizar"
 
-#: ../src/host/host-main-window.vala:44
-msgid "Today"
-msgstr "Hoy"
-
-#: ../src/host/host-main-window.vala:64
-msgid "Create a new event for today"
-msgstr "Crear un evento nuevo para hoy"
-
 #: ../src/host/host-main-window.vala:69
+#| msgid "Today"
+msgid "_Today"
+msgstr "_Hoy"
+
+#: ../src/host/host-main-window.vala:71
+msgid "Jump to today's date (Ctrl+T)"
+msgstr "Saltar a la fecha de hoy (Ctrl+T)"
+
+#: ../src/host/host-main-window.vala:76
+msgid "Previous (Alt+Left)"
+msgstr "Anterior (Alt+Izquierda)"
+
+#: ../src/host/host-main-window.vala:81
+msgid "Next (Alt+Right)"
+msgstr "Siguiente (Alt+Derecha)"
+
+#: ../src/host/host-main-window.vala:95
+#| msgid "Create a new event for today"
+msgid "Create a new event (Ctrl+N)"
+msgstr "Crear un evento nuevo (Ctrl+N)"
+
+#: ../src/host/host-main-window.vala:100
 msgid "Calendars (Ctrl+L)"
 msgstr "Calendarios (Ctrl+L)"
 
@@ -170,7 +184,7 @@ msgstr "Calendarios (Ctrl+L)"
 #. Single-day timed event, print "<full date>\n<full start time> to <full end time>",
 #. including year if not current year
 #. / Prints a span of time, i.e. "3:30pm to 4:30pm"
-#: ../src/host/host-show-event.vala:74 ../src/host/host-show-event.vala:84
+#: ../src/host/host-show-event.vala:76 ../src/host/host-show-event.vala:86
 #, c-format
 msgid "%s to %s"
 msgstr "%s a %s"
@@ -180,7 +194,7 @@ msgstr "%s a %s"
 #. / Prints two full time and date strings on separate lines, i.e.:
 #. / 12 January 2012, 3:30pm
 #. / 13 January 2013, 6:30am
-#: ../src/host/host-show-event.vala:95
+#: ../src/host/host-show-event.vala:97
 #, c-format
 msgid ""
 "%s, %s\n"
@@ -190,7 +204,6 @@ msgstr ""
 "%s, %s"
 
 #: ../src/rc/app-menu.interface.h:1
-#| msgid "Calendar:"
 msgid "_Calendars"
 msgstr "_Calendarios"
 
@@ -201,6 +214,15 @@ msgstr "_Acerca de"
 #: ../src/rc/app-menu.interface.h:3
 msgid "_Quit"
 msgstr "_Quitar"
+
+#: ../src/rc/calendar-manager-list.ui.h:1 ../src/rc/show-event.ui.h:3
+msgid "_Close"
+msgstr "_Cerrar"
+
+#: ../src/rc/calendar-manager-list-item.ui.h:1
+#| msgid "Calendar:"
+msgid "Calendar color"
+msgstr "Color del calendario"
 
 #: ../src/rc/create-update-event.ui.h:1
 msgid "New Event"
@@ -239,10 +261,6 @@ msgstr "C_rear"
 #: ../src/rc/show-event.ui.h:1
 msgid "_Remove"
 msgstr "_Quitar"
-
-#: ../src/rc/show-event.ui.h:3
-msgid "_Close"
-msgstr "_Cerrar"
 
 #~ msgid "%B"
 #~ msgstr "%B"
