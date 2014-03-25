@@ -167,9 +167,16 @@ public class CreateUpdateEvent : Gtk.Grid, Interaction {
         calendar_sources = Backing.Manager.instance.get_sources_of_type<Backing.CalendarSource>();
         index = 0;
         int calendar_source_index = 0;
-        foreach (Backing.Source source in calendar_sources) {
-            if (!source.visible)
+        Gee.Iterator<Backing.Source> iter = calendar_sources.iterator();
+        while (iter.next()) {
+            Backing.Source source = iter.get();
+            
+            // drop from List to ensure ComboBox indices match array indices
+            if (!source.visible) {
+                iter.remove();
+                
                 continue;
+            }
             
             calendar_combo.append_text(source.title);
             if (source == event.calendar_source)
