@@ -100,8 +100,16 @@ public class DateTime : BaseObject, Gee.Hashable<DateTime>, Gee.Comparable<DateT
             throw new ComponentError.INVALID("DATE-TIME for %s is invalid", ical_prop_kind.to_string());
         
         unowned iCal.icalparameter? param = prop.get_first_parameter(iCal.icalparameter_kind.TZID_PARAMETER);
-        if (param != null)
-            zone = new Calendar.OlsonZone(param.get_tzid());
+        if (param != null) {
+            // first, see if libical can convert this into builtin timezone; this indicates the
+            // component was (probably) created with another instance of libical that has added its
+            // timezone "prefix" to the tzid; otherwise, treat tzid as a straight-up Olson zone
+            unowned iCal.icaltimezone? tz = iCal.icaltimezone.get_builtin_timezone_from_tzid(param.get_tzid());
+            if (tz != null)
+                zone = new Calendar.OlsonZone(tz.get_location());
+            else
+                zone = new Calendar.OlsonZone(param.get_tzid());
+        }
         
         kind = ical_prop_kind;
     }

@@ -1402,7 +1402,7 @@ namespace iCal {
 		[CCode (cname = "icaltimezone_get_builtin_timezone_from_offset")]
 		public static unowned iCal.icaltimezone get_builtin_timezone_from_offset (int offset, string tzname);
 		[CCode (cname = "icaltimezone_get_builtin_timezone_from_tzid")]
-		public static unowned iCal.icaltimezone get_builtin_timezone_from_tzid (string tzid);
+		public static unowned iCal.icaltimezone? get_builtin_timezone_from_tzid (string tzid);
 		[CCode (cname = "icaltimezone_get_builtin_timezones")]
 		public static unowned iCal.icalarray get_builtin_timezones ();
 		[CCode (cname = "icaltimezone_get_component")]
