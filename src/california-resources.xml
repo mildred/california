@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
     <gresource prefix="/org/yorba/california">
+        <file compressed="true">rc/activator-list.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
         <file compressed="true">rc/app-menu.interface</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
@@ -14,6 +17,9 @@
     </gresource>
     <gresource prefix="/org/yorba/california">
         <file compressed="false">rc/show-event.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
+        <file compressed="true">rc/webcal-subscribe.ui</file>
     </gresource>
 </gresources>
 

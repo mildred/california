@@ -29,7 +29,7 @@ public abstract class Store : BaseObject {
      *
      * Also fired in {@link open_async} when Sources are discovered.
      */
-    public virtual signal void added(Source source) {
+    public virtual signal void source_added(Source source) {
         debug("%s: added %s", to_string(), source.to_string());
     }
     
@@ -40,7 +40,7 @@ public abstract class Store : BaseObject {
      *
      * Also called in {@link close_async} when internal refs are being dropped.
      */
-    public virtual signal void removed(Source source) {
+    public virtual signal void source_removed(Source source) {
         debug("%s: removed %s", to_string(), source.to_string());
     }
     

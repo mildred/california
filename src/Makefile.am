@@ -13,16 +13,22 @@ california_VALASOURCES = \
 	application/main.vala \
 	\
 	backing/backing.vala \
+	backing/backing-activator.vala \
 	backing/backing-calendar-source.vala \
 	backing/backing-calendar-source-subscription.vala \
+	backing/backing-calendar-subscription-manager.vala \
 	backing/backing-error.vala \
 	backing/backing-manager.vala \
 	backing/backing-source.vala \
 	backing/backing-store.vala \
+	backing/backing-webcal-subscribable.vala \
 	\
 	backing/eds/backing-eds-calendar-source.vala \
 	backing/eds/backing-eds-calendar-source-subscription.vala \
 	backing/eds/backing-eds-store.vala \
+	\
+	backing/webcal/backing-webcal-activator.vala \
+	backing/webcal/backing-webcal-activator-pane.vala \
 	\
 	base/base-object.vala \
 	base/base-unit.vala \
@@ -61,6 +67,7 @@ california_VALASOURCES = \
 	component/component-vtype.vala \
 	\
 	host/host.vala \
+	host/host-activator-list.vala \
 	host/host-calendar-popup.vala \
 	host/host-color-chooser-popup.vala \
 	host/host-create-update-event.vala \
@@ -78,6 +85,7 @@ california_VALASOURCES = \
 	util/util-gfx.vala \
 	util/util-memory.vala \
 	util/util-string.vala \
+	util/util-uri.vala \
 	\
 	view/view.vala \
 	view/view-controllable.vala \
@@ -94,11 +102,13 @@ california_SOURCES = \
 	$(NULL)
 
 california_RC = \
+	rc/activator-list.ui \
 	rc/app-menu.interface \
 	rc/calendar-manager-list.ui \
 	rc/calendar-manager-list-item.ui \
 	rc/create-update-event.ui \
 	rc/show-event.ui \
+	rc/webcal-subscribe.ui \
 	$(NULL)
 
 california_OPTIONAL_VALAFLAGS =
@@ -118,6 +128,7 @@ california_VALAFLAGS = \
 	--pkg libedataserver-1.2 \
 	--pkg libecal-1.2 \
 	--pkg libical \
+	--pkg libsoup-2.4 \
 	$(NULL)
 
 california_CFLAGS = \

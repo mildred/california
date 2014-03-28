@@ -255,6 +255,7 @@ public abstract class CalendarSourceSubscription : BaseObject {
         
         // Use to_array() so no iteration troubles when notify_instance_dropped removes it from
         // the multimap
+        debug("Dropping %d instances to %s: unavailable", instances.size, calendar.to_string());
         foreach (Component.Instance instance in instances.get_values().to_array())
             notify_instance_dropped(instance);
     }

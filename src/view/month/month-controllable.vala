@@ -65,8 +65,7 @@ public class Controllable : Gtk.Grid, View.Controllable {
     public Calendar.Date default_date { get; protected set; }
     
     private Gee.HashMap<Calendar.Date, Cell> date_to_cell = new Gee.HashMap<Calendar.Date, Cell>();
-    private Gee.ArrayList<Backing.CalendarSourceSubscription> subscriptions = new Gee.ArrayList<
-        Backing.CalendarSourceSubscription>();
+    private Backing.CalendarSubscriptionManager? subscriptions = null;
     private Gdk.EventType button_press_type = Gdk.EventType.NOTHING;
     private Gdk.Point button_press_point = Gdk.Point();
     
@@ -275,34 +274,25 @@ public class Controllable : Gtk.Grid, View.Controllable {
         Calendar.ExactTimeSpan time_window = new Calendar.ExactTimeSpan.from_date_span(window,
             Calendar.Timezone.local);
         
-        // clear current subscriptions and generate new subscriptions for new window
-        subscriptions.clear();
-        foreach (Backing.Store store in Backing.Manager.instance.get_stores()) {
-            foreach (Backing.Source source in store.get_sources_of_type<Backing.CalendarSource>()) {
-                Backing.CalendarSource calendar = (Backing.CalendarSource) source;
-                calendar.notify[Backing.Source.PROP_VISIBLE].connect(queue_draw);
-                calendar.subscribe_async.begin(time_window, null, on_subscribed);
-            }
-        }
+        // create new subscription manager, subscribe to its signals, and let them drive
+        subscriptions = null;
+        subscriptions = new Backing.CalendarSubscriptionManager(time_window);
+        subscriptions.calendar_added.connect(on_calendar_added);
+        subscriptions.calendar_removed.connect(on_calendar_removed);
+        subscriptions.instance_added.connect(on_instance_added);
+        subscriptions.instance_removed.connect(on_instance_removed);
+        
+        subscriptions.start();
     }
     
-    private void on_subscribed(Object? source, AsyncResult result) {
-        Backing.CalendarSource calendar = (Backing.CalendarSource) source;
-        
-        try {
-            Backing.CalendarSourceSubscription subscription = calendar.subscribe_async.end(result);
-            subscriptions.add(subscription);
-            
-            subscription.instance_discovered.connect(on_instance_added);
-            subscription.instance_added.connect(on_instance_added);
-            subscription.instance_removed.connect(on_instance_removed);
-            subscription.instance_dropped.connect(on_instance_removed);
-            
-            // this will start signals firing for event changes
-            subscription.start();
-        } catch (Error err) {
-            debug("Unable to subscribe to %s: %s", calendar.to_string(), err.message);
-        }
+    private void on_calendar_added(Backing.CalendarSource calendar) {
+        calendar.notify[Backing.Source.PROP_VISIBLE].connect(queue_draw);
+        calendar.notify[Backing.Source.PROP_COLOR].connect(queue_draw);
+    }
+    
+    private void on_calendar_removed(Backing.CalendarSource calendar) {
+        calendar.notify[Backing.Source.PROP_VISIBLE].disconnect(queue_draw);
+        calendar.notify[Backing.Source.PROP_COLOR].disconnect(queue_draw);
     }
     
     private void on_instance_added(Component.Instance instance) {

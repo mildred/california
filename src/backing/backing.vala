@@ -39,8 +39,10 @@ public void init() throws Error {
     // internal class init
     Manager.init();
     
-    // Register all Stores here
-    Manager.instance.register(new EdsStore());
+    // Register all Stores and Activators here
+    EdsStore eds_store = new EdsStore();
+    Manager.instance.register_store(eds_store);
+    Manager.instance.register_activator(new WebCalActivator(_("Web calendar (.ics)"), eds_store));
     
     // open Manager, pumping event loop until it completes (possibly w/ error)
     Manager.instance.open_async.begin(null, on_backing_manager_opened);

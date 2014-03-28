@@ -269,12 +269,13 @@ public class CreateUpdateEvent : Gtk.Grid, Interaction {
         else
             create_event(event);
         
-        dismissed();
+        completed();
+        dismissed(true);
     }
     
     [GtkCallback]
     private void on_cancel_button_clicked() {
-        dismissed();
+        dismissed(true);
     }
 }
 

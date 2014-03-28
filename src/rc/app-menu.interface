@@ -3,6 +3,10 @@
     <menu id="app-menu">
         <section>
             <item>
+                <attribute name="label" translatable="yes">_Add calendar...</attribute>
+                <attribute name="action">app.new-calendar</attribute>
+            </item>
+            <item>
                 <attribute name="label" translatable="yes">_Calendars</attribute>
                 <attribute name="action">app.calendar-manager</attribute>
                 <attribute name="accel">&lt;Primary&gt;l</attribute>

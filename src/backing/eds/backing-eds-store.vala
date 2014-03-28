@@ -10,7 +10,7 @@ namespace California.Backing {
  * An interface to the EDS source registry.
  */
 
-internal class EdsStore : Store {
+internal class EdsStore : Store, WebCalSubscribable {
     private E.SourceRegistry? registry = null;
     private Gee.HashMap<E.Source, Source> sources = new Gee.HashMap<E.Source, Source>();
     
@@ -41,6 +41,67 @@ internal class EdsStore : Store {
         is_open = false;
     }
     
+    /**
+     * @inheritDoc
+     *
+     * TODO: Authentication is not properly handled.
+     */
+    public async void subscribe_webcal_async(string title, Soup.URI uri, string color,
+        Cancellable? cancellable) throws Error {
+        if (!is_open)
+            throw new BackingError.UNAVAILABLE("EDS not open");
+        
+        E.Source scratch = new E.Source(null, null);
+        scratch.parent = "webcal-stub";
+        scratch.enabled = true;
+        scratch.display_name = title;
+        
+        // required
+        E.SourceCalendar? calendar = scratch.get_extension(E.SOURCE_EXTENSION_CALENDAR)
+            as E.SourceCalendar;
+        if (calendar == null)
+            throw new BackingError.UNAVAILABLE("No SourceCalendar extension for scratch source");
+        calendar.backend_name = "webcal";
+        calendar.selected = true;
+        calendar.color = color;
+        
+        // required
+        E.SourceWebdav? webdav = scratch.get_extension(E.SOURCE_EXTENSION_WEBDAV_BACKEND)
+            as E.SourceWebdav;
+        if (webdav == null)
+            throw new BackingError.UNAVAILABLE("No SourceWebdav extension for scratch source");
+        webdav.resource_path = uri.path;
+        webdav.resource_query = uri.query;
+        
+        // required
+        E.SourceAuthentication? auth = scratch.get_extension(E.SOURCE_EXTENSION_AUTHENTICATION)
+            as E.SourceAuthentication;
+        if (auth == null)
+            throw new BackingError.UNAVAILABLE("No SourceAuthentication extension for scratch source");
+        auth.host = uri.host;
+        auth.port = uri.port;
+        auth.method = "none";
+        
+        // optional w/ baked-in defaults
+        E.SourceOffline? offline = scratch.get_extension(E.SOURCE_EXTENSION_OFFLINE)
+            as E.SourceOffline;
+        if (offline != null)
+            offline.stay_synchronized = true;
+        
+        // optional w/ baked-in defaults
+        E.SourceRefresh? refresh = scratch.get_extension(E.SOURCE_EXTENSION_REFRESH)
+            as E.SourceRefresh;
+        if (refresh != null) {
+            refresh.enabled = true;
+            refresh.interval_minutes = 1;
+        }
+        
+        List<E.Source> sources = new List<E.Source>();
+        sources.append(scratch);
+        // TODO: Properly bind async version of this call
+        registry.create_sources_sync(sources, cancellable);
+    }
+    
     public override Gee.List<Source> get_sources() {
         Gee.List<Source> list = new Gee.ArrayList<Source>();
         list.add_all(sources.values.read_only_view);
@@ -69,7 +130,7 @@ internal class EdsStore : Store {
         
         sources.set(eds_source, calendar);
         
-        added(calendar);
+        source_added(calendar);
     }
     
     // since the registry ref may have been dropped (in close_async), it shouldn't be ref'd here
@@ -79,8 +140,8 @@ internal class EdsStore : Store {
         if (sources.unset(eds_source, out source)) {
             assert(source != null);
             
-            removed(source);
             source.set_unavailable();
+            source_removed(source);
         }
         
         // close in background

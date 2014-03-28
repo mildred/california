@@ -18,6 +18,7 @@ public class Manager : BaseObject {
     public bool is_open { get; private set; default = false; }
     
     private Gee.List<Store> stores = new Gee.ArrayList<Store>();
+    private Gee.List<Activator> activators = new Gee.ArrayList<Activator>();
     
     /**
      * Fired when a {@link Store} cannot be opened.
@@ -42,9 +43,21 @@ public class Manager : BaseObject {
      *
      * TODO: A plugin system may make sense here.
      */
-    internal void register(Store store) {
+    internal void register_store(Store store) {
         if (!stores.contains(store))
             stores.add(store);
+    }
+    
+    /**
+     * The various {@link Activators} are registered in {@link Backing.init}.
+     *
+     * This *must* be called prior to {@link open_async} for them to be opened properly.
+     *
+     * TODO: A plugin system may make sense here.
+     */
+    internal void register_activator(Activator activator) {
+        if (!activators.contains(activator))
+            activators.add(activator);
     }
     
     /**
@@ -100,6 +113,15 @@ public class Manager : BaseObject {
         }
         
         is_open = false;
+    }
+    
+    /**
+     * Returns a read-only list of all available {@link Activator}s.
+     *
+     * Must only be called wheil the {@link Manager} is open.
+     */
+    public Gee.List<Activator> get_activators() {
+        return activators.read_only_view;
     }
     
     /**

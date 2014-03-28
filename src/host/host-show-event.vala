@@ -127,18 +127,18 @@ public class ShowEvent : Gtk.Grid, Interaction {
     [GtkCallback]
     private void on_remove_button_clicked() {
         remove_event(event);
-        dismissed();
+        dismissed(true);
     }
     
     [GtkCallback]
     private void on_update_button_clicked() {
         update_event(event);
-        dismissed();
+        dismissed(true);
     }
     
     [GtkCallback]
     private void on_close_button_clicked() {
-        dismissed();
+        dismissed(true);
     }
 }
 

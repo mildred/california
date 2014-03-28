@@ -20,6 +20,7 @@ public class ModalWindow : Gtk.Dialog {
     public Gtk.Box content_area { get; private set; }
     
     private Interaction? primary = null;
+    private Gtk.ResponseType response_type = Gtk.ResponseType.CLOSE;
     
     public ModalWindow(Gtk.Window? parent) {
         transient_for = parent;
@@ -41,6 +42,7 @@ public class ModalWindow : Gtk.Dialog {
             if (primary == null)
                 primary = interaction;
             
+            interaction.completed.connect(on_interaction_completed);
             interaction.dismissed.connect(on_interaction_dismissed);
         }
     }
@@ -51,12 +53,17 @@ public class ModalWindow : Gtk.Dialog {
             if (primary == interaction)
                 primary = null;
             
+            interaction.completed.disconnect(on_interaction_completed);
             interaction.dismissed.disconnect(on_interaction_dismissed);
         }
     }
     
+    private void on_interaction_completed() {
+        response_type = Gtk.ResponseType.OK;
+    }
+    
     private void on_interaction_dismissed() {
-        response(Gtk.ResponseType.CLOSE);
+        response(response_type);
     }
     
     public override void show() {

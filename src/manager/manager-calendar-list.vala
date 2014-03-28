@@ -61,7 +61,7 @@ public class CalendarList : Gtk.Grid, Host.Interaction {
     
     [GtkCallback]
     private void on_close_button_clicked() {
-        dismissed();
+        dismissed(true);
     }
 }
 
