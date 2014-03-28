@@ -3,7 +3,7 @@
     <menu id="app-menu">
         <section>
             <item>
-                <attribute name="label" translatable="yes">_Add calendar...</attribute>
+                <attribute name="label" translatable="yes">_Add calendar…</attribute>
                 <attribute name="action">app.new-calendar</attribute>
             </item>
             <item>
