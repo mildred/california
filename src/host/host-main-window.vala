@@ -46,11 +46,13 @@ public class MainWindow : Gtk.ApplicationWindow {
         set_default_size(1024, 768);
         set_default_icon_name(Application.ICON_NAME);
         
+        bool rtl = get_direction() == Gtk.TextDirection.RTL;
+        
         add_action_entries(action_entries, this);
         Application.instance.add_accelerator(ACCEL_NEW_EVENT, ACTION_NEW_EVENT, null);
         Application.instance.add_accelerator(ACCEL_JUMP_TO_TODAY, ACTION_JUMP_TO_TODAY, null);
-        Application.instance.add_accelerator(ACCEL_NEXT, ACTION_NEXT, null);
-        Application.instance.add_accelerator(ACCEL_PREVIOUS, ACTION_PREVIOUS, null);
+        Application.instance.add_accelerator(rtl ? ACCEL_PREVIOUS : ACCEL_NEXT, ACTION_NEXT, null);
+        Application.instance.add_accelerator(rtl ? ACCEL_NEXT : ACCEL_PREVIOUS, ACTION_PREVIOUS, null);
         
         // start in Month view
         current_view = month_view;
@@ -63,8 +65,6 @@ public class MainWindow : Gtk.ApplicationWindow {
         headerbar.show_close_button = true;
         set_titlebar(headerbar);
 #endif
-        
-        bool rtl = get_direction () == Gtk.TextDirection.RTL;
         
         Gtk.Button today = new Gtk.Button.with_label(_("_Today"));
         today.use_underline = true;
