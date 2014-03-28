@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: california 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-28 05:05+0300\n"
-"PO-Revision-Date: 2014-03-28 05:08+0300\n"
+"PO-Revision-Date: 2014-03-28 05:10+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -281,7 +281,7 @@ msgstr "_שם:"
 
 #: ../src/rc/webcal-subscribe.ui.h:2
 msgid "_URL:"
-msgstr "_URL:"
+msgstr "_כתובת:"
 
 #: ../src/rc/webcal-subscribe.ui.h:3
 msgid "Select a color for the Web calendar"
