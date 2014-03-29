@@ -12,6 +12,7 @@ AM_PROG_CC_C_O
 
 AC_PATH_PROG(VALAC, valac, valac)
 AC_SUBST(VALAC)
+AM_PROG_VALAC(0.22.1)
 
 AC_PATH_PROG(GLIB_COMPILE_RESOURCES, glib-compile-resources)
 
