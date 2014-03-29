@@ -21,9 +21,6 @@ public class CreateUpdateEvent : Gtk.Grid, Interaction {
     public Gtk.Widget? default_widget { get { return accept_button; } }
     
     [GtkChild]
-    private Gtk.Label title_label;
-    
-    [GtkChild]
     private Gtk.Entry summary_entry;
     
     [GtkChild]
@@ -82,7 +79,6 @@ public class CreateUpdateEvent : Gtk.Grid, Interaction {
         this.event = event;
         original_calendar_source = event.calendar_source;
         
-        title_label.label = _("Update Event");
         accept_button.label = _("_Update");
         is_update = true;
         
