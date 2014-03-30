@@ -2,22 +2,23 @@
 # Copyright (C) 2014 california's COPYRIGHT HOLDER
 # This file is distributed under the same license as the california package.
 # rhaglion <rhaglion@riseup.net>, 2014.
+# Benjamin Steinwender <b@stbe.at>, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-03-22 07:26+0000\n"
-"PO-Revision-Date: 2014-03-23 16:50+0100\n"
-"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
+"POT-Creation-Date: 2014-03-29 02:03+0000\n"
+"PO-Revision-Date: 2014-03-30 16:32+0100\n"
+"Last-Translator: Benjamin Steinwender <b@stbe.at>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.6.4\n"
 
 #: ../src/application/california-application.vala:18
 msgid "California"
@@ -35,23 +36,28 @@ msgstr "Copyright © 2014 Yorba Foundation"
 msgid "Visit California's home page"
 msgstr "Besuchen Sie die California-Homepage"
 
-#: ../src/application/california-application.vala:89
+#: ../src/application/california-application.vala:92
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "California konnte nicht geöffnet werden: %s"
 
-#: ../src/application/california-application.vala:142
+#: ../src/application/california-application.vala:162
 #, c-format
 msgid "About %s"
 msgstr "Info zu %s"
 
 #. / Translators: add your name and email address to receive credit in the About dialog
 #. / For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:148
+#: ../src/application/california-application.vala:168
 msgid "translator-credits"
 msgstr ""
 "rhaglion <mails.rhaglion@riseup.net>, 2014\n"
-"Christian Kirbach <christian.kirbach@gmail.com>, 2014"
+"Christian Kirbach <christian.kirbach@gmail.com>, 2014\n"
+"Benjamin Steinwender <b@stbe.at>, 2014"
+
+#: ../src/backing/backing.vala:45
+msgid "Web calendar (.ics)"
+msgstr "Internetkalender (.ics)"
 
 #. / The month and year according to locale preferences, i.e. "March 2014"
 #. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
@@ -146,11 +152,12 @@ msgstr "%d:%02d"
 msgid "%d:%02d:%02d"
 msgstr "%d:%02d:%02d"
 
-#: ../src/host/host-create-update-event.vala:85
-msgid "Update Event"
-msgstr "Ereignis aktualisieren"
+#: ../src/calendar/calendar-date.vala:294
+#| msgid "_Today"
+msgid "Today"
+msgstr "Heute"
 
-#: ../src/host/host-create-update-event.vala:86 ../src/rc/show-event.ui.h:2
+#: ../src/host/host-create-update-event.vala:82 ../src/rc/show-event.ui.h:2
 msgid "_Update"
 msgstr "_Aktualisieren"
 
@@ -202,15 +209,29 @@ msgstr ""
 "%s, %s\n"
 "%s, %s"
 
+#: ../src/rc/activator-list.ui.h:1 ../src/rc/create-update-event.ui.h:8
+#: ../src/rc/webcal-subscribe.ui.h:4
+msgid "_Cancel"
+msgstr "_Abbrechen"
+
+#: ../src/rc/activator-list.ui.h:2
+msgid "_Add"
+msgstr "_Hinzufügen"
+
 #: ../src/rc/app-menu.interface.h:1
+#| msgid "_Calendars"
+msgid "_Add calendar…"
+msgstr "Kalender _hinzufügen …"
+
+#: ../src/rc/app-menu.interface.h:2
 msgid "_Calendars"
 msgstr "_Kalender"
 
-#: ../src/rc/app-menu.interface.h:2
+#: ../src/rc/app-menu.interface.h:3
 msgid "_About"
 msgstr "_Info"
 
-#: ../src/rc/app-menu.interface.h:3
+#: ../src/rc/app-menu.interface.h:4
 msgid "_Quit"
 msgstr "_Beenden"
 
@@ -223,39 +244,53 @@ msgid "Calendar color"
 msgstr "Kalenderfarbe"
 
 #: ../src/rc/create-update-event.ui.h:1
-msgid "New Event"
-msgstr "Neues Ereignis"
-
-#: ../src/rc/create-update-event.ui.h:2
 msgid "Untitled event"
 msgstr "Unbenanntes Ereignis"
 
 #. As in "From <date> <time> to <date> <time>"
-#: ../src/rc/create-update-event.ui.h:4
+#: ../src/rc/create-update-event.ui.h:3
 msgid "From"
 msgstr "Vom"
 
 #. As in "From <date> <time> to <date> <time>"
-#: ../src/rc/create-update-event.ui.h:6
+#: ../src/rc/create-update-event.ui.h:5
 msgid "to"
 msgstr "bis zum"
 
-#: ../src/rc/create-update-event.ui.h:7
+#: ../src/rc/create-update-event.ui.h:6
 msgid "_All-day event"
 msgstr "_Ganztägiges Ereignis"
 
-#: ../src/rc/create-update-event.ui.h:8
+#: ../src/rc/create-update-event.ui.h:7
 msgid "Calendar:"
 msgstr "Kalender:"
 
 #: ../src/rc/create-update-event.ui.h:9
-msgid "_Cancel"
-msgstr "_Abbrechen"
-
-#: ../src/rc/create-update-event.ui.h:10
 msgid "C_reate"
 msgstr "_Anlegen"
 
 #: ../src/rc/show-event.ui.h:1
 msgid "_Remove"
 msgstr "_Entfernen"
+
+#: ../src/rc/webcal-subscribe.ui.h:1
+msgid "_Name:"
+msgstr "_Name:"
+
+#: ../src/rc/webcal-subscribe.ui.h:2
+msgid "_URL:"
+msgstr "_Adresse:"
+
+#: ../src/rc/webcal-subscribe.ui.h:3
+msgid "Select a color for the Web calendar"
+msgstr "Wählen Sie eine Farbe für den Internetkalender"
+
+#: ../src/rc/webcal-subscribe.ui.h:5
+msgid "_Subscribe"
+msgstr "_Abonnieren"
+
+#~ msgid "Update Event"
+#~ msgstr "Ereignis aktualisieren"
+
+#~ msgid "New Event"
+#~ msgstr "Neues Ereignis"
