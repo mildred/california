@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-03-22 04:03+0000\n"
-"PO-Revision-Date: 2014-03-22 08:21+0100\n"
+"POT-Creation-Date: 2014-04-01 15:06+0000\n"
+"PO-Revision-Date: 2014-04-01 22:28+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -20,7 +20,10 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Generator: Poedit 1.5.4\n"
 
-#: ../libphodav/chezdav.c:201
+#: ../src/activator/activator.vala:35
+msgid "Web calendar (.ics)"
+msgstr "Spletni koledar (.ics)"
+
 #: ../src/application/california-application.vala:18
 msgid "California"
 msgstr "California"
@@ -37,19 +40,19 @@ msgstr "Avtorske pravice 2014, Yorba Foundation"
 msgid "Visit California's home page"
 msgstr "Obiščite spletno stran programa California"
 
-#: ../src/application/california-application.vala:89
+#: ../src/application/california-application.vala:92
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "Ni mogoče odpreti datoteke programa: %s"
 
-#: ../src/application/california-application.vala:142
+#: ../src/application/california-application.vala:150
 #, c-format
 msgid "About %s"
 msgstr "O %s"
 
 #. / Translators: add your name and email address to receive credit in the About dialog
 #. / For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:148
+#: ../src/application/california-application.vala:156
 msgid "translator-credits"
 msgstr "Matej Urbančič <mateju@svn.gnome.org>"
 
@@ -146,11 +149,11 @@ msgstr "%d:%02d"
 msgid "%d:%02d:%02d"
 msgstr "%d:%02d:%02d"
 
-#: ../src/host/host-create-update-event.vala:85
-msgid "Update Event"
-msgstr "Posodobi dogodek"
+#: ../src/calendar/calendar-date.vala:294
+msgid "Today"
+msgstr "Danes"
 
-#: ../src/host/host-create-update-event.vala:86 ../src/rc/show-event.ui.h:2
+#: ../src/host/host-create-update-event.vala:82 ../src/rc/show-event.ui.h:2
 msgid "_Update"
 msgstr "_Posodobi"
 
@@ -202,15 +205,28 @@ msgstr ""
 "%s, %s\n"
 "%s, %s"
 
+#: ../src/rc/activator-list.ui.h:1 ../src/rc/create-update-event.ui.h:8
+#: ../src/rc/webcal-subscribe.ui.h:4
+msgid "_Cancel"
+msgstr "_Prekliči"
+
+#: ../src/rc/activator-list.ui.h:2
+msgid "_Add"
+msgstr "_Dodaj"
+
 #: ../src/rc/app-menu.interface.h:1
+msgid "_Add calendar…"
+msgstr "_Dodaj koledar ..."
+
+#: ../src/rc/app-menu.interface.h:2
 msgid "_Calendars"
 msgstr "_Koledarji"
 
-#: ../src/rc/app-menu.interface.h:2
+#: ../src/rc/app-menu.interface.h:3
 msgid "_About"
 msgstr "_O programu"
 
-#: ../src/rc/app-menu.interface.h:3
+#: ../src/rc/app-menu.interface.h:4
 msgid "_Quit"
 msgstr "_Končaj"
 
@@ -223,39 +239,53 @@ msgid "Calendar color"
 msgstr "Barva koledarja"
 
 #: ../src/rc/create-update-event.ui.h:1
-msgid "New Event"
-msgstr "Nov dogodek"
-
-#: ../src/rc/create-update-event.ui.h:2
 msgid "Untitled event"
 msgstr "Neimenovan dogodek"
 
 #. As in "From <date> <time> to <date> <time>"
-#: ../src/rc/create-update-event.ui.h:4
+#: ../src/rc/create-update-event.ui.h:3
 msgid "From"
 msgstr "Od"
 
 #. As in "From <date> <time> to <date> <time>"
-#: ../src/rc/create-update-event.ui.h:6
+#: ../src/rc/create-update-event.ui.h:5
 msgid "to"
 msgstr "do"
 
-#: ../src/rc/create-update-event.ui.h:7
+#: ../src/rc/create-update-event.ui.h:6
 msgid "_All-day event"
 msgstr "Celo_dnevni dogodek"
 
-#: ../src/rc/create-update-event.ui.h:8
+#: ../src/rc/create-update-event.ui.h:7
 msgid "Calendar:"
 msgstr "Koledar:"
 
 #: ../src/rc/create-update-event.ui.h:9
-msgid "_Cancel"
-msgstr "_Prekliči"
-
-#: ../src/rc/create-update-event.ui.h:10
 msgid "C_reate"
 msgstr "Ustva_ri"
 
 #: ../src/rc/show-event.ui.h:1
 msgid "_Remove"
 msgstr "_Odstrani"
+
+#: ../src/rc/webcal-subscribe.ui.h:1
+msgid "_Name:"
+msgstr "_Ime:"
+
+#: ../src/rc/webcal-subscribe.ui.h:2
+msgid "_URL:"
+msgstr "Naslov _URL:"
+
+#: ../src/rc/webcal-subscribe.ui.h:3
+msgid "Select a color for the Web calendar"
+msgstr "Izbor barve za spletni koledar"
+
+#: ../src/rc/webcal-subscribe.ui.h:5
+msgid "_Subscribe"
+msgstr "_Naroči se"
+
+#~ msgid "Update Event"
+#~ msgstr "Posodobi dogodek"
+
+#~ msgid "New Event"
+#~ msgstr "Nov dogodek"
