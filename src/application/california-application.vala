@@ -87,7 +87,7 @@ public class Application : Gtk.Application {
         try {
             Host.init();
             Manager.init();
-            Backing.init();
+            Activator.init();
         } catch (Error err) {
             error_message(_("Unable to open California: %s").printf(err.message));
             quit();
@@ -103,7 +103,7 @@ public class Application : Gtk.Application {
         main_window = null;
         
         // unit termination
-        Backing.terminate();
+        Activator.terminate();
         Manager.terminate();
         Host.terminate();
         
@@ -132,19 +132,7 @@ public class Application : Gtk.Application {
     }
     
     private void on_new_calendar() {
-        Host.ModalWindow modal = new Host.ModalWindow(main_window);
-        Host.ActivatorList list = new Host.ActivatorList();
-        modal.content_area.add(list);
-        
-        // when a Backing.Activator is selected from the list, swap out the list for the
-        // Activator's own interaction
-        list.selected.connect(activator => {
-            modal.content_area.remove(list);
-            modal.content_area.add(activator.create_interaction(null));
-        });
-        
-        modal.run();
-        modal.destroy();
+        Activator.Window.display(main_window);
     }
     
     private void on_calendar_manager() {

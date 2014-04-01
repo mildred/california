@@ -4,7 +4,7 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Backing {
+namespace California.Activator {
 
 [GtkTemplate (ui = "/org/yorba/california/rc/webcal-subscribe.ui")]
 internal class WebCalActivatorPane : Gtk.Grid, Host.Interaction {
@@ -22,9 +22,9 @@ internal class WebCalActivatorPane : Gtk.Grid, Host.Interaction {
     [GtkChild]
     private Gtk.Button subscribe_button;
     
-    private WebCalSubscribable store;
+    private Backing.WebCalSubscribable store;
     
-    public WebCalActivatorPane(WebCalSubscribable store, Soup.URI? supplied_url) {
+    public WebCalActivatorPane(Backing.WebCalSubscribable store, Soup.URI? supplied_url) {
         this.store = store;
         
         if (supplied_url != null) {

@@ -18,7 +18,6 @@ public class Manager : BaseObject {
     public bool is_open { get; private set; default = false; }
     
     private Gee.List<Store> stores = new Gee.ArrayList<Store>();
-    private Gee.List<Activator> activators = new Gee.ArrayList<Activator>();
     
     /**
      * Fired when a {@link Store} cannot be opened.
@@ -43,21 +42,9 @@ public class Manager : BaseObject {
      *
      * TODO: A plugin system may make sense here.
      */
-    internal void register_store(Store store) {
+    internal void register(Store store) {
         if (!stores.contains(store))
             stores.add(store);
-    }
-    
-    /**
-     * The various {@link Activators} are registered in {@link Backing.init}.
-     *
-     * This *must* be called prior to {@link open_async} for them to be opened properly.
-     *
-     * TODO: A plugin system may make sense here.
-     */
-    internal void register_activator(Activator activator) {
-        if (!activators.contains(activator))
-            activators.add(activator);
     }
     
     /**
@@ -116,21 +103,26 @@ public class Manager : BaseObject {
     }
     
     /**
-     * Returns a read-only list of all available {@link Activator}s.
-     *
-     * Must only be called wheil the {@link Manager} is open.
-     */
-    public Gee.List<Activator> get_activators() {
-        return activators.read_only_view;
-    }
-    
-    /**
      * Returns a read-only list of all available {@link Store}s.
      *
      * Must only be called while the {@link Manager} is open.
      */
     public Gee.List<Store> get_stores() {
         return stores.read_only_view;
+    }
+    
+    /**
+     * Return a specific {@link Store}.
+     *
+     * This should only be used internally, specifically for {@link Activator}s.
+     */
+    internal Store? get_store_of_type<G>() {
+        foreach (Store store in stores) {
+            if (store.get_type().is_a(typeof(G)))
+                return store;
+        }
+        
+        return null;
     }
     
     /**

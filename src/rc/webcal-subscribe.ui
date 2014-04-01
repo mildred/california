@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.16.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
-  <template class="CaliforniaBackingWebCalActivatorPane" parent="GtkGrid">
+  <template class="CaliforniaActivatorWebCalActivatorPane" parent="GtkGrid">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="row_spacing">8</property>
@@ -128,7 +128,7 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="use_underline">True</property>
-            <signal name="clicked" handler="on_cancel_button_clicked" object="CaliforniaBackingWebCalActivatorPane" swapped="no"/>
+            <signal name="clicked" handler="on_cancel_button_clicked" object="CaliforniaActivatorWebCalActivatorPane" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -145,7 +145,7 @@
             <property name="has_default">True</property>
             <property name="receives_default">True</property>
             <property name="use_underline">True</property>
-            <signal name="clicked" handler="on_subscribe_button_clicked" object="CaliforniaBackingWebCalActivatorPane" swapped="no"/>
+            <signal name="clicked" handler="on_subscribe_button_clicked" object="CaliforniaActivatorWebCalActivatorPane" swapped="no"/>
             <style>
               <class name="suggested-action"/>
             </style>

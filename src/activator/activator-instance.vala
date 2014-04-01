@@ -4,10 +4,10 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Backing {
+namespace California.Activator {
 
 /**
- * Locates, validates, and authorizes access to a {@link Source}.
+ * Locates, validates, and authorizes access to a {@link Backing.Source}.
  *
  * Actovators are decoupled from the Backing.Source itself because it's possible for Activators
  * to be used for multiple backings.  For example, a Google Calendar Activator can be used to
@@ -15,7 +15,7 @@ namespace California.Backing {
  * backing.
  */
 
-public abstract class Activator : BaseObject {
+public abstract class Instance : BaseObject {
     public const string PROP_TITLE = "title";
     public const string PROP_STORE = "store";
     
@@ -26,20 +26,21 @@ public abstract class Activator : BaseObject {
     public string title { get; private set; }
     
     /**
-     * The {@link Store} this {@link Activator} will create the new {@link Source} in.
+     * The {@link Backing.Store} this {@link Instance} will create the new {@link Backing.Source}
+     * in.
      *
      * It's up to the subclass to determine which Stores will work with its information.
      */
-    public Store store { get; private set; }
+    public Backing.Store store { get; private set; }
     
-    protected Activator(string title, Store store) {
+    protected Instance(string title, Backing.Store store) {
         this.title = title;
         this.store = store;
     }
     
     /**
      * Return a {@link Host.Interaction} that guides the user through the steps to create a
-     * {@link Source}.
+     * {@link Backing.Source}.
      */
     public abstract Host.Interaction create_interaction(Soup.URI? supplied_uri);
     

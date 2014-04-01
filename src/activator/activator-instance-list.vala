@@ -4,14 +4,14 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Host {
+namespace California.Activator {
 
 [GtkTemplate (ui = "/org/yorba/california/rc/activator-list.ui")]
-public class ActivatorList : Gtk.Grid, Host.Interaction {
-    private class ActivatorListItem : Gtk.Label {
-        public Backing.Activator activator;
+public class InstanceList : Gtk.Grid, Host.Interaction {
+    private class Item : Gtk.Label {
+        public Activator.Instance activator;
         
-        public ActivatorListItem(Backing.Activator activator) {
+        public Item(Activator.Instance activator) {
             this.activator = activator;
             
             label = activator.title;
@@ -28,11 +28,11 @@ public class ActivatorList : Gtk.Grid, Host.Interaction {
     [GtkChild]
     private Gtk.Button add_button;
     
-    public signal void selected(Backing.Activator activator);
+    public signal void selected(Activator.Instance activator);
     
-    public ActivatorList() {
-        foreach (Backing.Activator activator in Backing.Manager.instance.get_activators())
-            listbox.add(new ActivatorListItem(activator));
+    public InstanceList() {
+        foreach (Activator.Instance activator in activators)
+            listbox.add(new Item(activator));
         
         show_all();
     }
@@ -40,7 +40,7 @@ public class ActivatorList : Gtk.Grid, Host.Interaction {
     [GtkCallback]
     private void on_listbox_row_activated(Gtk.ListBoxRow? row) {
         if (row != null)
-            selected(((ActivatorListItem) row.get_child()).activator);
+            selected(((Item) row.get_child()).activator);
     }
     
     [GtkCallback]

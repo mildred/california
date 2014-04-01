@@ -1,7 +1,7 @@
 [encoding: UTF-8]
 # List of source files which contain translatable strings.
+src/activator/activator.vala
 src/application/california-application.vala
-src/backing/backing.vala
 src/calendar/calendar.vala
 src/calendar/calendar-date.vala
 src/host/host-create-update-event.vala

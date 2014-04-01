@@ -4,12 +4,12 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Backing {
+namespace California.Activator {
 
-internal class WebCalActivator : Activator {
-    private WebCalSubscribable webcal_store;
+internal class WebCalActivator : Instance {
+    private Backing.WebCalSubscribable webcal_store;
     
-    public WebCalActivator(string title, WebCalSubscribable store) {
+    public WebCalActivator(string title, Backing.WebCalSubscribable store) {
         base (title, store);
         
         webcal_store = store;

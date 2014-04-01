@@ -8,12 +8,19 @@ AM_CPPFLAGS = \
 bin_PROGRAMS = california
 
 california_VALASOURCES = \
+	activator/activator.vala \
+	activator/activator-instance.vala \
+	activator/activator-instance-list.vala \
+	activator/activator-window.vala \
+	\
+	activator/webcal/activator-webcal.vala \
+	activator/webcal/activator-webcal-pane.vala \
+	\
 	application/california-application.vala \
 	application/california-resource.vala \
 	application/main.vala \
 	\
 	backing/backing.vala \
-	backing/backing-activator.vala \
 	backing/backing-calendar-source.vala \
 	backing/backing-calendar-source-subscription.vala \
 	backing/backing-calendar-subscription-manager.vala \
@@ -26,9 +33,6 @@ california_VALASOURCES = \
 	backing/eds/backing-eds-calendar-source.vala \
 	backing/eds/backing-eds-calendar-source-subscription.vala \
 	backing/eds/backing-eds-store.vala \
-	\
-	backing/webcal/backing-webcal-activator.vala \
-	backing/webcal/backing-webcal-activator-pane.vala \
 	\
 	base/base-object.vala \
 	base/base-unit.vala \
@@ -67,7 +71,6 @@ california_VALASOURCES = \
 	component/component-vtype.vala \
 	\
 	host/host.vala \
-	host/host-activator-list.vala \
 	host/host-calendar-popup.vala \
 	host/host-color-chooser-popup.vala \
 	host/host-create-update-event.vala \
