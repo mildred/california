@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-03-21 00:58+0000\n"
-"PO-Revision-Date: 2014-03-21 02:45-0300\n"
+"POT-Creation-Date: 2014-03-29 02:03+0000\n"
+"PO-Revision-Date: 2014-04-03 07:51-0300\n"
 "Last-Translator: Rafael Ferreira <rafael.f.f1@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -36,21 +36,25 @@ msgstr "Copyright 2014 Yorba Foundation"
 msgid "Visit California's home page"
 msgstr "Visite a página web do Califórnia"
 
-#: ../src/application/california-application.vala:89
+#: ../src/application/california-application.vala:92
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "Não foi possível abrir Califórnia: %s"
 
-#: ../src/application/california-application.vala:142
+#: ../src/application/california-application.vala:162
 #, c-format
 msgid "About %s"
 msgstr "Sobre %s"
 
 #. / Translators: add your name and email address to receive credit in the About dialog
 #. / For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:148
+#: ../src/application/california-application.vala:168
 msgid "translator-credits"
 msgstr "Rafael Ferreira <rafael.f.f1@gmail.com>"
+
+#: ../src/backing/backing.vala:45
+msgid "Web calendar (.ics)"
+msgstr "Agenda web (.ics)"
 
 #. / The month and year according to locale preferences, i.e. "March 2014"
 #. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
@@ -145,11 +149,12 @@ msgstr "%d:%02d"
 msgid "%d:%02d:%02d"
 msgstr "%d:%02d:%02d"
 
-#: ../src/host/host-create-update-event.vala:85
-msgid "Update Event"
-msgstr "Atualiza evento"
+#: ../src/calendar/calendar-date.vala:294
+#| msgid "_Today"
+msgid "Today"
+msgstr "Hoje"
 
-#: ../src/host/host-create-update-event.vala:86 ../src/rc/show-event.ui.h:2
+#: ../src/host/host-create-update-event.vala:82 ../src/rc/show-event.ui.h:2
 msgid "_Update"
 msgstr "_Atualizar"
 
@@ -170,7 +175,6 @@ msgid "Next (Alt+Right)"
 msgstr "Próxima (Alt+Right)"
 
 #: ../src/host/host-main-window.vala:95
-#| msgid "Create a new event for today"
 msgid "Create a new event (Ctrl+N)"
 msgstr "Criar em novo evento (Ctrl+N)"
 
@@ -202,15 +206,29 @@ msgstr ""
 "%s, %s\n"
 "%s, %s"
 
+#: ../src/rc/activator-list.ui.h:1 ../src/rc/create-update-event.ui.h:8
+#: ../src/rc/webcal-subscribe.ui.h:4
+msgid "_Cancel"
+msgstr "_Cancelar"
+
+#: ../src/rc/activator-list.ui.h:2
+msgid "_Add"
+msgstr "_Adicionar"
+
 #: ../src/rc/app-menu.interface.h:1
+#| msgid "_Calendars"
+msgid "_Add calendar…"
+msgstr "_Adicionar agenda…"
+
+#: ../src/rc/app-menu.interface.h:2
 msgid "_Calendars"
 msgstr "A_gendas"
 
-#: ../src/rc/app-menu.interface.h:2
+#: ../src/rc/app-menu.interface.h:3
 msgid "_About"
 msgstr "S_obre"
 
-#: ../src/rc/app-menu.interface.h:3
+#: ../src/rc/app-menu.interface.h:4
 msgid "_Quit"
 msgstr "_Sair"
 
@@ -223,42 +241,56 @@ msgid "Calendar color"
 msgstr "Cor da agenda"
 
 #: ../src/rc/create-update-event.ui.h:1
-msgid "New Event"
-msgstr "Novo evento"
-
-#: ../src/rc/create-update-event.ui.h:2
 msgid "Untitled event"
 msgstr "Evento sem título"
 
 #. As in "From <date> <time> to <date> <time>"
-#: ../src/rc/create-update-event.ui.h:4
+#: ../src/rc/create-update-event.ui.h:3
 msgid "From"
 msgstr "De"
 
 #. As in "From <date> <time> to <date> <time>"
-#: ../src/rc/create-update-event.ui.h:6
+#: ../src/rc/create-update-event.ui.h:5
 msgid "to"
 msgstr "para"
 
-#: ../src/rc/create-update-event.ui.h:7
+#: ../src/rc/create-update-event.ui.h:6
 msgid "_All-day event"
 msgstr "Evento de di_a inteiro"
 
-#: ../src/rc/create-update-event.ui.h:8
+#: ../src/rc/create-update-event.ui.h:7
 msgid "Calendar:"
 msgstr "Agenda:"
 
 #: ../src/rc/create-update-event.ui.h:9
-msgid "_Cancel"
-msgstr "_Cancelar"
-
-#: ../src/rc/create-update-event.ui.h:10
 msgid "C_reate"
 msgstr "C_riar"
 
 #: ../src/rc/show-event.ui.h:1
 msgid "_Remove"
 msgstr "_Remover"
+
+#: ../src/rc/webcal-subscribe.ui.h:1
+msgid "_Name:"
+msgstr "_Nome:"
+
+#: ../src/rc/webcal-subscribe.ui.h:2
+msgid "_URL:"
+msgstr "_URL:"
+
+#: ../src/rc/webcal-subscribe.ui.h:3
+msgid "Select a color for the Web calendar"
+msgstr "Selecione uma cor para a agenda web"
+
+#: ../src/rc/webcal-subscribe.ui.h:5
+msgid "_Subscribe"
+msgstr "In_screver"
+
+#~ msgid "Update Event"
+#~ msgstr "Atualiza evento"
+
+#~ msgid "New Event"
+#~ msgstr "Novo evento"
 
 #~ msgid "%B"
 #~ msgstr "%B"
