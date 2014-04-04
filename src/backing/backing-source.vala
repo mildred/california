@@ -36,7 +36,7 @@ public abstract class Source : BaseObject {
     /**
      * A user-visible name for the {@link Source}.
      */
-    public string title { get; private set; }
+    public string title { get; set; }
     
     /**
      * Whether the {@link Source} should be visible to the user.

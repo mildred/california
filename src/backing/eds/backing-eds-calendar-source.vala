@@ -27,16 +27,27 @@ internal class EdsCalendarSource : CalendarSource {
         
         // use unidirectional bindings so source updates (writing) only occurs when changed from
         // within the app
+        eds_source.bind_property("display-name", this, PROP_TITLE, BindingFlags.SYNC_CREATE);
         eds_calendar.bind_property("selected", this, PROP_VISIBLE, BindingFlags.SYNC_CREATE);
         eds_calendar.bind_property("color", this, PROP_COLOR, BindingFlags.SYNC_CREATE);
         
         // when changed within the app, need to write it back out
+        notify[PROP_TITLE].connect(on_title_changed);
         notify[PROP_VISIBLE].connect(on_visible_changed);
         notify[PROP_COLOR].connect(on_color_changed);
     }
     
     ~EdsCalendarSource() {
         cancel_source_write();
+    }
+    
+    private void on_title_changed() {
+        // on schedule write if something changed
+        if (eds_source.display_name == title)
+            return;
+        
+        eds_source.display_name = title;
+        schedule_source_write("title=%s".printf(title));
     }
     
     private void on_visible_changed() {
