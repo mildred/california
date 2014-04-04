@@ -13,6 +13,11 @@ california_VALASOURCES = \
 	activator/activator-instance-list.vala \
 	activator/activator-window.vala \
 	\
+	activator/google/activator-google.vala \
+	activator/google/activator-google-authenticating-pane.vala \
+	activator/google/activator-google-calendar-list-pane.vala \
+	activator/google/activator-google-login-pane.vala \
+	\
 	activator/webcal/activator-webcal.vala \
 	activator/webcal/activator-webcal-pane.vala \
 	\
@@ -21,6 +26,7 @@ california_VALASOURCES = \
 	application/main.vala \
 	\
 	backing/backing.vala \
+	backing/backing-caldav-subscribable.vala \
 	backing/backing-calendar-source.vala \
 	backing/backing-calendar-source-subscription.vala \
 	backing/backing-calendar-subscription-manager.vala \
@@ -85,7 +91,9 @@ california_VALASOURCES = \
 	manager/manager-calendar-list-item.vala \
 	manager/manager-window.vala \
 	\
+	util/util-deck.vala \
 	util/util-gfx.vala \
+	util/util-listbox-model.vala \
 	util/util-memory.vala \
 	util/util-string.vala \
 	util/util-uri.vala \
@@ -110,6 +118,9 @@ california_RC = \
 	rc/calendar-manager-list.ui \
 	rc/calendar-manager-list-item.ui \
 	rc/create-update-event.ui \
+	rc/google-authenticating.ui \
+	rc/google-calendar-list.ui \
+	rc/google-login.ui \
 	rc/show-event.ui \
 	rc/webcal-subscribe.ui \
 	$(NULL)
@@ -132,6 +143,8 @@ california_VALAFLAGS = \
 	--pkg libecal-1.2 \
 	--pkg libical \
 	--pkg libsoup-2.4 \
+	--pkg libgdata \
+	--pkg=Goa-1.0 \
 	$(NULL)
 
 california_CFLAGS = \

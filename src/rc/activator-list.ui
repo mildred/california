@@ -21,7 +21,6 @@
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="activate_on_single_click">False</property>
-            <signal name="row-activated" handler="on_listbox_row_activated" object="CaliforniaActivatorInstanceList" swapped="no"/>
           </object>
         </child>
       </object>
@@ -43,7 +42,7 @@
         <property name="layout_style">end</property>
         <child>
           <object class="GtkButton" id="cancel_button">
-            <property name="label" translatable="yes">_Cancel</property>
+            <property name="label" translatable="yes">_Close</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>

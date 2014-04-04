@@ -6,20 +6,22 @@
 
 namespace California.Activator {
 
-internal class WebCalActivator : Instance {
-    public override string first_card_id { get { return WebCalActivatorPane.ID; } }
+internal class GoogleActivator : Instance {
+    public override string first_card_id { get { return GoogleLoginPane.ID; } }
     
-    private Backing.WebCalSubscribable webcal_store;
+    private Backing.CalDAVSubscribable caldav_store;
     
-    public WebCalActivator(string title, Backing.WebCalSubscribable store) {
+    public GoogleActivator(string title, Backing.CalDAVSubscribable store) {
         base (title, store);
         
-        webcal_store = store;
+        caldav_store = store;
     }
     
     public override Gee.List<Card> create_cards(Soup.URI? supplied_uri) {
         Gee.List<Card> cards = new Gee.ArrayList<Card>();
-        cards.add(new WebCalActivatorPane(webcal_store, supplied_uri));
+        cards.add(new GoogleLoginPane());
+        cards.add(new GoogleAuthenticatingPane());
+        cards.add(new GoogleCalendarListPane(caldav_store));
         
         return cards;
     }

@@ -7,8 +7,16 @@
 namespace California.Activator {
 
 [GtkTemplate (ui = "/org/yorba/california/rc/webcal-subscribe.ui")]
-internal class WebCalActivatorPane : Gtk.Grid, Host.Interaction {
+internal class WebCalActivatorPane : Gtk.Grid, Card {
+    public const string ID = "WebCalActivatorPane";
+    
+    public string card_id { get { return ID; } }
+    
+    public string? title { get { return null; } }
+    
     public Gtk.Widget? default_widget { get { return subscribe_button; } }
+    
+    public Gtk.Widget? initial_focus { get { return name_entry; } }
     
     [GtkChild]
     private Gtk.ColorButton color_button;
@@ -38,6 +46,9 @@ internal class WebCalActivatorPane : Gtk.Grid, Host.Interaction {
             BindingFlags.SYNC_CREATE, on_entry_changed);
     }
     
+    public void jumped_to(Card? from, Value? message) {
+    }
+    
     private bool on_entry_changed(Binding binding, Value source_value, ref Value target_value) {
         target_value =
             name_entry.text_length > 0 
@@ -49,7 +60,7 @@ internal class WebCalActivatorPane : Gtk.Grid, Host.Interaction {
     
     [GtkCallback]
     private void on_cancel_button_clicked() {
-        dismissed(true);
+        jump_home();
     }
     
     [GtkCallback]
@@ -65,7 +76,7 @@ internal class WebCalActivatorPane : Gtk.Grid, Host.Interaction {
         
         try {
             yield store.subscribe_webcal_async(name_entry.text, URI.parse(url_entry.text),
-                Gfx.rgb_to_uint8_rgb_string(color), null);
+                null, Gfx.rgb_to_uint8_rgb_string(color), null);
             completed();
         } catch (Error err) {
             debug("Unable to create subscription to %s: %s", url_entry.text, err.message);

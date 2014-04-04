@@ -18,7 +18,7 @@ namespace California.Activator {
 
 private int init_count = 0;
 
-private Gee.TreeSet<Instance> activators;
+private Gee.List<Instance> activators;
 
 public void init() throws Error {
     if (!Unit.do_init(ref init_count))
@@ -26,13 +26,14 @@ public void init() throws Error {
     
     Backing.init();
     
-    activators = new Gee.TreeSet<Instance>(activator_comparator);
+    activators = new Gee.ArrayList<Instance>();
     
     // All Instances that work with EDS
     Backing.EdsStore? eds_store = Backing.Manager.instance.get_store_of_type<Backing.EdsStore>()
         as Backing.EdsStore;
     assert(eds_store != null);
     activators.add(new WebCalActivator(_("Web calendar (.ics)"), eds_store));
+    activators.add(new GoogleActivator(_("Google Calendar"), eds_store));
 }
 
 public void terminate() {
@@ -42,10 +43,6 @@ public void terminate() {
     activators = null;
     
     Backing.terminate();
-}
-
-private int activator_comparator(Instance a, Instance b) {
-    return String.stricmp(a.title, b.title);
 }
 
 }

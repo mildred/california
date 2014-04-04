@@ -1,6 +1,8 @@
 [encoding: UTF-8]
 # List of source files which contain translatable strings.
 src/activator/activator.vala
+src/activator/google/google-authenticating-pane.vala
+src/activator/google/google-calendar-list-pane.vala
 src/application/california-application.vala
 src/calendar/calendar.vala
 src/calendar/calendar-date.vala
@@ -12,5 +14,8 @@ src/host/host-show-event.vala
 [type: gettext/glade]src/rc/calendar-manager-list.ui
 [type: gettext/glade]src/rc/calendar-manager-list-item.ui
 [type: gettext/glade]src/rc/create-update-event.ui
+[type: gettext/glade]src/rc/google-authenticating.ui
+[type: gettext/glade]src/rc/google-calendar-list.ui
+[type: gettext/glade]src/rc/google-login.ui
 [type: gettext/glade]src/rc/show-event.ui
 [type: gettext/glade]src/rc/webcal-subscribe.ui

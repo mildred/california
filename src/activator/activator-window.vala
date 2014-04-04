@@ -13,19 +13,21 @@ namespace California.Activator {
 public class Window : Host.ModalWindow {
     private static Activator.Window? instance = null;
     
+    private Deck deck = new Deck();
+    
     private Window(Gtk.Window? parent) {
         base (parent);
         
-        InstanceList list = new InstanceList();
+        // The Deck is pre-populated with each of their Cards, with the InstanceList jumping to
+        // the right set when asked to (and acting as home)
+        Gee.List<Card> cards = new Gee.ArrayList<Card>();
+        cards.add(new InstanceList());
+        foreach (Instance activator in activators)
+            cards.add_all(activator.create_cards(null));
         
-        // when an Activator instance is selected from the list, swap out the list for the
-        // Activator's own interaction
-        list.selected.connect(activator => {
-            content_area.remove(list);
-            content_area.add(activator.create_interaction(null));
-        });
+        deck.add_cards(cards);
         
-        content_area.add(list);
+        content_area.add(deck);
     }
     
     public static void display(Gtk.Window? parent) {

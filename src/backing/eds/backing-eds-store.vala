@@ -4,13 +4,15 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
+extern void e_source_webdav_set_soup_uri(E.SourceWebdav webdav, Soup.URI uri);
+
 namespace California.Backing {
 
 /**
  * An interface to the EDS source registry.
  */
 
-internal class EdsStore : Store, WebCalSubscribable {
+internal class EdsStore : Store, WebCalSubscribable, CalDAVSubscribable {
     private E.SourceRegistry? registry = null;
     private Gee.HashMap<E.Source, Source> sources = new Gee.HashMap<E.Source, Source>();
     
@@ -43,16 +45,28 @@ internal class EdsStore : Store, WebCalSubscribable {
     
     /**
      * @inheritDoc
-     *
-     * TODO: Authentication is not properly handled.
      */
-    public async void subscribe_webcal_async(string title, Soup.URI uri, string color,
+    public async void subscribe_webcal_async(string title, Soup.URI uri, string? username, string color,
         Cancellable? cancellable) throws Error {
+        yield subscribe_eds_async(title, uri, username, color, "webcal", cancellable);
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public async void subscribe_caldav_async(string title, Soup.URI uri, string? username, string color,
+        Cancellable? cancellable) throws Error {
+        yield subscribe_eds_async(title, uri, username, color, "caldav", cancellable);
+    }
+    
+    private async void subscribe_eds_async(string title, Soup.URI uri, string? username, string color,
+        string backend_name, Cancellable? cancellable) throws Error {
         if (!is_open)
             throw new BackingError.UNAVAILABLE("EDS not open");
         
         E.Source scratch = new E.Source(null, null);
-        scratch.parent = "webcal-stub";
+        // Surprise -- Google gets special treatment
+        scratch.parent = uri.host.has_suffix("google.com") ? "google-stub" : "webcal-stub";
         scratch.enabled = true;
         scratch.display_name = title;
         
@@ -61,7 +75,7 @@ internal class EdsStore : Store, WebCalSubscribable {
             as E.SourceCalendar;
         if (calendar == null)
             throw new BackingError.UNAVAILABLE("No SourceCalendar extension for scratch source");
-        calendar.backend_name = "webcal";
+        calendar.backend_name = backend_name;
         calendar.selected = true;
         calendar.color = color;
         
@@ -70,17 +84,15 @@ internal class EdsStore : Store, WebCalSubscribable {
             as E.SourceWebdav;
         if (webdav == null)
             throw new BackingError.UNAVAILABLE("No SourceWebdav extension for scratch source");
-        webdav.resource_path = uri.path;
-        webdav.resource_query = uri.query;
+        // nice method that takes care of setting things correctly in a lot of other extensions
+        e_source_webdav_set_soup_uri(webdav, uri);
         
         // required
         E.SourceAuthentication? auth = scratch.get_extension(E.SOURCE_EXTENSION_AUTHENTICATION)
             as E.SourceAuthentication;
         if (auth == null)
             throw new BackingError.UNAVAILABLE("No SourceAuthentication extension for scratch source");
-        auth.host = uri.host;
-        auth.port = uri.port;
-        auth.method = "none";
+        auth.user = username;
         
         // optional w/ baked-in defaults
         E.SourceOffline? offline = scratch.get_extension(E.SOURCE_EXTENSION_OFFLINE)

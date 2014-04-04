@@ -33,16 +33,23 @@ public abstract class Instance : BaseObject {
      */
     public Backing.Store store { get; private set; }
     
+    /**
+     * The {@link Card.card_id} of the first Card returns by {@link create_cards}.
+     */
+    public abstract string first_card_id { get; }
+    
     protected Instance(string title, Backing.Store store) {
         this.title = title;
         this.store = store;
     }
     
     /**
-     * Return a {@link Host.Interaction} that guides the user through the steps to create a
+     * Return a collection of {@link Cards} that guides the user through the steps to create a
      * {@link Backing.Source}.
+     *
+     * The first Card will be jumped to initially.
      */
-    public abstract Host.Interaction create_interaction(Soup.URI? supplied_uri);
+    public abstract Gee.List<Card> create_cards(Soup.URI? supplied_uri);
     
     public override string to_string() {
         return title;

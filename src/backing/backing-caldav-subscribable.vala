@@ -7,15 +7,14 @@
 namespace California.Backing {
 
 /**
- * Interface allowing for a {@link Store} to subscribe to WebCal calendars.
+ * Interface allowing for a {@link Store} to subscribe to CalDAV calendars.
  *
- * See [[https://web.archive.org/web/20071222113039/http://larry.cannell.org/webcal]] for more
- * information about WebCal.
+ * See [[http://caldav.calconnect.org/]] for more information about CalDAV.
  */
 
-public interface WebCalSubscribable : Store {
+public interface CalDAVSubscribable : Store {
     /**
-     * Subscribe to a WebCal link, creating a new {@link CalendarSource} in the process.
+     * Subscribe to a CalDAV link, creating a new {@link CalendarSource} in the process.
      *
      * "title" is the display name of the new subscription and should probably be supplied by the
      * user.
@@ -23,7 +22,7 @@ public interface WebCalSubscribable : Store {
      * The CalendarSource is not returned; rather, callers should be subscribed to the
      * {@link Store.added} signal for notification.
      */
-    public abstract async void subscribe_webcal_async(string title, Soup.URI uri, string? username,
+    public abstract async void subscribe_caldav_async(string title, Soup.URI uri, string? username,
         string color, Cancellable? cancellable) throws Error;
 }
 

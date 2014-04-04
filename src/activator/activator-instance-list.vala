@@ -7,20 +7,16 @@
 namespace California.Activator {
 
 [GtkTemplate (ui = "/org/yorba/california/rc/activator-list.ui")]
-public class InstanceList : Gtk.Grid, Host.Interaction {
-    private class Item : Gtk.Label {
-        public Activator.Instance activator;
-        
-        public Item(Activator.Instance activator) {
-            this.activator = activator;
-            
-            label = activator.title;
-            xalign = 0.0f;
-            margin = 4;
-        }
-    }
+public class InstanceList : Gtk.Grid, Card {
+    public const string ID = "ActivatorInstanceList";
+    
+    public string card_id { get { return ID; } }
+    
+    public string? title { get { return null; } }
     
     public Gtk.Widget? default_widget { get { return add_button; } }
+    
+    public Gtk.Widget? initial_focus { get { return listbox; } }
     
     [GtkChild]
     private Gtk.ListBox listbox;
@@ -28,29 +24,57 @@ public class InstanceList : Gtk.Grid, Host.Interaction {
     [GtkChild]
     private Gtk.Button add_button;
     
-    public signal void selected(Activator.Instance activator);
+    private ListBoxModel<Instance> model;
     
     public InstanceList() {
-        foreach (Activator.Instance activator in activators)
-            listbox.add(new Item(activator));
+        model = new ListBoxModel<Instance>(listbox, model_presentation, activator_comparator);
+        model.add_many(activators);
+        
+        model.activated.connect(on_item_activated);
+        model.bind_property(ListBoxModel.PROP_SELECTED, add_button, "sensitive", BindingFlags.SYNC_CREATE,
+            selected_to_sensitive);
         
         show_all();
     }
     
-    [GtkCallback]
-    private void on_listbox_row_activated(Gtk.ListBoxRow? row) {
-        if (row != null)
-            selected(((Item) row.get_child()).activator);
+    private bool selected_to_sensitive(Binding binding, Value source_value, ref Value target_value) {
+        target_value = (model.selected != null);
+        
+        return true;
+    }
+    
+    public void jumped_to(Card? from, Value? message) {
+    }
+    
+    private void on_item_activated(Instance activator) {
+        start(activator);
     }
     
     [GtkCallback]
     private void on_add_button_clicked() {
-        on_listbox_row_activated(listbox.get_selected_row());
+        if (model.selected != null)
+            start(model.selected);
     }
     
     [GtkCallback]
     private void on_cancel_button_clicked() {
         dismissed(true);
+    }
+    
+    private void start(Instance activator) {
+        jump_to_card_by_name(activator.first_card_id, null);
+    }
+    
+    private Gtk.Widget model_presentation(Instance activator) {
+        Gtk.Label label = new Gtk.Label(activator.title);
+        label.xalign = 0.0f;
+        label.margin = 4;
+        
+        return label;
+    }
+    
+    private int activator_comparator(Instance a, Instance b) {
+        return String.stricmp(a.title, b.title);
     }
 }
 
