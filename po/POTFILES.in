@@ -1,8 +1,8 @@
 [encoding: UTF-8]
 # List of source files which contain translatable strings.
 src/activator/activator.vala
-src/activator/google/google-authenticating-pane.vala
-src/activator/google/google-calendar-list-pane.vala
+src/activator/google/activator-google-authenticating-pane.vala
+src/activator/google/activator-google-calendar-list-pane.vala
 src/application/california-application.vala
 src/calendar/calendar.vala
 src/calendar/calendar-date.vala
