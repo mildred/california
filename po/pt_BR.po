@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-03-29 02:03+0000\n"
-"PO-Revision-Date: 2014-04-03 07:51-0300\n"
+"POT-Creation-Date: 2014-04-04 05:08+0000\n"
+"PO-Revision-Date: 2014-04-04 08:57-0300\n"
 "Last-Translator: Rafael Ferreira <rafael.f.f1@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -19,6 +19,54 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.6.4\n"
+
+#: ../src/activator/activator.vala:36
+msgid "Web calendar (.ics)"
+msgstr "Agenda web (.ics)"
+
+#: ../src/activator/activator.vala:37
+#| msgid "Calendar:"
+msgid "Google Calendar"
+msgstr "Agenda do Google"
+
+#: ../src/activator/google/activator-google-authenticating-pane.vala:96
+msgid "Unable to authenticate with Google Calendar service"
+msgstr "Não foi possível autenticar com o serviço da Agenda do Google"
+
+#: ../src/activator/google/activator-google-authenticating-pane.vala:104
+msgid "Unable to authenticate: Incorrect account name or password"
+msgstr "Não foi possível autenticar: nome de conta ou senha incorretos"
+
+#: ../src/activator/google/activator-google-authenticating-pane.vala:106
+#, c-format
+#| msgid "Unable to open California: %s"
+msgid "Unable to authenticate: %s"
+msgstr "Não foi possível autenticar: %s"
+
+#: ../src/activator/google/activator-google-authenticating-pane.vala:124
+#, c-format
+#| msgid "Unable to open California: %s"
+msgid "Unable to retrieve calendar list: %s"
+msgstr "Não foi possível obter lista de agendas: %s"
+
+#: ../src/activator/google/activator-google-authenticating-pane.vala:133
+msgid "Authenticated"
+msgstr "Autenticado"
+
+#: ../src/activator/google/activator-google-calendar-list-pane.vala:65
+msgid "None"
+msgstr "Nenhum"
+
+#: ../src/activator/google/activator-google-calendar-list-pane.vala:158
+#, c-format
+msgid "Bad Google URI \"%s\""
+msgstr "URI do Google \"%s\" inválida"
+
+#: ../src/activator/google/activator-google-calendar-list-pane.vala:166
+#: ../src/activator/google/activator-google-calendar-list-pane.vala:180
+#, c-format
+msgid "Unable to subscribe to %s: %s"
+msgstr "Não foi possível se inscrever a %s: %s"
 
 #: ../src/application/california-application.vala:18
 msgid "California"
@@ -41,20 +89,16 @@ msgstr "Visite a página web do Califórnia"
 msgid "Unable to open California: %s"
 msgstr "Não foi possível abrir Califórnia: %s"
 
-#: ../src/application/california-application.vala:162
+#: ../src/application/california-application.vala:150
 #, c-format
 msgid "About %s"
 msgstr "Sobre %s"
 
 #. / Translators: add your name and email address to receive credit in the About dialog
 #. / For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:168
+#: ../src/application/california-application.vala:156
 msgid "translator-credits"
 msgstr "Rafael Ferreira <rafael.f.f1@gmail.com>"
-
-#: ../src/backing/backing.vala:45
-msgid "Web calendar (.ics)"
-msgstr "Agenda web (.ics)"
 
 #. / The month and year according to locale preferences, i.e. "March 2014"
 #. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
@@ -150,11 +194,10 @@ msgid "%d:%02d:%02d"
 msgstr "%d:%02d:%02d"
 
 #: ../src/calendar/calendar-date.vala:294
-#| msgid "_Today"
 msgid "Today"
 msgstr "Hoje"
 
-#: ../src/host/host-create-update-event.vala:82 ../src/rc/show-event.ui.h:2
+#: ../src/host/host-create-update-event.vala:90 ../src/rc/show-event.ui.h:2
 msgid "_Update"
 msgstr "_Atualizar"
 
@@ -187,7 +230,7 @@ msgstr "Agendas (Ctrl+L)"
 #. Single-day timed event, print "<full date>\n<full start time> to <full end time>",
 #. including year if not current year
 #. / Prints a span of time, i.e. "3:30pm to 4:30pm"
-#: ../src/host/host-show-event.vala:76 ../src/host/host-show-event.vala:86
+#: ../src/host/host-show-event.vala:87 ../src/host/host-show-event.vala:97
 #, c-format
 msgid "%s to %s"
 msgstr "%s para %s"
@@ -197,7 +240,7 @@ msgstr "%s para %s"
 #. / Prints two full time and date strings on separate lines, i.e.:
 #. / 12 January 2012, 3:30pm
 #. / 13 January 2013, 6:30am
-#: ../src/host/host-show-event.vala:97
+#: ../src/host/host-show-event.vala:108
 #, c-format
 msgid ""
 "%s, %s\n"
@@ -206,17 +249,16 @@ msgstr ""
 "%s, %s\n"
 "%s, %s"
 
-#: ../src/rc/activator-list.ui.h:1 ../src/rc/create-update-event.ui.h:8
-#: ../src/rc/webcal-subscribe.ui.h:4
-msgid "_Cancel"
-msgstr "_Cancelar"
+#: ../src/rc/activator-list.ui.h:1 ../src/rc/calendar-manager-list.ui.h:1
+#: ../src/rc/show-event.ui.h:3
+msgid "_Close"
+msgstr "_Fechar"
 
 #: ../src/rc/activator-list.ui.h:2
 msgid "_Add"
 msgstr "_Adicionar"
 
 #: ../src/rc/app-menu.interface.h:1
-#| msgid "_Calendars"
 msgid "_Add calendar…"
 msgstr "_Adicionar agenda…"
 
@@ -231,10 +273,6 @@ msgstr "S_obre"
 #: ../src/rc/app-menu.interface.h:4
 msgid "_Quit"
 msgstr "_Sair"
-
-#: ../src/rc/calendar-manager-list.ui.h:1 ../src/rc/show-event.ui.h:3
-msgid "_Close"
-msgstr "_Fechar"
 
 #: ../src/rc/calendar-manager-list-item.ui.h:1
 msgid "Calendar color"
@@ -262,9 +300,48 @@ msgstr "Evento de di_a inteiro"
 msgid "Calendar:"
 msgstr "Agenda:"
 
+#: ../src/rc/create-update-event.ui.h:8 ../src/rc/google-authenticating.ui.h:1
+#: ../src/rc/google-calendar-list.ui.h:2 ../src/rc/google-login.ui.h:1
+#: ../src/rc/webcal-subscribe.ui.h:4
+msgid "_Cancel"
+msgstr "_Cancelar"
+
 #: ../src/rc/create-update-event.ui.h:9
 msgid "C_reate"
 msgstr "C_riar"
+
+#: ../src/rc/google-authenticating.ui.h:2
+msgid "_Try again"
+msgstr "_Tente novamente"
+
+#: ../src/rc/google-authenticating.ui.h:3
+msgid "Authenticating…"
+msgstr "Autenticando…"
+
+#: ../src/rc/google-calendar-list.ui.h:1
+#| msgid "Calendar:"
+msgid "My calendars:"
+msgstr "Minhas agendas:"
+
+#: ../src/rc/google-calendar-list.ui.h:3 ../src/rc/webcal-subscribe.ui.h:5
+msgid "_Subscribe"
+msgstr "In_screver"
+
+#: ../src/rc/google-calendar-list.ui.h:4
+msgid "Other available calendars:"
+msgstr "Outras agendas disponíveis:"
+
+#: ../src/rc/google-login.ui.h:2
+msgid "_Login"
+msgstr "_Conectar"
+
+#: ../src/rc/google-login.ui.h:3
+msgid "Google _account name:"
+msgstr "_Nome de conta do Google:"
+
+#: ../src/rc/google-login.ui.h:4
+msgid "Google _password:"
+msgstr "_Senha do Google:"
 
 #: ../src/rc/show-event.ui.h:1
 msgid "_Remove"
@@ -281,10 +358,6 @@ msgstr "_URL:"
 #: ../src/rc/webcal-subscribe.ui.h:3
 msgid "Select a color for the Web calendar"
 msgstr "Selecione uma cor para a agenda web"
-
-#: ../src/rc/webcal-subscribe.ui.h:5
-msgid "_Subscribe"
-msgstr "In_screver"
 
 #~ msgid "Update Event"
 #~ msgstr "Atualiza evento"
