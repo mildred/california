@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-03-21 00:58+0000\n"
-"PO-Revision-Date: 2014-03-25 16:24+0100\n"
+"POT-Creation-Date: 2014-04-04 05:08+0000\n"
+"PO-Revision-Date: 2014-04-04 16:57+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -19,6 +19,54 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Generator: Gtranslator 2.91.5\n"
+
+#: ../src/activator/activator.vala:36
+msgid "Web calendar (.ics)"
+msgstr "Calendario web (.ics)"
+
+#: ../src/activator/activator.vala:37
+#| msgid "Calendar:"
+msgid "Google Calendar"
+msgstr "Calendario de Google"
+
+#: ../src/activator/google/activator-google-authenticating-pane.vala:96
+msgid "Unable to authenticate with Google Calendar service"
+msgstr "No se pudo autenticar con el servicio de calendario de Google"
+
+#: ../src/activator/google/activator-google-authenticating-pane.vala:104
+msgid "Unable to authenticate: Incorrect account name or password"
+msgstr "No se pudo autenticar: nombre de cuenta o contraseña no válidos"
+
+#: ../src/activator/google/activator-google-authenticating-pane.vala:106
+#, c-format
+#| msgid "Unable to open California: %s"
+msgid "Unable to authenticate: %s"
+msgstr "No se pudo autenticar: %s"
+
+#: ../src/activator/google/activator-google-authenticating-pane.vala:124
+#, c-format
+#| msgid "Unable to open California: %s"
+msgid "Unable to retrieve calendar list: %s"
+msgstr "No se pudo obtener la lista de calendarios: %s"
+
+#: ../src/activator/google/activator-google-authenticating-pane.vala:133
+msgid "Authenticated"
+msgstr "Autenticado"
+
+#: ../src/activator/google/activator-google-calendar-list-pane.vala:65
+msgid "None"
+msgstr "Niguno"
+
+#: ../src/activator/google/activator-google-calendar-list-pane.vala:158
+#, c-format
+msgid "Bad Google URI \"%s\""
+msgstr "URI «%s» de Google incorrecto"
+
+#: ../src/activator/google/activator-google-calendar-list-pane.vala:166
+#: ../src/activator/google/activator-google-calendar-list-pane.vala:180
+#, c-format
+msgid "Unable to subscribe to %s: %s"
+msgstr "No se pudo suscribir a %s: %s"
 
 #: ../src/application/california-application.vala:18
 msgid "California"
@@ -36,19 +84,19 @@ msgstr "Copyright 2014 Fundación Yorba"
 msgid "Visit California's home page"
 msgstr "Visitar la página web de California"
 
-#: ../src/application/california-application.vala:89
+#: ../src/application/california-application.vala:92
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "No se pudo abrir California: %s"
 
-#: ../src/application/california-application.vala:142
+#: ../src/application/california-application.vala:150
 #, c-format
 msgid "About %s"
 msgstr "Acerca de %s"
 
 #. / Translators: add your name and email address to receive credit in the About dialog
 #. / For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:148
+#: ../src/application/california-application.vala:156
 msgid "translator-credits"
 msgstr "Daniel Mustieles <daniel.mustieles@gmail.com>, 2014"
 
@@ -145,16 +193,16 @@ msgstr "%d:%02d"
 msgid "%d:%02d:%02d"
 msgstr "%d:%02d:%02d"
 
-#: ../src/host/host-create-update-event.vala:85
-msgid "Update Event"
-msgstr "Actualizar evento"
+#: ../src/calendar/calendar-date.vala:294
+#| msgid "_Today"
+msgid "Today"
+msgstr "Hoy"
 
-#: ../src/host/host-create-update-event.vala:86 ../src/rc/show-event.ui.h:2
+#: ../src/host/host-create-update-event.vala:90 ../src/rc/show-event.ui.h:2
 msgid "_Update"
 msgstr "_Actualizar"
 
 #: ../src/host/host-main-window.vala:69
-#| msgid "Today"
 msgid "_Today"
 msgstr "_Hoy"
 
@@ -171,7 +219,6 @@ msgid "Next (Alt+Right)"
 msgstr "Siguiente (Alt+Derecha)"
 
 #: ../src/host/host-main-window.vala:95
-#| msgid "Create a new event for today"
 msgid "Create a new event (Ctrl+N)"
 msgstr "Crear un evento nuevo (Ctrl+N)"
 
@@ -184,7 +231,7 @@ msgstr "Calendarios (Ctrl+L)"
 #. Single-day timed event, print "<full date>\n<full start time> to <full end time>",
 #. including year if not current year
 #. / Prints a span of time, i.e. "3:30pm to 4:30pm"
-#: ../src/host/host-show-event.vala:76 ../src/host/host-show-event.vala:86
+#: ../src/host/host-show-event.vala:87 ../src/host/host-show-event.vala:97
 #, c-format
 msgid "%s to %s"
 msgstr "%s a %s"
@@ -194,7 +241,7 @@ msgstr "%s a %s"
 #. / Prints two full time and date strings on separate lines, i.e.:
 #. / 12 January 2012, 3:30pm
 #. / 13 January 2013, 6:30am
-#: ../src/host/host-show-event.vala:97
+#: ../src/host/host-show-event.vala:108
 #, c-format
 msgid ""
 "%s, %s\n"
@@ -203,64 +250,122 @@ msgstr ""
 "%s, %s\n"
 "%s, %s"
 
-#: ../src/rc/app-menu.interface.h:1
-msgid "_Calendars"
-msgstr "_Calendarios"
-
-#: ../src/rc/app-menu.interface.h:2
-msgid "_About"
-msgstr "_Acerca de"
-
-#: ../src/rc/app-menu.interface.h:3
-msgid "_Quit"
-msgstr "_Quitar"
-
-#: ../src/rc/calendar-manager-list.ui.h:1 ../src/rc/show-event.ui.h:3
+#: ../src/rc/activator-list.ui.h:1 ../src/rc/calendar-manager-list.ui.h:1
+#: ../src/rc/show-event.ui.h:3
 msgid "_Close"
 msgstr "_Cerrar"
 
+#: ../src/rc/activator-list.ui.h:2
+msgid "_Add"
+msgstr "_Añadir"
+
+#: ../src/rc/app-menu.interface.h:1
+#| msgid "_Calendars"
+msgid "_Add calendar…"
+msgstr "_Añadir calendario…"
+
+#: ../src/rc/app-menu.interface.h:2
+msgid "_Calendars"
+msgstr "_Calendarios"
+
+#: ../src/rc/app-menu.interface.h:3
+msgid "_About"
+msgstr "_Acerca de"
+
+#: ../src/rc/app-menu.interface.h:4
+msgid "_Quit"
+msgstr "_Quitar"
+
 #: ../src/rc/calendar-manager-list-item.ui.h:1
-#| msgid "Calendar:"
 msgid "Calendar color"
 msgstr "Color del calendario"
 
 #: ../src/rc/create-update-event.ui.h:1
-msgid "New Event"
-msgstr "Evento nuevo"
-
-#: ../src/rc/create-update-event.ui.h:2
 msgid "Untitled event"
 msgstr "Evento sin título"
 
 #. As in "From <date> <time> to <date> <time>"
-#: ../src/rc/create-update-event.ui.h:4
+#: ../src/rc/create-update-event.ui.h:3
 msgid "From"
 msgstr "De"
 
 #. As in "From <date> <time> to <date> <time>"
-#: ../src/rc/create-update-event.ui.h:6
+#: ../src/rc/create-update-event.ui.h:5
 msgid "to"
 msgstr "a"
 
-#: ../src/rc/create-update-event.ui.h:7
+#: ../src/rc/create-update-event.ui.h:6
 msgid "_All-day event"
 msgstr "_Todo el día"
 
-#: ../src/rc/create-update-event.ui.h:8
+#: ../src/rc/create-update-event.ui.h:7
 msgid "Calendar:"
 msgstr "Calendario:"
 
-#: ../src/rc/create-update-event.ui.h:9
+#: ../src/rc/create-update-event.ui.h:8 ../src/rc/google-authenticating.ui.h:1
+#: ../src/rc/google-calendar-list.ui.h:2 ../src/rc/google-login.ui.h:1
+#: ../src/rc/webcal-subscribe.ui.h:4
 msgid "_Cancel"
 msgstr "_Cancelar"
 
-#: ../src/rc/create-update-event.ui.h:10
+#: ../src/rc/create-update-event.ui.h:9
 msgid "C_reate"
 msgstr "C_rear"
+
+#: ../src/rc/google-authenticating.ui.h:2
+msgid "_Try again"
+msgstr "In_tentarlo de nuevo"
+
+#: ../src/rc/google-authenticating.ui.h:3
+msgid "Authenticating…"
+msgstr "Autenticando…"
+
+#: ../src/rc/google-calendar-list.ui.h:1
+#| msgid "Calendar:"
+msgid "My calendars:"
+msgstr "Mis calendarios:"
+
+#: ../src/rc/google-calendar-list.ui.h:3 ../src/rc/webcal-subscribe.ui.h:5
+msgid "_Subscribe"
+msgstr "_Suscribir"
+
+#: ../src/rc/google-calendar-list.ui.h:4
+msgid "Other available calendars:"
+msgstr "Otros calendarios disponibles:"
+
+#: ../src/rc/google-login.ui.h:2
+msgid "_Login"
+msgstr "_Iniciar sesión"
+
+#: ../src/rc/google-login.ui.h:3
+msgid "Google _account name:"
+msgstr "Nombre de la _cuenta de Google:"
+
+#: ../src/rc/google-login.ui.h:4
+msgid "Google _password:"
+msgstr "Contra_seña de Google:"
 
 #: ../src/rc/show-event.ui.h:1
 msgid "_Remove"
 msgstr "_Quitar"
+
+#: ../src/rc/webcal-subscribe.ui.h:1
+msgid "_Name:"
+msgstr "_Nombre:"
+
+#: ../src/rc/webcal-subscribe.ui.h:2
+msgid "_URL:"
+msgstr "_URL:"
+
+#: ../src/rc/webcal-subscribe.ui.h:3
+msgid "Select a color for the Web calendar"
+msgstr "Seleccionar un color para el calendario web"
+
+#~ msgid "Update Event"
+#~ msgstr "Actualizar evento"
+
+#~ msgid "New Event"
+#~ msgstr "Evento nuevo"
 
 #~ msgid "%B"
 #~ msgstr "%B"
