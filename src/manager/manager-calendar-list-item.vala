@@ -28,6 +28,8 @@ public class CalendarListItem : Gtk.Grid {
     public CalendarListItem(Backing.CalendarSource source) {
         this.source = source;
         
+        has_tooltip = true;
+        
         source.bind_property(Backing.Source.PROP_TITLE, title_label, "label",
             BindingFlags.SYNC_CREATE);
         source.bind_property(Backing.Source.PROP_VISIBLE, visible_check_button, "active",
@@ -35,6 +37,16 @@ public class CalendarListItem : Gtk.Grid {
         
         on_color_changed();
         source.notify[Backing.Source.PROP_COLOR].connect(on_color_changed);
+    }
+    
+    public override bool query_tooltip(int x, int y, bool keyboard_mode, Gtk.Tooltip tooltip) {
+        // no tooltip if text is entirely shown
+        if (!title_label.get_layout().is_ellipsized())
+            return false;
+        
+        tooltip.set_text(source.title);
+        
+        return true;
     }
     
     private void on_color_changed() {
