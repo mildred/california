@@ -169,6 +169,8 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         
         // initialize available calendars
         calendar_sources = Backing.Manager.instance.get_sources_of_type<Backing.CalendarSource>();
+        calendar_sources.sort();
+        
         index = 0;
         int calendar_source_index = 0;
         Gee.Iterator<Backing.Source> iter = calendar_sources.iterator();

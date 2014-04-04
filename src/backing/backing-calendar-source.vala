@@ -14,8 +14,8 @@ namespace California.Backing {
  */
 
 public abstract class CalendarSource : Source {
-    protected CalendarSource(string title) {
-        base (title);
+    protected CalendarSource(string id, string title) {
+        base (id, title);
     }
     
     /**

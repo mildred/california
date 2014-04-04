@@ -20,7 +20,7 @@ internal class EdsCalendarSource : CalendarSource {
     private Cancellable? source_write_cancellable = null;
     
     public EdsCalendarSource(E.Source eds_source, E.SourceCalendar eds_calendar) {
-        base (eds_source.display_name);
+        base (eds_source.uid, eds_source.display_name);
         
         this.eds_source = eds_source;
         this.eds_calendar = eds_calendar;

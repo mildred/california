@@ -16,11 +16,18 @@ namespace California.Backing {
  * @see Manager
  */
 
-public abstract class Source : BaseObject {
+public abstract class Source : BaseObject, Gee.Comparable<Source> {
     public const string PROP_IS_AVAILABLE = "is-available";
     public const string PROP_TITLE = "title";
     public const string PROP_VISIBLE = "visible";
     public const string PROP_COLOR = "color";
+    
+    /**
+     * A unique identifier for the {@link Source}.
+     *
+     * This value is persisted by the Source's {@link Backing.Store}.
+     */
+    public string id { get; private set; }
     
     /**
      * True if the {@link Source} is unavailable for use due to being removed from it's
@@ -56,7 +63,8 @@ public abstract class Source : BaseObject {
      */
     public string color { get; set; }
     
-    protected Source(string title) {
+    protected Source(string id, string title) {
+        this.id = id;
         this.title = title;
     }
     
@@ -96,6 +104,24 @@ public abstract class Source : BaseObject {
      */
     public void set_color_to_rgba(Gdk.RGBA rgba) {
         color = Gfx.rgb_to_uint8_rgb_string(Gfx.rgba_to_rgb(rgba));
+    }
+    
+    /**
+     * The natural comparator for {@link Source}s.
+     *
+     * The natural comparator uses the {@link title} (compared case-insensitively) then the
+     * {@link id} to stabilize the sort.
+     */
+    public virtual int compare_to(Source other) {
+        if (this == other)
+            return 0;
+        
+        int compare = String.stricmp(title, other.title);
+        if (compare != 0)
+            return compare;
+        
+        // use the Source's id to stabilize the sort
+        return strcmp(id, other.id);
     }
     
     public override string to_string() {

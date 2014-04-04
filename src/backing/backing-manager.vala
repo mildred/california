@@ -24,6 +24,20 @@ public class Manager : BaseObject {
      */
     public signal void open_store_failed(Store store, Error err);
     
+    /**
+     * Fired when a {@link Store} adds a new {@link Source}.
+     *
+     * @see Source.source_added
+     */
+    public signal void source_added(Store store, Source source);
+    
+    /**
+     * Fired when a {@link Store} removes a {@link Source}.
+     *
+     * @see Source.source_removed
+     */
+    public signal void source_removed(Store store, Source source);
+    
     private Manager() {
     }
     
@@ -57,12 +71,18 @@ public class Manager : BaseObject {
     public async int open_async(Cancellable? cancellable) throws Error {
         int count = 0;
         foreach (Store store in stores) {
+            store.source_added.connect(on_source_added);
+            store.source_removed.connect(on_source_removed);
+            
             try {
                 yield store.open_async(cancellable);
                 assert(store.is_open);
                 
                 count++;
             } catch (Error err) {
+                store.source_added.disconnect(on_source_added);
+                store.source_removed.disconnect(on_source_removed);
+                
                 // treat cancelled as cancelled
                 if (err is IOError.CANCELLED)
                     throw err;
@@ -85,6 +105,9 @@ public class Manager : BaseObject {
      */
     public async void close_async(Cancellable? cancellable) throws Error {
         foreach (Store store in stores) {
+            store.source_added.disconnect(on_source_added);
+            store.source_removed.disconnect(on_source_removed);
+            
             try {
                 if (store.is_open) {
                     yield store.close_async(cancellable);
@@ -100,6 +123,14 @@ public class Manager : BaseObject {
         }
         
         is_open = false;
+    }
+    
+    private void on_source_added(Store store, Source source) {
+        source_added(store, source);
+    }
+    
+    private void on_source_removed(Store store, Source source) {
+        source_removed(store, source);
     }
     
     /**
@@ -128,8 +159,6 @@ public class Manager : BaseObject {
     /**
      * Returns a list of all available {@link Source}s of a particular type.
      *
-     * The list will be sorted by the Sources title in lexiographic order.
-     *
      * Must only be called while the {@link Manager} is open.
      *
      * @see Store.get_sources_of_type
@@ -138,10 +167,6 @@ public class Manager : BaseObject {
         Gee.List<G> sources = new Gee.ArrayList<G>();
         foreach (Store store in stores)
             sources.add_all(store.get_sources_of_type<G>());
-        
-        sources.sort((a, b) => {
-            return String.stricmp(((Source) a).title, ((Source) b).title);
-        });
         
         return sources;
     }
