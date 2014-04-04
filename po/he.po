@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-28 05:05+0300\n"
-"PO-Revision-Date: 2014-03-29 21:16+0300\n"
+"POT-Creation-Date: 2014-04-04 07:56+0300\n"
+"PO-Revision-Date: 2014-04-04 08:03+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -18,6 +18,51 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
+
+#: ../src/activator/activator.vala:36
+msgid "Web calendar (.ics)"
+msgstr "לוח שנה מקוון (‎.ics)"
+
+#: ../src/activator/activator.vala:37
+msgid "Google Calendar"
+msgstr "לוח שנה Google"
+
+#: ../src/activator/google/activator-google-authenticating-pane.vala:96
+msgid "Unable to authenticate with Google Calendar service"
+msgstr "לא ניתן לאמת עם שירות לוח שנה Google"
+
+#: ../src/activator/google/activator-google-authenticating-pane.vala:104
+msgid "Unable to authenticate: Incorrect account name or password"
+msgstr "לא ניתן לאמת: שם משתמש או ססמה שגויים"
+
+#: ../src/activator/google/activator-google-authenticating-pane.vala:106
+#, c-format
+msgid "Unable to authenticate: %s"
+msgstr "לא ניתן לאמת: %s"
+
+#: ../src/activator/google/activator-google-authenticating-pane.vala:124
+#, c-format
+msgid "Unable to retrieve calendar list: %s"
+msgstr "לא ניתן לאחזר רשימת לוחות שנה: %s"
+
+#: ../src/activator/google/activator-google-authenticating-pane.vala:133
+msgid "Authenticated"
+msgstr "מאומת"
+
+#: ../src/activator/google/activator-google-calendar-list-pane.vala:65
+msgid "None"
+msgstr "אף אחד"
+
+#: ../src/activator/google/activator-google-calendar-list-pane.vala:158
+#, c-format
+msgid "Bad Google URI \"%s\""
+msgstr "כתובת Google פגומה „%s”"
+
+#: ../src/activator/google/activator-google-calendar-list-pane.vala:166
+#: ../src/activator/google/activator-google-calendar-list-pane.vala:180
+#, c-format
+msgid "Unable to subscribe to %s: %s"
+msgstr "לא ניתן להירשם אל %s: ‏%s"
 
 #: ../src/application/california-application.vala:18
 msgid "California"
@@ -40,20 +85,16 @@ msgstr "ביקור בדף הבית של California"
 msgid "Unable to open California: %s"
 msgstr "לא ניתן לפתוח את California: ‏%s"
 
-#: ../src/application/california-application.vala:162
+#: ../src/application/california-application.vala:150
 #, c-format
 msgid "About %s"
 msgstr "על אודות  %s"
 
 #. / Translators: add your name and email address to receive credit in the About dialog
 #. / For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:168
+#: ../src/application/california-application.vala:156
 msgid "translator-credits"
 msgstr "יוסף אור בוצ׳קו <yoseforb@gnome.org>"
-
-#: ../src/backing/backing.vala:45
-msgid "Web calendar (.ics)"
-msgstr "לוח שנה מקוון (‎.ics)"
 
 #. / The month and year according to locale preferences, i.e. "March 2014"
 #. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
@@ -152,11 +193,7 @@ msgstr "%d:%02d:%02d"
 msgid "Today"
 msgstr "היום"
 
-#: ../src/host/host-create-update-event.vala:85
-msgid "Update Event"
-msgstr "עדכון אירוע"
-
-#: ../src/host/host-create-update-event.vala:86 ../src/rc/show-event.ui.h:2
+#: ../src/host/host-create-update-event.vala:90 ../src/rc/show-event.ui.h:2
 msgid "_Update"
 msgstr "_עדכון"
 
@@ -189,7 +226,7 @@ msgstr "לוחות שנה (Ctrl+ך)"
 #. Single-day timed event, print "<full date>\n<full start time> to <full end time>",
 #. including year if not current year
 #. / Prints a span of time, i.e. "3:30pm to 4:30pm"
-#: ../src/host/host-show-event.vala:76 ../src/host/host-show-event.vala:86
+#: ../src/host/host-show-event.vala:87 ../src/host/host-show-event.vala:97
 #, c-format
 msgid "%s to %s"
 msgstr "%s עד %s"
@@ -199,7 +236,7 @@ msgstr "%s עד %s"
 #. / Prints two full time and date strings on separate lines, i.e.:
 #. / 12 January 2012, 3:30pm
 #. / 13 January 2013, 6:30am
-#: ../src/host/host-show-event.vala:97
+#: ../src/host/host-show-event.vala:108
 #, c-format
 msgid ""
 "%s, %s\n"
@@ -208,10 +245,10 @@ msgstr ""
 "%s, %s\n"
 "%s, %s"
 
-#: ../src/rc/activator-list.ui.h:1 ../src/rc/create-update-event.ui.h:9
-#: ../src/rc/webcal-subscribe.ui.h:4
-msgid "_Cancel"
-msgstr "_ביטול"
+#: ../src/rc/activator-list.ui.h:1 ../src/rc/calendar-manager-list.ui.h:1
+#: ../src/rc/show-event.ui.h:3
+msgid "_Close"
+msgstr "_סגירה"
 
 #: ../src/rc/activator-list.ui.h:2
 msgid "_Add"
@@ -233,43 +270,73 @@ msgstr "על _אודות"
 msgid "_Quit"
 msgstr "_יציאה"
 
-#: ../src/rc/calendar-manager-list.ui.h:1 ../src/rc/show-event.ui.h:3
-msgid "_Close"
-msgstr "_סגירה"
-
 #: ../src/rc/calendar-manager-list-item.ui.h:1
 msgid "Calendar color"
 msgstr "צבע לוח שנה"
 
 #: ../src/rc/create-update-event.ui.h:1
-msgid "New Event"
-msgstr "אירוע חדש"
-
-#: ../src/rc/create-update-event.ui.h:2
 msgid "Untitled event"
 msgstr "אירוע ללא כותרת"
 
 #. As in "From <date> <time> to <date> <time>"
-#: ../src/rc/create-update-event.ui.h:4
+#: ../src/rc/create-update-event.ui.h:3
 msgid "From"
 msgstr "מ"
 
 #. As in "From <date> <time> to <date> <time>"
-#: ../src/rc/create-update-event.ui.h:6
+#: ../src/rc/create-update-event.ui.h:5
 msgid "to"
 msgstr "עד"
 
-#: ../src/rc/create-update-event.ui.h:7
+#: ../src/rc/create-update-event.ui.h:6
 msgid "_All-day event"
 msgstr "אירוע במשך _כל היום"
 
-#: ../src/rc/create-update-event.ui.h:8
+#: ../src/rc/create-update-event.ui.h:7
 msgid "Calendar:"
 msgstr "לוח שנה:"
 
-#: ../src/rc/create-update-event.ui.h:10
+#: ../src/rc/create-update-event.ui.h:8 ../src/rc/google-authenticating.ui.h:1
+#: ../src/rc/google-calendar-list.ui.h:2 ../src/rc/google-login.ui.h:1
+#: ../src/rc/webcal-subscribe.ui.h:4
+msgid "_Cancel"
+msgstr "_ביטול"
+
+#: ../src/rc/create-update-event.ui.h:9
 msgid "C_reate"
 msgstr "_יצירה"
+
+#: ../src/rc/google-authenticating.ui.h:2
+msgid "_Try again"
+msgstr "_לנסות שוב"
+
+#: ../src/rc/google-authenticating.ui.h:3
+msgid "Authenticating…"
+msgstr "מאמת…"
+
+#: ../src/rc/google-calendar-list.ui.h:1
+msgid "My calendars:"
+msgstr "לוחות השנה שלי:"
+
+#: ../src/rc/google-calendar-list.ui.h:3 ../src/rc/webcal-subscribe.ui.h:5
+msgid "_Subscribe"
+msgstr "_הרשמה"
+
+#: ../src/rc/google-calendar-list.ui.h:4
+msgid "Other available calendars:"
+msgstr "לוחות שנה זמינים אחרים:"
+
+#: ../src/rc/google-login.ui.h:2
+msgid "_Login"
+msgstr "ה_תחברות"
+
+#: ../src/rc/google-login.ui.h:3
+msgid "Google _account name:"
+msgstr "שם _חשבון Google:"
+
+#: ../src/rc/google-login.ui.h:4
+msgid "Google _password:"
+msgstr "_ססמת Google:"
 
 #: ../src/rc/show-event.ui.h:1
 msgid "_Remove"
@@ -287,9 +354,11 @@ msgstr "_כתובת:"
 msgid "Select a color for the Web calendar"
 msgstr "בחירת צבע עבור לוח השנה המקוון"
 
-#: ../src/rc/webcal-subscribe.ui.h:5
-msgid "_Subscribe"
-msgstr "_הרשמה"
+#~ msgid "Update Event"
+#~ msgstr "עדכון אירוע"
+
+#~ msgid "New Event"
+#~ msgstr "אירוע חדש"
 
 #~ msgid "%B"
 #~ msgstr "%B"
