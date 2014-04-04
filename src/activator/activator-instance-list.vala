@@ -7,7 +7,7 @@
 namespace California.Activator {
 
 [GtkTemplate (ui = "/org/yorba/california/rc/activator-list.ui")]
-public class InstanceList : Gtk.Grid, Card {
+public class InstanceList : Gtk.Grid, Toolkit.Card {
     public const string ID = "ActivatorInstanceList";
     
     public string card_id { get { return ID; } }
@@ -24,14 +24,14 @@ public class InstanceList : Gtk.Grid, Card {
     [GtkChild]
     private Gtk.Button add_button;
     
-    private ListBoxModel<Instance> model;
+    private Toolkit.ListBoxModel<Instance> model;
     
     public InstanceList() {
-        model = new ListBoxModel<Instance>(listbox, model_presentation, activator_comparator);
+        model = new Toolkit.ListBoxModel<Instance>(listbox, model_presentation, activator_comparator);
         model.add_many(activators);
         
         model.activated.connect(on_item_activated);
-        model.bind_property(ListBoxModel.PROP_SELECTED, add_button, "sensitive", BindingFlags.SYNC_CREATE,
+        model.bind_property(Toolkit.ListBoxModel.PROP_SELECTED, add_button, "sensitive", BindingFlags.SYNC_CREATE,
             selected_to_sensitive);
         
         show_all();
@@ -43,7 +43,7 @@ public class InstanceList : Gtk.Grid, Card {
         return true;
     }
     
-    public void jumped_to(Card? from, Value? message) {
+    public void jumped_to(Toolkit.Card? from, Value? message) {
     }
     
     private void on_item_activated(Instance activator) {

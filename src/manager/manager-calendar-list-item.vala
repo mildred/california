@@ -23,7 +23,7 @@ public class CalendarListItem : Gtk.Grid {
     private Gtk.Label title_label;
     
     [GtkChild]
-    private Gtk.Button color_button;
+    private Gtk.ColorButton color_button;
     
     public CalendarListItem(Backing.CalendarSource source) {
         this.source = source;
@@ -38,25 +38,7 @@ public class CalendarListItem : Gtk.Grid {
     }
     
     private void on_color_changed() {
-        Gdk.Pixbuf pixbuf = new Gdk.Pixbuf(Gdk.Colorspace.RGB, false, 8, COLOR_DIM, COLOR_DIM);
-        pixbuf.fill(Gfx.rgba_to_pixel(source.color_as_rgba()));
-        
-        color_button.set_image(new Gtk.Image.from_pixbuf(pixbuf));
-    }
-    
-    [GtkCallback]
-    private void on_color_button_clicked() {
-        Host.ColorChooserPopup popup = new Host.ColorChooserPopup(color_button, source.color_as_rgba());
-        
-        popup.selected.connect((rgba) => {
-            source.set_color_to_rgba(rgba);
-        });
-        
-        popup.dismissed.connect(() => {
-            popup.destroy();
-        });
-        
-        popup.show_all();
+        color_button.set_color(source.color_as_rgb());
     }
 }
 

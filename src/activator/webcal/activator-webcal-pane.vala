@@ -7,7 +7,7 @@
 namespace California.Activator {
 
 [GtkTemplate (ui = "/org/yorba/california/rc/webcal-subscribe.ui")]
-internal class WebCalActivatorPane : Gtk.Grid, Card {
+internal class WebCalActivatorPane : Gtk.Grid, Toolkit.Card {
     public const string ID = "WebCalActivatorPane";
     
     public string card_id { get { return ID; } }
@@ -46,7 +46,7 @@ internal class WebCalActivatorPane : Gtk.Grid, Card {
             BindingFlags.SYNC_CREATE, on_entry_changed);
     }
     
-    public void jumped_to(Card? from, Value? message) {
+    public void jumped_to(Toolkit.Card? from, Value? message) {
     }
     
     private bool on_entry_changed(Binding binding, Value source_value, ref Value target_value) {

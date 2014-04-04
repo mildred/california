@@ -17,8 +17,8 @@ internal class WebCalActivator : Instance {
         webcal_store = store;
     }
     
-    public override Gee.List<Card> create_cards(Soup.URI? supplied_uri) {
-        Gee.List<Card> cards = new Gee.ArrayList<Card>();
+    public override Gee.List<Toolkit.Card> create_cards(Soup.URI? supplied_uri) {
+        Gee.List<Toolkit.Card> cards = new Gee.ArrayList<Toolkit.Card>();
         cards.add(new WebCalActivatorPane(webcal_store, supplied_uri));
         
         return cards;

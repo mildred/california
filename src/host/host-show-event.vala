@@ -7,8 +7,16 @@
 namespace California.Host {
 
 [GtkTemplate (ui = "/org/yorba/california/rc/show-event.ui")]
-public class ShowEvent : Gtk.Grid, Interaction {
+public class ShowEvent : Gtk.Grid, Toolkit.Card {
+    public const string ID = "ShowEvent";
+    
+    public string card_id { get { return ID; } }
+    
+    public string? title { get { return null; } }
+    
     public Gtk.Widget? default_widget { get { return close_button; } }
+    
+    public Gtk.Widget? initial_focus { get { return close_button; } }
     
     [GtkChild]
     private Gtk.Label text_label;
@@ -39,6 +47,9 @@ public class ShowEvent : Gtk.Grid, Interaction {
     ~ShowEvent() {
         Calendar.System.instance.is_24hr_changed.disconnect(build_display);
         Calendar.System.instance.today_changed.disconnect(build_display);
+    }
+    
+    public void jumped_to(Toolkit.Card? from, Value? message) {
     }
     
     private void build_display() {

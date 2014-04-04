@@ -4,7 +4,7 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Host {
+namespace California.Toolkit {
 
 /**
  * A Popup is a single GtkWindow that grabs the application focus and dismisses itself if it

@@ -10,13 +10,13 @@ namespace California.Manager {
  * The Calendar Manager main window.
  */
 
-public class Window : Host.ModalWindow {
+public class Window : Toolkit.DeckWindow {
     private static Manager.Window? instance = null;
     
     private Window(Gtk.Window? parent) {
         base (parent);
         
-        content_area.add(new CalendarList());
+        deck.add_cards(iterate<Toolkit.Card>(new CalendarList()).to_array_list());
     }
     
     public static void display(Gtk.Window? parent) {

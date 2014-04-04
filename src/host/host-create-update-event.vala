@@ -11,14 +11,22 @@ namespace California.Host {
  */
 
 [GtkTemplate (ui = "/org/yorba/california/rc/create-update-event.ui")]
-public class CreateUpdateEvent : Gtk.Grid, Interaction {
+public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
+    public const string ID = "CreateUpdateEvent";
+    
     public const string PROP_SELECTED_DATE_SPAN = "selected-date-span";
     
     private const int START_HOUR = 0;
     private const int END_HOUR = 23;
     private const int MIN_DIVISIONS = 15;
     
+    public string card_id { get { return ID; } }
+    
+    public string? title { get { return null; } }
+    
     public Gtk.Widget? default_widget { get { return accept_button; } }
+    
+    public Gtk.Widget? initial_focus { get { return summary_entry; } }
     
     [GtkChild]
     private Gtk.Entry summary_entry;
@@ -198,6 +206,9 @@ public class CreateUpdateEvent : Gtk.Grid, Interaction {
             BindingFlags.SYNC_CREATE);
     }
     
+    public void jumped_to(Toolkit.Card? from, Value? message) {
+    }
+    
     [GtkCallback]
     private void on_date_button_clicked(Gtk.Button button) {
         bool is_dtstart = (button == dtstart_date_button);
@@ -208,7 +219,7 @@ public class CreateUpdateEvent : Gtk.Grid, Interaction {
             both_date_buttons_touched
             || (last_date_button_touched != null && last_date_button_touched != button);
         
-        CalendarPopup popup = new CalendarPopup(button,
+        Toolkit.CalendarPopup popup = new Toolkit.CalendarPopup(button,
             is_dtstart ? selected_date_span.start_date : selected_date_span.end_date);
         
         popup.date_selected.connect((date) => {

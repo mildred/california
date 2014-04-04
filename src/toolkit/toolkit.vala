@@ -5,11 +5,10 @@
  */
 
 /**
- * The Calendar Manager, an interactive window for the user to add, configure, and remove
- * calendar subscriptions.
+ * A grab bag of utility classes for working with GTK.
  */
 
-namespace California.Manager {
+namespace California.Toolkit {
 
 private int init_count = 0;
 
@@ -17,16 +16,14 @@ public void init() throws Error {
     if (!Unit.do_init(ref init_count))
         return;
     
-    Backing.init();
-    Toolkit.init();
+    Calendar.init();
 }
 
 public void terminate() {
     if (!Unit.do_terminate(ref init_count))
         return;
     
-    Backing.terminate();
-    Toolkit.terminate();
+    Calendar.terminate();
 }
 
 }

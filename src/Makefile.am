@@ -65,6 +65,7 @@ california_VALASOURCES = \
 	calendar/calendar-week-span.vala \
 	calendar/calendar-year.vala \
 	\
+	collection/collection-iterable.vala \
 	collection/collection-simple-iterator.vala \
 	collection/collection-simple-iterable.vala \
 	\
@@ -77,13 +78,8 @@ california_VALASOURCES = \
 	component/component-vtype.vala \
 	\
 	host/host.vala \
-	host/host-calendar-popup.vala \
-	host/host-color-chooser-popup.vala \
 	host/host-create-update-event.vala \
-	host/host-interaction.vala \
 	host/host-main-window.vala \
-	host/host-modal-window.vala \
-	host/host-popup.vala \
 	host/host-show-event.vala \
 	\
 	manager/manager.vala \
@@ -91,9 +87,16 @@ california_VALASOURCES = \
 	manager/manager-calendar-list-item.vala \
 	manager/manager-window.vala \
 	\
-	util/util-deck.vala \
+	toolkit/toolkit.vala \
+	toolkit/toolkit-calendar-popup.vala \
+	toolkit/toolkit-card.vala \
+	toolkit/toolkit-deck.vala \
+	toolkit/toolkit-listbox-model.vala \
+	toolkit/toolkit-deck-window.vala \
+	toolkit/toolkit-popup.vala \
+	\
 	util/util-gfx.vala \
-	util/util-listbox-model.vala \
+	util/util-interfaces.vala \
 	util/util-memory.vala \
 	util/util-string.vala \
 	util/util-uri.vala \

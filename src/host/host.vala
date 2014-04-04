@@ -22,6 +22,7 @@ public void init() throws Error {
     View.init();
     Backing.init();
     Calendar.init();
+    Toolkit.init();
 }
 
 public void terminate() {
@@ -31,6 +32,7 @@ public void terminate() {
     View.terminate();
     Backing.terminate();
     Calendar.terminate();
+    Toolkit.terminate();
 }
 
 }

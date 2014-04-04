@@ -7,7 +7,7 @@
 namespace California.Activator {
 
 [GtkTemplate (ui = "/org/yorba/california/rc/google-authenticating.ui")]
-public class GoogleAuthenticatingPane : Gtk.Grid, Card {
+public class GoogleAuthenticatingPane : Gtk.Grid, Toolkit.Card {
     public const string ID = "GoogleAuthenticatingPane";
     
     private const int SUCCESS_DELAY_MSEC = 1500;
@@ -55,7 +55,7 @@ public class GoogleAuthenticatingPane : Gtk.Grid, Card {
             app_id = "yorba-california-%s".printf(Application.VERSION);
     }
     
-    public void jumped_to(Card? from, Value? message) {
+    public void jumped_to(Toolkit.Card? from, Value? message) {
         Message? credentials = message as Message;
         assert(credentials != null);
         

@@ -49,7 +49,7 @@ public abstract class Instance : BaseObject {
      *
      * The first Card will be jumped to initially.
      */
-    public abstract Gee.List<Card> create_cards(Soup.URI? supplied_uri);
+    public abstract Gee.List<Toolkit.Card> create_cards(Soup.URI? supplied_uri);
     
     public override string to_string() {
         return title;

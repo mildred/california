@@ -10,24 +10,20 @@ namespace California.Activator {
  * A modal window for selecting and managing {@link Activator.Instance} workflows.
  */
 
-public class Window : Host.ModalWindow {
+public class Window : Toolkit.DeckWindow {
     private static Activator.Window? instance = null;
-    
-    private Deck deck = new Deck();
     
     private Window(Gtk.Window? parent) {
         base (parent);
         
         // The Deck is pre-populated with each of their Cards, with the InstanceList jumping to
         // the right set when asked to (and acting as home)
-        Gee.List<Card> cards = new Gee.ArrayList<Card>();
+        Gee.List<Toolkit.Card> cards = new Gee.ArrayList<Toolkit.Card>();
         cards.add(new InstanceList());
         foreach (Instance activator in activators)
             cards.add_all(activator.create_cards(null));
         
         deck.add_cards(cards);
-        
-        content_area.add(deck);
     }
     
     public static void display(Gtk.Window? parent) {

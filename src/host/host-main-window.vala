@@ -124,18 +124,17 @@ public class MainWindow : Gtk.ApplicationWindow {
         add(layout);
     }
     
-    private void show_interaction(Gtk.Widget relative_to, Gdk.Point? for_location,
-        Interaction child) {
-        ModalWindow modal_window = new ModalWindow(this);
-        modal_window.content_area.add(child);
+    private void show_deck(Gtk.Widget relative_to, Gdk.Point? for_location, Gee.List<Toolkit.Card> cards) {
+        Toolkit.DeckWindow deck_window = new Toolkit.DeckWindow(this);
+        deck_window.deck.add_cards(cards);
         
         // when the dialog closes, reset View.Controllable state (selection is maintained while
         // use is viewing/editing Interaction) and destroy widgets
-        child.dismissed.connect(() => current_view.unselect_all());
+        deck_window.deck.dismissed.connect(() => current_view.unselect_all());
         
-        modal_window.show_all();
-        modal_window.run();
-        modal_window.destroy();
+        deck_window.show_all();
+        deck_window.run();
+        deck_window.destroy();
     }
     
     private void on_new_event() {
@@ -189,7 +188,7 @@ public class MainWindow : Gtk.ApplicationWindow {
             update_event_async.begin(event, null);
         });
         
-        show_interaction(relative_to, for_location, create_update_event);
+        show_deck(relative_to, for_location, iterate<Toolkit.Card>(create_update_event).to_array_list());
     }
     
     private async void create_event_async(Component.Event event, Cancellable? cancellable) {
@@ -226,7 +225,7 @@ public class MainWindow : Gtk.ApplicationWindow {
             create_event(null, null, event, relative_to, for_location);
         });
         
-        show_interaction(relative_to, for_location, show_event);
+        show_deck(relative_to, for_location, iterate<Toolkit.Card>(show_event).to_array_list());
     }
     
     private async void remove_event_async(Component.Event event, Cancellable? cancellable) {

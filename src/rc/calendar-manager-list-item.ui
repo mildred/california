@@ -47,17 +47,13 @@
       </packing>
     </child>
     <child>
-      <object class="GtkButton" id="color_button">
+      <object class="GtkColorButton" id="color_button">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
-        <property name="tooltip_text" translatable="yes">Calendar color</property>
         <property name="halign">center</property>
         <property name="valign">center</property>
-        <signal name="clicked" handler="on_color_button_clicked" object="CaliforniaManagerCalendarListItem" swapped="no"/>
-        <child>
-          <placeholder/>
-        </child>
+        <property name="title" translatable="yes">Calendar color</property>
       </object>
       <packing>
         <property name="left_attach">1</property>

@@ -7,7 +7,7 @@
 namespace California.Activator {
 
 [GtkTemplate (ui = "/org/yorba/california/rc/google-calendar-list.ui")]
-public class GoogleCalendarListPane : Gtk.Grid, Card {
+public class GoogleCalendarListPane : Gtk.Grid, Toolkit.Card {
     public const string ID = "GoogleCalendarListPane";
     
     public class Message : BaseObject {
@@ -45,8 +45,8 @@ public class GoogleCalendarListPane : Gtk.Grid, Card {
     
     private Backing.CalDAVSubscribable store;
     private string? username = null;
-    private ListBoxModel<GData.CalendarCalendar> own_calendars_model;
-    private ListBoxModel<GData.CalendarCalendar> unowned_calendars_model;
+    private Toolkit.ListBoxModel<GData.CalendarCalendar> own_calendars_model;
+    private Toolkit.ListBoxModel<GData.CalendarCalendar> unowned_calendars_model;
     
     public GoogleCalendarListPane(Backing.CalDAVSubscribable store) {
         this.store = store;
@@ -54,9 +54,9 @@ public class GoogleCalendarListPane : Gtk.Grid, Card {
         own_calendars_listbox.set_placeholder(create_placeholder());
         unowned_calendars_listbox.set_placeholder(create_placeholder());
         
-        own_calendars_model = new ListBoxModel<GData.CalendarCalendar>(own_calendars_listbox,
+        own_calendars_model = new Toolkit.ListBoxModel<GData.CalendarCalendar>(own_calendars_listbox,
             entry_to_widget, entry_comparator);
-        unowned_calendars_model = new ListBoxModel<GData.CalendarCalendar>(unowned_calendars_listbox,
+        unowned_calendars_model = new Toolkit.ListBoxModel<GData.CalendarCalendar>(unowned_calendars_listbox,
             entry_to_widget, entry_comparator);
     }
     
@@ -67,7 +67,7 @@ public class GoogleCalendarListPane : Gtk.Grid, Card {
         return label;
     }
     
-    public void jumped_to(Card? from, Value? message) {
+    public void jumped_to(Toolkit.Card? from, Value? message) {
         Message? feeds = message as Message;
         assert(feeds != null);
         

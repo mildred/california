@@ -7,7 +7,7 @@
 namespace California.Activator {
 
 [GtkTemplate (ui = "/org/yorba/california/rc/google-login.ui")]
-internal class GoogleLoginPane : Gtk.Grid, Card {
+internal class GoogleLoginPane : Gtk.Grid, Toolkit.Card {
     public const string ID = "GoogleLoginPane";
     
     public string card_id { get { return ID; } }
@@ -34,7 +34,7 @@ internal class GoogleLoginPane : Gtk.Grid, Card {
             BindingFlags.SYNC_CREATE, on_entry_changed);
     }
     
-    public void jumped_to(Card? from, Value? msg) {
+    public void jumped_to(Toolkit.Card? from, Value? msg) {
         password_entry.text = "";
     }
     

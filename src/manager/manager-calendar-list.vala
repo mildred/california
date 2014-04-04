@@ -11,8 +11,16 @@ namespace California.Manager {
  */
 
 [GtkTemplate (ui = "/org/yorba/california/rc/calendar-manager-list.ui")]
-public class CalendarList : Gtk.Grid, Host.Interaction {
+public class CalendarList : Gtk.Grid, Toolkit.Card {
+    public const string ID = "CalendarList";
+    
+    public string card_id { get { return ID; } }
+    
+    public string? title { get { return null; } }
+    
     public Gtk.Widget? default_widget { get { return null; } }
+    
+    public Gtk.Widget? initial_focus { get { return calendar_list_box; } }
     
     [GtkChild]
     private Gtk.ListBox calendar_list_box;
@@ -28,6 +36,9 @@ public class CalendarList : Gtk.Grid, Host.Interaction {
     
     ~CalendarList() {
         Backing.Manager.instance.notify[Backing.Manager.PROP_IS_OPEN].disconnect(on_manager_opened_closed);
+    }
+    
+    public void jumped_to(Toolkit.Card? from, Value? message) {
     }
     
     private void on_manager_opened_closed() {

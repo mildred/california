@@ -25,6 +25,7 @@ public void init() throws Error {
         return;
     
     Backing.init();
+    Toolkit.init();
     
     activators = new Gee.ArrayList<Instance>();
     
@@ -43,6 +44,7 @@ public void terminate() {
     activators = null;
     
     Backing.terminate();
+    Toolkit.terminate();
 }
 
 }
