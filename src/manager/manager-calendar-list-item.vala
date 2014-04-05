@@ -34,9 +34,8 @@ public class CalendarListItem : Gtk.Grid {
             BindingFlags.SYNC_CREATE);
         source.bind_property(Backing.Source.PROP_VISIBLE, visible_check_button, "active",
             BindingFlags.SYNC_CREATE | BindingFlags.BIDIRECTIONAL);
-        
-        on_color_changed();
-        source.notify[Backing.Source.PROP_COLOR].connect(on_color_changed);
+        source.bind_property(Backing.Source.PROP_COLOR, color_button, "rgba",
+            BindingFlags.SYNC_CREATE | BindingFlags.BIDIRECTIONAL, source_to_button, button_to_source);
     }
     
     public override bool query_tooltip(int x, int y, bool keyboard_mode, Gtk.Tooltip tooltip) {
@@ -49,8 +48,17 @@ public class CalendarListItem : Gtk.Grid {
         return true;
     }
     
-    private void on_color_changed() {
-        color_button.set_color(source.color_as_rgb());
+    public bool source_to_button(Binding binding, Value source_value, ref Value target_value) {
+        bool used_default;
+        target_value = Gfx.rgb_string_to_rgba(source.color, Gfx.RGBA_BLACK, out used_default);
+        
+        return !used_default;
+    }
+    
+    public bool button_to_source(Binding binding, Value source_value, ref Value target_value) {
+        target_value = Gfx.rgb_to_uint8_rgb_string(Gfx.rgba_to_rgb(color_button.rgba));
+        
+        return true;
     }
 }
 

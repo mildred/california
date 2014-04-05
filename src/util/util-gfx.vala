@@ -6,6 +6,10 @@
 
 namespace California.Gfx {
 
+public const Gdk.Color RGB_BLACK = { 0, 0, 0 };
+
+public const Gdk.RGBA RGBA_BLACK = { 0.0, 0.0, 0.0, 0.0 };
+
 /**
  * Convert an RGB string into an RGB structure.
  *
