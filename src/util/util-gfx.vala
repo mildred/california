@@ -16,7 +16,13 @@ public const Gdk.RGBA RGBA_BLACK = { 0.0, 0.0, 0.0, 0.0 };
  * The string can be in any of the forms that Gdk.Color.parse accepts.  If unable to parse the
  * string, the {@link default_rgb} is returned and {@link used_default} is set to true.
  */
-public Gdk.Color rgb_string_to_rgb(string rgb_string, Gdk.Color default_rgb, out bool used_default) {
+public Gdk.Color rgb_string_to_rgb(string? rgb_string, Gdk.Color default_rgb, out bool used_default) {
+    if (String.is_empty(rgb_string)) {
+        used_default = true;
+        
+        return default_rgb;
+    }
+    
     Gdk.Color rgb;
     if (!Gdk.Color.parse(rgb_string, out rgb)) {
         debug("Unable to parse RGB color \"%s\"", rgb_string);
@@ -37,7 +43,13 @@ public Gdk.Color rgb_string_to_rgb(string rgb_string, Gdk.Color default_rgb, out
  * The string can be in any of the forms that Gdk.Color.parse accepts.  If unable to parse the
  * string, the {@link default_rgba} is returned and {@link used_default} is set to true.
  */
-public Gdk.RGBA rgb_string_to_rgba(string rgb_string, Gdk.RGBA default_rgba, out bool used_default) {
+public Gdk.RGBA rgb_string_to_rgba(string? rgb_string, Gdk.RGBA default_rgba, out bool used_default) {
+    if (String.is_empty(rgb_string)) {
+        used_default = true;
+        
+        return default_rgba;
+    }
+    
     Gdk.Color rgb;
     if (!Gdk.Color.parse(rgb_string, out rgb)) {
         debug("Unable to parse RGB color \"%s\"", rgb_string);
