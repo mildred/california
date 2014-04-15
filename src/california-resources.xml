@@ -7,6 +7,12 @@
         <file compressed="true">rc/app-menu.interface</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
+        <file compressed="true">rc/calendar-import.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
+        <file compressed="false">rc/calendar-list-item.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
         <file compressed="false">rc/calendar-manager-list.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">

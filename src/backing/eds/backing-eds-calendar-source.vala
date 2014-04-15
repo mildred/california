@@ -167,6 +167,14 @@ internal class EdsCalendarSource : CalendarSource {
         // TODO: Fix remove_object() bindings so async is possible
         client.remove_object_sync(uid.value, null, E.CalObjModType.THIS, cancellable);
     }
+    
+    public override async void import_icalendar_async(Component.iCalendar ical, Cancellable? cancellable = null)
+        throws Error {
+        check_open();
+        
+        // TODO: Fix receive_objects() bindings so async is possible
+        client.receive_objects_sync(ical.ical_component, cancellable);
+    }
 }
 
 }

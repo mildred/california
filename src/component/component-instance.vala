@@ -115,7 +115,7 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      * external invocation of full_update() (such as immutable data) should update that state after
      * the base constructor returns.
      */
-    protected Instance(Backing.CalendarSource calendar_source, iCal.icalcomponent ical_component,
+    protected Instance(Backing.CalendarSource? calendar_source, iCal.icalcomponent ical_component,
         iCal.icalcomponent_kind kind) throws Error {
         if (ical_component.isa() != kind) {
             throw new ComponentError.MISMATCH("Cannot create VTYPE %s from component of VTYPE %s",
@@ -260,9 +260,11 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     /**
      * Returns an appropriate {@link Component} instance for the iCalendar component.
      *
+     * VCALENDARs should use {@link Component.iCalendar}.
+     *
      * @returns null if the component is not represented in this namespace (yet).
      */
-    public static Component.Instance? convert(Backing.CalendarSource calendar_source,
+    public static Component.Instance? convert(Backing.CalendarSource? calendar_source,
         iCal.icalcomponent ical_component) throws Error {
         switch (ical_component.isa()) {
             case iCal.icalcomponent_kind.VEVENT_COMPONENT:

@@ -27,7 +27,7 @@ public class InstanceList : Gtk.Grid, Toolkit.Card {
     private Toolkit.ListBoxModel<Instance> model;
     
     public InstanceList() {
-        model = new Toolkit.ListBoxModel<Instance>(listbox, model_presentation, activator_comparator);
+        model = new Toolkit.ListBoxModel<Instance>(listbox, model_presentation, null, activator_comparator);
         model.add_many(activators);
         
         model.activated.connect(on_item_activated);

@@ -18,6 +18,13 @@ public class Event : Instance, Gee.Comparable<Event> {
     public const string PROP_EXACT_TIME_SPAN = "exact-time-span";
     public const string PROP_DATE_SPAN = "date-span";
     public const string PROP_IS_ALL_DAY = "is-all-day";
+    public const string PROP_STATUS = "status";
+    
+    public enum Status {
+        TENTATIVE,
+        CONFIRMED,
+        CANCELLED
+    }
     
     /**
      * Summary (title) of {@link Event}.
@@ -55,11 +62,16 @@ public class Event : Instance, Gee.Comparable<Event> {
     public bool is_all_day { get; private set; }
     
     /**
+     * Status (confirmation) of an {@link Event}.
+     */
+    public Status status { get; set; default = Status.CONFIRMED; }
+    
+    /**
      * Create an {@link Event} {@link Component} from an EDS CalComponent object.
      *
      * Throws a BackingError if the E.CalComponent's VTYPE is not VEVENT.
      */
-    public Event(Backing.CalendarSource calendar_source, iCal.icalcomponent ical_component) throws Error {
+    public Event(Backing.CalendarSource? calendar_source, iCal.icalcomponent ical_component) throws Error {
         base (calendar_source, ical_component, iCal.icalcomponent_kind.VEVENT_COMPONENT);
         
         // remainder of state is initialized in update_from_component()
@@ -105,6 +117,21 @@ public class Event : Instance, Gee.Comparable<Event> {
         
         // need to set this here because on_notify() doesn't update inside full update
         is_all_day = (date_span != null);
+        
+        switch (ical_component.get_status()) {
+            case iCal.icalproperty_status.TENTATIVE:
+                status = Status.TENTATIVE;
+            break;
+            
+            case iCal.icalproperty_status.CANCELLED:
+                status = Status.CANCELLED;
+            break;
+            
+            case iCal.icalproperty_status.CONFIRMED:
+            default:
+                status = Status.CONFIRMED;
+            break;
+        }
     }
     
     private void on_notify(ParamSpec pspec) {
@@ -146,6 +173,23 @@ public class Event : Instance, Gee.Comparable<Event> {
                 
                 // updating here guarantees it's always accurate
                 is_all_day = (date_span != null);
+            break;
+            
+            case PROP_STATUS:
+                switch(status) {
+                    case Status.TENTATIVE:
+                        ical_component.set_status(iCal.icalproperty_status.TENTATIVE);
+                    break;
+                    
+                    case Status.CANCELLED:
+                        ical_component.set_status(iCal.icalproperty_status.CANCELLED);
+                    break;
+                    
+                    case Status.CONFIRMED:
+                    default:
+                        ical_component.set_status(iCal.icalproperty_status.CONFIRMED);
+                    break;
+                }
             break;
             
             default:

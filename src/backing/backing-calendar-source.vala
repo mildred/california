@@ -52,6 +52,12 @@ public abstract class CalendarSource : Source {
      */
     public abstract async void remove_component_async(Component.UID uid,
         Cancellable? cancellable = null) throws Error;
+    
+    /**
+     * Imports a {@link Component.iCalendar} into the {@link CalendarSource}.
+     */
+    public abstract async void import_icalendar_async(Component.iCalendar ical, Cancellable? cancellable = null)
+        throws Error;
 }
 
 }

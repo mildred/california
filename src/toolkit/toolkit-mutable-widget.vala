@@ -4,15 +4,16 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California {
+namespace California.Toolkit {
 
 /**
- * A {@link Mutable} is an Object which can internally change state (i.e. is no immutable).
+ * A {@link MutableWidget} is a Gtk.Widget whose internal state can change and affect its sort
+ * order or filtering.
  */
 
-public interface Mutable : Object {
+public interface MutableWidget : Gtk.Widget {
     /**
-     * Fired when important internal state has changed.
+     * Fired when internal state has changed which may affect sorting or filtering.
      *
      * This can be used by collections and other containers to update their own state, such as
      * re-sorting or re-applying filters.

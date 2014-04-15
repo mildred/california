@@ -22,6 +22,7 @@ california_VALASOURCES = \
 	activator/webcal/activator-webcal-pane.vala \
 	\
 	application/california-application.vala \
+	application/california-commandline.vala \
 	application/california-resource.vala \
 	application/main.vala \
 	\
@@ -73,12 +74,15 @@ california_VALASOURCES = \
 	component/component-date-time.vala \
 	component/component-error.vala \
 	component/component-event.vala \
+	component/component-icalendar.vala \
 	component/component-instance.vala \
 	component/component-uid.vala \
 	component/component-vtype.vala \
 	\
 	host/host.vala \
+	host/host-calendar-list-item.vala \
 	host/host-create-update-event.vala \
+	host/host-import-calendar.vala \
 	host/host-main-window.vala \
 	host/host-show-event.vala \
 	\
@@ -91,12 +95,12 @@ california_VALASOURCES = \
 	toolkit/toolkit-calendar-popup.vala \
 	toolkit/toolkit-card.vala \
 	toolkit/toolkit-deck.vala \
-	toolkit/toolkit-listbox-model.vala \
 	toolkit/toolkit-deck-window.vala \
+	toolkit/toolkit-listbox-model.vala \
+	toolkit/toolkit-mutable-widget.vala \
 	toolkit/toolkit-popup.vala \
 	\
 	util/util-gfx.vala \
-	util/util-interfaces.vala \
 	util/util-memory.vala \
 	util/util-string.vala \
 	util/util-uri.vala \
@@ -118,6 +122,8 @@ california_SOURCES = \
 california_RC = \
 	rc/activator-list.ui \
 	rc/app-menu.interface \
+	rc/calendar-import.ui \
+	rc/calendar-list-item.ui \
 	rc/calendar-manager-list.ui \
 	rc/calendar-manager-list-item.ui \
 	rc/create-update-event.ui \

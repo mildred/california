@@ -16,11 +16,12 @@ namespace California {
 
 public class Application : Gtk.Application {
     public const string TITLE = _("California");
-    public const string DESCRIPTION = _("Desktop Calendar");
+    public const string DESCRIPTION = _("GNOME 3 Calendar");
     public const string COPYRIGHT = _("Copyright 2014 Yorba Foundation");
     public const string VERSION = PACKAGE_VERSION;
     public const string WEBSITE_NAME = _("Visit California's home page");
     public const string WEBSITE_URL = "https://wiki.gnome.org/Apps/California";
+    public const string BUGREPORT_URL = "https://bugzilla.gnome.org/enter_bug.cgi?product=california";
     public const string ID = "org.yorba.california";
     public const string ICON_NAME = "x-office-calendar";
     
@@ -29,10 +30,15 @@ public class Application : Gtk.Application {
         null
     };
     
+    // public application menu actions; note their "app." prefix which does not
+    // match the actions in the action_entries table
     public const string ACTION_NEW_CALENDAR = "app.new-calendar";
     public const string ACTION_CALENDAR_MANAGER = "app.calendar-manager";
     public const string ACTION_ABOUT = "app.about";
     public const string ACTION_QUIT = "app.quit";
+    
+    // internal actions; no "app." prefix
+    private const string ACTION_PROCESS_FILE = "process-file";
     
     private static Application? _instance = null;
     public static Application instance {
@@ -42,10 +48,14 @@ public class Application : Gtk.Application {
     }
     
     private static const ActionEntry[] action_entries = {
+        // public actions
         { "new-calendar", on_new_calendar },
         { "calendar-manager", on_calendar_manager },
         { "about", on_about },
-        { "quit", on_quit }
+        { "quit", on_quit },
+        
+        // internal
+        { ACTION_PROCESS_FILE, on_process_file, "s" }
     };
     
     private Host.MainWindow? main_window = null;
@@ -59,6 +69,11 @@ public class Application : Gtk.Application {
     public override bool local_command_line(ref unowned string[] args, out int exit_status) {
         exec_file = File.new_for_path(Posix.realpath(Environment.find_program_in_path(args[0])));
         
+        // process arguments now, prior to register and activate; if true is returned before that,
+        // the application will exit with the exit code
+        if (!Commandline.parse(args, out exit_status))
+            return true;
+        
         try {
             register();
         } catch (Error err) {
@@ -66,6 +81,13 @@ public class Application : Gtk.Application {
         }
         
         activate();
+        
+        // tell the primary instance (which this instance may not be) about the command-line options
+        // it should act upon
+        if (Commandline.files != null) {
+            foreach (string file in Commandline.files)
+                activate_action(ACTION_PROCESS_FILE, file);
+        }
         
         exit_status = 0;
         
@@ -137,6 +159,48 @@ public class Application : Gtk.Application {
     
     private void on_calendar_manager() {
         Manager.Window.display(main_window);
+    }
+    
+    private void on_process_file(SimpleAction action, Variant? variant) {
+        if (variant == null)
+            return;
+        
+        // TODO: Support URIs
+        File file = File.new_for_commandline_arg((string) variant);
+        if (!file.is_native() || file.get_path() == null)
+            return;
+        
+        Component.iCalendar ical;
+        try {
+            MappedFile mmap = new MappedFile(file.get_path(), false);
+            ical = Component.iCalendar.parse((string) mmap.get_contents());
+        } catch (Error err) {
+            message("Unable to add %s: %s", file.get_path(), err.message);
+            
+            return;
+        }
+        
+        debug("Parsed %s", ical.to_string());
+        
+        // Ask the user to select a calendar to import it into
+        main_window.present_with_time(Gdk.CURRENT_TIME);
+        Host.ImportCalendar importer = new Host.ImportCalendar(main_window, ical);
+        Gtk.ResponseType response_type = (Gtk.ResponseType) importer.run();
+        importer.destroy();
+        
+        if (response_type != Gtk.ResponseType.OK || importer.chosen == null)
+            return;
+        
+        importer.chosen.import_icalendar_async.begin(ical, null, on_import_completed);
+    }
+    
+    private void on_import_completed(Object? object, AsyncResult result) {
+        Backing.CalendarSource calendar_source = (Backing.CalendarSource) object;
+        try {
+            calendar_source.import_icalendar_async.end(result);
+        } catch (Error err) {
+            debug("Unable to import iCalendar: %s", err.message);
+        }
     }
     
     private void on_about() {

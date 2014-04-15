@@ -85,9 +85,9 @@ namespace iCal {
 		[CCode (cname = "icalcomponent_get_comment")]
 		public unowned string get_comment ();
 		[CCode (cname = "icalcomponent_get_current_component")]
-		public unowned iCal.icalcomponent get_current_component ();
+		public unowned iCal.icalcomponent? get_current_component ();
 		[CCode (cname = "icalcomponent_get_current_property")]
-		public unowned iCal.icalproperty get_current_property ();
+		public unowned iCal.icalproperty? get_current_property ();
 		[CCode (cname = "icalcomponent_get_description")]
 		public unowned string get_description ();
 		[CCode (cname = "icalcomponent_get_dtend")]
@@ -101,7 +101,7 @@ namespace iCal {
 		[CCode (cname = "icalcomponent_get_duration")]
 		public unowned iCal.icaldurationtype get_duration ();
 		[CCode (cname = "icalcomponent_get_first_component")]
-		public unowned iCal.icalcomponent get_first_component (iCal.icalcomponent_kind kind);
+		public unowned iCal.icalcomponent? get_first_component (iCal.icalcomponent_kind kind);
 		[CCode (cname = "icalcomponent_get_first_property")]
 		public unowned iCal.icalproperty? get_first_property (iCal.icalproperty_kind kind);
 		[CCode (cname = "icalcomponent_get_first_real_component")]
@@ -113,9 +113,9 @@ namespace iCal {
 		[CCode (cname = "icalcomponent_get_method")]
 		public iCal.icalproperty_method get_method ();
 		[CCode (cname = "icalcomponent_get_next_component")]
-		public unowned iCal.icalcomponent get_next_component (iCal.icalcomponent_kind kind);
+		public unowned iCal.icalcomponent? get_next_component (iCal.icalcomponent_kind kind);
 		[CCode (cname = "icalcomponent_get_next_property")]
-		public unowned iCal.icalproperty get_next_property (iCal.icalproperty_kind kind);
+		public unowned iCal.icalproperty? get_next_property (iCal.icalproperty_kind kind);
 		[CCode (cname = "icalcomponent_get_parent")]
 		public unowned iCal.icalcomponent get_parent ();
 		[CCode (cname = "icalcomponent_get_recurrenceid")]
@@ -481,9 +481,9 @@ namespace iCal {
 		[CCode (cname = "icalparser_get_state")]
 		public iCal.icalparser_state get_state ();
 		[CCode (cname = "icalparser_parse")]
-		public unowned iCal.icalcomponent parse (GLib.Callback line_gen_func);
+		public iCal.icalcomponent? parse (GLib.Callback line_gen_func);
 		[CCode (cname = "icalparser_parse_string")]
-		public static unowned iCal.icalcomponent parse_string (string str);
+		public static iCal.icalcomponent? parse_string (string str);
 		[CCode (cname = "icalparser_parse_value")]
 		public static unowned iCal.icalvalue parse_value (iCal.icalvalue_kind kind, string str, out unowned iCal.icalcomponent errors);
 		[CCode (cname = "icalparser_set_gen_data")]

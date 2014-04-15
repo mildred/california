@@ -48,7 +48,7 @@ namespace E {
 		public async bool get_object_list_as_comps (string sexp, GLib.Cancellable? cancellable) throws GLib.Error;
 		public bool get_object_list_as_comps_sync (string sexp, GLib.SList out_ecalcomps, GLib.Cancellable? cancellable) throws GLib.Error;
 		public bool get_object_list_sync (string sexp, GLib.SList out_icalcomps, GLib.Cancellable? cancellable) throws GLib.Error;
-		public bool get_object_sync (string uid, string rid, out unowned iCal.icalcomponent out_icalcomp, GLib.Cancellable? cancellable) throws GLib.Error;
+		public bool get_object_sync (string uid, string? rid, out iCal.icalcomponent out_icalcomp, GLib.Cancellable? cancellable) throws GLib.Error;
 		public async bool get_objects_for_uid (string uid, GLib.Cancellable? cancellable) throws GLib.Error;
 		public bool get_objects_for_uid_sync (string uid, GLib.SList out_ecalcomps, GLib.Cancellable? cancellable) throws GLib.Error;
 		public E.CalClientSourceType get_source_type ();
@@ -339,15 +339,6 @@ namespace E {
 		MODIFIED,
 		DELETED
 	}
-	[CCode (cheader_filename = "libecal/libecal.h", cprefix = "E_CAL_CLIENT_ERROR_", has_type_id = false)]
-	public enum CalClientError {
-		NO_SUCH_CALENDAR,
-		OBJECT_NOT_FOUND,
-		INVALID_OBJECT,
-		UNKNOWN_USER,
-		OBJECT_ID_ALREADY_EXISTS,
-		INVALID_RANGE
-	}
 	[CCode (cheader_filename = "libecal/libecal.h", cprefix = "E_CAL_CLIENT_SOURCE_TYPE_")]
 	public enum CalClientSourceType {
 		EVENTS,
@@ -535,6 +526,15 @@ namespace E {
 		Todo,
 		Journal,
 		AnyType
+	}
+	[CCode (cheader_filename = "libecal/libecal.h", cprefix = "E_CAL_CLIENT_ERROR_")]
+	public errordomain CalClientError {
+		NO_SUCH_CALENDAR,
+		OBJECT_NOT_FOUND,
+		INVALID_OBJECT,
+		UNKNOWN_USER,
+		OBJECT_ID_ALREADY_EXISTS,
+		INVALID_RANGE
 	}
 	[CCode (cheader_filename = "libecal/libecal.h", instance_pos = 3.9)]
 	public delegate bool CalRecurInstanceFn (E.CalComponent comp, time_t instance_start, time_t instance_end);

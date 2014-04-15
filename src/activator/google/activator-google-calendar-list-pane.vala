@@ -55,9 +55,9 @@ public class GoogleCalendarListPane : Gtk.Grid, Toolkit.Card {
         unowned_calendars_listbox.set_placeholder(create_placeholder());
         
         own_calendars_model = new Toolkit.ListBoxModel<GData.CalendarCalendar>(own_calendars_listbox,
-            entry_to_widget, entry_comparator);
+            entry_to_widget, null, entry_comparator);
         unowned_calendars_model = new Toolkit.ListBoxModel<GData.CalendarCalendar>(unowned_calendars_listbox,
-            entry_to_widget, entry_comparator);
+            entry_to_widget, null, entry_comparator);
     }
     
     private static Gtk.Widget create_placeholder() {
