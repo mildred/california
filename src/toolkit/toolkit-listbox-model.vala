@@ -117,7 +117,7 @@ public class ListBoxModel<G> : BaseObject {
         MutableWidget? mutable = widget as MutableWidget;
         if (mutable != null)
             mutable.mutated.connect(() => { row.changed(); });
-        row.add(mutable);
+        row.add(widget);
         
         // mappings
         row.set_data<G>(KEY, item);
