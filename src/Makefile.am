@@ -133,6 +133,7 @@ california_RC = \
 	rc/google-login.ui \
 	rc/show-event.ui \
 	rc/webcal-subscribe.ui \
+	rc/windowsZones.xml \
 	$(NULL)
 
 california_OPTIONAL_VALAFLAGS =

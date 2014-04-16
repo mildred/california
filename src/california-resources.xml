@@ -36,5 +36,8 @@
     <gresource prefix="/org/yorba/california">
         <file compressed="true">rc/webcal-subscribe.ui</file>
     </gresource>
+    <gresource prefix="/org/yorba/california">
+        <file compressed="true">rc/windowsZones.xml</file>
+    </gresource>
 </gresources>
 

@@ -19,25 +19,25 @@ namespace California.Calendar {
 
 private int init_count = 0;
 
-private static unowned string FMT_MONTH_YEAR_FULL;
-private static unowned string FMT_MONTH_YEAR_ABBREV;
-private static unowned string FMT_MONTH_FULL;
-private static unowned string FMT_MONTH_ABBREV;
-private static unowned string FMT_DAY_OF_WEEK_FULL;
-private static unowned string FMT_DAY_OF_WEEK_ABBREV;
-private static unowned string FMT_FULL_DATE;
-private static unowned string FMT_PRETTY_DATE;
-private static unowned string FMT_PRETTY_DATE_NO_YEAR;
-private static unowned string FMT_PRETTY_DATE_ABBREV;
-private static unowned string FMT_PRETTY_DATE_ABBREV_NO_YEAR;
-private static unowned string FMT_AM;
-private static unowned string FMT_BRIEF_AM;
-private static unowned string FMT_PM;
-private static unowned string FMT_BRIEF_PM;
-private static unowned string FMT_12HOUR_MIN_MERIDIEM;
-private static unowned string FMT_12HOUR_MIN_SEC_MERIDIEM;
-private static unowned string FMT_24HOUR_MIN;
-private static unowned string FMT_24HOUR_MIN_SEC;
+private unowned string FMT_MONTH_YEAR_FULL;
+private unowned string FMT_MONTH_YEAR_ABBREV;
+private unowned string FMT_MONTH_FULL;
+private unowned string FMT_MONTH_ABBREV;
+private unowned string FMT_DAY_OF_WEEK_FULL;
+private unowned string FMT_DAY_OF_WEEK_ABBREV;
+private unowned string FMT_FULL_DATE;
+private unowned string FMT_PRETTY_DATE;
+private unowned string FMT_PRETTY_DATE_NO_YEAR;
+private unowned string FMT_PRETTY_DATE_ABBREV;
+private unowned string FMT_PRETTY_DATE_ABBREV_NO_YEAR;
+private unowned string FMT_AM;
+private unowned string FMT_BRIEF_AM;
+private unowned string FMT_PM;
+private unowned string FMT_BRIEF_PM;
+private unowned string FMT_12HOUR_MIN_MERIDIEM;
+private unowned string FMT_12HOUR_MIN_SEC_MERIDIEM;
+private unowned string FMT_24HOUR_MIN;
+private unowned string FMT_24HOUR_MIN_SEC;
 
 public void init() throws Error {
     if (!California.Unit.do_init(ref init_count))
@@ -149,6 +149,9 @@ public void init() throws Error {
     WallTime.init();
     System.init();
     Timezone.init();
+    
+    // this needs to be peformed after the rest of the namespace is initialized
+    OlsonZone.load_conversions();
 }
 
 public void terminate() {

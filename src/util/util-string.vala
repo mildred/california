@@ -16,6 +16,14 @@ public int stricmp(string a, string b) {
     return strcmp(a.casefold(), b.casefold());
 }
 
+public uint stri_hash(string str) {
+    return str.down().hash();
+}
+
+public bool stri_equal(string a, string b) {
+    return stricmp(a, b) == 0;
+}
+
 /**
  * Removes redundant whitespace (including tabs and newlines) and strips whitespace from beginning
  * and end of string.

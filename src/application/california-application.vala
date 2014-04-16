@@ -116,7 +116,7 @@ public class Application : Gtk.Application {
         }
         
         add_action_entries(action_entries, this);
-        set_app_menu(Resource.load<MenuModel>("app-menu.interface", "app-menu"));
+        set_app_menu(Resource.load_object<MenuModel>("app-menu.interface", "app-menu"));
     }
     
     // This method is invoked when the main loop terminates on the primary instance.
