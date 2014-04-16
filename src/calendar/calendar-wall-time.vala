@@ -286,16 +286,16 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
         if (!include_sec) {
             // hour and minutes only
             if (is_24hr)
-                return FMT_24HOUR_MIN.printf(hour, minute);
+                return String.reduce_whitespace(FMT_24HOUR_MIN.printf(hour, minute));
             
-            return FMT_12HOUR_MIN_MERIDIEM.printf(12hour, minute, meridiem);
+            return String.reduce_whitespace(FMT_12HOUR_MIN_MERIDIEM.printf(12hour, minute, meridiem));
         }
         
         // the full package
         if (is_24hr)
-            return FMT_24HOUR_MIN_SEC.printf(hour, minute, second);
+            return String.reduce_whitespace(FMT_24HOUR_MIN_SEC.printf(hour, minute, second));
         
-        return FMT_12HOUR_MIN_SEC_MERIDIEM.printf(12hour, minute, second, meridiem);
+        return String.reduce_whitespace(FMT_12HOUR_MIN_SEC_MERIDIEM.printf(12hour, minute, second, meridiem));
     }
     
     public int compare_to(WallTime other) {

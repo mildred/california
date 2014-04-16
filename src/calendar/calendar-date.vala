@@ -299,7 +299,7 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
         else
             fmt = with_year ? FMT_PRETTY_DATE : FMT_PRETTY_DATE_NO_YEAR;
         
-        return format(fmt);
+        return String.reduce_whitespace(format(fmt));
     }
     
     public override string to_string() {
