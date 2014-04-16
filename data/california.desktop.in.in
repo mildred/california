@@ -1,0 +1,17 @@
+[Desktop Entry]
+_Name=California
+_Comment=GNOME 3 Calendar
+_Keywords=Event;Events;Schedule;
+Exec=california %u
+TryExec=california
+Terminal=false
+Type=Application
+Icon=x-office-calendar
+StartupNotify=true
+Categories=GNOME;GTK;Office;Calendar;
+OnlyShowIn=GNOME;Unity;
+MimeType=text/calendar;
+X-GNOME-Bugzilla-Bugzilla=GNOME
+X-GNOME-Bugzilla-Product=california
+X-GNOME-Bugzilla-Component=general
+X-GNOME-Bugzilla-Version=@VERSION@

@@ -1,5 +1,5 @@
 NULL =
-GITIGNOREFILES=
+GITIGNOREFILES =
 
 # Build in these directories:
 
@@ -24,6 +24,8 @@ EXTRA_DIST = \
 	intltool-merge.in \
 	intltool-update.in\
 	$(NULL)
+
+CLEANFILES =
 
 DISTCLEANFILES = \
 	configure \
@@ -80,5 +82,9 @@ GITIGNOREFILES += \
 
 devclean:
 	$(MAKE) -C src devclean
+
+include data/Makefile.am
+
+@INTLTOOL_DESKTOP_RULE@
 
 -include $(top_srcdir)/git.mk

@@ -1,4 +1,5 @@
 NULL =
+GITIGNOREFILES = 
 
 AM_CPPFLAGS = \
 	$(CALIFORNIA_CFLAGS) \
@@ -185,7 +186,7 @@ DISTCLEANFILES = \
 	Makefile.in \
 	$(NULL)
 
-GITIGNOREFILES = \
+GITIGNOREFILES += \
 	$(california_VALASOURCES:%.vala=%.c) \
 	$(NULL)
 

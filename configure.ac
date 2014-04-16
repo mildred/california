@@ -32,16 +32,16 @@ LIBSOUP_REQUIRED=2.44
 GDATA_REQUIRED=0.14.0
 GOA_REQUIRED=3.8.3
 
-PKG_CHECK_MODULES(CALIFORNIA, \
-	glib-2.0 >= $GLIB_REQUIRED \
-	gobject-2.0 >= $GLIB_REQUIRED \
-	gtk+-3.0 >= $GTK_REQUIRED \
-	gee-0.8 >= $GEE_REQUIRED \
-	libecal-1.2 >= $ECAL_REQUIRED \
-	libsoup-2.4 >= $LIBSOUP_REQUIRED \
-	libgdata >= $GDATA_REQUIRED \
-	goa-1.0 >= $GOA_REQUIRED \
-)
+PKG_CHECK_MODULES(CALIFORNIA, [
+	glib-2.0 >= $GLIB_REQUIRED
+	gobject-2.0 >= $GLIB_REQUIRED
+	gtk+-3.0 >= $GTK_REQUIRED
+	gee-0.8 >= $GEE_REQUIRED
+	libecal-1.2 >= $ECAL_REQUIRED
+	libsoup-2.4 >= $LIBSOUP_REQUIRED
+	libgdata >= $GDATA_REQUIRED
+	goa-1.0 >= $GOA_REQUIRED
+])
 AC_SUBST(CALIFORNIA_CFLAGS)
 AC_SUBST(CALIFORNIA_LIBS)
 
@@ -69,7 +69,9 @@ AM_CONDITIONAL(ENABLE_UNITY, test "x$unity" = "xyes")
 AC_CONFIG_FILES([
 	Makefile
 	src/Makefile
-	po/Makefile.in])
+	po/Makefile.in
+	data/california.desktop.in
+])
 
 AC_OUTPUT
 
