@@ -9,7 +9,6 @@ Type=Application
 Icon=x-office-calendar
 StartupNotify=true
 Categories=GNOME;GTK;Office;Calendar;
-OnlyShowIn=GNOME;Unity;
 MimeType=text/calendar;
 X-GNOME-Bugzilla-Bugzilla=GNOME
 X-GNOME-Bugzilla-Product=california
