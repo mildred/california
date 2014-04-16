@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-04 16:47+0200\n"
-"PO-Revision-Date: 2014-04-04 16:48+0200\n"
+"POT-Creation-Date: 2014-04-17 01:11+0200\n"
+"PO-Revision-Date: 2014-04-17 01:12+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -23,6 +23,20 @@ msgstr ""
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: Poland\n"
 
+#: ../data/california.desktop.in.in.h:1
+#: ../src/application/california-application.vala:18
+msgid "California"
+msgstr "California"
+
+#: ../data/california.desktop.in.in.h:2
+#: ../src/application/california-application.vala:19
+msgid "GNOME 3 Calendar"
+msgstr "Kalendarz dla środowiska GNOME 3"
+
+#: ../data/california.desktop.in.in.h:3
+msgid "Event;Events;Schedule;"
+msgstr "Wydarzenie;Wydarzenia;Zdarzenie;Zdarzenia;Plan;Terminarz;Harmonogram;"
+
 #: ../src/activator/activator.vala:36
 msgid "Web calendar (.ics)"
 msgstr "Kalendarz WWW (.ics)"
@@ -30,6 +44,23 @@ msgstr "Kalendarz WWW (.ics)"
 #: ../src/activator/activator.vala:37
 msgid "Google Calendar"
 msgstr "Kalendarz Google"
+
+#: ../src/application/california-commandline.vala:9
+msgid "[.ics FILE...]"
+msgstr "[PLIK .ics...]"
+
+#: ../src/application/california-commandline.vala:15
+msgid "Display program version"
+msgstr "Wyświetla wersję programu"
+
+#: ../src/application/california-commandline.vala:32
+msgid "Please report problems and requests to:"
+msgstr "Prosimy zgłaszać problemy na adres (w języku angielskim):"
+
+#: ../src/application/california-commandline.vala:38
+#, c-format
+msgid "Unknown options: %s\n"
+msgstr "Nieznane opcje: %s\n"
 
 #: ../src/activator/google/activator-google-authenticating-pane.vala:96
 msgid "Unable to authenticate with Google Calendar service"
@@ -68,14 +99,6 @@ msgstr "Błędny adres URL Google \"%s\""
 msgid "Unable to subscribe to %s: %s"
 msgstr "Nie można subskrybować %s: %s"
 
-#: ../src/application/california-application.vala:18
-msgid "California"
-msgstr "California"
-
-#: ../src/application/california-application.vala:19
-msgid "Desktop Calendar"
-msgstr "Kalendarz"
-
 #: ../src/application/california-application.vala:20
 msgid "Copyright 2014 Yorba Foundation"
 msgstr "Copyright 2014 Fundacja Yorba"
@@ -84,19 +107,19 @@ msgstr "Copyright 2014 Fundacja Yorba"
 msgid "Visit California's home page"
 msgstr "Witryna programu California"
 
-#: ../src/application/california-application.vala:92
+#: ../src/application/california-application.vala:114
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "Nie można otworzyć programu California: %s"
 
-#: ../src/application/california-application.vala:150
+#: ../src/application/california-application.vala:214
 #, c-format
 msgid "About %s"
 msgstr "O programie %s"
 
 #. / Translators: add your name and email address to receive credit in the About dialog
 #. / For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:156
+#: ../src/application/california-application.vala:220
 msgid "translator-credits"
 msgstr ""
 "Piotr Drąg <piotrdrag@gmail.com>, 2014\n"
@@ -203,6 +226,13 @@ msgstr "Dzisiaj"
 msgid "_Update"
 msgstr "Z_aktualizuj"
 
+#: ../src/host/host-import-calendar.vala:33
+msgid "Select calendar to import event into:"
+msgid_plural "Select calendar to import events into:"
+msgstr[0] "Proszę wybrać kalendarz, do którego zaimportować wydarzenie:"
+msgstr[1] "Proszę wybrać kalendarz, do którego zaimportować wydarzenia:"
+msgstr[2] "Proszę wybrać kalendarz, do którego zaimportować wydarzenia:"
+
 #: ../src/host/host-main-window.vala:69
 msgid "_Today"
 msgstr "_Dzisiaj"
@@ -276,6 +306,17 @@ msgstr "_O programie"
 msgid "_Quit"
 msgstr "Za_kończ"
 
+#: ../src/rc/calendar-import.ui.h:1 ../src/rc/create-update-event.ui.h:8
+#: ../src/rc/google-authenticating.ui.h:1
+#: ../src/rc/google-calendar-list.ui.h:2 ../src/rc/google-login.ui.h:1
+#: ../src/rc/webcal-subscribe.ui.h:4
+msgid "_Cancel"
+msgstr "_Anuluj"
+
+#: ../src/rc/calendar-import.ui.h:2
+msgid "_Import"
+msgstr "_Zaimportuj"
+
 #: ../src/rc/calendar-manager-list-item.ui.h:1
 msgid "Calendar color"
 msgstr "Kolor kalendarza"
@@ -301,12 +342,6 @@ msgstr "Wydarzenie _całodniowe"
 #: ../src/rc/create-update-event.ui.h:7
 msgid "Calendar:"
 msgstr "Kalendarz:"
-
-#: ../src/rc/create-update-event.ui.h:8 ../src/rc/google-authenticating.ui.h:1
-#: ../src/rc/google-calendar-list.ui.h:2 ../src/rc/google-login.ui.h:1
-#: ../src/rc/webcal-subscribe.ui.h:4
-msgid "_Cancel"
-msgstr "_Anuluj"
 
 #: ../src/rc/create-update-event.ui.h:9
 msgid "C_reate"
