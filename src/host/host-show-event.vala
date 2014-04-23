@@ -138,18 +138,18 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     [GtkCallback]
     private void on_remove_button_clicked() {
         remove_event(event);
-        dismissed(true);
+        notify_success();
     }
     
     [GtkCallback]
     private void on_update_button_clicked() {
         update_event(event);
-        dismissed(true);
+        notify_success();
     }
     
     [GtkCallback]
     private void on_close_button_clicked() {
-        dismissed(true);
+        notify_user_closed();
     }
 }
 

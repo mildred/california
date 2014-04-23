@@ -125,13 +125,18 @@ public class MainWindow : Gtk.ApplicationWindow {
         add(layout);
     }
     
-    private void show_deck(Gtk.Widget relative_to, Gdk.Point? for_location, Gee.List<Toolkit.Card> cards) {
-        Toolkit.DeckWindow deck_window = new Toolkit.DeckWindow(this);
-        deck_window.deck.add_cards(cards);
+    private void show_deck(Gtk.Widget relative_to, Gdk.Point? for_location, Toolkit.Deck deck) {
+        Toolkit.DeckWindow deck_window = new Toolkit.DeckWindow(this, deck);
         
         // when the dialog closes, reset View.Controllable state (selection is maintained while
-        // use is viewing/editing Interaction) and destroy widgets
-        deck_window.deck.dismissed.connect(() => current_view.unselect_all());
+        // use is viewing/editing interaction) and destroy widgets
+        deck_window.deck.dismiss.connect(() => {
+            current_view.unselect_all();
+            deck_window.hide();
+            // give the dialog a change to hide before allowing other signals to fire, which may
+            // invoke another dialog (prevents multiple dialogs on screen at same time)
+            Toolkit.spin_event_loop();
+        });
         
         deck_window.show_all();
         deck_window.run();
@@ -141,7 +146,7 @@ public class MainWindow : Gtk.ApplicationWindow {
     private void on_quick_create_event() {
         QuickCreateEvent quick_create = new QuickCreateEvent();
         
-        quick_create.completed.connect(() => {
+        quick_create.success.connect(() => {
             if (quick_create.parsed_event == null)
                 return;
             
@@ -151,7 +156,10 @@ public class MainWindow : Gtk.ApplicationWindow {
                 create_event(null, null, quick_create.parsed_event, true, quick_add_button, null);
         });
         
-        show_deck(quick_add_button, null, iterate<Toolkit.Card>(quick_create).to_array_list());
+        Toolkit.Deck deck = new Toolkit.Deck();
+        deck.add_cards(iterate<Toolkit.Card>(quick_create).to_array_list());
+        
+        show_deck(quick_add_button, null, deck);
     }
     
     private void on_jump_to_today() {
@@ -199,7 +207,10 @@ public class MainWindow : Gtk.ApplicationWindow {
             update_event_async.begin(event, null);
         });
         
-        show_deck(relative_to, for_location, iterate<Toolkit.Card>(create_update_event).to_array_list());
+        Toolkit.Deck deck = new Toolkit.Deck();
+        deck.add_cards(iterate<Toolkit.Card>(create_update_event).to_array_list());
+        
+        show_deck(relative_to, for_location, deck);
     }
     
     private async void create_event_async(Component.Event event, Cancellable? cancellable) {
@@ -236,7 +247,10 @@ public class MainWindow : Gtk.ApplicationWindow {
             create_event(null, null, event, false, relative_to, for_location);
         });
         
-        show_deck(relative_to, for_location, iterate<Toolkit.Card>(show_event).to_array_list());
+        Toolkit.Deck deck = new Toolkit.Deck();
+        deck.add_cards(iterate<Toolkit.Card>(show_event).to_array_list());
+        
+        show_deck(relative_to, for_location, deck);
     }
     
     private async void remove_event_async(Component.Event event, Cancellable? cancellable) {

@@ -61,7 +61,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
     
     [GtkCallback]
     private void on_cancel_button_clicked() {
-        dismissed(true);
+        notify_user_closed();
     }
     
     [GtkCallback]
@@ -69,8 +69,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
         Component.DetailsParser parser = new Component.DetailsParser(details_entry.text, model.active);
         parsed_event = parser.event;
         
-        completed();
-        dismissed(true);
+        notify_success();
     }
 }
 

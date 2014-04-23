@@ -14,7 +14,7 @@ public class Window : Toolkit.DeckWindow {
     private static Manager.Window? instance = null;
     
     private Window(Gtk.Window? parent) {
-        base (parent);
+        base (parent, null);
         
         deck.add_cards(iterate<Toolkit.Card>(new CalendarList()).to_array_list());
     }

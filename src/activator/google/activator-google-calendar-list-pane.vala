@@ -163,10 +163,7 @@ public class GoogleCalendarListPane : Gtk.Grid, Toolkit.Card {
         }
         
         if (errmsg != null) {
-            Application.instance.error_message(_("Unable to subscribe to %s: %s").printf(
-                calendar.title, errmsg));
-            
-            dismissed(false);
+            notify_failure(_("Unable to subscribe to %s: %s").printf(calendar.title, errmsg));
             
             return;
         }
@@ -175,13 +172,13 @@ public class GoogleCalendarListPane : Gtk.Grid, Toolkit.Card {
         try {
             yield store.subscribe_caldav_async(calendar.title, uri, username,
                 calendar.color.to_hexadecimal(), null);
-            completed();
         } catch (Error err) {
-            Application.instance.error_message(_("Unable to subscribe to %s: %s").printf(
-                calendar.title, err.message));
+            notify_failure(_("Unable to subscribe to %s: %s").printf(calendar.title, err.message));
+            
+            return;
         }
         
-        dismissed(true);
+        notify_success();
     }
 }
 

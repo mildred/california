@@ -44,25 +44,19 @@ public class Deck : Gtk.Stack {
     private Gee.HashMap<string, Card> names = new Gee.HashMap<string, Card>();
     
     /**
-     * Fired when the {@link Deck}'s work is cancelled, closed, or dismissed, whether due to
-     * programmatic reasons or by user request.
-     *
-     * This will be fired after firing the {@link completed signal} so subscribers can maintain
-     * their cleanup in a single handler.
+     * @see Card.dismiss
      */
-    public signal void dismissed(bool user_request);
+    public signal void dismiss(bool user_request, bool final);
     
     /**
-     * Fired when the {@link Deck}'s work has completed successfully.
-     *
-     * This will only be fired if the Deck requires valid input from the user to perform
-     * some intensive operation.  Merely displaying information and closing the Deck
-     * should simply fire {@link dismissed}.
-     *
-     * "completed" implies that dismissed will be called shortly thereafter, meaning all
-     * cleanup can be handled there.
+     * @see Card.success
      */
-    public signal void completed();
+    public signal void success();
+    
+    /**
+     * @see Card.failure
+     */
+    public signal void failure(string? user_message);
     
     /**
      * Create a new {@link Deck}.
@@ -88,8 +82,9 @@ public class Deck : Gtk.Stack {
             top.jump_to_card_by_name.disconnect(on_jump_to_card_by_name);
             top.jump_back.disconnect(on_jump_back);
             top.jump_home.disconnect(on_jump_home);
-            top.dismissed.disconnect(on_dismissed);
-            top.completed.disconnect(on_completed);
+            top.dismiss.disconnect(on_dismiss);
+            top.success.disconnect(on_success);
+            top.failure.disconnect(on_failure);
             
             navigation_stack.offer_head(top);
             top = null;
@@ -102,8 +97,9 @@ public class Deck : Gtk.Stack {
             top.jump_to_card_by_name.connect(on_jump_to_card_by_name);
             top.jump_back.connect(on_jump_back);
             top.jump_home.connect(on_jump_home);
-            top.dismissed.connect(on_dismissed);
-            top.completed.connect(on_completed);
+            top.dismiss.connect(on_dismiss);
+            top.success.connect(on_success);
+            top.failure.connect(on_failure);
         }
     }
     
@@ -229,12 +225,16 @@ public class Deck : Gtk.Stack {
             message("No home card in Deck");
     }
     
-    private void on_dismissed(bool user_request) {
-        dismissed(user_request);
+    private void on_dismiss(bool user_request, bool final) {
+        dismiss(user_request, final);
     }
     
-    private void on_completed() {
-        completed();
+    private void on_success() {
+        success();
+    }
+    
+    private void on_failure(string? user_message) {
+        failure(user_message);
     }
     
     private void on_card_mapped(Gtk.Widget widget) {

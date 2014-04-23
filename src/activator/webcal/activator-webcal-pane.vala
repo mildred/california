@@ -77,12 +77,11 @@ internal class WebCalActivatorPane : Gtk.Grid, Toolkit.Card {
         try {
             yield store.subscribe_webcal_async(name_entry.text, URI.parse(url_entry.text),
                 null, Gfx.rgb_to_uint8_rgb_string(color), null);
-            completed();
+            notify_success();
         } catch (Error err) {
-            debug("Unable to create subscription to %s: %s", url_entry.text, err.message);
+            notify_failure(_("Unable to subscribe to Web calendar at %s: %s").printf(url_entry.text,
+                err.message));
         }
-        
-        dismissed(true);
     }
 }
 

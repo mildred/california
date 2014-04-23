@@ -26,4 +26,12 @@ public void terminate() {
     Calendar.terminate();
 }
 
+/**
+ * Spin the GTK event loop until all pending events are completed.
+ */
+public void spin_event_loop() {
+    while (Gtk.events_pending())
+        Gtk.main_iteration();
+}
+
 }

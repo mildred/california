@@ -58,7 +58,7 @@ public class InstanceList : Gtk.Grid, Toolkit.Card {
     
     [GtkCallback]
     private void on_cancel_button_clicked() {
-        dismissed(true);
+        notify_user_closed();
     }
     
     private void start(Instance activator) {

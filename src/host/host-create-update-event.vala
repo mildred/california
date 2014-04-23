@@ -288,13 +288,12 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         else
             create_event(event);
         
-        completed();
-        dismissed(true);
+        notify_success();
     }
     
     [GtkCallback]
     private void on_cancel_button_clicked() {
-        dismissed(true);
+        notify_user_closed();
     }
 }
 

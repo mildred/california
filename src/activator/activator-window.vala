@@ -14,7 +14,7 @@ public class Window : Toolkit.DeckWindow {
     private static Activator.Window? instance = null;
     
     private Window(Gtk.Window? parent) {
-        base (parent);
+        base (parent, null);
         
         // The Deck is pre-populated with each of their Cards, with the InstanceList jumping to
         // the right set when asked to (and acting as home)

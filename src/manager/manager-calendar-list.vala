@@ -90,7 +90,7 @@ public class CalendarList : Gtk.Grid, Toolkit.Card {
     
     [GtkCallback]
     private void on_close_button_clicked() {
-        dismissed(true);
+        notify_user_closed();
     }
 }
 

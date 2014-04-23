@@ -17,17 +17,18 @@ namespace California.Toolkit {
  */
 
 public class DeckWindow : Gtk.Dialog {
-    public Deck deck { get; private set; default = new Deck(); }
+    public Deck deck { get; private set; }
     
-    private Gtk.ResponseType response_type = Gtk.ResponseType.CLOSE;
-    
-    public DeckWindow(Gtk.Window? parent) {
+    public DeckWindow(Gtk.Window? parent, Deck? starter_deck) {
+        this.deck = starter_deck ?? new Deck();
+        
         transient_for = parent;
         modal = true;
         resizable = false;
         
-        deck.dismissed.connect(on_deck_dismissed);
-        deck.completed.connect(on_deck_completed);
+        deck.dismiss.connect(on_deck_dismissed);
+        deck.success.connect(on_deck_success);
+        deck.failure.connect(on_deck_failure);
         
         Gtk.Box content_area = (Gtk.Box) get_content_area();
         content_area.margin = 8;
@@ -37,12 +38,26 @@ public class DeckWindow : Gtk.Dialog {
         get_action_area().no_show_all = true;
     }
     
-    private void on_deck_completed() {
-        response_type = Gtk.ResponseType.OK;
+    ~DeckWindow() {
+        deck.dismiss.disconnect(on_deck_dismissed);
+        deck.success.disconnect(on_deck_success);
+        deck.failure.disconnect(on_deck_failure);
     }
     
-    private void on_deck_dismissed() {
-        response(response_type);
+    private void on_deck_dismissed(bool user_request, bool final) {
+        if (final)
+            response(Gtk.ResponseType.CLOSE);
+    }
+    
+    private void on_deck_success() {
+        response(Gtk.ResponseType.OK);
+    }
+    
+    private void on_deck_failure(string? user_message) {
+        if (!String.is_empty(user_message))
+            Application.instance.error_message(user_message);
+        
+        response(Gtk.ResponseType.CLOSE);
     }
 }
 
