@@ -86,7 +86,7 @@ public class ComboBoxTextModel<G> : BaseObject {
         int added_index = items.index_of(item);
         
         // any existing indices need to be incremented
-        foreach (G key in indices.keys) {
+        foreach (G key in indices.keys.to_array()) {
             int existing_index = indices.get(key);
             if (existing_index >= added_index)
                 indices.set(key, existing_index + 1);
@@ -113,7 +113,7 @@ public class ComboBoxTextModel<G> : BaseObject {
         if (!indices.unset(item, out removed_index))
             return false;
         
-        foreach (G key in indices.keys) {
+        foreach (G key in indices.keys.to_array()) {
             int existing_index = indices.get(key);
             assert(existing_index != removed_index);
             
