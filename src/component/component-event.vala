@@ -18,6 +18,7 @@ public class Event : Instance, Gee.Comparable<Event> {
     public const string PROP_EXACT_TIME_SPAN = "exact-time-span";
     public const string PROP_DATE_SPAN = "date-span";
     public const string PROP_IS_ALL_DAY = "is-all-day";
+    public const string PROP_LOCATION = "location";
     public const string PROP_STATUS = "status";
     
     public enum Status {
@@ -60,6 +61,11 @@ public class Event : Instance, Gee.Comparable<Event> {
      * Convenience property for determining if an all-day event or not.
      */
     public bool is_all_day { get; private set; }
+    
+    /**
+     * Location of an {@link Event}.
+     */
+    public string? location { get; set; default = null; }
     
     /**
      * Status (confirmation) of an {@link Event}.
@@ -118,6 +124,8 @@ public class Event : Instance, Gee.Comparable<Event> {
         // need to set this here because on_notify() doesn't update inside full update
         is_all_day = (date_span != null);
         
+        location = ical_component.get_location();
+        
         switch (ical_component.get_status()) {
             case iCal.icalproperty_status.TENTATIVE:
                 status = Status.TENTATIVE;
@@ -173,6 +181,10 @@ public class Event : Instance, Gee.Comparable<Event> {
                 
                 // updating here guarantees it's always accurate
                 is_all_day = (date_span != null);
+            break;
+            
+            case PROP_LOCATION:
+                ical_component.set_location(location);
             break;
             
             case PROP_STATUS:
@@ -236,6 +248,13 @@ public class Event : Instance, Gee.Comparable<Event> {
     public void set_event_exact_time_span(Calendar.ExactTimeSpan exact_time_span) {
         this.exact_time_span = exact_time_span;
         date_span = null;
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public override bool is_valid() {
+        return base.is_valid() && (date_span != null || exact_time_span != null);
     }
     
     /**

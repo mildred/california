@@ -109,7 +109,7 @@ namespace iCal {
 		[CCode (cname = "icalcomponent_get_inner")]
 		public unowned iCal.icalcomponent get_inner ();
 		[CCode (cname = "icalcomponent_get_location")]
-		public unowned string get_location ();
+		public unowned string? get_location ();
 		[CCode (cname = "icalcomponent_get_method")]
 		public iCal.icalproperty_method get_method ();
 		[CCode (cname = "icalcomponent_get_next_component")]

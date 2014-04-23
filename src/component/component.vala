@@ -17,19 +17,82 @@ namespace California.Component {
 
 private int init_count = 0;
 
+private string TODAY;
+private string TOMORROW;
+private string YESTERDAY;
+private string[] TIME_PREPOSITIONS;
+private string[] LOCATION_PREPOSITIONS;
+private string[] DURATION_PREPOSITIONS;
+private string[] DELAY_PREPOSITIONS;
+private string[] ORDINAL_SUFFIXES;
+
 public void init() throws Error {
     if (!Unit.do_init(ref init_count))
         return;
     
     // external unit init
+    Collection.init();
     Calendar.init();
+    
+    // Used by quick-add to indicate the user wants to create an event for today.
+    TODAY = _("today").casefold();
+    
+    // Used by quick-add to indicate the user wants to create an event for tomorrow.
+    TOMORROW = _("tomorrow").casefold();
+    
+    // Used by quick-add to indicate the user wants to create an event for yesterday.
+    YESTERDAY = _("yesterday").casefold();
+    
+    // Used by quick-add to determine if the word is a time-based preposition (indicating a
+    // specific time, not a duration).  Each word must be separated by semi-colons.
+    // It's allowable for some or all of these words to
+    // be duplicated in the location prepositions list (elsewhere) but not another time list.
+    // The list can be empty, but that will limit the parser.
+    // Examples: "at 9am", "from 10pm to 11:30pm", "on monday"
+    TIME_PREPOSITIONS = _("at;from;to;on;").casefold().split(";");
+    
+    // Used by quick-add to determine if the word is a duration-based preposition (indicating a
+    // a duration, not a specific time).  Each word must be separated by semi-colons.
+    // It's allowable for some or all of these words to
+    // be duplicated in the location prepositions list (elsewhere) but not another time list.
+    // The list can be empty, but that will limit the parser.
+    // Examples: "for 3 hours", "for 90 minutes"
+    DURATION_PREPOSITIONS = _("for;").casefold().split(";");
+    
+    // Used by quick-add to determine if the word is a delay preposition (indicating a specific
+    // time from the current moment).  Each word must be separated by semi-colons.
+    // It's allowable for some or all of these words to
+    // be duplicated in the location prepositions list (elsewhere) but not another time list.
+    // The list can be empty, but that will limit the parser.
+    // Example: "in 3 hours" (meaning 3 hours from now)
+    DELAY_PREPOSITIONS = _("in;").casefold().split(";");
+    
+    // Used by quick-add to determine if the word is a location-based preposition (indicating a
+    // specific place).  Each word must be separated by semi-colons.
+    // It's allowable for some or all of these words to be duplicated in
+    // the time prepositions list (elsewhere).  The list can be empty, but that will limit the
+    // parser.
+    // Example: "at supermarket", "at Eiffel Tower"
+    LOCATION_PREPOSITIONS = _("at;").casefold().split(";");
+    
+    // Used by quick-add to strip date numbers of common ordinal suffices.  Each word must be
+    // separated by semi-colons.
+    // The list can be empty, but that will limit the parser if your language supports ordinal
+    // suffixes.
+    // Example: "1st", "2nd", "3rd", "4th"
+    ORDINAL_SUFFIXES = _("st;nd;rd;th").casefold().split(";");
 }
 
 public void terminate() {
     if (!Unit.do_terminate(ref init_count))
         return;
     
+    TIME_PREPOSITIONS = LOCATION_PREPOSITIONS = DURATION_PREPOSITIONS = ORDINAL_SUFFIXES =
+        DELAY_PREPOSITIONS =null;
+    TODAY = TOMORROW = YESTERDAY = null;
+    
     Calendar.terminate();
+    Collection.terminate();
 }
 
 }

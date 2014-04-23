@@ -5,6 +5,6 @@
  */
 
 int main(string[] args) {
-    return California.Application.instance.run(args);
+    return args[1] != "--tests" ? California.Application.instance.run(args) : California.Tests.run(args);
 }
 

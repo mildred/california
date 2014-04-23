@@ -24,6 +24,8 @@ public class Month : BaseObject, Gee.Comparable<Month>, Gee.Hashable<Month> {
     public static Month NOV;
     public static Month DEC;
     
+    private static Gee.Map<string, Month> parse_map;
+    
     public const int MIN = 1;
     public const int MAX = 12;
     public const int COUNT = MAX - MIN + 1;
@@ -78,9 +80,17 @@ public class Month : BaseObject, Gee.Comparable<Month>, Gee.Hashable<Month> {
     }
     
     internal static void init() {
+        parse_map = new Gee.HashMap<string, Month>(String.ci_hash, String.ci_equal);
+        
         months = new Month[COUNT];
-        for (int ctr = MIN; ctr <= MAX; ctr++)
-            months[ctr - MIN] = new Month(ctr);
+        for (int ctr = MIN; ctr <= MAX; ctr++) {
+            Month month = new Month(ctr);
+            months[ctr - MIN] = month;
+            
+            // build parse map of abbreviated and full name to the Month
+            parse_map.set(month.abbrev_name, month);
+            parse_map.set(month.full_name, month);
+        }
         
         JAN = months[0];
         FEB = months[1];
@@ -97,6 +107,7 @@ public class Month : BaseObject, Gee.Comparable<Month>, Gee.Hashable<Month> {
     }
     
     internal static void terminate() {
+        parse_map = null;
         months = null;
         JAN = FEB = MAR = APR = MAY = JUN = JUL = AUG = SEP = OCT = NOV = DEC = null;
     }
@@ -129,6 +140,16 @@ public class Month : BaseObject, Gee.Comparable<Month>, Gee.Hashable<Month> {
         assert(gdate.valid());
         
         return for_checked(gdate.get_month());
+    }
+    
+    /**
+     * Compares the supplied string with all translated {@link Month} names, both {@link abbrev_name}
+     * and {@link full_name}.
+     *
+     * parse() is case-insensitive.
+     */
+    public static Month? parse(string str) {
+        return parse_map.get(str);
     }
     
     internal inline DateMonth to_date_month() {

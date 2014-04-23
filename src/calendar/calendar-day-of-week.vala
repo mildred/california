@@ -59,6 +59,8 @@ public class DayOfWeek : BaseObject, Gee.Hashable<DayOfWeek> {
     private static DayOfWeek[]? days_of_week_monday = null;
     private static DayOfWeek[]? days_of_week_sunday = null;
     
+    private static Gee.Map<string, DayOfWeek> parse_map;
+    
     /**
      * The abbreviated locale-specific name for the day of the week.
      */
@@ -110,10 +112,18 @@ public class DayOfWeek : BaseObject, Gee.Hashable<DayOfWeek> {
             date.add_days(1);
         }
         
+        parse_map = new Gee.HashMap<string, DayOfWeek>(String.ci_hash, String.ci_equal);
+        
         // Following GLib's lead, days of week Monday-first is straightforward
         days_of_week_monday = new DayOfWeek[COUNT];
-        for (int ctr = MIN; ctr <= MAX; ctr++)
-            days_of_week_monday[ctr - MIN] = new DayOfWeek(ctr, abbrevs[ctr - MIN], fulls[ctr - MIN]);
+        for (int ctr = MIN; ctr <= MAX; ctr++) {
+            DayOfWeek dow = new DayOfWeek(ctr, abbrevs[ctr - MIN], fulls[ctr - MIN]);
+            days_of_week_monday[ctr - MIN] = dow;
+            
+            // add to parse map by abbreivated and full name
+            parse_map.set(dow.abbrev_name, dow);
+            parse_map.set(dow.full_name, dow);
+        }
         
         MON = days_of_week_monday[0];
         TUE = days_of_week_monday[1];
@@ -177,6 +187,16 @@ public class DayOfWeek : BaseObject, Gee.Hashable<DayOfWeek> {
         
         // GLib.Weekday is Monday-first
         return for_checked(date.get_weekday(), FirstOfWeek.MONDAY);
+    }
+    
+    /**
+     * Parses the string looking for a match with any of the {@link DayOfWeek}'s {@link abbrev_name}
+     * or {@link full_name}.
+     *
+     * parse() is case-insensitive.
+     */
+    public static DayOfWeek? parse(string str) {
+        return parse_map.get(str);
     }
     
     /**

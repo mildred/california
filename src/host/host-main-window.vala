@@ -13,8 +13,8 @@ namespace California.Host {
 public class MainWindow : Gtk.ApplicationWindow {
     private const string PROP_FIRST_OF_WEEK = "first-of-week";
     
-    private const string ACTION_NEW_EVENT = "win.new-event";
-    private const string ACCEL_NEW_EVENT = "<Primary>n";
+    private const string ACTION_QUICK_CREATE_EVENT = "win.quick-create-event";
+    private const string ACCEL_QUICK_CREATE_EVENT = "<Primary>n";
     
     private const string ACTION_JUMP_TO_TODAY = "win.jump-to-today";
     private const string ACCEL_JUMP_TO_TODAY = "<Primary>t";
@@ -26,7 +26,7 @@ public class MainWindow : Gtk.ApplicationWindow {
     private const string ACCEL_PREVIOUS = "<Alt>Left";
     
     private static const ActionEntry[] action_entries = {
-        { "new-event", on_new_event },
+        { "quick-create-event", on_quick_create_event },
         { "jump-to-today", on_jump_to_today },
         { "next", on_next },
         { "previous", on_previous }
@@ -37,6 +37,7 @@ public class MainWindow : Gtk.ApplicationWindow {
     
     private View.Controllable current_view;
     private View.Month.Controllable month_view = new View.Month.Controllable();
+    private Gtk.Button quick_add_button;
     
     public MainWindow(Application app) {
         Object (application: app);
@@ -49,7 +50,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         bool rtl = get_direction() == Gtk.TextDirection.RTL;
         
         add_action_entries(action_entries, this);
-        Application.instance.add_accelerator(ACCEL_NEW_EVENT, ACTION_NEW_EVENT, null);
+        Application.instance.add_accelerator(ACCEL_QUICK_CREATE_EVENT, ACTION_QUICK_CREATE_EVENT, null);
         Application.instance.add_accelerator(ACCEL_JUMP_TO_TODAY, ACTION_JUMP_TO_TODAY, null);
         Application.instance.add_accelerator(rtl ? ACCEL_PREVIOUS : ACCEL_NEXT, ACTION_NEXT, null);
         Application.instance.add_accelerator(rtl ? ACCEL_NEXT : ACCEL_PREVIOUS, ACTION_PREVIOUS, null);
@@ -91,9 +92,9 @@ public class MainWindow : Gtk.ApplicationWindow {
         headerbar.pack_start(today);
         headerbar.pack_start(nav_buttons);
         
-        Gtk.Button new_event = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.MENU);
-        new_event.tooltip_text = _("Create a new event (Ctrl+N)");
-        new_event.set_action_name(ACTION_NEW_EVENT);
+        quick_add_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.MENU);
+        quick_add_button.tooltip_text = _("Quick add event (Ctrl+N)");
+        quick_add_button.set_action_name(ACTION_QUICK_CREATE_EVENT);
         
         Gtk.Button calendars = new Gtk.Button.from_icon_name("x-office-calendar-symbolic",
             Gtk.IconSize.MENU);
@@ -101,7 +102,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         calendars.set_action_name(Application.ACTION_CALENDAR_MANAGER);
         
         // pack right-side of window
-        headerbar.pack_end(new_event);
+        headerbar.pack_end(quick_add_button);
         headerbar.pack_end(calendars);
         
         Gtk.Box layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
@@ -137,12 +138,20 @@ public class MainWindow : Gtk.ApplicationWindow {
         deck_window.destroy();
     }
     
-    private void on_new_event() {
-        // create all-day event for today
-        Calendar.DateSpan initial = new Calendar.DateSpan(Calendar.System.today, Calendar.System.today);
+    private void on_quick_create_event() {
+        QuickCreateEvent quick_create = new QuickCreateEvent();
         
-        // revert to today's date and use the widget for the popover
-        create_event(null, initial, null, current_view.today(), null);
+        quick_create.completed.connect(() => {
+            if (quick_create.parsed_event == null)
+                return;
+            
+            if (quick_create.parsed_event.is_valid())
+                create_event_async.begin(quick_create.parsed_event, null);
+            else
+                create_event(null, null, quick_create.parsed_event, true, quick_add_button, null);
+        });
+        
+        show_deck(quick_add_button, null, iterate<Toolkit.Card>(quick_create).to_array_list());
     }
     
     private void on_jump_to_today() {
@@ -159,16 +168,16 @@ public class MainWindow : Gtk.ApplicationWindow {
     
     private void on_request_create_timed_event(Calendar.ExactTimeSpan initial, Gtk.Widget relative_to,
         Gdk.Point? for_location) {
-        create_event(initial, null, null, relative_to, for_location);
+        create_event(initial, null, null, false, relative_to, for_location);
     }
     
     private void on_request_create_all_day_event(Calendar.DateSpan initial, Gtk.Widget relative_to,
         Gdk.Point? for_location) {
-        create_event(null, initial, null, relative_to, for_location);
+        create_event(null, initial, null, false, relative_to, for_location);
     }
     
     private void create_event(Calendar.ExactTimeSpan? time_span, Calendar.DateSpan? date_span,
-        Component.Event? existing, Gtk.Widget relative_to, Gdk.Point? for_location) {
+        Component.Event? existing, bool create_existing, Gtk.Widget relative_to, Gdk.Point? for_location) {
         assert(time_span != null || date_span != null || existing != null);
         
         CreateUpdateEvent create_update_event;
@@ -176,6 +185,8 @@ public class MainWindow : Gtk.ApplicationWindow {
             create_update_event = new CreateUpdateEvent(time_span);
         else if (date_span != null)
             create_update_event = new CreateUpdateEvent.all_day(date_span);
+        else if (create_existing)
+            create_update_event = new CreateUpdateEvent.finish(existing);
         else
             create_update_event = new CreateUpdateEvent.update(existing);
         
@@ -222,7 +233,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         });
         
         show_event.update_event.connect(() => {
-            create_event(null, null, event, relative_to, for_location);
+            create_event(null, null, event, false, relative_to, for_location);
         });
         
         show_deck(relative_to, for_location, iterate<Toolkit.Card>(show_event).to_array_list());

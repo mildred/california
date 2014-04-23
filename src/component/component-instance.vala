@@ -352,6 +352,16 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     }
     
     /**
+     * Returns true if all the fields necessary for creating/updating the {@link Instance} are
+     * present with proper values.
+     *
+     * The presence of {@link calendar_source} is not necessary to deem an Instance valid.
+     */
+    public virtual bool is_valid() {
+        return dtstamp != null;
+    }
+    
+    /**
      * Equality is defined as {@link Component.Instance}s having the same UID.
      *
      * Subclasses should override this and {@link hash} if more definite equality is necessary.

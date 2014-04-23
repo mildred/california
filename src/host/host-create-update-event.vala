@@ -93,6 +93,12 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         init();
     }
     
+    public CreateUpdateEvent.finish(Component.Event event) {
+        this.event = event;
+        
+        init();
+    }
+    
     private void init() {
         if (event.summary != null)
             summary_entry.text = event.summary;
@@ -111,11 +117,15 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
                 event.exact_time_span.start_exact_time.to_timezone(Calendar.Timezone.local));
             initial_end_time = new Calendar.WallTime.from_exact_time(
                 event.exact_time_span.end_exact_time.to_timezone(Calendar.Timezone.local));
-        } else {
-            assert(event.date_span != null);
-            
+        } else if (event.date_span != null) {
             all_day_toggle.active = true;
             selected_date_span = event.date_span;
+            initial_start_time = new Calendar.WallTime.from_exact_time(Calendar.System.now);
+            initial_end_time = new Calendar.WallTime.from_exact_time(
+                Calendar.System.now.adjust_time(1, Calendar.TimeUnit.HOUR));
+        } else {
+            all_day_toggle.active = false;
+            selected_date_span = new Calendar.DateSpan(Calendar.System.today, Calendar.System.today);
             initial_start_time = new Calendar.WallTime.from_exact_time(Calendar.System.now);
             initial_end_time = new Calendar.WallTime.from_exact_time(
                 Calendar.System.now.adjust_time(1, Calendar.TimeUnit.HOUR));

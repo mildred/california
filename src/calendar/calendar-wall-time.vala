@@ -92,6 +92,8 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
     /**
      * Generate a new {@link WallTime} object with the specified values.
      *
+     * Note that hour must be in 24-hour time.
+     *
      * Values will be clamped to create a valid time.
      */
     public WallTime(int hour, int minute, int second) {
@@ -131,6 +133,75 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
     internal static void terminate() {
         earliest = null;
         latest = null;
+    }
+    
+    /**
+     * Attempt to convert a string into {@link WallTime}.
+     *
+     * 24-hour and 12-hour time is recognized, as are localized versions of AM and PM.  If the time
+     * was "liberally" parsed (in other words, "8" is converted to 8am), the returned flag is
+     * cleared.
+     */
+    public static WallTime? parse(string str, out bool strictly_parsed) {
+        strictly_parsed = false;
+        
+        string token = str.strip().casefold();
+        if (String.is_empty(token))
+            return null;
+        
+        // look for meridiem tacked on to end
+        bool pm = false;
+        bool meridiem_unknown = false;
+        if (token.has_suffix(FMT_AM.casefold())) {
+            token = token.slice(0, token.length - FMT_AM.casefold().length);
+        } else if (token.has_suffix(FMT_BRIEF_AM.casefold())) {
+            token = token.slice(0, token.length - FMT_BRIEF_AM.casefold().length);
+        } else if (token.has_suffix(FMT_PM.casefold())) {
+            token = token.slice(0, token.length - FMT_PM.casefold().length);
+            pm = true;
+        } else if (token.has_suffix(FMT_BRIEF_PM.casefold())) {
+            token = token.slice(0, token.length - FMT_BRIEF_PM.casefold().length);
+            pm = true;
+        } else {
+            meridiem_unknown = true;
+        }
+        
+        // remove colon (can be present for 12- or 24-hour time)
+        token = token.replace(":", "");
+        int length = token.length;
+        
+        // rest of string better be numeric and under the common lengths for specifying time
+        if (!String.is_numeric(token) || length == 0 || length > 4)
+            return null;
+        
+        // look for 24-hour time or a fully-detailed 12-hour time
+        if ((length == 3 || length == 4)) {
+            int h, m;
+            if (length == 3) {
+                h = int.parse(token.slice(0, 1));
+                m = int.parse(token.slice(1, 3));
+            } else {
+                h = int.parse(token.slice(0, 2));
+                m = int.parse(token.slice(2, 4));
+            }
+            
+            if (!meridiem_unknown && pm)
+                h += 12;
+            
+            strictly_parsed = true;
+            
+            return new WallTime(h, m, 0);
+        }
+        
+        // otherwise, treat as short-form 12-hour time (even if meridiem is unknown, i.e. "8" is
+        // treated as "8:00am"
+        int h = int.parse(token);
+        if (!meridiem_unknown && pm)
+            h += 12;
+        
+        strictly_parsed = !meridiem_unknown;
+        
+        return new WallTime(h, 0, 0);
     }
     
     /**

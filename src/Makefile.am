@@ -43,6 +43,7 @@ california_VALASOURCES = \
 	backing/eds/backing-eds-store.vala \
 	\
 	base/base-object.vala \
+	base/base-properties.vala \
 	base/base-unit.vala \
 	\
 	calendar/calendar.vala \
@@ -51,6 +52,7 @@ california_VALASOURCES = \
 	calendar/calendar-day-of-week.vala \
 	calendar/calendar-date.vala \
 	calendar/calendar-dbus.vala \
+	calendar/calendar-duration.vala \
 	calendar/calendar-error.vala \
 	calendar/calendar-exact-time.vala \
 	calendar/calendar-exact-time-span.vala \
@@ -67,12 +69,15 @@ california_VALASOURCES = \
 	calendar/calendar-week-span.vala \
 	calendar/calendar-year.vala \
 	\
+	collection/collection.vala \
 	collection/collection-iterable.vala \
+	collection/collection-lookahead-stack.vala \
 	collection/collection-simple-iterator.vala \
 	collection/collection-simple-iterable.vala \
 	\
 	component/component.vala \
 	component/component-date-time.vala \
+	component/component-details-parser.vala \
 	component/component-error.vala \
 	component/component-event.vala \
 	component/component-icalendar.vala \
@@ -85,6 +90,7 @@ california_VALASOURCES = \
 	host/host-create-update-event.vala \
 	host/host-import-calendar.vala \
 	host/host-main-window.vala \
+	host/host-quick-create-event.vala \
 	host/host-show-event.vala \
 	\
 	manager/manager.vala \
@@ -92,9 +98,13 @@ california_VALASOURCES = \
 	manager/manager-calendar-list-item.vala \
 	manager/manager-window.vala \
 	\
+	tests/tests.vala \
+	tests/tests-quick-add.vala \
+	\
 	toolkit/toolkit.vala \
 	toolkit/toolkit-calendar-popup.vala \
 	toolkit/toolkit-card.vala \
+	toolkit/toolkit-combo-box-text-model.vala \
 	toolkit/toolkit-deck.vala \
 	toolkit/toolkit-deck-window.vala \
 	toolkit/toolkit-listbox-model.vala \
@@ -105,6 +115,8 @@ california_VALASOURCES = \
 	util/util-memory.vala \
 	util/util-string.vala \
 	util/util-uri.vala \
+	\
+	unit-test/unit-test-harness.vala \
 	\
 	view/view.vala \
 	view/view-controllable.vala \
@@ -131,6 +143,7 @@ california_RC = \
 	rc/google-authenticating.ui \
 	rc/google-calendar-list.ui \
 	rc/google-login.ui \
+	rc/quick-create-event.ui \
 	rc/show-event.ui \
 	rc/webcal-subscribe.ui \
 	$(NULL)

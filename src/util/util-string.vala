@@ -16,6 +16,14 @@ public int stricmp(string a, string b) {
     return strcmp(a.casefold(), b.casefold());
 }
 
+public uint ci_hash(string str) {
+    return str.casefold().hash();
+}
+
+public bool ci_equal(string a, string b) {
+    return stricmp(a, b) == 0;
+}
+
 /**
  * Removes redundant whitespace (including tabs and newlines) and strips whitespace from beginning
  * and end of string.
@@ -42,6 +50,23 @@ public string reduce_whitespace(string str) {
     }
     
     return builder.str;
+}
+
+/**
+ * Returns true if every character in the string is a numeric digit.
+ */
+public bool is_numeric(string? str) {
+    if (is_empty(str))
+        return false;
+    
+    unichar ch;
+    int index = 0;
+    while (str.get_next_char(ref index, out ch)) {
+        if (!ch.isdigit())
+            return false;
+    }
+    
+    return true;
 }
 
 }

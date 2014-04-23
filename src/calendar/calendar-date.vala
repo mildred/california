@@ -250,6 +250,20 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
         return new Date.from_gdate(clone);
     }
     
+    /**
+     * Returns the next date;
+     */
+    public Date next() {
+        return adjust(1, DateUnit.DAY);
+    }
+    
+    /**
+     * Returns the previous date.
+     */
+    public Date previous() {
+        return adjust(-1, DateUnit.DAY);
+    }
+    
     public int compare_to(Date other) {
         return (this != other) ? gdate.compare(other.gdate) : 0;
     }
