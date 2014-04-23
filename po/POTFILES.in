@@ -2,12 +2,13 @@
 # List of source files which contain translatable strings.
 data/california.desktop.in.in
 src/activator/activator.vala
-src/application/california-commandline.vala
 src/activator/google/activator-google-authenticating-pane.vala
 src/activator/google/activator-google-calendar-list-pane.vala
 src/application/california-application.vala
-src/calendar/calendar.vala
+src/application/california-commandline.vala
 src/calendar/calendar-date.vala
+src/calendar/calendar.vala
+src/component/component.vala
 src/host/host-create-update-event.vala
 src/host/host-import-calendar.vala
 src/host/host-main-window.vala
@@ -15,11 +16,12 @@ src/host/host-show-event.vala
 [type: gettext/glade]src/rc/activator-list.ui
 [type: gettext/glade]src/rc/app-menu.interface
 [type: gettext/glade]src/rc/calendar-import.ui
-[type: gettext/glade]src/rc/calendar-manager-list.ui
 [type: gettext/glade]src/rc/calendar-manager-list-item.ui
+[type: gettext/glade]src/rc/calendar-manager-list.ui
 [type: gettext/glade]src/rc/create-update-event.ui
 [type: gettext/glade]src/rc/google-authenticating.ui
 [type: gettext/glade]src/rc/google-calendar-list.ui
 [type: gettext/glade]src/rc/google-login.ui
+[type: gettext/glade]src/rc/quick-create-event.ui
 [type: gettext/glade]src/rc/show-event.ui
 [type: gettext/glade]src/rc/webcal-subscribe.ui
