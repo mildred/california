@@ -54,61 +54,67 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     
     public Calendar.DateSpan selected_date_span { get; set; }
     
-    private new Component.Event event;
+    public bool is_update { get; set; default = false; }
+    
+    private new Component.Event event = new Component.Event.blank();
     private Gee.HashMap<string, Calendar.WallTime> time_map = new Gee.HashMap<string, Calendar.WallTime>();
-    private Gee.List<Backing.CalendarSource> calendar_sources;
     private Backing.CalendarSource? original_calendar_source;
-    private Backing.CalendarSource? selected_calendar_source;
-    private bool is_update = false;
+    private Toolkit.ComboBoxTextModel<Backing.CalendarSource> calendar_model;
     private Gtk.Button? last_date_button_touched = null;
     private bool both_date_buttons_touched = false;
     
-    public signal void create_event(Component.Event event);
-    
-    public signal void update_event(Backing.CalendarSource? original_source, Component.Event event);
-    
-    public CreateUpdateEvent(Calendar.ExactTimeSpan initial) {
-        event = new Component.Event.blank();
-        event.set_event_exact_time_span(initial);
-        original_calendar_source = null;
-        
-        init();
-    }
-    
-    public CreateUpdateEvent.all_day(Calendar.DateSpan initial) {
-        event = new Component.Event.blank();
-        event.set_event_date_span(initial);
-        original_calendar_source = null;
-        
-        init();
-    }
-    
-    public CreateUpdateEvent.update(Component.Event event) {
-        this.event = event;
-        original_calendar_source = event.calendar_source;
-        
-        accept_button.label = _("_Update");
-        is_update = true;
-        
-        init();
-    }
-    
-    public CreateUpdateEvent.finish(Component.Event event) {
-        this.event = event;
-        
-        init();
-    }
-    
-    private void init() {
-        if (event.summary != null)
-            summary_entry.text = event.summary;
-        
+    public CreateUpdateEvent() {
+        // when selected_date_span updates, update date buttons as well
         notify[PROP_SELECTED_DATE_SPAN].connect(() => {
             dtstart_date_button.label = selected_date_span.start_date.to_standard_string();
             dtend_date_button.label = selected_date_span.end_date.to_standard_string();
         });
         
-        // date/date-time must be set in the Event prior to this call
+        // create button is active only if summary is filled out; all other fields (so far)
+        // guarantee valid values at all times
+        summary_entry.bind_property("text-length", accept_button, "sensitive",
+            BindingFlags.SYNC_CREATE);
+        
+        // hide start/end time widgets if an all-day event ..."no-show-all" needed to avoid the
+        // merciless effects of show_all()
+        all_day_toggle.bind_property("active", dtstart_time_combo, "visible",
+            BindingFlags.INVERT_BOOLEAN | BindingFlags.SYNC_CREATE);
+        dtstart_time_combo.no_show_all = true;
+        all_day_toggle.bind_property("active", dtend_time_combo, "visible",
+            BindingFlags.INVERT_BOOLEAN | BindingFlags.SYNC_CREATE);
+        dtend_time_combo.no_show_all = true;
+        
+        // use model to control calendars combo box
+        calendar_model = new Toolkit.ComboBoxTextModel<Backing.CalendarSource>(calendar_combo,
+            (cal) => cal.title);
+        foreach (Backing.CalendarSource calendar_source in
+            Backing.Manager.instance.get_sources_of_type<Backing.CalendarSource>()) {
+            if (!calendar_source.visible)
+                continue;
+            
+            calendar_model.add(calendar_source);
+        }
+        
+        update_controls();
+    }
+    
+    public void jumped_to(Toolkit.Card? from, Value? message) {
+        if (message != null) {
+            event = message as Component.Event;
+            assert(event != null);
+        } else {
+            event = new Component.Event.blank();
+        }
+        
+        update_controls();
+    }
+    
+    private void update_controls() {
+        if (event.summary != null)
+            summary_entry.text = event.summary;
+        else
+            summary_entry.text = "";
+        
         Calendar.WallTime initial_start_time, initial_end_time;
         if (event.exact_time_span != null) {
             all_day_toggle.active = false;
@@ -131,7 +137,7 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
                 Calendar.System.now.adjust_time(1, Calendar.TimeUnit.HOUR));
         }
         
-        // initialize start and end time (as in, wall clock time)
+        // initialize start and end time controls (as in, wall clock time)
         Calendar.WallTime current = new Calendar.WallTime(START_HOUR, Calendar.WallTime.MIN_MINUTE, 0);
         Calendar.WallTime end = new Calendar.WallTime(END_HOUR, Calendar.WallTime.MAX_MINUTE, 0);
         int index = 0;
@@ -168,57 +174,16 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         dtstart_time_combo.set_active(dtstart_active_index.clamp(0, index - 1));
         dtend_time_combo.set_active(dtend_active_index.clamp(0, index - 1));
         
-        // hide start/end time widgets if an all-day event ..."no-show-all" needed to avoid the
-        // merciless effects of show_all()
-        all_day_toggle.bind_property("active", dtstart_time_combo, "visible",
-            BindingFlags.INVERT_BOOLEAN | BindingFlags.SYNC_CREATE);
-        dtstart_time_combo.no_show_all = true;
-        all_day_toggle.bind_property("active", dtend_time_combo, "visible",
-            BindingFlags.INVERT_BOOLEAN | BindingFlags.SYNC_CREATE);
-        dtend_time_combo.no_show_all = true;
-        
-        // initialize available calendars
-        calendar_sources = Backing.Manager.instance.get_sources_of_type<Backing.CalendarSource>();
-        calendar_sources.sort();
-        
-        index = 0;
-        int calendar_source_index = 0;
-        Gee.Iterator<Backing.Source> iter = calendar_sources.iterator();
-        while (iter.next()) {
-            Backing.Source source = iter.get();
-            
-            // drop from List to ensure ComboBox indices match array indices
-            if (!source.visible) {
-                iter.remove();
-                
-                continue;
-            }
-            
-            calendar_combo.append_text(source.title);
-            if (source == event.calendar_source)
-                calendar_source_index = index;
-            
-            index++;
+        // set combo to event's calendar
+        if (event.calendar_source != null) {
+            calendar_model.set_item_active(event.calendar_source);
+        } else {
+            calendar_combo.active = 0;
+            is_update = false;
         }
         
-        // keep attribute up-to-date
-        calendar_combo.notify["active"].connect(() => {
-            if (calendar_combo.active >= 0 && calendar_combo.active < calendar_sources.size)
-                selected_calendar_source = calendar_sources[calendar_combo.active];
-            else
-                selected_calendar_source = null;
-        });
-        
-        // set now that handlers are in place
-        calendar_combo.set_active(calendar_source_index);
-        
-        // create button is active only if summary is filled out; all other fields (so far)
-        // guarantee valid values at all times
-        summary_entry.bind_property("text-length", accept_button, "sensitive",
-            BindingFlags.SYNC_CREATE);
-    }
-    
-    public void jumped_to(Toolkit.Card? from, Value? message) {
+        accept_button.label = is_update ? _("_Update") : _("C_reate");
+        original_calendar_source = event.calendar_source;
     }
     
     [GtkCallback]
@@ -260,10 +225,10 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     
     [GtkCallback]
     private void on_accept_clicked() {
-        if (selected_calendar_source == null)
+        if (calendar_model.active == null)
             return;
         
-        event.calendar_source = selected_calendar_source;
+        event.calendar_source = calendar_model.active;
         event.summary = summary_entry.text;
         
         if (all_day_toggle.active) {
@@ -284,17 +249,43 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         }
         
         if (is_update)
-            update_event(original_calendar_source, event);
+            update_event_async.begin(null);
         else
-            create_event(event);
+            create_event_async.begin(null);
         
         notify_success();
     }
     
     [GtkCallback]
     private void on_cancel_button_clicked() {
-        notify_user_closed();
+        jump_home_or_user_closed();
     }
+    
+    private async void create_event_async(Cancellable? cancellable) {
+        if (event.calendar_source == null)
+            return;
+        
+        try {
+            yield event.calendar_source.create_component_async(event, cancellable);
+            notify_success();
+        } catch (Error err) {
+            notify_failure(_("Unable to create event: %s").printf(err.message));
+        }
+    }
+    
+    // TODO: Delete from original source if not the same as the new source
+    private async void update_event_async(Cancellable? cancellable) {
+        if (event.calendar_source == null)
+            return;
+        
+        try {
+            yield event.calendar_source.update_component_async(event, cancellable);
+            notify_success();
+        } catch (Error err) {
+            notify_failure(_("Unable to update event: %s").printf(err.message));
+        }
+    }
+    
 }
 
 }

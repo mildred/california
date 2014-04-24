@@ -153,7 +153,7 @@ public class MainWindow : Gtk.ApplicationWindow {
             if (quick_create.parsed_event.is_valid())
                 create_event_async.begin(quick_create.parsed_event, null);
             else
-                create_event(null, null, quick_create.parsed_event, true, quick_add_button, null);
+                create_event(quick_create.parsed_event, quick_add_button, null);
         });
         
         Toolkit.Deck deck = new Toolkit.Deck();
@@ -176,39 +176,27 @@ public class MainWindow : Gtk.ApplicationWindow {
     
     private void on_request_create_timed_event(Calendar.ExactTimeSpan initial, Gtk.Widget relative_to,
         Gdk.Point? for_location) {
-        create_event(initial, null, null, false, relative_to, for_location);
+        Component.Event event = new Component.Event.blank();
+        event.set_event_exact_time_span(initial);
+        
+        create_event(event, relative_to, for_location);
     }
     
     private void on_request_create_all_day_event(Calendar.DateSpan initial, Gtk.Widget relative_to,
         Gdk.Point? for_location) {
-        create_event(null, initial, null, false, relative_to, for_location);
+        Component.Event event = new Component.Event.blank();
+        event.set_event_date_span(initial);
+        
+        create_event(event, relative_to, for_location);
     }
     
-    private void create_event(Calendar.ExactTimeSpan? time_span, Calendar.DateSpan? date_span,
-        Component.Event? existing, bool create_existing, Gtk.Widget relative_to, Gdk.Point? for_location) {
-        assert(time_span != null || date_span != null || existing != null);
-        
-        CreateUpdateEvent create_update_event;
-        if (time_span != null)
-            create_update_event = new CreateUpdateEvent(time_span);
-        else if (date_span != null)
-            create_update_event = new CreateUpdateEvent.all_day(date_span);
-        else if (create_existing)
-            create_update_event = new CreateUpdateEvent.finish(existing);
-        else
-            create_update_event = new CreateUpdateEvent.update(existing);
-        
-        create_update_event.create_event.connect((event) => {
-            create_event_async.begin(event, null);
-        });
-        
-        create_update_event.update_event.connect((original_source, event) => {
-            // TODO: Delete from original source if not the same as the new source
-            update_event_async.begin(event, null);
-        });
+    private void create_event(Component.Event event, Gtk.Widget relative_to, Gdk.Point? for_location) {
+        CreateUpdateEvent create_update_event = new CreateUpdateEvent();
+        create_update_event.is_update = false;
         
         Toolkit.Deck deck = new Toolkit.Deck();
         deck.add_cards(iterate<Toolkit.Card>(create_update_event).to_array_list());
+        deck.go_home(event);
         
         show_deck(relative_to, for_location, deck);
     }
@@ -224,31 +212,20 @@ public class MainWindow : Gtk.ApplicationWindow {
         }
     }
     
-    private async void update_event_async(Component.Event event, Cancellable? cancellable) {
-        if (event.calendar_source == null)
-            return;
-        
-        try {
-            yield event.calendar_source.update_component_async(event, cancellable);
-        } catch (Error err) {
-            debug("Unable to update event: %s", err.message);
-        }
-    }
-    
     private void on_request_display_event(Component.Event event, Gtk.Widget relative_to,
         Gdk.Point? for_location) {
-        ShowEvent show_event = new ShowEvent(event);
-        
+        ShowEvent show_event = new ShowEvent();
         show_event.remove_event.connect(() => {
             remove_event_async.begin(event, null);
         });
         
-        show_event.update_event.connect(() => {
-            create_event(null, null, event, false, relative_to, for_location);
-        });
+        CreateUpdateEvent create_update_event = new CreateUpdateEvent();
+        create_update_event.is_update = true;
         
         Toolkit.Deck deck = new Toolkit.Deck();
-        deck.add_cards(iterate<Toolkit.Card>(show_event).to_array_list());
+        deck.add_card(show_event);
+        deck.add_card(create_update_event);
+        deck.go_home(event);
         
         show_deck(relative_to, for_location, deck);
     }

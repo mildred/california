@@ -160,6 +160,16 @@ public interface Card : Gtk.Widget {
         dismiss(true, false);
         failure(user_message);
     }
+    
+    /**
+     * Jump home or, if this {@link Card} is the home card, dismiss {@link Deck}.
+     */
+    protected void jump_home_or_user_closed() {
+        if (deck.home == this)
+            notify_user_closed();
+        else
+            jump_home();
+    }
 }
 
 }

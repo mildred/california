@@ -168,7 +168,7 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     }
     
     /**
-     * Updates the {@link Instance} with information from the E.CalComponent.
+     * Updates the {@link Instance} with information from the iCal component.
      *
      * The Instance will update whatever changes it discovers from this new component and fire
      * signals to update subscribers.

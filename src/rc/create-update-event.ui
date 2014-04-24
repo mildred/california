@@ -18,9 +18,9 @@
         <property name="can_focus">True</property>
         <property name="has_focus">True</property>
         <property name="is_focus">True</property>
-        <property name="max_length">64</property>
+        <property name="max_length">128</property>
         <property name="activates_default">True</property>
-        <property name="width_chars">24</property>
+        <property name="width_chars">48</property>
         <property name="caps_lock_warning">False</property>
         <property name="placeholder_text" translatable="yes">Untitled event</property>
       </object>
@@ -121,25 +121,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkCheckButton" id="all_day_toggle">
-        <property name="label" translatable="yes">_All-day event</property>
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">False</property>
-        <property name="halign">end</property>
-        <property name="use_underline">True</property>
-        <property name="xalign">0</property>
-        <property name="image_position">right</property>
-        <property name="draw_indicator">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">2</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkBox" id="calendar_box">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -180,12 +161,11 @@
       <object class="GtkButtonBox" id="button_box">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="halign">baseline</property>
-        <property name="valign">baseline</property>
+        <property name="valign">end</property>
         <property name="margin_top">8</property>
+        <property name="vexpand">True</property>
         <property name="spacing">8</property>
         <property name="homogeneous">True</property>
-        <property name="baseline_position">bottom</property>
         <property name="layout_style">end</property>
         <child>
           <object class="GtkButton" id="cancel_button">
@@ -231,6 +211,25 @@
         <property name="left_attach">0</property>
         <property name="top_attach">4</property>
         <property name="width">2</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="all_day_toggle">
+        <property name="label" translatable="yes">_All-day event</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="halign">start</property>
+        <property name="use_underline">True</property>
+        <property name="xalign">0</property>
+        <property name="image_position">right</property>
+        <property name="draw_indicator">True</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">2</property>
+        <property name="width">1</property>
         <property name="height">1</property>
       </packing>
     </child>

@@ -34,12 +34,7 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     
     public signal void remove_event(Component.Event event);
     
-    public signal void update_event(Component.Event event);
-    
-    public ShowEvent(Component.Event event) {
-        this.event = event;
-        
-        build_display();
+    public ShowEvent() {
         Calendar.System.instance.is_24hr_changed.connect(build_display);
         Calendar.System.instance.today_changed.connect(build_display);
     }
@@ -50,6 +45,13 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     }
     
     public void jumped_to(Toolkit.Card? from, Value? message) {
+        if (message == null)
+            return;
+        
+        event = message as Component.Event;
+        assert(event != null);
+        
+        build_display();
     }
     
     private void build_display() {
@@ -143,8 +145,7 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     
     [GtkCallback]
     private void on_update_button_clicked() {
-        update_event(event);
-        notify_success();
+        jump_to_card_by_name(CreateUpdateEvent.ID, event);
     }
     
     [GtkCallback]

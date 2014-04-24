@@ -15,6 +15,11 @@ namespace California.Toolkit {
 
 public class Deck : Gtk.Stack {
     /**
+     * A slightly slower transition duration than default.
+     */
+    public const int DEFAULT_TRANSITION_MSEC = 300;
+    
+    /**
      * @inheritedDoc
      */
     public Gtk.Widget? default_widget { get { return null; } }
@@ -67,6 +72,8 @@ public class Deck : Gtk.Stack {
      */
     public Deck() {
         transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
+        transition_duration = DEFAULT_TRANSITION_MSEC;
+        
         notify["visible-child"].connect(on_child_to_top);
     }
     
@@ -101,6 +108,13 @@ public class Deck : Gtk.Stack {
             top.success.connect(on_success);
             top.failure.connect(on_failure);
         }
+    }
+    
+    /**
+     * A helper method for {@link add_cards}.
+     */
+    public void add_card(Card card) {
+        add_cards(iterate<Card>(card).to_array_list());
     }
     
     /**
@@ -180,6 +194,25 @@ public class Deck : Gtk.Stack {
             set_visible_child(home);
             home.jumped_to(null, null);
         }
+    }
+    
+    /**
+     * Force the {@link Deck} to jump to the {@link home} {@link Card}.
+     *
+     * In general, Deck avoids jumping to a Card if it's already displayed (on top).  However, for
+     * this call it will call the Card's {@link Card.jumped_to} method and pass the supplied
+     * message every time, even if already on top.  This allows for this call to be used for Deck
+     * initialization.
+     */
+    public void go_home(Value? message) {
+        if (home == null)
+            return;
+        
+        // clear navigation stack, this acts as a kind of reset
+        navigation_stack.clear();
+        
+        set_visible_child(home);
+        home.jumped_to(null, message);
     }
     
     private void on_jump_to_card(Card card, Card next, Value? message) {
