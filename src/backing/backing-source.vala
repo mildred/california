@@ -20,6 +20,7 @@ public abstract class Source : BaseObject, Gee.Comparable<Source> {
     public const string PROP_IS_AVAILABLE = "is-available";
     public const string PROP_TITLE = "title";
     public const string PROP_VISIBLE = "visible";
+    public const string PROP_READONLY = "read-only";
     public const string PROP_COLOR = "color";
     
     /**
@@ -56,6 +57,15 @@ public abstract class Source : BaseObject, Gee.Comparable<Source> {
      * @see CalendarSourceSubscription
      */
     public bool visible { get; set; }
+    
+    /**
+     * Whether the {@link Source} is read-only.
+     *
+     * If true, write operations (create, update, remove) should not be attempted.
+     *
+     * It's possible this can change at run-time by the backend.
+     */
+    public bool read_only { get; protected set; }
     
     /**
      * The suggested color to use when displaying the {@link Source} or information about or from

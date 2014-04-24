@@ -46,7 +46,7 @@ public class ImportCalendar : Gtk.Dialog {
     }
     
     private bool model_filter(Backing.CalendarSource calendar_source) {
-        return calendar_source.visible;
+        return calendar_source.visible && !calendar_source.read_only;
     }
     
     private void on_row_selected() {

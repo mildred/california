@@ -37,7 +37,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
             (cal) => cal.title);
         foreach (Backing.CalendarSource calendar_source in
             Backing.Manager.instance.get_sources_of_type<Backing.CalendarSource>()) {
-            if (calendar_source.visible)
+            if (calendar_source.visible && !calendar_source.read_only)
                 model.add(calendar_source);
         }
         

@@ -122,7 +122,8 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         // don't current support updating or removing recurring events properly; see
         // https://bugzilla.gnome.org/show_bug.cgi?id=725786
         // https://bugzilla.gnome.org/show_bug.cgi?id=725787
-        bool visible = !event.is_recurring;
+        bool read_only = event.calendar_source != null && event.calendar_source.read_only;
+        bool visible = !event.is_recurring && !read_only;
         update_button.visible = visible;
         update_button.no_show_all = !visible;
         remove_button.visible = visible;

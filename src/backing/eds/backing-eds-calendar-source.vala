@@ -25,6 +25,9 @@ internal class EdsCalendarSource : CalendarSource {
         this.eds_source = eds_source;
         this.eds_calendar = eds_calendar;
         
+        // read-only until opened, when state can be determined from client
+        read_only = true;
+        
         // use unidirectional bindings so source updates (writing) only occurs when changed from
         // within the app
         eds_source.bind_property("display-name", this, PROP_TITLE, BindingFlags.SYNC_CREATE);
@@ -113,12 +116,15 @@ internal class EdsCalendarSource : CalendarSource {
     internal async void open_async(Cancellable? cancellable) throws Error {
         client = (E.CalClient) yield E.CalClient.connect(eds_source, E.CalClientSourceType.EVENTS,
             cancellable);
+        
+        client.bind_property("readonly", this, PROP_READONLY, BindingFlags.SYNC_CREATE);
     }
     
     // Invoked by EdsStore when closing and dropping all its refs
     internal async void close_async(Cancellable? cancellable) throws Error {
         // no close -- just drop the ref
         client = null;
+        read_only = true;
     }
     
     private void check_open() throws BackingError {
