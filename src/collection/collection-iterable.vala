@@ -131,6 +131,15 @@ public class Iterable<G> : BaseObject {
         return false;
     }
     
+    public bool contains_any(Gee.Collection<G> c) {
+        foreach (G g in this) {
+            if (c.contains(g))
+                return true;
+        }
+        
+        return false;
+    }
+    
     public bool all(owned Gee.Predicate<G> f) {
         foreach (G g in this) {
             if (!f(g))

@@ -99,6 +99,7 @@ california_VALASOURCES = \
 	manager/manager-window.vala \
 	\
 	tests/tests.vala \
+	tests/tests-calendar-date.vala \
 	tests/tests-quick-add.vala \
 	\
 	toolkit/toolkit.vala \

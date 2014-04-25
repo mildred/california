@@ -188,6 +188,21 @@ public class DateSpan : BaseObject, Collection.SimpleIterable<Date>, Span<Date>,
     }
     
     /**
+     * Returns a {@link DateSpan} with starting and ending points within the boundary specified
+     * (inclusive).
+     *
+     * If this DateSpan is within the clamped dates, this object may be returned.
+     *
+     * This method will not expand a DateSpan to meet the clamp range.
+     */
+    public DateSpan clamp(DateSpan span) {
+        Date new_start = (start_date.compare_to(span.start_date) < 0) ? span.start_date : start_date;
+        Date new_end = (end_date.compare_to(span.end_date) > 0) ? span.end_date : end_date;
+        
+        return new DateSpan(new_start, new_end);
+    }
+    
+    /**
      * Compares two {@link DateSpan}s by their {@link start_date}.
      */
     public int compare_to(DateSpan other) {

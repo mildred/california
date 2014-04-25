@@ -168,6 +168,10 @@ public class Controllable : Gtk.Grid, View.Controllable {
         return (Cell) get_child_at(col, row);
     }
     
+    internal Cell? get_cell_for_date(Calendar.Date date) {
+        return date_to_cell.get(date);
+    }
+    
     private void foreach_cell(CellCallback callback) {
         foreach (unowned Gtk.Widget widget in get_children()) {
             // watch for Gtk.Labels across the top
@@ -286,13 +290,23 @@ public class Controllable : Gtk.Grid, View.Controllable {
     }
     
     private void on_calendar_added(Backing.CalendarSource calendar) {
-        calendar.notify[Backing.Source.PROP_VISIBLE].connect(queue_draw);
+        calendar.notify[Backing.Source.PROP_VISIBLE].connect(on_calendar_visibility_changed);
         calendar.notify[Backing.Source.PROP_COLOR].connect(queue_draw);
     }
     
     private void on_calendar_removed(Backing.CalendarSource calendar) {
-        calendar.notify[Backing.Source.PROP_VISIBLE].disconnect(queue_draw);
+        calendar.notify[Backing.Source.PROP_VISIBLE].disconnect(on_calendar_visibility_changed);
         calendar.notify[Backing.Source.PROP_COLOR].disconnect(queue_draw);
+    }
+    
+    private void on_calendar_visibility_changed(Object o, ParamSpec pspec) {
+        Backing.CalendarSource calendar = (Backing.CalendarSource) o;
+        
+        foreach_cell((cell) => {
+            cell.notify_calendar_visibility_changed(calendar);
+            
+            return true;
+        });
     }
     
     private void on_instance_added(Component.Instance instance) {

@@ -347,11 +347,14 @@ public class Event : Instance, Gee.Comparable<Event> {
         }
         
         if (exact_time_span != null
+            && other_event.date_span != null
             && !new Calendar.DateSpan.from_exact_time_span(exact_time_span).equal_to(other_event.date_span)) {
             return false;
         }
         
-        if (!date_span.equal_to(new Calendar.DateSpan.from_exact_time_span(other_event.exact_time_span))) {
+        if (date_span != null
+            && other_event.exact_time_span != null
+            && !date_span.equal_to(new Calendar.DateSpan.from_exact_time_span(other_event.exact_time_span))) {
             return false;
         }
         
