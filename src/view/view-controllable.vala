@@ -65,6 +65,12 @@ public interface Controllable : Object {
         Gdk.Point? for_location);
     
     /**
+     * Returns the Gtk.Widget container that should be used to display the {@link Controllable}'s
+     * contents.
+     */
+    public abstract Gtk.Widget get_container();
+    
+    /**
      * Move forward one calendar unit.
      */
     public abstract void next();

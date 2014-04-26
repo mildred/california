@@ -59,6 +59,7 @@ california_VALASOURCES = \
 	calendar/calendar-first-of-week.vala \
 	calendar/calendar-month.vala \
 	calendar/calendar-month-of-year.vala \
+	calendar/calendar-month-span.vala \
 	calendar/calendar-olson-zone.vala \
 	calendar/calendar-span.vala \
 	calendar/calendar-system.vala \
@@ -100,6 +101,8 @@ california_VALASOURCES = \
 	\
 	tests/tests.vala \
 	tests/tests-calendar-date.vala \
+	tests/tests-calendar-month-of-year.vala \
+	tests/tests-calendar-month-span.vala \
 	tests/tests-quick-add.vala \
 	\
 	toolkit/toolkit.vala \
@@ -124,7 +127,8 @@ california_VALASOURCES = \
 	\
 	view/month/month.vala \
 	view/month/month-cell.vala \
-	view/month/month-controllable.vala \
+	view/month/month-controller.vala \
+	view/month/month-grid.vala \
 	\
 	$(NULL)
 

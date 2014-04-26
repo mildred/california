@@ -84,6 +84,42 @@ public class MonthOfYear : DateSpan {
         return start_date.adjust(quantity, DateUnit.MONTH).month_of_year();
     }
     
+    /**
+     * Returns the number of months between the two {@link MonthOfYear}s.
+     *
+     * If the supplied MonthOfYear is earlier than this one, a negative value is returned.
+     */
+    public int difference(MonthOfYear other) {
+        int compare = compare_to(other);
+        if (compare == 0)
+            return 0;
+        
+        // TODO: Iterating sucks, but it will have to suffice for now.
+        int count = 0;
+        MonthOfYear current = this;
+        for (;;) {
+            current = (compare > 0) ? current.previous() : current.next();
+            count += (compare > 0) ? -1 : 1;
+            
+            if (current.equal_to(other))
+                return count;
+        }
+    }
+    
+    /**
+     * Returns the chronological next {@link MonthOfYear}.
+     */
+    public MonthOfYear next() {
+        return adjust(1);
+    }
+    
+    /**
+     * Returns the chronological prior {@link MonthOfYear}.
+     */
+    public MonthOfYear previous() {
+        return adjust(-1);
+    }
+    
     public override string to_string() {
         return "%s %s".printf(month.to_string(), year.to_string());
     }

@@ -7,42 +7,38 @@
 namespace California.View.Month {
 
 /**
- * A Gtk.Grid widget that displays a month's worth of days as cells.
- *
- * @see Cell
+ * A Gtk.Grid of {@link Cell}s, each representing a particular {@link Calendar.Date}.
  */
 
-public class Controllable : Gtk.Grid, View.Controllable {
+private class Grid : Gtk.Grid {
+    public const string PROP_MONTH_OF_YEAR = "month-of-year";
+    public const string PROP_WINDOW = "window";
+    public const string PROP_FIRST_OF_WEEK = "first-of-week";
+    
     // days of the week
     public const int COLS = Calendar.DayOfWeek.COUNT;
     // calendar weeks to be displayed at any one time
     public const int ROWS = 6;
     
-    // day of week labels are stored in the -1 row
-    private const int DOW_ROW = -1;
-    
-    public const string PROP_MONTH_OF_YEAR = "month-of-year";
-    public const string PROP_SHOW_OUTSIDE_MONTH = "show-outside-month";
-    
     // Delegate for walking only Cells in the Grid.  Return true to keep iterating.
     private delegate bool CellCallback(Cell cell);
     
     /**
-     * The month and year being displayed.
+     * {@link Month.Controller} that created and holds this {@link Grid}.
+     */
+    public weak Controller owner { get; private set; }
+    
+    /**
+     * {@link MonthOfYear} this {@link Grid} represents.
      *
-     * Defaults to the current month and year.
+     * This is immutable; Grids are not designed to be re-used for other months.
      */
     public Calendar.MonthOfYear month_of_year { get; private set; }
     
     /**
-     * @inheritDoc
+     * The first day of the week, as defined by this {@link Grid}'s {@link Controller}.
      */
-    public Calendar.FirstOfWeek first_of_week { get; set; }
-    
-    /**
-     * Show days outside the current month.
-     */
-    public bool show_outside_month { get; set; default = true; }
+    public Calendar.FirstOfWeek first_of_week { get; private set; }
     
     /**
      * The span of dates being displayed.
@@ -50,29 +46,25 @@ public class Controllable : Gtk.Grid, View.Controllable {
     public Calendar.DateSpan window { get; private set; }
     
     /**
-     * @inheritDoc
+     * The name (id) of the {@link Grid}.
+     *
+     * This is used when the Grid is added to Gtk.Stack.
      */
-    public string current_label { get; protected set; }
-    
-    /**
-     * @inheritDoc
-     */
-    public bool is_viewing_today { get; protected set; }
-    
-    /**
-     * @inheritDoc
-     */
-    public Calendar.Date default_date { get; protected set; }
+    public string id { get { return month_of_year.full_name; } }
     
     private Gee.HashMap<Calendar.Date, Cell> date_to_cell = new Gee.HashMap<Calendar.Date, Cell>();
     private Backing.CalendarSubscriptionManager? subscriptions = null;
     private Gdk.EventType button_press_type = Gdk.EventType.NOTHING;
     private Gdk.Point button_press_point = Gdk.Point();
     
-    public Controllable() {
+    public Grid(Controller owner, Calendar.MonthOfYear month_of_year) {
+        this.owner = owner;
+        this.month_of_year = month_of_year;
+        first_of_week = owner.first_of_week;
+        
         column_homogeneous = true;
         column_spacing = 0;
-        row_homogeneous = false;
+        row_homogeneous = true;
         row_spacing = 0;
         
         // prep the grid with a fixed number of rows and columns
@@ -82,20 +74,9 @@ public class Controllable : Gtk.Grid, View.Controllable {
         for (int col = 0; col < COLS; col++)
             insert_column(0);
         
-        // pre-add grid elements for days of the week along the top row (using -1 as the row so the
-        // remainder of grid is "naturally" zero-based rows)
-        for (int col = 0; col < COLS; col++) {
-            Gtk.Label dow_cell = new Gtk.Label(null);
-            dow_cell.margin_top = 2;
-            dow_cell.margin_bottom = 2;
-            
-            attach(dow_cell, col, DOW_ROW, 1, 1);
-        }
-        
         // pre-add grid elements for every cell, which are updated when the MonthYear changes
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
-                // mouse events are enabled in Cell's constructor, not here
                 Cell cell = new Cell(this, row, col);
                 cell.expand = true;
                 cell.events |= Gdk.EventMask.BUTTON_PRESS_MASK & Gdk.EventMask.BUTTON1_MOTION_MASK;
@@ -107,58 +88,20 @@ public class Controllable : Gtk.Grid, View.Controllable {
             }
         }
         
-        notify[PROP_MONTH_OF_YEAR].connect(on_month_of_year_changed);
-        notify[PROP_FIRST_OF_WEEK].connect(update_first_of_week);
-        notify[PROP_SHOW_OUTSIDE_MONTH].connect(update_cells);
-        Calendar.System.instance.today_changed.connect(on_today_changed);
+        // update all the Cells by assigning them Dates ... this also updates the window, which
+        // is necessary for subscriptions
+        update_cells();
+        update_subscriptions();
         
-        // update now that signal handlers are in place
-        month_of_year = Calendar.System.today.month_of_year();
-        first_of_week = Calendar.FirstOfWeek.SUNDAY;
+        owner.notify[Controller.PROP_MONTH_OF_YEAR].connect(on_controller_month_of_year_changed);
+        owner.notify[View.Controllable.PROP_FIRST_OF_WEEK].connect(update_first_of_week);
+        owner.notify[Controller.PROP_SHOW_OUTSIDE_MONTH].connect(update_cells);
     }
     
-    ~Controllable() {
-        Calendar.System.instance.today_changed.disconnect(on_today_changed);
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public void next() {
-        month_of_year = month_of_year.adjust(1);
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public void prev() {
-        month_of_year = month_of_year.adjust(-1);
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public Gtk.Widget today() {
-        // since changing the date is expensive in terms of adding/removing subscriptions, only
-        // update the property if it's actually different
-        Calendar.MonthOfYear now = Calendar.System.today.month_of_year();
-        if (!now.equal_to(month_of_year))
-            month_of_year = now;
-        
-        assert(date_to_cell.has_key(Calendar.System.today));
-        
-        return date_to_cell.get(Calendar.System.today);
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public void unselect_all() {
-        foreach_cell((cell) => {
-            cell.selected = false;
-            
-            return true;
-        });
+    ~Grid() {
+        owner.notify[Controller.PROP_MONTH_OF_YEAR].disconnect(on_controller_month_of_year_changed);
+        owner.notify[View.Controllable.PROP_FIRST_OF_WEEK].disconnect(update_first_of_week);
+        owner.notify[Controller.PROP_SHOW_OUTSIDE_MONTH].disconnect(update_cells);
     }
     
     private Cell get_cell(int row, int col) {
@@ -168,7 +111,11 @@ public class Controllable : Gtk.Grid, View.Controllable {
         return (Cell) get_child_at(col, row);
     }
     
-    internal Cell? get_cell_for_date(Calendar.Date date) {
+    /**
+     * Returns the {@link Cell} for the specified {@link Calendar.Date}, if it is contained by this
+     * {@link Grid}.
+     */
+    public Cell? get_cell_for_date(Calendar.Date date) {
         return date_to_cell.get(date);
     }
     
@@ -201,14 +148,14 @@ public class Controllable : Gtk.Grid, View.Controllable {
     
     private void update_week(int row, Calendar.Week week) {
         foreach (Calendar.Date date in week) {
-            int col = date.day_of_week.ordinal(first_of_week) - 1;
+            int col = date.day_of_week.ordinal(owner.first_of_week) - 1;
             
             Cell cell = get_cell(row, col);
             
             // if the date is in the month or configured to show days outside the month, set
             // the cell to show that date; otherwise, it'll be cleared
             cell.clear();
-            cell.date = (date in month_of_year) || show_outside_month ? date : null;
+            cell.date = (date in month_of_year) || owner.show_outside_month ? date : null;
             
             // add to map for quick lookups
             date_to_cell.set(date, cell);
@@ -221,7 +168,7 @@ public class Controllable : Gtk.Grid, View.Controllable {
         
         // create a WeekSpan for the first week of the month to the last displayed week (not all
         // months will fill all displayed weeks, but some will)
-        Calendar.WeekSpan span = new Calendar.WeekSpan.count(month_of_year.weeks(first_of_week).start(),
+        Calendar.WeekSpan span = new Calendar.WeekSpan.count(month_of_year.weeks(owner.first_of_week).start(),
             ROWS - 1);
         
         // fill in weeks of the displayed month
@@ -233,60 +180,63 @@ public class Controllable : Gtk.Grid, View.Controllable {
         window = span.to_date_span();
     }
     
-    private void update_first_of_week() {
-        // set label text in day of week row
-        int col = 0;
-        foreach (Calendar.DayOfWeek dow in Calendar.DayOfWeek.iterator(first_of_week)) {
-            Gtk.Label dow_cell = (Gtk.Label) get_child_at(col++, DOW_ROW);
-            dow_cell.label = dow.abbrev_name;
-        }
-        
-        // requires updating all the cells as well, since all dates have to be shifted
-        update_cells();
-        update_subscription();
-    }
-    
-    private void update_is_viewing_today() {
-        is_viewing_today = month_of_year.equal_to(Calendar.System.today.month_of_year());
-    }
-    
-    private void on_today_changed() {
-        // don't update view but indicate if it's still in view
-        update_is_viewing_today();
-    }
-    
-    private void on_month_of_year_changed() {
-        current_label = month_of_year.full_name;
-        update_is_viewing_today();
-        
-        // default date is first of month unless displaying current month, in which case it's
-        // current date
-        try {
-            default_date = is_viewing_today ? Calendar.System.today
-                : month_of_year.date_for(month_of_year.first_day_of_month());
-        } catch (CalendarError calerr) {
-            // this should always work
-            error("Unable to set default date for %s: %s", month_of_year.to_string(), calerr.message);
-        }
-        
-        update_cells();
-        update_subscription();
-    }
-    
-    private void update_subscription() {
+    private void update_subscriptions() {
         // convert DateSpan window into an ExactTimeSpan, which is what the subscription wants
         Calendar.ExactTimeSpan time_window = new Calendar.ExactTimeSpan.from_date_span(window,
             Calendar.Timezone.local);
         
+        if (subscriptions != null && subscriptions.window.equal_to(time_window))
+            return;
+        
         // create new subscription manager, subscribe to its signals, and let them drive
-        subscriptions = null;
         subscriptions = new Backing.CalendarSubscriptionManager(time_window);
         subscriptions.calendar_added.connect(on_calendar_added);
         subscriptions.calendar_removed.connect(on_calendar_removed);
         subscriptions.instance_added.connect(on_instance_added);
         subscriptions.instance_removed.connect(on_instance_removed);
         
-        subscriptions.start();
+        // only start if this month is being displayed, otherwise will be started when owner's
+        // month of year changes to this one or a timeout (to prevent only subscribing
+        // when scrolled into view)
+        if (owner.month_of_year.equal_to(month_of_year)) {
+            subscriptions.start_async.begin();
+        } else {
+            // use distance from currently displayed month as a way to space out subscription
+            // starts, which are a little taxing ... assume future months are more likely to be
+            // moved to than past months, hence earlier months get the +1 dinged against them
+            int diff = owner.month_of_year.difference(month_of_year);
+            if (diff < 0)
+                diff = diff.abs() + 1;
+            
+            Timeout.add(300 + (diff * 100), () => {
+                subscriptions.start_async.begin();
+                
+                return false;
+            });
+        }
+    }
+    
+    private void on_controller_month_of_year_changed() {
+        // if this Grid is being displayed, immediately activate subscriptions
+        if (!owner.month_of_year.equal_to(month_of_year))
+            return;
+        
+        if (subscriptions == null)
+            update_subscriptions();
+        else if (!subscriptions.is_started)
+            subscriptions.start_async.begin();
+    }
+    
+    private void update_first_of_week() {
+        // avoid some extra work
+        if (first_of_week == owner.first_of_week)
+            return;
+        
+        first_of_week = owner.first_of_week;
+        
+        // requires updating all the cells as well, since all dates have to be shifted
+        update_cells();
+        update_subscriptions();
     }
     
     private void on_calendar_added(Backing.CalendarSource calendar) {
@@ -334,14 +284,21 @@ public class Controllable : Gtk.Grid, View.Controllable {
         }
     }
     
+    public void unselect_all() {
+        foreach_cell((cell) => {
+            cell.selected = false;
+            
+            return true;
+        });
+    }
+    
     private bool on_cell_button_event(Gtk.Widget widget, Gdk.EventButton event) {
         // only interested in left-clicks
         if (event.button != 1)
             return false;
         
         // NOTE: widget is the *pressed* widget, even for "release" events, no matter where the release
-        // occurs ... this signal handler is fired from Cells, never the GtkLabels across the top
-        // of the grid
+        // occurs
         Cell press_cell = (Cell) widget;
         
         switch (event.type) {
@@ -411,12 +368,12 @@ public class Controllable : Gtk.Grid, View.Controllable {
         if (press_cell == release_cell) {
             Component.Event? event = release_cell.get_event_at(release_point);
             if (event != null) {
-                request_display_event(event, release_cell, release_point);
+                owner.request_display_event(event, release_cell, release_point);
                 stop_propagation = true;
             }
         } else if (press_cell.date != null && release_cell.date != null) {
             // create multi-day event
-            request_create_all_day_event(new Calendar.DateSpan(press_cell.date, release_cell.date),
+            owner.request_create_all_day_event(new Calendar.DateSpan(press_cell.date, release_cell.date),
                 release_cell, release_point);
             stop_propagation = true;
         } else {
@@ -453,7 +410,7 @@ public class Controllable : Gtk.Grid, View.Controllable {
         
         Calendar.ExactTime end = start.adjust_time(1, Calendar.TimeUnit.HOUR);
         
-        request_create_timed_event(new Calendar.ExactTimeSpan(start, end), release_cell, release_point);
+        owner.request_create_timed_event(new Calendar.ExactTimeSpan(start, end), release_cell, release_point);
         
         // stop propagation
         return true;

@@ -10,7 +10,7 @@ namespace California.View.Month {
  * A single cell within a {@link MonthGrid}.
  */
 
-public class Cell : Gtk.EventBox {
+private class Cell : Gtk.EventBox {
     private const int TOP_LINE_FONT_SIZE_PT = 11;
     private const int LINE_FONT_SIZE_PT = 8;
     
@@ -35,7 +35,7 @@ public class Cell : Gtk.EventBox {
         POINTED
     }
     
-    public weak Controllable owner { get; private set; }
+    public weak Grid owner { get; private set; }
     public int row { get; private set; }
     public int col { get; private set; }
     
@@ -88,7 +88,7 @@ public class Cell : Gtk.EventBox {
     
     private Gtk.DrawingArea canvas = new Gtk.DrawingArea();
     
-    public Cell(Controllable owner, int row, int col) {
+    public Cell(Grid owner, int row, int col) {
         this.owner = owner;
         this.row = row;
         this.col = col;
@@ -395,13 +395,13 @@ public class Cell : Gtk.EventBox {
         }
         
         // only draw bottom line if not on the bottom row
-        if (row < Controllable.ROWS - 1) {
+        if (row < Grid.ROWS - 1) {
             ctx.move_to(0, height);
             ctx.line_to(width, height);
         }
         
         // only draw right line if not on the right-most column
-        if (col < Controllable.COLS - 1) {
+        if (col < Grid.COLS - 1) {
             ctx.move_to(width, 0);
             ctx.line_to(width, height);
         }

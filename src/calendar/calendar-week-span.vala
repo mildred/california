@@ -47,7 +47,7 @@ public class WeekSpan : BaseObject, Collection.SimpleIterable<Week>, Span<Week>,
     }
     
     /**
-     * The {@link DateSpan} of thw {@link Week}s.
+     * The {@link DateSpan} of the {@link Week}s.
      */
     public DateSpan dates { get; private set; }
     

@@ -26,6 +26,11 @@ public class CalendarSubscriptionManager : BaseObject {
     public Calendar.ExactTimeSpan window { get; private set; }
     
     /**
+     * Set to true when {@link start_async} begins.
+     */
+    public bool is_started { get; private set; default = false; }
+    
+    /**
      * Indicates a {@link CalendarSource} was added to the manager, either listed when first
      * created or detected at runtime afterwards.
      */
@@ -62,7 +67,7 @@ public class CalendarSubscriptionManager : BaseObject {
      *
      * The {@link window} cannot be modified once created.
      *
-     * Events will not be signalled until {@link start} is called.
+     * Events will not be signalled until {@link start_async} is called.
      */
     public CalendarSubscriptionManager(Calendar.ExactTimeSpan window) {
         this.window = window;
@@ -85,38 +90,39 @@ public class CalendarSubscriptionManager : BaseObject {
      * There is no "stop" method.  Destroying the object will cancel all subscriptions, although
      * signals will not be fired at that time.
      */
-    public void start() {
+    public async void start_async() {
+        // to prevent reentrancy
+        if (is_started)
+            return;
+        
+        is_started = true;
+        
         foreach (Backing.Store store in Backing.Manager.instance.get_stores()) {
             // watch each store for future added sources
             store.source_added.connect(on_source_added);
             store.source_removed.connect(on_source_removed);
             
             foreach (Backing.Source source in store.get_sources_of_type<Backing.CalendarSource>())
-                add_calendar((Backing.CalendarSource) source);
+                yield add_calendar_async((Backing.CalendarSource) source, cancellable);
         }
     }
     
     private void on_source_added(Backing.Source source) {
         Backing.CalendarSource? calendar = source as Backing.CalendarSource;
         if (calendar != null)
-            add_calendar(calendar);
+            add_calendar_async.begin(calendar, cancellable);
     }
     
-    private void add_calendar(Backing.CalendarSource calendar) {
+    private async void add_calendar_async(Backing.CalendarSource calendar, Cancellable? cancellable) {
         // report calendar as added to subscription
         calendar_added(calendar);
         
         // start generating instances on this calendar
-        calendar.subscribe_async.begin(window, cancellable, on_subscribed);
-    }
-    
-    // Since this might be called after the dtor has finished (cancelling the operation), don't
-    // touch the "this" ref unless the Error is shown not to be a cancellation
-    private void on_subscribed(Object? source, AsyncResult result) {
-        Backing.CalendarSource calendar = (Backing.CalendarSource) source;
-        
         try {
-            Backing.CalendarSourceSubscription subscription = calendar.subscribe_async.end(result);
+            // Since this might be called after the dtor has finished (cancelling the operation), don't
+            // touch the "this" ref unless the Error is shown not to be a cancellation
+            Backing.CalendarSourceSubscription subscription = yield calendar.subscribe_async(window,
+                cancellable);
             
             // okay to use "this" ref
             subscriptions.add(subscription);

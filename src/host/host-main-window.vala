@@ -36,7 +36,7 @@ public class MainWindow : Gtk.ApplicationWindow {
     public Calendar.FirstOfWeek first_of_week { get; set; }
     
     private View.Controllable current_view;
-    private View.Month.Controllable month_view = new View.Month.Controllable();
+    private View.Month.Controller month_view = new View.Month.Controller();
     private Gtk.Button quick_add_button;
     
     public MainWindow(Application app) {
@@ -109,7 +109,7 @@ public class MainWindow : Gtk.ApplicationWindow {
 #if ENABLE_UNITY
         layout.pack_start(headerbar, false, true, 0);
 #endif
-        layout.pack_end(month_view, true, true, 0);
+        layout.pack_end(month_view.get_container(), true, true, 0);
         
         // current host bindings and signals
         current_view.request_create_timed_event.connect(on_request_create_timed_event);
