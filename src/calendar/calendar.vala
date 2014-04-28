@@ -39,6 +39,9 @@ private static unowned string FMT_12HOUR_MIN_SEC_MERIDIEM;
 private static unowned string FMT_24HOUR_MIN;
 private static unowned string FMT_24HOUR_MIN_SEC;
 
+private unowned string MIDNIGHT;
+private unowned string NOON;
+
 private string[] UNIT_DAYS;
 private string[] UNIT_HOURS;
 private string[] UNIT_MINS;
@@ -153,6 +156,9 @@ public void init() throws Error {
         Intl.setlocale(LocaleCategory.MESSAGES, messages_locale);
     if (language_env != null)
         Environment.set_variable("LANGUAGE", language_env, true);
+    
+    MIDNIGHT = _("midnight");
+    NOON = _("noon");
     
     // This init() throws an IOError, so perform before others to prevent unnecessary unwinding
     System.preinit();

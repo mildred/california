@@ -18,6 +18,8 @@ private class QuickAdd : UnitTest.Harness {
         add_case("with-delay-and-duration", with_delay_and_duration);
         add_case("indeterminate-time", indeterminate_time);
         add_case("dialog-example", dialog_example);
+        add_case("noon", noon);
+        add_case("midnight", midnight);
     }
     
     protected override void setup() throws Error {
@@ -136,6 +138,34 @@ private class QuickAdd : UnitTest.Harness {
             && parser.event.location == "Tadich Grill"
             && parser.event.exact_time_span.start_exact_time.equal_to(time)
             && parser.event.exact_time_span.end_exact_time.equal_to(time.adjust_time(1, Calendar.TimeUnit.HOUR));
+    }
+    
+    private bool noon() throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "Lunch noon to 1:30pm", null);
+        
+        Calendar.ExactTime start = new Calendar.ExactTime(Calendar.Timezone.local, Calendar.System.today,
+            new Calendar.WallTime(12, 0, 0));
+        Calendar.ExactTime end = new Calendar.ExactTime(Calendar.Timezone.local, Calendar.System.today,
+            new Calendar.WallTime(13, 30, 0));
+        
+        return parser.event.summary == "Lunch"
+            && parser.event.exact_time_span.start_exact_time.equal_to(start)
+            && parser.event.exact_time_span.end_exact_time.equal_to(end);
+    }
+    
+    private bool midnight() throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "Dinner 11pm to midnight", null);
+        
+        Calendar.ExactTime start = new Calendar.ExactTime(Calendar.Timezone.local, Calendar.System.today,
+            new Calendar.WallTime(23, 0, 0));
+        Calendar.ExactTime end = new Calendar.ExactTime(Calendar.Timezone.local, Calendar.System.today.adjust(1, Calendar.DateUnit.DAY),
+            new Calendar.WallTime(0, 0, 0));
+        
+        return parser.event.summary == "Dinner"
+            && parser.event.exact_time_span.start_exact_time.equal_to(start)
+            && parser.event.exact_time_span.end_exact_time.equal_to(end);
     }
 }
 

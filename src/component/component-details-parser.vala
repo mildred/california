@@ -193,6 +193,10 @@ public class DetailsParser : BaseObject {
             assert(start_date != null);
             assert(end_date != null);
             
+            // look for midnight crossings
+            if (start_time.compare_to(end_time) > 0)
+                end_date = end_date.next();
+            
             event.set_event_exact_time_span(new Calendar.ExactTimeSpan(
                 new Calendar.ExactTime(Calendar.System.timezone, start_date, start_time),
                 new Calendar.ExactTime(Calendar.System.timezone, end_date, end_time)

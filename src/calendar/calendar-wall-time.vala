@@ -149,6 +149,17 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
         if (String.is_empty(token))
             return null;
         
+        // look for words that mean specific times
+        if (token == MIDNIGHT.casefold()) {
+            strictly_parsed = true;
+            
+            return new WallTime(0, 0, 0);
+        } else if (token == NOON.casefold()) {
+            strictly_parsed = true;
+            
+            return new WallTime(12, 0, 0);
+        }
+        
         // look for meridiem tacked on to end
         bool pm = false;
         bool meridiem_unknown = false;
