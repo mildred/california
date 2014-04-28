@@ -128,9 +128,10 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
         _ical_component = ical_component.clone();
         
         // this needs to be stored before calling update() or the equality check there will fail
-        uid = new UID(_ical_component.get_uid());
+        string? ical_uid = _ical_component.get_uid();
+        uid = !String.is_empty(ical_uid) ? new UID(ical_uid) : UID.generate();
         
-        full_update(_ical_component);
+        full_update(_ical_component, uid);
         
         // watch for property changes and update ical_component when happens
         notify.connect(on_notify);
@@ -176,14 +177,16 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      * This is also called by the Instance base class constructor to give subclasses a single
      * code path for updating their state.
      *
+     * The {@link UID} may be supplied if the iCal component does not have one.
+     *
      * @throws BackingError if eds_component is not for this Instance.
      */
-    public void full_update(iCal.icalcomponent ical_component) throws Error {
+    public void full_update(iCal.icalcomponent ical_component, UID? supplied_uid) throws Error {
         in_full_update = true;
         
         bool notify = false;
         try {
-            update_from_component(ical_component);
+            update_from_component(ical_component, supplied_uid);
             notify = true;
         } finally {
             in_full_update = false;
@@ -200,18 +203,36 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      * It's highly recommended the subclass call the base class update_from_component() first to
      * allow it to do basic sanity checking before proceeding to update its own state.
      *
+     * If supplied_uid is non-null, it should be used in preference over the UID in the iCal
+     * component.  In either case, at least one method should return a valid UID.
+     *
      * @see full_update
      */
-    protected virtual void update_from_component(iCal.icalcomponent ical_component) throws Error {
-        Component.UID other_uid = new Component.UID(ical_component.get_uid());
+    protected virtual void update_from_component(iCal.icalcomponent ical_component, UID? supplied_uid)
+        throws Error {
+        if (supplied_uid == null)
+            assert(!String.is_empty(ical_component.get_uid()));
+        
+        // use the supplied UID before using the one in the iCal component (for dealing with
+        // malformed iCal w/ no UID ... I'm looking at you, EventBrite)
+        Component.UID other_uid = supplied_uid ?? new Component.UID(ical_component.get_uid());
         if (!uid.equal_to(other_uid)) {
             throw new BackingError.MISMATCH("Attempt to update component %s with component %s",
                 this.uid.to_string(), other_uid.to_string());
         }
         
-        DateTime dt_stamp = new DateTime(ical_component, iCal.icalproperty_kind.DTSTAMP_PROPERTY);
-        if (!dt_stamp.is_date)
-            dtstamp = dt_stamp.to_exact_time();
+        try {
+            DateTime dt_stamp = new DateTime(ical_component, iCal.icalproperty_kind.DTSTAMP_PROPERTY);
+            if (!dt_stamp.is_date)
+                dtstamp = dt_stamp.to_exact_time();
+        } catch (ComponentError comperr) {
+            // if unavailable, generate a DTSTAMP ... like UID, this is for malformed iCal with
+            // no DTSTAMP, i.e. EventBrite
+            if (!(comperr is ComponentError.UNAVAILABLE))
+                throw comperr;
+            
+            dtstamp = Calendar.System.now;
+        }
         
         try {
             rid = new DateTime(ical_component, iCal.icalproperty_kind.RECURRENCEID_PROPERTY);

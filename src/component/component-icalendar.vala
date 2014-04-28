@@ -22,6 +22,16 @@ namespace California.Component {
 
 public class iCalendar : BaseObject {
     /**
+     * Default METHOD when one is not supplied with iCalendar.
+     *
+     * NONE is not viable, as some backends will choke and require one.  PUBLISH is a good
+     * general METHOD for VCALENDARs lacking a METHOD.
+     *
+     * @see method
+     */
+    public const iCal.icalproperty_method DEFAULT_METHOD = iCal.icalproperty_method.PUBLISH;
+    
+    /**
      * The VCALENDAR's PRODID.
      *
      * See [[https://tools.ietf.org/html/rfc5545#section-3.7.3]]
@@ -41,7 +51,7 @@ public class iCalendar : BaseObject {
      *
      * See [[https://tools.ietf.org/html/rfc5545#section-3.7.2]]
      */
-    public iCal.icalproperty_method method { get; private set; default = iCal.icalproperty_method.NONE; }
+    public iCal.icalproperty_method method { get; private set; default = DEFAULT_METHOD; }
     
     /**
      * The VCALENDAR's CALSCALE.
@@ -86,9 +96,13 @@ public class iCalendar : BaseObject {
         if (prop != null)
             calscale = prop.get_calscale();
         
+        // METHOD is important ... if not present, be sure it's set (important for adding, some
+        // backends may require its presence)
         prop = root.get_first_property(iCal.icalproperty_kind.METHOD_PROPERTY);
         if (prop != null)
             method = prop.get_method();
+        else
+            root.set_method(DEFAULT_METHOD);
         
         //
         // Contained components

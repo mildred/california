@@ -133,7 +133,7 @@ namespace iCal {
 		[CCode (cname = "icalcomponent_get_timezone")]
 		public unowned iCal.icaltimezone get_timezone (string tzid);
 		[CCode (cname = "icalcomponent_get_uid")]
-		public unowned string get_uid ();
+		public unowned string? get_uid ();
 		[CCode (cname = "icalcomponent_is_valid")]
 		public int is_valid ();
 		[CCode (cname = "icalcomponent_isa")]

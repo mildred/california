@@ -124,14 +124,18 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
     
     private void on_objects_modified(SList<weak iCal.icalcomponent> objects) {
         foreach (weak iCal.icalcomponent ical_component in objects) {
+            Component.Event? event = null;
+            
             // only update known objects
-            Component.Event? event = for_uid(new Component.UID(ical_component.get_uid()))
-                as Component.Event;
+            string? uid = ical_component.get_uid();
+            if (!String.is_empty(uid))
+                event = for_uid(new Component.UID(uid)) as Component.Event;
+            
             if (event == null)
                 continue;
             
             try {
-                event.full_update(ical_component);
+                event.full_update(ical_component, null);
             } catch (Error err) {
                 debug("Unable to update event %s: %s", event.to_string(), err.message);
             }

@@ -101,8 +101,9 @@ public class Event : Instance, Gee.Comparable<Event> {
     /**
      * @inheritDoc
      */
-    protected override void update_from_component(iCal.icalcomponent ical_component) throws Error {
-        base.update_from_component(ical_component);
+    protected override void update_from_component(iCal.icalcomponent ical_component, UID? supplied_uid)
+        throws Error {
+        base.update_from_component(ical_component, supplied_uid);
         
         summary = ical_component.get_summary();
         description = ical_component.get_description();
