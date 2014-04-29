@@ -129,21 +129,24 @@ private class Cell : Gtk.EventBox {
         line_font = null;
     }
     
-    // this comparator uses the standard Event comparator with one exception: if both Events are
-    // all-day, it sorts the one(s) with the furthest out end dates to the top, to ensure they are
-    // at the top of the drawn lines and prevent gaps and skips in the connected bars
+    // this comparator uses the standard Event comparator with one exception: if both Events require
+    // solid span lines, it sorts the one(s) with the furthest out end dates to the top, to ensure
+    // they are at the top of the drawn lines and prevent gaps and skips in the connected bars
     private static int all_day_comparator(Component.Event a, Component.Event b) {
         if (a == b)
             return 0;
         
-        if (!a.is_all_day || !b.is_all_day)
+        if (!requires_span(a) && !requires_span(b))
             return a.compare_to(b);
         
-        int compare = a.date_span.start_date.compare_to(b.date_span.start_date);
+        Calendar.DateSpan a_span = a.get_event_date_span(Calendar.Timezone.local);
+        Calendar.DateSpan b_span = b.get_event_date_span(Calendar.Timezone.local);
+        
+        int compare = a_span.start_date.compare_to(b_span.start_date);
         if (compare != 0)
             return compare;
         
-        compare = b.date_span.end_date.compare_to(a.date_span.end_date);
+        compare = b_span.end_date.compare_to(a_span.end_date);
         if (compare != 0)
             return compare;
         
@@ -240,6 +243,11 @@ private class Cell : Gtk.EventBox {
         queue_draw();
     }
     
+    // criteria for an event requiring a solid span on the grid
+    private static bool requires_span(Component.Event event) {
+        return event.is_all_day || event.exact_time_span.duration.days >= 1;
+    }
+    
     // each event gets a line of the cell to draw in; this clears all assigned line numbers and
     // re-assigns from the sorted set of events, making sure holes are filled where possible ...
     // if an event starts in this cell or this cell is the first day of a week an event is in,
@@ -257,8 +265,8 @@ private class Cell : Gtk.EventBox {
             if (!event.calendar_source.visible)
                 continue;
             
-            bool all_day_assigned_here = false;
-            if (event.is_all_day) {
+            bool notify_reassigned = false;
+            if (requires_span(event)) {
                 // get the first day of this week the event exists in ... if not the current cell's
                 // date, get the assigned line number from the first day of this week the event
                 // exists in
@@ -276,9 +284,16 @@ private class Cell : Gtk.EventBox {
                     }
                 } else {
                     // only worried about multi-day events being reassigned, as that's what effects
-                    // other cells
-                    all_day_assigned_here = event.date_span.duration() > 1;
+                    // other cells (i.e. when notifying of reassignment)
+                    notify_reassigned = event.get_event_date_span(Calendar.Timezone.local).duration.days > 1;
                 }
+            } else if (!event.is_all_day) {
+                // if timed event is in this date but started elsewhere, don't display (unless it
+                // requires a span, above)
+                Calendar.Date start_date = new Calendar.Date.from_exact_time(
+                    event.exact_time_span.start_exact_time.to_timezone(Calendar.Timezone.local));
+                if (!start_date.equal_to(date))
+                    continue;
             }
             
             // otherwise, a timed event, a single-day event, or a multi-day event which starts here,
@@ -287,7 +302,7 @@ private class Cell : Gtk.EventBox {
             
             // if this cell assigns the line number and the event is not new and the number has changed,
             // inform all the other cells following this day's in the current week
-            if (all_day_assigned_here && old_line_to_event.values.contains(event) && old_line_to_event.get(assigned) != event)
+            if (notify_reassigned && old_line_to_event.values.contains(event) && old_line_to_event.get(assigned) != event)
                 reassigned.add(event);
         }
         
@@ -430,36 +445,43 @@ private class Cell : Gtk.EventBox {
         Gee.MapIterator<int, Component.Event> iter = line_to_event.map_iterator();
         while (iter.next()) {
             Component.Event event = iter.get_value();
+            Calendar.DateSpan date_span = event.get_event_date_span(Calendar.Timezone.local);
             
-            string text, tooltip_text;
-            if (event.is_all_day) {
+            bool display_text = true;
+            if (requires_span(event)) {
                 // only show the title if (a) the first day of an all-day event or (b) this is the
                 // first day of a new week of a multi-day even.  (b) handles the contingency of a
                 // multi-day event starting in a previous week prior to the top of the current view
-                bool display_text = event.date_span.start_date.equal_to(date)
+                display_text = date_span.start_date.equal_to(date)
                     || owner.first_of_week.as_day_of_week().equal_to(date.day_of_week);
-                text = display_text ? event.summary : "";
-                tooltip_text = event.summary;
+            }
+            
+            string text;
+            if (display_text) {
+                if (event.is_all_day) {
+                    text = event.summary;
+                } else {
+                    Calendar.ExactTime local_start = event.exact_time_span.start_exact_time.to_timezone(
+                        Calendar.Timezone.local);
+                    text = "%s %s".printf(local_start.to_pretty_time_string(PRETTY_TIME_FLAGS), event.summary);
+                }
             } else {
-                Calendar.ExactTime local_start = event.exact_time_span.start_exact_time.to_timezone(
-                    Calendar.Timezone.local);
-                text = "%s %s".printf(local_start.to_pretty_time_string(PRETTY_TIME_FLAGS), event.summary);
-                tooltip_text = text;
+                text = "";
             }
             
             // use caps on both ends of all-day events depending whether this is the start, end,
             // or start/end of week of continuing event
             CapEffect left_effect = CapEffect.NONE;
             CapEffect right_effect = CapEffect.NONE;
-            if (event.is_all_day) {
-                if (event.date_span.start_date.equal_to(date))
+            if (requires_span(event)) {
+                if (date_span.start_date.equal_to(date))
                     left_effect = CapEffect.ROUNDED;
                 else if (date.day_of_week == owner.first_of_week.as_day_of_week())
                     left_effect = CapEffect.POINTED;
                 else
                     left_effect = CapEffect.BLOCKED;
                 
-                if (event.date_span.end_date.equal_to(date))
+                if (date_span.end_date.equal_to(date))
                     right_effect = CapEffect.ROUNDED;
                 else if (date.day_of_week == owner.first_of_week.as_day_of_week().previous())
                     right_effect = CapEffect.POINTED;
@@ -469,7 +491,7 @@ private class Cell : Gtk.EventBox {
             
             Pango.Layout layout = draw_line_of_text(ctx, iter.get_key(), event.calendar_source.color_as_rgba(),
                 text, left_effect, right_effect);
-            event.set_data<string?>(KEY_TOOLTIP, layout.is_ellipsized() ? tooltip_text : null);
+            event.set_data<string?>(KEY_TOOLTIP, layout.is_ellipsized() ? text : null);
         }
         
         return true;

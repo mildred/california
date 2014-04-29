@@ -63,6 +63,11 @@ public class DateSpan : BaseObject, Collection.SimpleIterable<Date>, Span<Date>,
     public bool is_same_day { get { return start_date.equal_to(end_date); } }
     
     /**
+     * Returns the {@link Duration} this {@link DateSpan} represents.
+     */
+    public Duration duration { owned get { return new Duration(end_date.difference(start_date)); } }
+    
+    /**
      * Create a {@link DateSpan} with the specified start and end dates.
      *
      * DateSpan will arrange the two dates so start_date is chronologically earlier (or the same
@@ -148,13 +153,6 @@ public class DateSpan : BaseObject, Collection.SimpleIterable<Date>, Span<Date>,
      */
     public WeekSpan weeks(FirstOfWeek first_of_week) {
         return new WeekSpan(this, first_of_week);
-    }
-    
-    /**
-     * Returns the absolute number of days this {@link DateSpan} represents.
-     */
-    public int duration() {
-        return start_date.difference(end_date).abs();
     }
     
     /**

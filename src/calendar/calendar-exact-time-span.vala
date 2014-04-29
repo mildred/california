@@ -45,6 +45,11 @@ public class ExactTimeSpan : BaseObject, Gee.Comparable<ExactTimeSpan>, Gee.Hash
     public Date end_date { get; private set; }
     
     /**
+     * The {@link Duration} of the {@link ExactTimeSpan}.
+     */
+    public Duration duration { owned get { return new Duration(0, 0, 0, end_exact_time.difference(start_exact_time)); } }
+    
+    /**
      * Convenience property indicating if the {@link ExactTimeSpan} falls on a single calendar day
      */
     public bool is_same_day { get { return start_date.equal_to(end_date); } }
