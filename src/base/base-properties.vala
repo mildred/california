@@ -10,7 +10,15 @@
 
 namespace California.Properties {
 
-public delegate bool ValueToBoolCallback(Value source_value);
+/**
+ * Transformation callback used by {@link xform_to_bool}.
+ */
+public delegate bool BoolTransformer(Value source_value);
+
+/**
+ * Transformation callback used by {@link xform_to_string}.
+ */
+public delegate string? StringTransformer(Value source_value);
 
 /**
  * Simplified binding transformation of a property of any value to a boolean.
@@ -18,8 +26,23 @@ public delegate bool ValueToBoolCallback(Value source_value);
  * The transformation is always considered successful.  Use bind_property directly if finer control
  * is required.
  */
-public void value_to_bool(Object source, string source_property, Object target, string target_property,
-    BindingFlags flags, ValueToBoolCallback cb) {
+public void xform_to_bool(Object source, string source_property, Object target, string target_property,
+    BoolTransformer cb, BindingFlags flags = BindingFlags.SYNC_CREATE) {
+    source.bind_property(source_property, target, target_property, flags, (binding, source, ref target) => {
+        target = cb(source);
+        
+        return true;
+    });
+}
+
+/**
+ * Simplified binding transformation of a property of any value to a nullable string.
+ *
+ * The transformation is always considered successful.  Use bind_property directly if finer control
+ * is required.
+ */
+public void xform_to_string(Object source, string source_property, Object target, string target_property,
+    StringTransformer cb, BindingFlags flags = BindingFlags.SYNC_CREATE) {
     source.bind_property(source_property, target, target_property, flags, (binding, source, ref target) => {
         target = cb(source);
         

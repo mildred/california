@@ -17,6 +17,9 @@ public class CalendarListItem : Gtk.Grid {
     public Backing.CalendarSource source { get; private set; }
     
     [GtkChild]
+    private Gtk.Image readonly_icon;
+    
+    [GtkChild]
     private Gtk.CheckButton visible_check_button;
     
     [GtkChild]
@@ -35,7 +38,11 @@ public class CalendarListItem : Gtk.Grid {
         source.bind_property(Backing.Source.PROP_VISIBLE, visible_check_button, "active",
             BindingFlags.SYNC_CREATE | BindingFlags.BIDIRECTIONAL);
         source.bind_property(Backing.Source.PROP_COLOR, color_button, "rgba",
-            BindingFlags.SYNC_CREATE | BindingFlags.BIDIRECTIONAL, source_to_button, button_to_source);
+            BindingFlags.SYNC_CREATE | BindingFlags.BIDIRECTIONAL, source_to_color, color_to_source);
+        Properties.xform_to_string(source, Backing.Source.PROP_READONLY, readonly_icon, "icon-name",
+            () => source.read_only ? "changes-prevent-symbolic" : "");
+        Properties.xform_to_string(source, Backing.Source.PROP_READONLY, readonly_icon, "tooltip-text",
+            () => source.read_only ? _("Calendar is read-only") : null);
     }
     
     public override bool query_tooltip(int x, int y, bool keyboard_mode, Gtk.Tooltip tooltip) {
@@ -48,14 +55,14 @@ public class CalendarListItem : Gtk.Grid {
         return true;
     }
     
-    public bool source_to_button(Binding binding, Value source_value, ref Value target_value) {
+    private bool source_to_color(Binding binding, Value source_value, ref Value target_value) {
         bool used_default;
         target_value = Gfx.rgb_string_to_rgba(source.color, Gfx.RGBA_BLACK, out used_default);
         
         return !used_default;
     }
     
-    public bool button_to_source(Binding binding, Value source_value, ref Value target_value) {
+    private bool color_to_source(Binding binding, Value source_value, ref Value target_value) {
         target_value = Gfx.rgb_to_uint8_rgb_string(Gfx.rgba_to_rgb(color_button.rgba));
         
         return true;

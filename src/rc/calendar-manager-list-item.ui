@@ -7,26 +7,6 @@
     <property name="can_focus">False</property>
     <property name="column_spacing">4</property>
     <child>
-      <object class="GtkCheckButton" id="visible_check_button">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">False</property>
-        <property name="halign">start</property>
-        <property name="valign">center</property>
-        <property name="xalign">0.50999999046325684</property>
-        <property name="draw_indicator">True</property>
-        <child>
-          <placeholder/>
-        </child>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkLabel" id="title_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -40,7 +20,7 @@
         <property name="single_line_mode">True</property>
       </object>
       <packing>
-        <property name="left_attach">2</property>
+        <property name="left_attach">3</property>
         <property name="top_attach">0</property>
         <property name="width">1</property>
         <property name="height">1</property>
@@ -56,7 +36,44 @@
         <property name="title" translatable="yes">Calendar color</property>
       </object>
       <packing>
+        <property name="left_attach">2</property>
+        <property name="top_attach">0</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="visible_check_button">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="halign">start</property>
+        <property name="valign">center</property>
+        <property name="xalign">0.50999999046325684</property>
+        <property name="draw_indicator">True</property>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+      <packing>
         <property name="left_attach">1</property>
+        <property name="top_attach">0</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkImage" id="readonly_icon">
+        <property name="width_request">16</property>
+        <property name="height_request">16</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">center</property>
+        <property name="valign">center</property>
+        <property name="icon_size">1</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
         <property name="top_attach">0</property>
         <property name="width">1</property>
         <property name="height">1</property>
