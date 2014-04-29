@@ -173,8 +173,12 @@ private class Cell : Gtk.EventBox {
     
     public void clear() {
         date = null;
-        sorted_events.clear();
         line_to_event.clear();
+        
+        foreach (Component.Event event in sorted_events.to_array())
+            internal_remove_event(event);
+        
+        queue_draw();
     }
     
     public void add_event(Component.Event event) {
@@ -191,13 +195,20 @@ private class Cell : Gtk.EventBox {
         queue_draw();
     }
     
-    public void remove_event(Component.Event event) {
+    private bool internal_remove_event(Component.Event event) {
         if (!sorted_events.remove(event))
-            return;
+            return false;
         
         event.notify[Component.Event.PROP_SUMMARY].disconnect(queue_draw);
         event.notify[Component.Event.PROP_DATE_SPAN].disconnect(on_span_updated);
         event.notify[Component.Event.PROP_EXACT_TIME_SPAN].disconnect(on_span_updated);
+        
+        return true;
+    }
+    
+    public void remove_event(Component.Event event) {
+        if (!internal_remove_event(event))
+            return;
         
         assign_line_numbers();
         
