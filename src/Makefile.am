@@ -160,7 +160,7 @@ california_OPTIONAL_VALAFLAGS += --define ENABLE_UNITY
 endif
 
 california_VALAFLAGS = \
-	--fatal-warnings -g --enable-checking --vapidir $(top_srcdir)/vapi --target-glib=2.38 \
+	--fatal-warnings --debug --enable-checking --vapidir $(top_srcdir)/vapi --target-glib=2.38 \
 	--gresources=california-resources.xml \
 	$(california_OPTIONAL_VALAFLAGS) \
 	--pkg gtk+-3.0 \
