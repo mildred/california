@@ -11,7 +11,8 @@ Build-Depends: debhelper (>= 8),
  libecal1.2-dev (>= 3.8.5),
  libsoup2.4-dev (>= 2.44),
  libgdata-dev (>= 0.14.0),
- libgoa-1.0-dev (>= 3.8.3)
+ libgoa-1.0-dev (>= 3.8.3),
+ gnome-common
 Standards-Version: 3.8.3
 Homepage: https://wiki.gnome.org/Apps/California
 
