@@ -61,6 +61,7 @@
                 <property name="vexpand">True</property>
                 <property name="activate_on_single_click">False</property>
                 <signal name="row-activated" handler="on_calendar_list_box_row_activated" object="CaliforniaManagerCalendarList" swapped="no"/>
+                <signal name="row-selected" handler="on_calendar_list_box_row_selected" object="CaliforniaManagerCalendarList" swapped="no"/>
               </object>
             </child>
           </object>

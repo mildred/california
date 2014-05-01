@@ -35,7 +35,7 @@ public class CalendarPopup : Popup {
      * inheritDoc
      */
     public CalendarPopup(Gtk.Widget relative_to, Calendar.Date initial_date) {
-        base (relative_to);
+        base (relative_to, Popup.Position.BELOW);
         
         calendar.day = initial_date.day_of_month.value;
         calendar.month = initial_date.month.value - 1;

@@ -11,7 +11,9 @@ namespace California.Manager {
  */
 
 [GtkTemplate (ui = "/org/yorba/california/rc/calendar-manager-list.ui")]
-public class CalendarList : Gtk.Grid, Toolkit.Card {
+internal class CalendarList : Gtk.Grid, Toolkit.Card {
+    public const string PROP_SELECTED = "selected";
+    
     public const string ID = "CalendarList";
     
     public string card_id { get { return ID; } }
@@ -21,6 +23,8 @@ public class CalendarList : Gtk.Grid, Toolkit.Card {
     public Gtk.Widget? default_widget { get { return null; } }
     
     public Gtk.Widget? initial_focus { get { return calendar_list_box; } }
+    
+    public CalendarListItem? selected { get; private set; default = null; }
     
     [GtkChild]
     private Gtk.ListBox calendar_list_box;
@@ -84,8 +88,19 @@ public class CalendarList : Gtk.Grid, Toolkit.Card {
     
     [GtkCallback]
     private void on_calendar_list_box_row_activated(Gtk.ListBoxRow row) {
-        CalendarListItem item = (CalendarListItem) row.get_child();
-        debug("activated %s", item.source.to_string());
+    }
+    
+    [GtkCallback]
+    private void on_calendar_list_box_row_selected(Gtk.ListBoxRow? row) {
+        if (selected != null)
+            selected.is_selected = false;
+        
+        if (row != null) {
+            selected = (CalendarListItem) row.get_child();
+            selected.is_selected = true;
+        } else {
+            selected = null;
+        }
     }
     
     [GtkCallback]

@@ -11,10 +11,15 @@ namespace California.Manager {
  */
 
 [GtkTemplate (ui = "/org/yorba/california/rc/calendar-manager-list-item.ui")]
-public class CalendarListItem : Gtk.Grid {
+internal class CalendarListItem : Gtk.Grid, Toolkit.MutableWidget {
     private const int COLOR_DIM = 16;
     
     public Backing.CalendarSource source { get; private set; }
+    
+    /**
+     * Set by {@link CalendarList}.
+     */
+    public bool is_selected { get; set; default = false; }
     
     [GtkChild]
     private Gtk.Image readonly_icon;
@@ -23,15 +28,22 @@ public class CalendarListItem : Gtk.Grid {
     private Gtk.CheckButton visible_check_button;
     
     [GtkChild]
+    private Gtk.EventBox title_eventbox;
+    
+    [GtkChild]
     private Gtk.Label title_label;
     
     [GtkChild]
     private Gtk.ColorButton color_button;
     
+    private Toolkit.EditableLabel? editable_label = null;
+    
     public CalendarListItem(Backing.CalendarSource source) {
         this.source = source;
         
         has_tooltip = true;
+        
+        source.notify[Backing.Source.PROP_TITLE].connect(on_title_changed);
         
         source.bind_property(Backing.Source.PROP_TITLE, title_label, "label",
             BindingFlags.SYNC_CREATE);
@@ -43,6 +55,17 @@ public class CalendarListItem : Gtk.Grid {
             () => source.read_only ? "changes-prevent-symbolic" : "");
         Properties.xform_to_string(source, Backing.Source.PROP_READONLY, readonly_icon, "tooltip-text",
             () => source.read_only ? _("Calendar is read-only") : null);
+        
+        title_eventbox.button_release_event.connect(on_title_button_release);
+    }
+    
+    ~CalendarListItem() {
+        source.notify[Backing.Source.PROP_TITLE].disconnect(on_title_changed);
+    }
+    
+    private void on_title_changed() {
+        // title determines sort order, so this is important
+        mutated();
     }
     
     public override bool query_tooltip(int x, int y, bool keyboard_mode, Gtk.Tooltip tooltip) {
@@ -66,6 +89,40 @@ public class CalendarListItem : Gtk.Grid {
         target_value = Gfx.rgb_to_uint8_rgb_string(Gfx.rgba_to_rgb(color_button.rgba));
         
         return true;
+    }
+    
+    private void activate_editable_label() {
+        assert(editable_label == null);
+        
+        editable_label = new Toolkit.EditableLabel(title_label);
+        editable_label.accepted.connect(on_title_edit_accepted);
+        editable_label.dismissed.connect(remove_editable_label);
+        
+        editable_label.show_all();
+    }
+    
+    private void remove_editable_label() {
+        assert(editable_label != null);
+        
+        editable_label.destroy();
+        editable_label = null;
+    }
+    
+    private bool on_title_button_release(Gdk.EventButton event) {
+        // if already accepting input or not selected, don't activate text entry for rename (but
+        // allow signal to propagate further)
+        if (editable_label != null || !is_selected)
+            return false;
+        
+        activate_editable_label();
+        
+        // don't propagate
+        return true;
+    }
+    
+    private void on_title_edit_accepted(string text) {
+        if (!String.is_empty(text))
+            source.title = text;
     }
 }
 

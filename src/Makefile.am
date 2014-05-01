@@ -111,6 +111,7 @@ california_VALASOURCES = \
 	toolkit/toolkit-combo-box-text-model.vala \
 	toolkit/toolkit-deck.vala \
 	toolkit/toolkit-deck-window.vala \
+	toolkit/toolkit-editable-label.vala \
 	toolkit/toolkit-listbox-model.vala \
 	toolkit/toolkit-mutable-widget.vala \
 	toolkit/toolkit-popup.vala \

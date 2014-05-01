@@ -14,8 +14,16 @@ namespace California.Toolkit {
  */
 
 public class Popup : Gtk.Window {
+    public enum Position {
+        BELOW,
+        VERTICAL_CENTER
+    }
+    
     private Gtk.Widget relative_to;
+    private Position position;
     private Gtk.Widget? prev_focus = null;
+    private int relative_x = 0;
+    private int relative_y = 0;
     
     /**
      * Fired when the {@link Popup} is hidden, either due to user interaction (losing focus) or
@@ -29,17 +37,16 @@ public class Popup : Gtk.Window {
      *
      * The GtkWidget must be realized when this is invoked.
      */
-    public Popup(Gtk.Widget relative_to) {
+    public Popup(Gtk.Widget relative_to, Position position) {
         Object(type:Gtk.WindowType.TOPLEVEL);
         
         assert(relative_to.get_realized());
         this.relative_to = relative_to;
+        this.position = position;
         
         set_screen(relative_to.get_screen());
         
-        // move Popup window directly below relative_to widget aligned on the left-hand side
-        // TODO: RTL support
-        // TODO: Better detection to ensure Popup is always fully mapped onto the screen
+        // get coordinates of relative_to widget
         Gtk.Window? relative_to_win = relative_to.get_ancestor(typeof (Gtk.Window)) as Gtk.Window;
         if (relative_to_win != null && relative_to_win.is_toplevel()) {
             int gtk_x, gtk_y;
@@ -50,7 +57,8 @@ public class Popup : Gtk.Window {
             int gdk_x, gdk_y;
             gdk_win.get_position(out gdk_x, out gdk_y);
             
-            move(gtk_x + gdk_x, gtk_y + gdk_y + relative_to.get_allocated_height());
+            relative_x = gtk_x + gdk_x;
+            relative_y = gtk_y + gdk_y;
         }
         
         decorated = false;
@@ -81,6 +89,22 @@ public class Popup : Gtk.Window {
     
     public override void map() {
         base.map();
+        
+        switch (position) {
+            case Position.BELOW:
+                // move Popup window directly below relative_to widget aligned on the left-hand side
+                // TODO: RTL support
+                // TODO: Better detection to ensure Popup is always fully mapped onto the same screen
+                move(relative_x, relative_y + relative_to.get_allocated_height());
+            break;
+            
+            case Position.VERTICAL_CENTER:
+                move(relative_x, relative_y + ((relative_to.get_allocated_height() - get_allocated_height()) / 2));
+            break;
+            
+            default:
+                assert_not_reached();
+        }
         
         prev_focus = get_focus();
         
