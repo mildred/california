@@ -41,6 +41,7 @@ public class EditableLabel : Popup {
         // set up Gtk.Entry to look and be sized exactly like the Gtk.Label
         entry.text = label.label;
         entry.width_chars = label.width_chars;
+        entry.set_size_request(label.get_allocated_width(), -1);
         add(entry);
         
         // make sure the Popup window is hugging close to label as well
