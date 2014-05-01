@@ -13,10 +13,12 @@ namespace California.Manager {
 public class Window : Toolkit.DeckWindow {
     private static Manager.Window? instance = null;
     
+    private CalendarList calendar_list = new CalendarList();
+    
     private Window(Gtk.Window? parent) {
         base (parent, null);
         
-        deck.add_cards(iterate<Toolkit.Card>(new CalendarList()).to_array_list());
+        deck.add_cards(iterate<Toolkit.Card>(calendar_list).to_array_list());
     }
     
     public static void display(Gtk.Window? parent) {
@@ -33,6 +35,20 @@ public class Window : Toolkit.DeckWindow {
         instance.destroy();
         
         instance = null;
+    }
+    
+    public override bool key_release_event(Gdk.EventKey event) {
+        // F2 with no modifiers means rename currenly selected item
+        if (event.keyval != Gdk.Key.F2 || event.state != 0)
+            return base.key_release_event(event);
+        
+        if (calendar_list.selected == null)
+            return base.key_release_event(event);
+        
+        calendar_list.selected.rename();
+        
+        // don't propagate
+        return true;
     }
 }
 

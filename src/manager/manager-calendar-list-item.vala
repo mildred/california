@@ -78,6 +78,16 @@ internal class CalendarListItem : Gtk.Grid, Toolkit.MutableWidget {
         return true;
     }
     
+    /**
+     * Allow for the user to rename the title of the {@link source}.
+     *
+     * This presents a {@link Toolkit.EditableLabel} for the user to enter the new name.
+     */
+    public void rename() {
+        if (editable_label == null)
+            activate_editable_label();
+    }
+    
     private bool source_to_color(Binding binding, Value source_value, ref Value target_value) {
         bool used_default;
         target_value = Gfx.rgb_string_to_rgba(source.color, Gfx.RGBA_BLACK, out used_default);
@@ -112,6 +122,10 @@ internal class CalendarListItem : Gtk.Grid, Toolkit.MutableWidget {
         // if already accepting input or not selected, don't activate text entry for rename (but
         // allow signal to propagate further)
         if (editable_label != null || !is_selected)
+            return false;
+        
+        // only interest in primary button clicks
+        if (event.button != 1)
             return false;
         
         activate_editable_label();
