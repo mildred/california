@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-24 18:14+0200\n"
-"PO-Revision-Date: 2014-04-24 18:15+0200\n"
+"POT-Creation-Date: 2014-05-01 16:51+0200\n"
+"PO-Revision-Date: 2014-05-01 16:52+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -131,73 +131,73 @@ msgstr "Dzisiaj"
 
 #. / The month and year according to locale preferences, i.e. "March 2014"
 #. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:80
+#: ../src/calendar/calendar.vala:83
 msgid "%B %Y"
 msgstr "%B %Y"
 
 #. / The abbreviated month and year according to locale preferences, i.e. "Mar 2014"
 #. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:84
+#: ../src/calendar/calendar.vala:87
 msgid "%b %Y"
 msgstr "%b %Y"
 
 #. / A "pretty" date according to locale preferences, i.e. "Monday, March 10, 2014"
 #. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:88
+#: ../src/calendar/calendar.vala:91
 msgid "%A, %B %e, %Y"
 msgstr "%A, %e %B %Y"
 
 #. / A "pretty" date with no year according to locale preferences, i.e. "Monday, March 10"
 #. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:92
+#: ../src/calendar/calendar.vala:95
 msgid "%A, %B %e"
 msgstr "%A, %e %B"
 
 #. / A "pretty" date abbreviated according to locale preferences, i.e. "Mon, Mar 10, 2014"
 #. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:96
+#: ../src/calendar/calendar.vala:99
 msgid "%a, %b %e, %Y"
 msgstr "%a, %e %b %Y"
 
 #. / A "pretty" date abbreviated and no year according to locale preferences, i.e.
 #. / "Mon, Mar 10"
 #. / See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:101
+#: ../src/calendar/calendar.vala:104
 msgid "%a, %b %e"
 msgstr "%a, %e %b"
 
 #. / Ante meridiem
 #. / (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. / format user settings to be honored)
-#: ../src/calendar/calendar.vala:106
+#: ../src/calendar/calendar.vala:109
 msgid "am"
 msgstr "AM"
 
 #. / Brief ante meridiem, i.e. "am" -> "a"
 #. / (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. / format user settings to be honored)
-#: ../src/calendar/calendar.vala:111
+#: ../src/calendar/calendar.vala:114
 msgid "a"
 msgstr "A"
 
 #. / Post meridiem
 #. / (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. / format user settings to be honored)
-#: ../src/calendar/calendar.vala:116
+#: ../src/calendar/calendar.vala:119
 msgid "pm"
 msgstr "PM"
 
 #. / Brief post meridiem, i.e. "pm" -> "p"
 #. / (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. / format user settings to be honored)
-#: ../src/calendar/calendar.vala:121
+#: ../src/calendar/calendar.vala:124
 msgid "p"
 msgstr "P"
 
 #. / The 12-hour time with minute and meridiem ("am" or "pm"), i.e. "5:06pm"
 #. / (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. / format user settings to be honored)
-#: ../src/calendar/calendar.vala:126
+#: ../src/calendar/calendar.vala:129
 #, c-format
 msgid "%d:%02d%s"
 msgstr "%d∶%02d %s"
@@ -205,40 +205,48 @@ msgstr "%d∶%02d %s"
 #. / The 12-hour time with minute, seconds, and meridiem ("am" or "pm"), i.e. "5:06:31pm"
 #. / (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. / format user settings to be honored)
-#: ../src/calendar/calendar.vala:131
+#: ../src/calendar/calendar.vala:134
 #, c-format
 msgid "%d:%02d:%02d%s"
 msgstr "%d∶%02d∶%02d %s"
 
 #. / The 24-hour time with minutes, i.e. "17:06"
-#: ../src/calendar/calendar.vala:134
+#: ../src/calendar/calendar.vala:137
 #, c-format
 msgid "%d:%02d"
 msgstr "%d∶%02d"
 
 #. / The 24-hour time with minutes and seconds, i.e. "17:06:31"
-#: ../src/calendar/calendar.vala:137
+#: ../src/calendar/calendar.vala:140
 #, c-format
 msgid "%d:%02d:%02d"
 msgstr "%d∶%02d∶%02d"
 
 #. Used by quick-add to convert a user's day unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
-#: ../src/calendar/calendar.vala:141
+#: ../src/calendar/calendar.vala:144
 msgid "day;days;"
 msgstr "dzień;dni;"
 
 #. Used by quick-add to convert a user's hours unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
-#: ../src/calendar/calendar.vala:145
+#: ../src/calendar/calendar.vala:148
 msgid "hour;hours;hr;hrs"
 msgstr "godzina;godziny;godzin;g;h;"
 
 #. Used by quick-add to convert a user's minute unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
-#: ../src/calendar/calendar.vala:149
+#: ../src/calendar/calendar.vala:152
 msgid "minute;minutes;min;mins"
 msgstr "minuta;minuty;minut;min;m;"
+
+#: ../src/calendar/calendar.vala:160
+msgid "midnight"
+msgstr "północ"
+
+#: ../src/calendar/calendar.vala:161
+msgid "noon"
+msgstr "południe"
 
 #. Used by quick-add to indicate the user wants to create an event for today.
 #: ../src/component/component.vala:38
@@ -388,7 +396,7 @@ msgid "_Add"
 msgstr "_Dodaj"
 
 #: ../src/rc/app-menu.interface.h:1
-msgid "_Add calendar…"
+msgid "_Add Calendar…"
 msgstr "_Dodaj kalendarz…"
 
 #: ../src/rc/app-menu.interface.h:2
