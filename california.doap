@@ -6,7 +6,7 @@
          xmlns="http://usefulinc.com/ns/doap#">
 
   <name xml:lang="en">california</name>
-  <shortdesc xml:lang="en">Calendar for GNOME 3</shortdesc>
+  <shortdesc xml:lang="en">GNOME 3 Calendar</shortdesc>
   <homepage rdf:resource="https://wiki.gnome.org/Apps/California" />
   <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/california-list" />
   <bug-database rdf:resource="https://bugzilla.gnome.org/browse.cgi?product=california" />

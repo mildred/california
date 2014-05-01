@@ -1,0 +1,44 @@
+
+    California GNOME 3 Calendar
+    ---------------------------
+
+  * Introduction
+
+    California is a calendar built for GNOME 3.  It allows you to view and
+    manage your online calendars with a simple and modern interface.
+
+    Visit https://wiki.gnome.org/Apps/California to read about the current
+    state of California's development and to make sure you're running the
+    latest version.
+
+
+  * Installation & Licensing
+
+    Please consult the INSTALL and COPYING files for more information.
+
+
+  * Quick Start
+
+    California uses EDS (Evolution Data Server) as the back-end for managing
+    your calendars.  If you've already added calendars to EDS via another
+    application (such as Evolution), you should be able to see those calendars
+    in California as well.
+    
+    If you haven't added any calendars to EDS, you can do so by choosing
+    "Add Calendar..." from the California application menu.  You may need to
+    enter a username and password for calendars you can write to (such as
+    Google Calendar).
+
+
+  * Contacting Yorba
+
+    Yorba:                      http://www.yorba.org
+    California home page:       https://wiki.gnome.org/Apps/California
+
+    We also encourage you to join the California mailing list.  See
+    http://mail.gnome.org/mailman/listinfo/california-list for details.
+
+
+
+    Copyright 2014 Yorba Foundation
+
