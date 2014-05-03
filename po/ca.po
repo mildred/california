@@ -44,7 +44,7 @@ msgstr "No s'ha pogut autenticar amb el servei del Google Calendar"
 
 #: ../src/activator/google/activator-google-authenticating-pane.vala:104
 msgid "Unable to authenticate: Incorrect account name or password"
-msgstr "No s'ha pogut autenticar: nol del compte o contrasenya incorrecta"
+msgstr "No s'ha pogut autenticar: nom del compte o contrasenya incorrecta"
 
 #: ../src/activator/google/activator-google-authenticating-pane.vala:106
 #, c-format
@@ -386,7 +386,7 @@ msgstr "_Afegeix"
 
 #: ../src/rc/app-menu.interface.h:1
 msgid "_Add Calendar…"
-msgstr "_Afegeix una calendari..."
+msgstr "_Afegeix un calendari..."
 
 #: ../src/rc/app-menu.interface.h:2
 msgid "_Calendars"
@@ -394,7 +394,7 @@ msgstr "_Calendaris"
 
 #: ../src/rc/app-menu.interface.h:3
 msgid "_About"
-msgstr "Qu_ant a"
+msgstr "_Quant a"
 
 #: ../src/rc/app-menu.interface.h:4
 msgid "_Quit"
@@ -427,7 +427,7 @@ msgstr "Des de"
 #. As in "From <date> <time> to <date> <time>"
 #: ../src/rc/create-update-event.ui.h:5
 msgid "to"
-msgstr "a"
+msgstr "fins a"
 
 #: ../src/rc/create-update-event.ui.h:6
 msgid "Calendar:"
@@ -483,7 +483,7 @@ msgstr "_Crea"
 
 #: ../src/rc/quick-create-event.ui.h:4
 msgid "<small><i>Example: Dinner at Tadich Grill 7:30pm tomorrow</i></small>"
-msgstr "<small><i>Exmple: Sopar al Terra d'escudella demà a les 19.30</i></small>"
+msgstr "<small><i>Exemple: Sopar al Terra d'escudella demà a les 19.30</i></small>"
 
 #: ../src/rc/quick-create-event.ui.h:5
 msgid "Ca_lendar:"
