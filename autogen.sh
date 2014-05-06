@@ -14,4 +14,10 @@ which gnome-autogen.sh || {
 mkdir -p config
 mkdir -p m4
 
+cp -pf INSTALL INSTALL.bak
+
 . gnome-autogen.sh
+
+cp -pf INSTALL.bak INSTALL
+rm INSTALL.bak
+
