@@ -43,23 +43,23 @@ public void init() throws Error {
     // Used by quick-add to indicate the user wants to create an event for yesterday.
     YESTERDAY = _("yesterday").casefold();
     
-    // Used by quick-add to determine if the word is a time-based preposition (indicating a
-    // specific time, not a duration).  Each word must be separated by semi-colons.
+    // Used by quick-add to determine if the word is a TIME preposition (indicating a
+    // specific time of day, not a duration).  Each word must be separated by semi-colons.
     // It's allowable for some or all of these words to
     // be duplicated in the location prepositions list (elsewhere) but not another time list.
     // The list can be empty, but that will limit the parser.
     // Examples: "at 9am", "from 10pm to 11:30pm", "on monday"
     TIME_PREPOSITIONS = _("at;from;to;on;").casefold().split(";");
     
-    // Used by quick-add to determine if the word is a duration-based preposition (indicating a
-    // a duration, not a specific time).  Each word must be separated by semi-colons.
+    // Used by quick-add to determine if the word is a DURATION preposition (indicating a
+    // a duration of time, not a specific time).  Each word must be separated by semi-colons.
     // It's allowable for some or all of these words to
     // be duplicated in the location prepositions list (elsewhere) but not another time list.
     // The list can be empty, but that will limit the parser.
     // Examples: "for 3 hours", "for 90 minutes"
     DURATION_PREPOSITIONS = _("for;").casefold().split(";");
     
-    // Used by quick-add to determine if the word is a delay preposition (indicating a specific
+    // Used by quick-add to determine if the word is a DELAY preposition (indicating a specific
     // time from the current moment).  Each word must be separated by semi-colons.
     // It's allowable for some or all of these words to
     // be duplicated in the location prepositions list (elsewhere) but not another time list.
@@ -67,7 +67,7 @@ public void init() throws Error {
     // Example: "in 3 hours" (meaning 3 hours from now)
     DELAY_PREPOSITIONS = _("in;").casefold().split(";");
     
-    // Used by quick-add to determine if the word is a location-based preposition (indicating a
+    // Used by quick-add to determine if the word is a LOCATION preposition (indicating a
     // specific place).  Each word must be separated by semi-colons.
     // It's allowable for some or all of these words to be duplicated in
     // the time prepositions list (elsewhere).  The list can be empty, but that will limit the
