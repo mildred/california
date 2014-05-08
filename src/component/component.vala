@@ -35,12 +35,15 @@ public void init() throws Error {
     Calendar.init();
     
     // Used by quick-add to indicate the user wants to create an event for today.
+    // For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
     TODAY = _("today").casefold();
     
     // Used by quick-add to indicate the user wants to create an event for tomorrow.
+    // For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
     TOMORROW = _("tomorrow").casefold();
     
     // Used by quick-add to indicate the user wants to create an event for yesterday.
+    // For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
     YESTERDAY = _("yesterday").casefold();
     
     // Used by quick-add to determine if the word is a TIME preposition (indicating a
@@ -49,6 +52,7 @@ public void init() throws Error {
     // be duplicated in the location prepositions list (elsewhere) but not another time list.
     // The list can be empty, but that will limit the parser.
     // Examples: "at 9am", "from 10pm to 11:30pm", "on monday"
+    // For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
     TIME_PREPOSITIONS = _("at;from;to;on;").casefold().split(";");
     
     // Used by quick-add to determine if the word is a DURATION preposition (indicating a
@@ -57,6 +61,7 @@ public void init() throws Error {
     // be duplicated in the location prepositions list (elsewhere) but not another time list.
     // The list can be empty, but that will limit the parser.
     // Examples: "for 3 hours", "for 90 minutes"
+    // For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
     DURATION_PREPOSITIONS = _("for;").casefold().split(";");
     
     // Used by quick-add to determine if the word is a DELAY preposition (indicating a specific
@@ -65,6 +70,7 @@ public void init() throws Error {
     // be duplicated in the location prepositions list (elsewhere) but not another time list.
     // The list can be empty, but that will limit the parser.
     // Example: "in 3 hours" (meaning 3 hours from now)
+    // For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
     DELAY_PREPOSITIONS = _("in;").casefold().split(";");
     
     // Used by quick-add to determine if the word is a LOCATION preposition (indicating a
@@ -73,6 +79,7 @@ public void init() throws Error {
     // the time prepositions list (elsewhere).  The list can be empty, but that will limit the
     // parser.
     // Example: "at supermarket", "at Eiffel Tower"
+    // For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
     LOCATION_PREPOSITIONS = _("at;").casefold().split(";");
     
     // Used by quick-add to strip date numbers of common ordinal suffices.  Each word must be
@@ -80,6 +87,7 @@ public void init() throws Error {
     // The list can be empty, but that will limit the parser if your language supports ordinal
     // suffixes.
     // Example: "1st", "2nd", "3rd", "4th"
+    // For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
     ORDINAL_SUFFIXES = _("st;nd;rd;th").casefold().split(";");
 }
 

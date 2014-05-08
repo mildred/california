@@ -141,14 +141,17 @@ public void init() throws Error {
     
     // Used by quick-add to convert a user's day unit into an internal value.  Common abbreviations
     // (without punctuation) should be included.  Each word must be separated by semi-colons.
+    // For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
     UNIT_DAYS = _("day;days;").casefold().split(";");
     
     // Used by quick-add to convert a user's hours unit into an internal value.  Common abbreviations
     // (without punctuation) should be included.  Each word must be separated by semi-colons.
+    // For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
     UNIT_HOURS = _("hour;hours;hr;hrs").casefold().split(";");
     
     // Used by quick-add to convert a user's minute unit into an internal value.  Common abbreviations
     // (without punctuation) should be included.  Each word must be separated by semi-colons.
+    // For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
     UNIT_MINS = _("minute;minutes;min;mins").casefold().split(";");
     
     // return LC_MESSAGES back to proper locale and return LANGUAGE environment variable
@@ -157,7 +160,12 @@ public void init() throws Error {
     if (language_env != null)
         Environment.set_variable("LANGUAGE", language_env, true);
     
+    // Used by quick-add to indicate the user wants to create an event at midnight.
+    // For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
     MIDNIGHT = _("midnight");
+    
+    // Used by quick-add to indicate the user wants to create an event at noon.
+    // For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
     NOON = _("noon");
     
     // This init() throws an IOError, so perform before others to prevent unnecessary unwinding
