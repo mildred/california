@@ -68,17 +68,20 @@ public class MainWindow : Gtk.ApplicationWindow {
 #endif
         
         Gtk.Button today = new Gtk.Button.with_label(_("_Today"));
+        today.valign = Gtk.Align.CENTER;
         today.use_underline = true;
         today.tooltip_text = _("Jump to today's date (Ctrl+T)");
         today.set_action_name(ACTION_JUMP_TO_TODAY);
         
         Gtk.Button prev = new Gtk.Button.from_icon_name(rtl ? "go-previous-rtl-symbolic" : "go-previous-symbolic",
             Gtk.IconSize.MENU);
+        prev.valign = Gtk.Align.CENTER;
         prev.tooltip_text = _("Previous (Alt+Left)");
         prev.set_action_name(ACTION_PREVIOUS);
         
         Gtk.Button next = new Gtk.Button.from_icon_name(rtl ? "go-next-rtl-symbolic" : "go-next-symbolic",
             Gtk.IconSize.MENU);
+        next.valign = Gtk.Align.CENTER;
         next.tooltip_text = _("Next (Alt+Right)");
         next.set_action_name(ACTION_NEXT);
         
@@ -93,13 +96,25 @@ public class MainWindow : Gtk.ApplicationWindow {
         headerbar.pack_start(nav_buttons);
         
         quick_add_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.MENU);
+        quick_add_button.valign = Gtk.Align.CENTER;
         quick_add_button.tooltip_text = _("Quick add event (Ctrl+N)");
         quick_add_button.set_action_name(ACTION_QUICK_CREATE_EVENT);
         
         Gtk.Button calendars = new Gtk.Button.from_icon_name("x-office-calendar-symbolic",
             Gtk.IconSize.MENU);
+        calendars.valign = Gtk.Align.CENTER;
         calendars.tooltip_text = _("Calendars (Ctrl+L)");
         calendars.set_action_name(Application.ACTION_CALENDAR_MANAGER);
+
+        // Vertically center all buttons and put them in a SizeGroup to handle situations where
+        // the text button is smaller than the icons buttons due to language (i.e. Hebrew)
+        // see https://bugzilla.gnome.org/show_bug.cgi?id=729771
+        Gtk.SizeGroup size = new Gtk.SizeGroup(Gtk.SizeGroupMode.VERTICAL);
+        size.add_widget(today);
+        size.add_widget(prev);
+        size.add_widget(next);
+        size.add_widget(quick_add_button);
+        size.add_widget(calendars);
         
         // pack right-side of window
         headerbar.pack_end(quick_add_button);
