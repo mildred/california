@@ -10,7 +10,7 @@ namespace California.Calendar {
  * An immutable representation of a {@link Month} of a {@link Year}.
  */
 
-public class MonthOfYear : DateSpan {
+public class MonthOfYear : Unit<MonthOfYear>, Gee.Comparable<MonthOfYear>, Gee.Hashable<MonthOfYear> {
     /**
      * The {@link Month} of the associated {@link Year}.
      */
@@ -37,7 +37,7 @@ public class MonthOfYear : DateSpan {
     public string abbrev_name { get; private set; }
     
     public MonthOfYear(Month month, Year year) {
-        base.uninitialized();
+        base.uninitialized(DateUnit.MONTH);
         
         this.month = month;
         this.year = year;
@@ -76,20 +76,16 @@ public class MonthOfYear : DateSpan {
     }
     
     /**
-     * Returns a {@link MonthOfYear} adjusted a quantity of months from this one.
-     *
-     * Subtraction (adjusting to a past date) is acheived by using a negative quantity.
+     * @inheritDoc
      */
-    public MonthOfYear adjust(int quantity) {
-        return start_date.adjust(quantity, DateUnit.MONTH).month_of_year();
+    public override MonthOfYear adjust(int quantity) {
+        return start_date.adjust_by(quantity, DateUnit.MONTH).month_of_year();
     }
     
     /**
-     * Returns the number of months between the two {@link MonthOfYear}s.
-     *
-     * If the supplied MonthOfYear is earlier than this one, a negative value is returned.
+     * @inheritDoc
      */
-    public int difference(MonthOfYear other) {
+    public override int difference(MonthOfYear other) {
         int compare = compare_to(other);
         if (compare == 0)
             return 0;
@@ -106,18 +102,17 @@ public class MonthOfYear : DateSpan {
         }
     }
     
-    /**
-     * Returns the chronological next {@link MonthOfYear}.
-     */
-    public MonthOfYear next() {
-        return adjust(1);
+    public int compare_to(MonthOfYear other) {
+        return (this != other) ? start_date.compare_to(other.start_date) : 0;
     }
     
-    /**
-     * Returns the chronological prior {@link MonthOfYear}.
-     */
-    public MonthOfYear previous() {
-        return adjust(-1);
+    public bool equal_to(MonthOfYear other) {
+        return compare_to(other) == 0;
+    }
+    
+    public uint hash() {
+        // 4 bits for month (1 - 12)
+        return (year.value << 4) | month.value;
     }
     
     public override string to_string() {

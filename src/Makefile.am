@@ -65,10 +65,12 @@ california_VALASOURCES = \
 	calendar/calendar-system.vala \
 	calendar/calendar-timezone.vala \
 	calendar/calendar-unit.vala \
+	calendar/calendar-unit-span.vala \
 	calendar/calendar-wall-time.vala \
 	calendar/calendar-week.vala \
 	calendar/calendar-week-span.vala \
 	calendar/calendar-year.vala \
+	calendar/calendar-year-span.vala \
 	\
 	collection/collection.vala \
 	collection/collection-iterable.vala \

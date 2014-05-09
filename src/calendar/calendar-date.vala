@@ -13,14 +13,19 @@ namespace California.Calendar {
  * this class is immutable.  This means this object is incapable of representing a DMY prior to
  * Year 1 (BCE).
  *
- * GLib.Date has many powerful features for representing a calenday day, but it's interface is
+ * GLib.Date has many powerful features for representing a calendar day, but it's interface is
  * inconvenient when working in Vala.  It can also exist in an uninitialized and an invalid
  * state.  It's desired to avoid both of those.  It is also not an Object, has no signals or
  * properties, doesn't work well with Gee, and is mutable.  This class attempts to solve these
  * issues.
  */
 
-public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
+public class Date : Unit<Date>, Gee.Comparable<Date>, Gee.Hashable<Date> {
+    public const string PROP_DAY_OF_WEEK = "day-of-week";
+    public const string PROP_DAY_OF_MONTH = "day-of-month";
+    public const string PROP_MONTH = "month";
+    public const string PROP_YEAR = "year";
+    
     /**
      * Options for {@link to_pretty_string}.
      */
@@ -42,6 +47,21 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
         NO_TODAY
     }
     
+    
+    /**
+     * @inheritDoc
+     *
+     * Overridden to prevent a reference cycle in {@link Span.start_date}.
+     */
+    public override Date start_date { get { return this; } }
+    
+    /**
+     * @inheritDoc
+     *
+     * Overridden to prevent a reference cycle in {@link Span.end_date}.
+     */
+    public override Date end_date { get { return this; } }
+    
     public DayOfWeek day_of_week { get; private set; }
     public DayOfMonth day_of_month { get; private set; }
     public Month month { get; private set; }
@@ -55,6 +75,8 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
      * @throws CalendarError if an invalid calendar day
      */
     public Date(DayOfMonth day_of_month, Month month, Year year) throws CalendarError {
+        base.uninitialized(DateUnit.DAY);
+        
         gdate.set_dmy(day_of_month.to_date_day(), month.to_date_month(), year.to_date_year());
         if (!gdate.valid()) {
             throw new CalendarError.INVALID("Invalid day/month/year %s/%s/%s", day_of_month.to_string(),
@@ -71,6 +93,8 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
      * Creates a {@link Date} for the {@link ExactTime}.
      */
     public Date.from_exact_time(ExactTime exact_time) {
+        base.uninitialized(DateUnit.DAY);
+        
         // Can use for_checked() methods because ExactTime can only be created with proper values
         day_of_month = exact_time.day_of_month;
         month = exact_time.month;
@@ -90,6 +114,8 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
     }
     
     internal Date.from_gdate(GLib.Date gdate) {
+        base.uninitialized(DateUnit.DAY);
+        
         assert(gdate.valid());
         
         this.gdate = gdate;
@@ -118,7 +144,7 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
         }
         
         // add six days and that's the last day of the week
-        Date end = start.adjust(DayOfWeek.COUNT - 1, DateUnit.DAY);
+        Date end = start.adjust_by(DayOfWeek.COUNT - 1, DateUnit.DAY);
         
         // get the numeric week of the year of this date
         int week_of_year;
@@ -165,24 +191,10 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
     }
     
     /**
-     * Returns the {@link Date} as the earliest ExactTime possible for the specified {@link Timezone}.
-     *
-     * @see latest_exact_time
+     * @inheritDoc
      */
-    public ExactTime earliest_exact_time(Timezone tz) {
-        return new ExactTime(tz, this, WallTime.earliest);
-    }
-    
-    /**
-     * Returns the {@link Date} as the latest {@link ExactTime} possible for the specified
-     * {@link Timezone}.
-     *
-     * By latest, the precision of ExactTime.seconds will be 59.0.
-     *
-     * @see earliest_exact_time
-     */
-    public ExactTime latest_exact_time(Timezone tz) {
-        return new ExactTime(tz, this, WallTime.latest);
+    public override Date adjust(int quantity) {
+        return adjust_by(quantity, DateUnit.DAY);
     }
     
     /**
@@ -190,7 +202,7 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
      *
      * Subtraction (adjusting to a past date) is acheived by using a negative quantity.
      */
-    public Date adjust(int quantity, DateUnit unit) {
+    public Date adjust_by(int quantity, DateUnit unit) {
         if (quantity == 0)
             return this;
         
@@ -232,11 +244,9 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
     }
     
     /**
-     * Returns the difference (in days) between this {@link Date} and another Date.
-     *
-     * If the supplied Date is earlier than this one, a negative value will be returned.
+     * @inheritDoc
      */
-    public int difference(Date other) {
+    public override int difference(Date other) {
         return (this != other) ? gdate.days_between(other.gdate) : 0;
     }
     
@@ -248,20 +258,6 @@ public class Date : BaseObject, Gee.Comparable<Date>, Gee.Hashable<Date> {
         clone.clamp(min.gdate, max.gdate);
         
         return new Date.from_gdate(clone);
-    }
-    
-    /**
-     * Returns the next date;
-     */
-    public Date next() {
-        return adjust(1, DateUnit.DAY);
-    }
-    
-    /**
-     * Returns the previous date.
-     */
-    public Date previous() {
-        return adjust(-1, DateUnit.DAY);
     }
     
     public int compare_to(Date other) {

@@ -17,6 +17,31 @@
 
 namespace California.Calendar {
 
+/**
+ * An enumeration of various calendar units.
+ *
+ * @see Unit
+ */
+
+public enum DateUnit {
+    DAY,
+    WEEK,
+    MONTH,
+    YEAR
+}
+
+/**
+ * An enumeration of various time units.
+ *
+ * @see WallTime
+ */
+
+public enum TimeUnit {
+    SECOND,
+    MINUTE,
+    HOUR
+}
+
 private int init_count = 0;
 
 private static unowned string FMT_MONTH_YEAR_FULL;

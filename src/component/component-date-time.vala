@@ -213,7 +213,7 @@ public class DateTime : BaseObject, Gee.Hashable<DateTime>, Gee.Comparable<DateT
         
         // if exclusive, drop back one day
         if (!dtend_inclusive)
-            end_date = end_date.adjust(-1, Calendar.DateUnit.DAY);
+            end_date = end_date.previous();
         
         date_span = new Calendar.DateSpan(start_date, end_date);
         exact_time_span = null;

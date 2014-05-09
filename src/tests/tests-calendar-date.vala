@@ -23,7 +23,7 @@ private class CalendarDate : UnitTest.Harness {
     }
     
     private Calendar.Date from_today(int days) {
-        return Calendar.System.today.adjust(days, Calendar.DateUnit.DAY);
+        return Calendar.System.today.adjust(days);
     }
     
     private Calendar.DateSpan span_from_today(int start_days, int end_days) {
@@ -33,7 +33,7 @@ private class CalendarDate : UnitTest.Harness {
     private bool clamp_start() throws Error {
         Calendar.DateSpan span = span_from_today(0, 5);
         Calendar.DateSpan clamp = span_from_today(1, 5);
-        Calendar.DateSpan adj = span.clamp(clamp);
+        Calendar.DateSpan adj = span.clamp_between(clamp);
         
         return adj.start_date.equal_to(clamp.start_date) && adj.end_date.equal_to(span.end_date);
     }
@@ -41,7 +41,7 @@ private class CalendarDate : UnitTest.Harness {
     private bool clamp_end() throws Error {
         Calendar.DateSpan span = span_from_today(0, 5);
         Calendar.DateSpan clamp = span_from_today(0, 4);
-        Calendar.DateSpan adj = span.clamp(clamp);
+        Calendar.DateSpan adj = span.clamp_between(clamp);
         
         return adj.start_date.equal_to(span.start_date) && adj.end_date.equal_to(clamp.end_date);
     }
@@ -49,7 +49,7 @@ private class CalendarDate : UnitTest.Harness {
     private bool clamp_both() throws Error {
         Calendar.DateSpan span = span_from_today(0, 5);
         Calendar.DateSpan clamp = span_from_today(1, 4);
-        Calendar.DateSpan adj = span.clamp(clamp);
+        Calendar.DateSpan adj = span.clamp_between(clamp);
         
         return adj.start_date.equal_to(clamp.start_date) && adj.end_date.equal_to(clamp.end_date);
     }
@@ -57,7 +57,7 @@ private class CalendarDate : UnitTest.Harness {
     private bool clamp_neither() throws Error {
         Calendar.DateSpan span = span_from_today(0, 5);
         Calendar.DateSpan clamp = span_from_today(-1, 6);
-        Calendar.DateSpan adj = span.clamp(clamp);
+        Calendar.DateSpan adj = span.clamp_between(clamp);
         
         return adj.start_date.equal_to(span.start_date) && adj.end_date.equal_to(span.end_date);
     }

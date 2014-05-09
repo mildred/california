@@ -171,7 +171,7 @@ public class MainWindow : Gtk.ApplicationWindow {
     }
     
     private void on_previous() {
-        current_view.prev();
+        current_view.previous();
     }
     
     private void on_request_create_timed_event(Calendar.ExactTimeSpan initial, Gtk.Widget relative_to,

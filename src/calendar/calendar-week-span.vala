@@ -8,138 +8,61 @@ namespace California.Calendar {
 
 /**
  * An immutable representation of a span of {@link Week}s.
- *
- * This class provides methods that can turn a {@link DateSpan} an iteration of Week objects.
- * Partial weeks are included; the caller needs to do their own clamping if they want to avoid
- * days outside of the DateSpan.
  */
 
-public class WeekSpan : BaseObject, Collection.SimpleIterable<Week>, Span<Week>, Gee.Comparable<WeekSpan>,
-    Gee.Hashable<WeekSpan> {
-    private class WeekSpanIterator : BaseObject, Collection.SimpleIterator<Week> {
-        public Week first;
-        public Week last;
-        public Week? current = null;
-        
-        public WeekSpanIterator(WeekSpan owner) {
-            first = owner.start();
-            last = owner.end();
-        }
-        
-        public new Week get() {
-            return current;
-        }
-        
-        public bool next() {
-            if (current == null)
-                current = first;
-            else if (current.start_date.compare_to(last.start_date) < 0)
-                current = current.adjust(1);
-            else
-                return false;
-            
-            return true;
-        }
-        
-        public override string to_string() {
-            return "WeekSpanIterator %s::%s".printf(first.to_string(), last.to_string());
-        }
-    }
-    
+public class WeekSpan : UnitSpan<Week> {
     /**
-     * The {@link DateSpan} of the {@link Week}s.
-     */
-    public DateSpan dates { get; private set; }
-    
-    /**
-     * The defined first day of the week.
+     * The defined first day of the week for the weeks in the span.
      */
     public FirstOfWeek first_of_week { get; private set; }
     
     /**
-     * inheritDoc
+     * Create a span of {@link Week}s from the start and end week.
+     *
+     * The start week's {@link FirstOfWeek} is used.  The end week is converted if it uses a
+     * different first of week value.
      */
-    public Date start_date { owned get { return dates.start_date; } }
-    
-    /**
-     * inheritDoc
-     */
-    public Date end_date { owned get { return dates.end_date; } }
-    
-    /**
-     * Create a span of {@link Week}s corresponding to the {@link DateSpan} according to
-     * {@link FirstOfWeek}'s definition of a week's starting day.
-     */
-    public WeekSpan(DateSpan dates, FirstOfWeek first_of_week) {
-        this.dates = dates;
-        this.first_of_week = first_of_week;
+    public WeekSpan(Week first, Week last) {
+        base (first, last, first.start_date, last.end_date.week_of(first.first_of_week).end_date);
+        
+        first_of_week = first.first_of_week;
     }
     
     /**
      * Create an arbitrary span of {@link Week}s starting from the specified {@link Week}.
      *
-     * Week's first-of-week is preserved.
+     * start's first-of-week is preserved.
      */
-    public WeekSpan.count(Week start, int count) {
-        dates = new DateSpan(start.start_date, start.adjust(count).end_date);
-        first_of_week = start.first_of_week;
-    }
-    
-    /**
-     * inheritDoc
-     */
-    public Week start() {
-        return dates.start_date.week_of(first_of_week);
-    }
-    
-    /**
-     * inheritDoc
-     */
-    public Week end() {
-        return dates.end_date.week_of(first_of_week);
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public bool contains(Date date) {
-        return dates.contains(date);
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public bool has(Week week) {
-        return (start().compare_to(week) <= 0) && (end().compare_to(week) >= 0);
-    }
-    
-    /**
-     * Returns an Iterator for each {@link Week} (full and partial) in the {@link WeekSpan}.
-     */
-    public Collection.SimpleIterator<Week> iterator() {
-        return new WeekSpanIterator(this);
-    }
-    
-    /**
-     * Compares two {@link WeekSpan}s by their {@link start_date}.
-     */
-    public int compare_to(WeekSpan other) {
-        return start_date.compare_to(other.start_date);
-    }
-    
-    public bool equal_to(WeekSpan other) {
-        if (this == other)
-            return true;
+    public WeekSpan.count(Week first, int count) {
+        Week last = first.adjust(count);
         
-        return start_date.equal_to(other.start_date) && end_date.equal_to(other.end_date);
+        base (first, last, first.start_date, last.end_date);
+        
+        first_of_week = first.first_of_week;
     }
     
-    public uint hash() {
-        return start_date.hash() ^ end_date.hash();
+    /**
+     * Create a span of {@link Week}s corresponding to the {@link DateSpan} according to
+     * {@link FirstOfWeek}'s definition of a week's starting day.
+     */
+    public WeekSpan.from_span(Span span, FirstOfWeek first_of_week) {
+        Week first = span.start_date.week_of(first_of_week);
+        Week last = span.end_date.week_of(first_of_week);
+        
+        base (first, last, first.start_date, last.end_date);
+        
+        this.first_of_week = first_of_week;
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public override bool contains(Week week) {
+        return (first.compare_to(week) <= 0) && (last.compare_to(week) >= 0);
     }
     
     public override string to_string() {
-        return "weeks of %s".printf(dates.to_string());
+        return "weeks of %s".printf(to_date_span().to_string());
     }
 }
 

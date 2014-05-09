@@ -168,7 +168,7 @@ private class Grid : Gtk.Grid {
         
         // create a WeekSpan for the first week of the month to the last displayed week (not all
         // months will fill all displayed weeks, but some will)
-        Calendar.WeekSpan span = new Calendar.WeekSpan.count(month_of_year.weeks(owner.first_of_week).start(),
+        Calendar.WeekSpan span = new Calendar.WeekSpan.count(month_of_year.to_week_span(owner.first_of_week).first,
             ROWS - 1);
         
         // fill in weeks of the displayed month

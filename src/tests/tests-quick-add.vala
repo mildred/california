@@ -160,7 +160,7 @@ private class QuickAdd : UnitTest.Harness {
         
         Calendar.ExactTime start = new Calendar.ExactTime(Calendar.Timezone.local, Calendar.System.today,
             new Calendar.WallTime(23, 0, 0));
-        Calendar.ExactTime end = new Calendar.ExactTime(Calendar.Timezone.local, Calendar.System.today.adjust(1, Calendar.DateUnit.DAY),
+        Calendar.ExactTime end = new Calendar.ExactTime(Calendar.Timezone.local, Calendar.System.today.next(),
             new Calendar.WallTime(0, 0, 0));
         
         return parser.event.summary == "Dinner"

@@ -120,7 +120,7 @@ public class Controller : BaseObject, View.Controllable {
     // previous month and that Grids outside that range are dropped.  The current chronological
     // month is never discarded.
     private void update_month_grid_cache() {
-        Calendar.MonthSpan cache_span = new Calendar.MonthSpan.from_months(
+        Calendar.MonthSpan cache_span = new Calendar.MonthSpan(
             month_of_year.adjust(0 - (CACHE_NEIGHBORS_COUNT / 2)),
             month_of_year.adjust(CACHE_NEIGHBORS_COUNT / 2));
         
@@ -134,7 +134,7 @@ public class Controller : BaseObject, View.Controllable {
                 continue;
             
             // keep if grid is in cache span
-            if (cache_span.has(grid_moy))
+            if (grid_moy in cache_span)
                 continue;
             
             // drop, remove from GtkStack and local storage
@@ -161,7 +161,7 @@ public class Controller : BaseObject, View.Controllable {
     /**
      * @inheritDoc
      */
-    public void prev() {
+    public void previous() {
         month_of_year = month_of_year.previous();
     }
     

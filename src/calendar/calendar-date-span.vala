@@ -7,152 +7,39 @@
 namespace California.Calendar {
 
 /**
- * Represents an immutable span of consecutive {@link Date}s.
+ * Represents an immutable arbitrary span of consecutive {@link Date}s.
  *
- * A DateSpan may be naturally iterated over its {@link Date}s.  It also provides iterators for
- * {@link Week}s.
+ * Although DateSpan is technically a {@link UnitSpan} of Dates, it's such a fundamental way of
+ * representing any unit of dates that {@link Span} offers a conversion method.  Thus, a
+ * {@link Week} is a {@link DiscreteUnit} but it can easily be converted into a {@link DateSpan}.
+ * The only reason Week does not inherit from DateSpan -- indeed, all units of calendar time don't
+ * inherit from DateSpan -- is to avoid inheritance problems and circularities.  (Another way to
+ * look at things is that Span is a lightweight DateSpan.)
  */
 
-public class DateSpan : BaseObject, Collection.SimpleIterable<Date>, Span<Date>, Gee.Comparable<DateSpan>,
-    Gee.Hashable<DateSpan> {
-    private class DateSpanIterator : BaseObject, Collection.SimpleIterator<Date> {
-        public Date first;
-        public Date last;
-        public Date? current = null;
-        
-        public DateSpanIterator(DateSpan owner) {
-            first = owner.start_date;
-            last = owner.end_date;
-        }
-        
-        public new Date get() {
-            return current;
-        }
-        
-        public bool next() {
-            if (current == null)
-                current = first;
-            else if (current.compare_to(last) < 0)
-                current = current.adjust(1, DateUnit.DAY);
-            else
-                return false;
-            
-            return true;
-        }
-        
-        public override string to_string() {
-            return "DateSpanIterator %s::%s".printf(first.to_string(), last.to_string());
-        }
+public class DateSpan : UnitSpan<Date> {
+    /**
+     * Create a {@link DateSpan} with the specified start and end dates.
+     */
+    public DateSpan(Date start_date, Date end_date) {
+        base (start_date, end_date, start_date, end_date);
     }
     
     /**
-     * @inheritDoc
+     * Create a {@link DateSpan} from a {@link Span}.
      */
-    private Date _start_date;
-    public Date start_date { owned get { return _start_date; } }
-    
-    /**
-     * @inheritDoc
-     */
-    private Date _end_date;
-    public Date end_date { owned get { return _end_date; } }
-    
-    /**
-     * Convenience property indicating if the {@link DateSpan} spans only one day.
-     */
-    public bool is_same_day { get { return start_date.equal_to(end_date); } }
-    
-    /**
-     * Returns the {@link Duration} this {@link DateSpan} represents.
-     */
-    public Duration duration { owned get { return new Duration(end_date.difference(start_date)); } }
-    
-    /**
-     * Create a {@link DateSpan} with the specified start and end dates.
-     *
-     * DateSpan will arrange the two dates so start_date is chronologically earlier (or the same
-     * as) the end_date.
-     */
-    public DateSpan(Date start_date, Date end_date) {
-        init_span(start_date, end_date);
+    public DateSpan.from_span(Span span) {
+        base (span.start_date, span.end_date, span.start_date, span.end_date);
     }
     
     /**
      * Create a {@link DateSpan} from the {@link ExactTimeSpan}.
      */
     public DateSpan.from_exact_time_span(ExactTimeSpan exact_time_span) {
-        init_span(new Date.from_exact_time(exact_time_span.start_exact_time),
-            new Date.from_exact_time(exact_time_span.end_exact_time));
-    }
-    
-    /**
-     * Create an unintialized {@link DateSpan).
-     *
-     * Because it's sometimes inconvenient to generate the necessary {@link Date}s until the
-     * subclass's constructor completes, DateSpan allows for itself to be created empty assuming
-     * that the subclass will call {@link init_span} as soon as it's finished initializing.
-     *
-     * init_span() must be called.  DateSpan will not function properly when uninitialized.
-     */
-    protected DateSpan.uninitialized() {
-    }
-    
-    /**
-     * Initialize the {@link DateSpan} with s start and end date.
-     *
-     * DateSpan will sort the start and end to ensure that start is chronologically prior
-     * to end.
-     */
-    protected void init_span(Date start_date, Date end_date) {
-        if (start_date.compare_to(end_date) <= 0) {
-            _start_date = start_date;
-            _end_date = end_date;
-        } else {
-            _start_date = end_date;
-            _end_date = start_date;
-        }
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public Date start() {
-        return _start_date;
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public Date end() {
-        return _end_date;
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public bool contains(Date date) {
-        return (start_date.compare_to(date) <= 0) && (end_date.compare_to(date) >= 0);
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public bool has(Date date) {
-        return contains(date);
-    }
-    
-    /**
-     * Returns an Iterator for all {@link Date}s in the {@link DateSpan}.
-     */
-    public Collection.SimpleIterator<Date> iterator() {
-        return new DateSpanIterator(this);
-    }
-    
-    /**
-     * Returns a {@link WeekSpan} for each {@link Week} (full and partial) in the {@link DateSpan}.
-     */
-    public WeekSpan weeks(FirstOfWeek first_of_week) {
-        return new WeekSpan(this, first_of_week);
+        Date start_date = new Date.from_exact_time(exact_time_span.start_exact_time);
+        Date end_date = new Date.from_exact_time(exact_time_span.end_exact_time);
+        
+        base(start_date, end_date, start_date, end_date);
     }
     
     /**
@@ -167,7 +54,7 @@ public class DateSpan : BaseObject, Collection.SimpleIterable<Date>, Span<Date>,
     public DateSpan adjust_start_date(Calendar.Date new_start_date) {
         int diff = start_date.difference(end_date);
         
-        return new DateSpan(new_start_date, new_start_date.adjust(diff, DateUnit.DAY));
+        return new DateSpan(new_start_date, new_start_date.adjust(diff));
     }
     
     /**
@@ -182,40 +69,14 @@ public class DateSpan : BaseObject, Collection.SimpleIterable<Date>, Span<Date>,
     public DateSpan adjust_end_date(Calendar.Date new_end_date) {
         int diff = end_date.difference(start_date);
         
-        return new DateSpan(new_end_date.adjust(diff, DateUnit.DAY), new_end_date);
+        return new DateSpan(new_end_date.adjust(diff), new_end_date);
     }
     
     /**
-     * Returns a {@link DateSpan} with starting and ending points within the boundary specified
-     * (inclusive).
-     *
-     * If this DateSpan is within the clamped dates, this object may be returned.
-     *
-     * This method will not expand a DateSpan to meet the clamp range.
+     * @inheritDoc
      */
-    public DateSpan clamp(DateSpan span) {
-        Date new_start = (start_date.compare_to(span.start_date) < 0) ? span.start_date : start_date;
-        Date new_end = (end_date.compare_to(span.end_date) > 0) ? span.end_date : end_date;
-        
-        return new DateSpan(new_start, new_end);
-    }
-    
-    /**
-     * Compares two {@link DateSpan}s by their {@link start_date}.
-     */
-    public int compare_to(DateSpan other) {
-        return start_date.compare_to(other.start_date);
-    }
-    
-    public bool equal_to(DateSpan other) {
-        if (this == other)
-            return true;
-        
-        return start_date.equal_to(other.start_date) && end_date.equal_to(other.end_date);
-    }
-    
-    public uint hash() {
-        return start_date.hash() ^ end_date.hash();
+    public override bool contains(Date date) {
+        return has_date(date);
     }
     
     public override string to_string() {

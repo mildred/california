@@ -7,45 +7,103 @@
 namespace California.Calendar {
 
 /**
- * An immutable generic span or range of consecutive calendar dates.
+ * An immutable span or range of consecutive calendar {@link Date}s.
  *
- * The Span is delineated by specific lengths of time (such as {@link Date}, {@link Week}, or
- * {@link Month} and is required to be Traversable and Iterable by the same.
+ * Span is not currently designed for {@link ExactTime} resolution or to be used as the base
+ * class of {@link ExactTimeSpan}.  It's possible this will change in the future.
  *
- * Since the start and end Date of a Span may fall within the larger delineated unit of time,
- * the contract is that partial units will always be returned.  If the caller wants to only deal
- * with full units within this Span, they must check all returned values.
- *
- * Although not specified, it's expected that all Spans will also implement Gee.Comparable and
- * Gee.Hashable.
- *
- * Span is not designed for {@link ExactTime} resolution.
- *
- * @see DateSpan
- * @see WeekSpan
- * @see MonthSpan
+ * @see DiscreteUnit
+ * @see UnitSpan
  */
 
-public interface Span<G> : BaseObject, Collection.SimpleIterable<G> {
+public abstract class Span : BaseObject {
+    public const string PROP_START_DATE = "start-date";
+    public const string PROP_END_DATE = "end-date";
+    public const string PROP_IS_SAME_DAY = "is-same-day";
+    public const string PROP_DURATION = "duration";
+    
+    private class SpanIterator : BaseObject, Collection.SimpleIterator<Date> {
+        private Date first;
+        private Date last;
+        private Date? current = null;
+        
+        public SpanIterator(Span span) {
+            first = span.start_date;
+            last = span.end_date;
+        }
+        
+        public new Date get() {
+            return current;
+        }
+        
+        public bool next() {
+            if (current == null)
+                current = first;
+            else if (current.compare_to(last) < 0)
+                current = current.next();
+            else
+                return false;
+            
+            return true;
+        }
+        
+        public override string to_string() {
+            return "SpanIterator %s::%s".printf(first.to_string(), last.to_string());
+        }
+    }
+    
     /**
      * Returns the earliest {@link Date} within the {@link Span}.
      */
-    public abstract Date start_date { owned get; }
+    private Date? _start_date = null;
+    public virtual Date start_date { get { return _start_date; } }
     
     /**
      * Returns the latest {@link Date} within the {@link Span}.
      */
-    public abstract Date end_date { owned get; }
+    private Date? _end_date = null;
+    public virtual Date end_date { get { return _end_date; } }
     
     /**
-     * The earliest delinated unit of time within the {@link Span}.
+     * Convenience property indicating if the {@link Span} spans only one day.
      */
-    public abstract G start();
+    public bool is_same_day { get { return start_date.equal_to(end_date); } }
     
     /**
-     * The latest delineated unit of time within the {@link Span}.
+     * Returns the {@link Duration} this {@link Span} represents.
      */
-    public abstract G end();
+    public Duration duration { owned get { return new Duration(end_date.difference(start_date).abs()); } }
+    
+    protected Span(Date start_date, Date end_date) {
+        init_span(start_date, end_date);
+    }
+    
+    /**
+     * Create an unintialized {@link Span) on the presumption that {@link start_date} and
+     * {@link end_date} are overridden or that the child class needs to do more work before
+     * providing a date span.
+     *
+     * Because it's sometimes inconvenient to generate the necessary {@link Date}s until the
+     * subclass's constructor completes, Span allows for itself to be created empty assuming
+     * that the subclass will call {@link init_span} as soon as it's finished initializing.
+     *
+     * init_span() must be called.  Span will not function properly when uninitialized.
+     */
+    protected Span.uninitialized() {
+    }
+    
+    /**
+     * @see Span.uninitialized
+     */
+    protected void init_span(Date start_date, Date end_date) {
+        if (start_date.compare_to(end_date) <= 0) {
+            _start_date = start_date;
+            _end_date = end_date;
+        } else {
+            _start_date = end_date;
+            _end_date = start_date;
+        }
+    }
     
     /**
      * Returns the earliest {@link ExactTime} for this {@link Span}.
@@ -53,7 +111,7 @@ public interface Span<G> : BaseObject, Collection.SimpleIterable<G> {
      * @see Date.earliest_exact_time
      */
     public ExactTime earliest_exact_time(Timezone tz) {
-        return start_date.earliest_exact_time(tz);
+        return new ExactTime(tz, start_date, WallTime.earliest);
     }
     
     /**
@@ -62,33 +120,85 @@ public interface Span<G> : BaseObject, Collection.SimpleIterable<G> {
      * @see Date.latest_exact_time
      */
     public ExactTime latest_exact_time(Timezone tz) {
-        return end_date.latest_exact_time(tz);
+        return new ExactTime(tz, end_date, WallTime.latest);
     }
     
     /**
      * Converts the {@link Span} into a {@link DateSpan}.
      */
     public DateSpan to_date_span() {
-        return new DateSpan(start_date, end_date);
+        return new DateSpan.from_span(this);
     }
     
     /**
-     * true if the {@link Span} contains the specified {@link Date}.
+     * Converts the {@link Span} into a {@link WeekSpan} using the supplied {@link FirstOfWeek}.
      *
-     * This is named to conform to Vala's rule for automatic syntax support.  This allows for the
-     * ''in'' operator to function on Spans, but only for Dates (which is perceived as a common
-     * operation).
-     *
-     * @see has
+     * Dates covering a partial week are included.
      */
-    public abstract bool contains(Date date);
+    public WeekSpan to_week_span(FirstOfWeek first_of_week) {
+        return new WeekSpan.from_span(this, first_of_week);
+    }
     
     /**
-     * true if the {@link Span} contains the specified unit of time.
+     * Converts the {@link Span} into a {@link MonthSpan}.
      *
-     * @see contains
+     * Dates covering a partial month are included.
      */
-    public abstract bool has(G unit);
+    public MonthSpan to_month_span() {
+        return new MonthSpan.from_span(this);
+    }
+    
+    /**
+     * Converts the {@link Span} into a {@link YearSpan}.
+     *
+     * Dates coverting a partial year are included.
+     */
+    public YearSpan to_year_span() {
+        return new YearSpan.from_span(this);
+    }
+    
+    /**
+     * Returns an {@link ExactTimeSpan} for this {@link Span}.
+     */
+    public ExactTimeSpan to_exact_time_span(Timezone tz) {
+        return new ExactTimeSpan(earliest_exact_time(tz), latest_exact_time(tz));
+    }
+    
+    /**
+     * Returns a {@link DateSpan} with starting and ending points within the boundary specified
+     * (inclusive).
+     *
+     * If this {@link Span} is within the clamped dates, this object may be returned.
+     *
+     * This method will not expand a DateSpan to meet the clamp range.
+     */
+    public DateSpan clamp_between(Span span) {
+        Date new_start = (start_date.compare_to(span.start_date) < 0) ? span.start_date : start_date;
+        Date new_end = (end_date.compare_to(span.end_date) > 0) ? span.end_date : end_date;
+        
+        return new DateSpan(new_start, new_end);
+    }
+    
+    /**
+     * True if the {@link Span} contains the specified {@link Date}.
+     */
+    public bool has_date(Date date) {
+        int compare = start_date.compare_to(date);
+        if (compare == 0)
+            return true;
+        else if (compare > 0)
+            return false;
+        
+        return end_date.compare_to(date) >= 0;
+    }
+    
+    /**
+     * Returns a {@link Collection.SimpleIterator} of all the {@link Date}s in the
+     * {@link Span}'s range of time.
+     */
+    public Collection.SimpleIterator<Date> date_iterator() {
+        return new SpanIterator(this);
+    }
 }
 
 }

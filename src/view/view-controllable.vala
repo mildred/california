@@ -78,7 +78,7 @@ public interface Controllable : Object {
     /**
      * Move backward one calendar unit.
      */
-    public abstract void prev();
+    public abstract void previous();
     
     /**
      * Jump to calendar unit representing the current date.

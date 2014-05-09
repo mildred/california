@@ -325,7 +325,7 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     protected static void date_span_to_ical(Calendar.DateSpan date_span, bool dtend_inclusive,
         iCal.icaltimetype *ical_dtstart, iCal.icaltimetype *ical_dtend) {
         date_to_ical(date_span.start_date, ical_dtstart);
-        date_to_ical(date_span.end_date.adjust(dtend_inclusive ? 0 : 1, Calendar.DateUnit.DAY),
+        date_to_ical(date_span.end_date.adjust_by(dtend_inclusive ? 0 : 1, Calendar.DateUnit.DAY),
             ical_dtend);
     }
     

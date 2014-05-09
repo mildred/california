@@ -186,7 +186,7 @@ public class DetailsParser : BaseObject {
         // if no end date was describe, assume ends today as well (unless midnight was crossed
         // due to duration)
         if (start_date != null && end_date == null)
-            end_date = midnight_crossed ? start_date.adjust(1, Calendar.DateUnit.DAY) : start_date;
+            end_date = midnight_crossed ? start_date.next() : start_date;
         
         // Event start/end time, if specified
         if (start_time != null && end_time != null) {
@@ -349,7 +349,7 @@ public class DetailsParser : BaseObject {
         // find a Date for day of the week ... starting today, move forward up to one
         // week
         Calendar.Date upcoming = Calendar.System.today;
-        Calendar.Date next_week = upcoming.adjust(1, Calendar.DateUnit.WEEK);
+        Calendar.Date next_week = upcoming.adjust_by(1, Calendar.DateUnit.WEEK);
         do {
             if (upcoming.day_of_week.equal_to(dow))
                 return upcoming;

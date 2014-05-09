@@ -13,7 +13,7 @@ namespace California.Calendar {
  * value is described as thousands of years from now.
  */
 
-public class Year : DateSpan {
+public class Year : Unit<Year>, Gee.Comparable<Year>, Gee.Hashable<Year> {
     /**
      * The year as an integer.
      */
@@ -25,7 +25,7 @@ public class Year : DateSpan {
      * Negative values and zero are clamped to 1 CE.
      */
     public Year(int value) {
-        base.uninitialized();
+        base.uninitialized(DateUnit.YEAR);
         
         this.value = value.clamp(1, int.MAX);
         
@@ -45,6 +45,32 @@ public class Year : DateSpan {
     
     internal DateYear to_date_year() {
         return (DateYear) value;
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public override Year adjust(int quantity) {
+        return new Year(value + quantity);
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public override int difference(Year other) {
+        return value - other.value;
+    }
+    
+    public int compare_to(Year other) {
+        return (this != other) ? start_date.compare_to(other.start_date) : 0;
+    }
+    
+    public bool equal_to(Year other) {
+        return compare_to(other) == 0;
+    }
+    
+    public uint hash() {
+        return value;
     }
     
     public override string to_string() {

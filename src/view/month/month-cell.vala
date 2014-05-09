@@ -309,7 +309,7 @@ private class Cell : Gtk.EventBox {
         if (reassigned.size > 0) {
             // only need to tell cells following this day's in the current week about the reassignment
             Calendar.Week this_week = date.week_of(owner.first_of_week);
-            Calendar.DateSpan span = new Calendar.DateSpan(date.next(), this_week.end_date).clamp(this_week);
+            Calendar.DateSpan span = new Calendar.DateSpan(date.next(), this_week.end_date).clamp_between(this_week);
             
             foreach (Calendar.Date span_date in span) {
                 Cell? cell = owner.get_cell_for_date(span_date);

@@ -18,7 +18,7 @@ namespace California.Calendar {
  * {@link Date.week_of} to obtain a Week for a particular calendar day.
  */
 
-public class Week : DateSpan {
+public class Week : Unit<Week>, Gee.Comparable<Week>, Gee.Hashable<Week> {
     /**
      * The one-based week of the month (1 to 6).
      */
@@ -52,7 +52,7 @@ public class Week : DateSpan {
      */
     internal Week(Date start, Date end, int week_of_month, int week_of_year, MonthOfYear month_of_year,
         FirstOfWeek first_of_week) {
-        base (start, end);
+        base (DateUnit.WEEK, start, end);
         
         this.week_of_month = week_of_month;
         this.week_of_year = week_of_year;
@@ -61,14 +61,43 @@ public class Week : DateSpan {
     }
     
     /**
-     * Returns a {@link Week} adjusted a quantity of weeks from this one.
-     *
-     * The first day of the week is preserved in the new Week.
-     *
-     * Subtraction (adjusting to a past date) is acheived by using a negative quantity.
+     * @inheritDoc
      */
-    public Week adjust(int quantity) {
-        return start_date.adjust(quantity, DateUnit.WEEK).week_of(first_of_week);
+    public override Week adjust(int quantity) {
+        return start_date.adjust_by(quantity, DateUnit.WEEK).week_of(first_of_week);
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public override int difference(Week other) {
+        int compare = compare_to(other);
+        if (compare == 0)
+            return 0;
+        
+        // TODO: Iterating sucks, but it will have to suffice for now.
+        int count = 0;
+        Week current = this;
+        for (;;) {
+            current = (compare > 0) ? current.previous() : current.next();
+            count += (compare > 0) ? -1 : 1;
+            
+            if (current.equal_to(other))
+                return count;
+        }
+    }
+    
+    public int compare_to(Week other) {
+        return (this != other) ? start_date.compare_to(other.start_date) : 0;
+    }
+    
+    public bool equal_to(Week other) {
+        return compare_to(other) == 0;
+    }
+    
+    public uint hash() {
+        // 6 bits for week of year (1 - 52)
+        return (month_of_year.hash() << 6) | week_of_year;
     }
     
     public override string to_string() {
