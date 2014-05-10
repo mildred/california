@@ -128,6 +128,14 @@ private class Grid : Gtk.Grid {
         }
     }
     
+    private void foreach_cell_in_date_span(Calendar.DateSpan span, CellCallback callback) {
+        foreach (Calendar.Date date in span) {
+            Cell? cell = date_to_cell.get(date);
+            if (cell != null && !callback(cell))
+                return;
+        }
+    }
+    
     // Must be in coordinates of the Gtk.Grid, not a Cell
     private Cell? translate_to_cell(int grid_x, int grid_y) {
         // TODO: A proper hit-detection algorithm would be better here
@@ -192,7 +200,8 @@ private class Grid : Gtk.Grid {
         subscriptions = new Backing.CalendarSubscriptionManager(time_window);
         subscriptions.calendar_added.connect(on_calendar_added);
         subscriptions.calendar_removed.connect(on_calendar_removed);
-        subscriptions.instance_added.connect(on_instance_added);
+        subscriptions.instance_added.connect(on_instance_added_or_altered);
+        subscriptions.instance_altered.connect(on_instance_added_or_altered);
         subscriptions.instance_removed.connect(on_instance_removed);
         
         // only start if this month is being displayed, otherwise will be started when owner's
@@ -259,17 +268,19 @@ private class Grid : Gtk.Grid {
         });
     }
     
-    private void on_instance_added(Component.Instance instance) {
+    private void on_instance_added_or_altered(Component.Instance instance) {
         Component.Event? event = instance as Component.Event;
         if (event == null)
             return;
         
-        // add event to every date it represents
-        foreach (Calendar.Date date in event.get_event_date_span(Calendar.Timezone.local)) {
-            Cell? cell = date_to_cell.get(date);
-            if (cell != null)
-                cell.add_event(event);
-        }
+        // add event to every date it represents ... in the "instance-altered" case, if the event's
+        // date changes it doesn't need to be removed here (Month.Call catches the change and
+        // removes it itself) but it does need to be added to the new date(s) it covers
+        foreach_cell_in_date_span(event.get_event_date_span(Calendar.Timezone.local), (cell) => {
+            cell.add_event(event);
+            
+            return true;
+        });
     }
     
     private void on_instance_removed(Component.Instance instance) {
@@ -277,11 +288,12 @@ private class Grid : Gtk.Grid {
         if (event == null)
             return;
         
-        foreach (Calendar.Date date in event.get_event_date_span(Calendar.Timezone.local)) {
-            Cell? cell = date_to_cell.get(date);
-            if (cell != null)
-                cell.remove_event(event);
-        }
+        // remove event from every date it represents
+        foreach_cell_in_date_span(event.get_event_date_span(Calendar.Timezone.local), (cell) => {
+            cell.remove_event(event);
+            
+            return true;
+        });
     }
     
     public void unselect_all() {

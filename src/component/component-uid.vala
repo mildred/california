@@ -37,7 +37,7 @@ public class UID : BaseObject, Gee.Hashable<UID>, Gee.Comparable<UID> {
     }
     
     public bool equal_to(UID other) {
-        return (this != other) ? value == other.value : true;
+        return compare_to(other) == 0;
     }
     
     /**
@@ -47,7 +47,7 @@ public class UID : BaseObject, Gee.Hashable<UID>, Gee.Comparable<UID> {
      * used to stabilize sorts of {@link Instance}s.
      */
     public int compare_to(UID other) {
-        return strcmp(value, other.value);
+        return (this != other) ? strcmp(value, other.value) : 0;
     }
     
     public override string to_string() {

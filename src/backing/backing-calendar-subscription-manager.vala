@@ -48,6 +48,14 @@ public class CalendarSubscriptionManager : BaseObject {
     public signal void instance_added(Component.Instance instance);
     
     /**
+     * Indicates the {@link Component.Instance} was reported altered by one of the managed
+     * subscriptions, either by the local user or on a remote server.
+     *
+     * @see Component.Instance.altered
+     */
+    public signal void instance_altered(Component.Instance instance);
+    
+    /**
      * Indicates the {@link Component.Instance} was removed by one of the managed subscriptions,
      * either due to the {@link CalendarSource} being made unavailable or removal by the user.
      */
@@ -131,6 +139,7 @@ public class CalendarSubscriptionManager : BaseObject {
             subscription.instance_added.connect(on_instance_added);
             subscription.instance_removed.connect(on_instance_removed);
             subscription.instance_dropped.connect(on_instance_removed);
+            subscription.instance_altered.connect(on_instance_altered);
             subscription.start_failed.connect(on_error);
             
             // this will start signals firing for event changes
@@ -150,6 +159,10 @@ public class CalendarSubscriptionManager : BaseObject {
     
     private void on_instance_removed(Component.Instance instance) {
         instance_removed(instance);
+    }
+    
+    private void on_instance_altered(Component.Instance instance) {
+        instance_altered(instance);
     }
     
     private void on_error(CalendarSourceSubscription subscription, Error err) {

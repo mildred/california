@@ -128,8 +128,30 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
             
             // only update known objects
             string? uid = ical_component.get_uid();
-            if (!String.is_empty(uid))
-                event = for_uid(new Component.UID(uid)) as Component.Event;
+            if (!String.is_empty(uid)) {
+                Gee.Collection<Component.Instance>? instances = for_uid(new Component.UID(uid));
+                if (instances != null && instances.size > 0) {
+                    // convert the modified event source into an orphaned event
+                    Component.Event modified_event;
+                    try {
+                        modified_event = new Component.Event(null, ical_component);
+                    } catch (Error err) {
+                        debug("Unable to process modified event: %s", err.message);
+                        
+                        continue;
+                    }
+                    
+                    // for every instance matching its UID, look for the original
+                    foreach (Component.Instance instance in instances) {
+                        Component.Event? stored_event = instance as Component.Event;
+                        if (stored_event != null && stored_event.equal_to(modified_event)) {
+                            event = stored_event;
+                            
+                            break;
+                        }
+                    }
+                }
+            }
             
             if (event == null)
                 continue;
