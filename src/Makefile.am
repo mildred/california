@@ -43,7 +43,6 @@ california_VALASOURCES = \
 	backing/eds/backing-eds-store.vala \
 	\
 	base/base-object.vala \
-	base/base-properties.vala \
 	base/base-unit.vala \
 	\
 	calendar/calendar.vala \

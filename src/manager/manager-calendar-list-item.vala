@@ -51,10 +51,10 @@ internal class CalendarListItem : Gtk.Grid, Toolkit.MutableWidget {
             BindingFlags.SYNC_CREATE | BindingFlags.BIDIRECTIONAL);
         source.bind_property(Backing.Source.PROP_COLOR, color_button, "rgba",
             BindingFlags.SYNC_CREATE | BindingFlags.BIDIRECTIONAL, source_to_color, color_to_source);
-        Properties.xform_to_string(source, Backing.Source.PROP_READONLY, readonly_icon, "icon-name",
-            () => source.read_only ? "changes-prevent-symbolic" : "");
-        Properties.xform_to_string(source, Backing.Source.PROP_READONLY, readonly_icon, "tooltip-text",
-            () => source.read_only ? _("Calendar is read-only") : null);
+        source.bind_property(Backing.Source.PROP_READONLY, readonly_icon, "icon-name",
+            BindingFlags.SYNC_CREATE, xform_readonly_to_icon_name);
+        source.bind_property(Backing.Source.PROP_READONLY, readonly_icon, "tooltip-text",
+            BindingFlags.SYNC_CREATE, xform_readonly_to_tooltip_text);
         
         title_eventbox.button_release_event.connect(on_title_button_release);
     }
@@ -66,6 +66,18 @@ internal class CalendarListItem : Gtk.Grid, Toolkit.MutableWidget {
     private void on_title_changed() {
         // title determines sort order, so this is important
         mutated();
+    }
+    
+    private bool xform_readonly_to_icon_name(Binding binding, Value source_value, ref Value target_value) {
+        target_value = source.read_only ? "changes-prevent-symbolic" : "";
+        
+        return true;
+    }
+    
+    private bool xform_readonly_to_tooltip_text(Binding binding, Value source_value, ref Value target_value) {
+        target_value = source.read_only ? _("Calendar is read-only") : null;
+        
+        return true;
     }
     
     public override bool query_tooltip(int x, int y, bool keyboard_mode, Gtk.Tooltip tooltip) {

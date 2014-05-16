@@ -118,6 +118,9 @@ internal class EdsCalendarSource : CalendarSource {
             cancellable);
         
         client.bind_property("readonly", this, PROP_READONLY, BindingFlags.SYNC_CREATE);
+        client.notify["readonly"].connect(() => {
+            debug("%s readonly: %s", to_string(), client.readonly.to_string());
+        });
     }
     
     // Invoked by EdsStore when closing and dropping all its refs

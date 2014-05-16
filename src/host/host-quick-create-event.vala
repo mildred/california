@@ -44,8 +44,14 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
         // make first item active
         calendar_combo_box.active = 0;
         
-        Properties.xform_to_bool(details_entry, "text-length", create_button, "sensitive",
-            () => !String.is_empty(details_entry.text));
+        details_entry.bind_property("text-length", create_button, "sensitive", BindingFlags.SYNC_CREATE,
+            xform_text_length_to_sensitive);
+    }
+    
+    private bool xform_text_length_to_sensitive(Binding binding, Value source_value, ref Value target_value) {
+        target_value = !String.is_empty(details_entry.text);
+        
+        return true;
     }
     
     public void jumped_to(Toolkit.Card? from, Value? message) {
