@@ -69,6 +69,9 @@
             <property name="valign">end</property>
             <property name="title" translatable="yes">Select a color for the Web calendar</property>
             <property name="rgba">rgb(32,32,204)</property>
+            <style>
+              <class name="image-button"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>
