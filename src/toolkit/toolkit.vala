@@ -10,6 +10,18 @@
 
 namespace California.Toolkit {
 
+/**
+ * Gtk.Stack transition duration is a little quick for my tastes; this default value seems a bit
+ * smoother to me.
+ */
+public const int DEFAULT_STACK_TRANSITION_DURATION_MSEC = 300;
+
+/**
+ * Gtk.Stack transition duration for slower transitions (where it really needs to be obvious to
+ * user what's going on).
+ */
+public const int SLOW_STACK_TRANSITION_DURATION_MSEC = 500;
+
 private int init_count = 0;
 
 public void init() throws Error {

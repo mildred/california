@@ -17,12 +17,19 @@ public class Controller : BaseObject, View.Controllable {
     public const string PROP_MONTH_OF_YEAR = "month-of-year";
     public const string PROP_SHOW_OUTSIDE_MONTH = "show-outside-month";
     
-    // Slower than default to make more apparent to user what's occurring
-    private const int TRANSITION_DURATION_MSEC = 500;
-    
     // number of Grids to keep in GtkStack and cache (in terms of months) ... this should be an
     // even number, as it is halved to determine neighboring months depths
     private const int CACHE_NEIGHBORS_COUNT = 4;
+    
+    // MasterGrid holds the day of week labels and Month.Cells
+    private class MasterGrid : Gtk.Grid, View.Container {
+        private Controller _owner;
+        public unowned View.Controllable owner { get { return _owner; } }
+        
+        public MasterGrid(Controller owner) {
+            _owner = owner;
+        }
+    }
     
     /**
      * The month and year being displayed.
@@ -44,6 +51,11 @@ public class Controller : BaseObject, View.Controllable {
     /**
      * @inheritDoc
      */
+    public string title { get { return _("Month"); } }
+    
+    /**
+     * @inheritDoc
+     */
     public string current_label { get; protected set; }
     
     /**
@@ -56,18 +68,24 @@ public class Controller : BaseObject, View.Controllable {
      */
     public Calendar.Date default_date { get; protected set; }
     
-    private Gtk.Grid master_grid = new Gtk.Grid();
+    private MasterGrid master_grid;
     private Gtk.Stack stack = new Gtk.Stack();
-    private Gee.HashMap<Calendar.MonthOfYear, Grid> month_grids = new Gee.HashMap<Calendar.MonthOfYear, Grid>();
+    private Toolkit.StackModel<Calendar.MonthOfYear> stack_model;
+    private Calendar.MonthSpan cache_span;
     
     public Controller() {
+        master_grid = new MasterGrid(this);
         master_grid.column_homogeneous = true;
         master_grid.column_spacing = 0;
         master_grid.row_homogeneous = false;
         master_grid.row_spacing = 0;
         master_grid.expand = true;
         
-        stack.transition_duration = TRANSITION_DURATION_MSEC;
+        stack.transition_duration = Toolkit.SLOW_STACK_TRANSITION_DURATION_MSEC;
+        
+        stack_model = new Toolkit.StackModel<Calendar.MonthOfYear>(stack,
+            Toolkit.StackModel.OrderedTransitionType.SLIDE_LEFT_RIGHT, model_presentation,
+            trim_presentation_from_cache, ensure_presentation_in_cache);
         
         // insert labels for days of the week across top of master grid
         for (int col = 0; col < Grid.COLS; col++) {
@@ -102,49 +120,30 @@ public class Controller : BaseObject, View.Controllable {
         Calendar.System.instance.today_changed.disconnect(on_today_changed);
     }
     
-    // Creates a new Grid for the MonthOfYear, storing locally and adding to the GtkStack.  Will
-    // reuse existing Grids whenever possible.
-    private void ensure_month_grid_exists(Calendar.MonthOfYear month_of_year) {
-        if (month_grids.has_key(month_of_year))
-            return;
+    private Gtk.Widget model_presentation(Calendar.MonthOfYear moy, out string? id) {
+        Grid grid = new Grid(this, moy);
+        id = grid.id;
         
-        Grid month_grid = new Grid(this, month_of_year);
-        month_grid.show_all();
-        
-        // add to local store and to the GtkStack itself
-        month_grids.set(month_of_year, month_grid);
-        stack.add_named(month_grid, month_grid.id);
+        return grid;
     }
     
-    // Performs Grid caching by ensuring that Grids are available for the current, next, and
-    // previous month and that Grids outside that range are dropped.  The current chronological
-    // month is never discarded.
-    private void update_month_grid_cache() {
-        Calendar.MonthSpan cache_span = new Calendar.MonthSpan(
-            month_of_year.adjust(0 - (CACHE_NEIGHBORS_COUNT / 2)),
-            month_of_year.adjust(CACHE_NEIGHBORS_COUNT / 2));
+    private bool trim_presentation_from_cache(Calendar.MonthOfYear moy, Calendar.MonthOfYear? visible_moy) {
+        // always keep current month in cache
+        if (moy.equal_to(Calendar.System.today.month_of_year()))
+            return false;
         
-        // trim cache
-        Gee.MapIterator<Calendar.MonthOfYear, Grid> iter = month_grids.map_iterator();
-        while (iter.next()) {
-            Calendar.MonthOfYear grid_moy = iter.get_key();
-            
-            // always keep current month
-            if (grid_moy.equal_to(Calendar.System.today.month_of_year()))
-                continue;
-            
-            // keep if grid is in cache span
-            if (grid_moy in cache_span)
-                continue;
-            
-            // drop, remove from GtkStack and local storage
-            stack.remove(iter.get_value());
-            iter.unset();
-        }
+        return !(moy in cache_span);
+    }
+    
+    private Gee.Collection<Calendar.MonthOfYear>? ensure_presentation_in_cache(
+        Calendar.MonthOfYear? visible_moy) {
+        // convert cache span into a collection on months
+        Gee.List<Calendar.MonthOfYear> months = cache_span.as_list();
         
-        // ensure all-months in span are available
-        foreach (Calendar.MonthOfYear moy in cache_span)
-            ensure_month_grid_exists(moy);
+        // add today's month
+        months.add(Calendar.System.today.month_of_year());
+        
+        return months;
     }
     
     private unowned Grid? get_current_month_grid() {
@@ -168,22 +167,12 @@ public class Controller : BaseObject, View.Controllable {
     /**
      * @inheritDoc
      */
-    public Gtk.Widget today() {
+    public void today() {
         // since changing the date is expensive in terms of adding/removing subscriptions, only
         // update the property if it's actually different
         Calendar.MonthOfYear now = Calendar.System.today.month_of_year();
         if (!now.equal_to(month_of_year))
             month_of_year = now;
-        
-        // current should be set by the month_of_year being set
-        Grid? current_grid = get_current_month_grid();
-        assert(current_grid != null);
-        
-        // this grid better have a cell with this date in it
-        Cell? cell = current_grid.get_cell_for_date(Calendar.System.today);
-        assert(cell != null);
-        
-        return cell;
     }
     
     /**
@@ -198,7 +187,7 @@ public class Controller : BaseObject, View.Controllable {
     /**
      * @inheritDoc
      */
-    public Gtk.Widget get_container() {
+    public View.Container get_container() {
         return master_grid;
     }
     
@@ -215,49 +204,14 @@ public class Controller : BaseObject, View.Controllable {
         current_label = month_of_year.full_name;
         update_is_viewing_today();
         
-        // default date is first of month unless displaying current month, in which case it's
-        // current date
-        try {
-            default_date = is_viewing_today ? Calendar.System.today
-                : month_of_year.date_for(month_of_year.first_day_of_month());
-        } catch (CalendarError calerr) {
-            // this should always work
-            error("Unable to set default date for %s: %s", month_of_year.to_string(), calerr.message);
-        }
+        // update cache span, splitting down the middle of the current month
+        cache_span = new Calendar.MonthSpan(
+            month_of_year.adjust(0 - (CACHE_NEIGHBORS_COUNT / 2)),
+            month_of_year.adjust(CACHE_NEIGHBORS_COUNT / 2)
+        );
         
-        // set up transition to give appearance of moving chronologically through the pages of
-        // a calendar
-        Grid? current_grid = get_current_month_grid();
-        if (current_grid != null) {
-            Calendar.MonthOfYear current_moy = current_grid.month_of_year;
-            int compare = month_of_year.compare_to(current_moy);
-            if (compare < 0)
-                stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
-            else if (compare > 0)
-                stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT;
-            else
-                return;
-        }
-        
-        // because grid cache is populated/trimmed after sliding month into view, ensure the
-        // desired month already exists
-        ensure_month_grid_exists(month_of_year);
-        
-        // make visible using proper transition type
-        stack.set_visible_child(month_grids.get(month_of_year));
-        
-        // now update the cache to store current month and neighbors ... do this after doing above
-        // comparison because this update affects the GtkStack, which may revert to another page
-        // when the cache is trimmed, making the notion of "current" indeterminate; the most
-        // visible symptom of this is navigating far from today's month then clicking the Today
-        // button and no transition occurs because, when the cache is trimmed, today's month is
-        // the current child ... to avoid dropping the Widget before the transition completes,
-        // wait before doing this; 3.12's "transition-running" property would be useful here
-        Idle.add(() => {
-            update_month_grid_cache();
-            
-            return false;
-        }, Priority.LOW);
+        // show (and add if not present) the current month
+        stack_model.show(month_of_year);
     }
     
     public override string to_string() {

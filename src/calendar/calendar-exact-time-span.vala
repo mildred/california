@@ -67,7 +67,7 @@ public class ExactTimeSpan : BaseObject, Gee.Comparable<ExactTimeSpan>, Gee.Hash
         end_date = new Date.from_exact_time(end_exact_time);
     }
     
-    public ExactTimeSpan.from_date_span(DateSpan span, Timezone tz) {
+    public ExactTimeSpan.from_span(Span span, Timezone tz) {
         this (span.earliest_exact_time(tz), span.latest_exact_time(tz));
     }
     
@@ -85,6 +85,14 @@ public class ExactTimeSpan : BaseObject, Gee.Comparable<ExactTimeSpan>, Gee.Hash
     public ExactTimeSpan to_timezone(Timezone new_tz) {
         return new ExactTimeSpan(start_exact_time.to_timezone(new_tz),
             end_exact_time.to_timezone(new_tz));
+    }
+    
+    /**
+     * Returns true if the {@link ExactTime} is in this {@link ExactTimeSpan}.
+     */
+    public bool contains(ExactTime exact_time) {
+        return start_exact_time.compare_to(exact_time) <= 0
+            && end_exact_time.compare_to(exact_time) >= 0;
     }
     
     /**

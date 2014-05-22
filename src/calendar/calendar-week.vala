@@ -101,7 +101,7 @@ public class Week : Unit<Week>, Gee.Comparable<Week>, Gee.Hashable<Week> {
     }
     
     public override string to_string() {
-        return "week %d of %s (%s)".printf(week_of_year, month_of_year.to_string(), base.to_string());
+        return "week %d of %s (%s)".printf(week_of_year, month_of_year.to_string(), to_date_span().to_string());
     }
 }
 

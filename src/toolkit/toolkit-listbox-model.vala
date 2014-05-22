@@ -182,7 +182,7 @@ public class ListBoxModel<G> : BaseObject {
             return false;
         
         if (remove_from_listbox)
-            listbox.remove(row);
+            row.destroy();
         
         removed(item);
         

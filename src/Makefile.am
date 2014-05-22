@@ -104,18 +104,23 @@ california_VALASOURCES = \
 	tests/tests-calendar-date.vala \
 	tests/tests-calendar-month-of-year.vala \
 	tests/tests-calendar-month-span.vala \
+	tests/tests-calendar-wall-time.vala \
 	tests/tests-quick-add.vala \
 	\
 	toolkit/toolkit.vala \
+	toolkit/toolkit-button-connector.vala \
+	toolkit/toolkit-button-event.vala \
 	toolkit/toolkit-calendar-popup.vala \
 	toolkit/toolkit-card.vala \
 	toolkit/toolkit-combo-box-text-model.vala \
 	toolkit/toolkit-deck.vala \
 	toolkit/toolkit-deck-window.vala \
 	toolkit/toolkit-editable-label.vala \
+	toolkit/toolkit-event-connector.vala \
 	toolkit/toolkit-listbox-model.vala \
 	toolkit/toolkit-mutable-widget.vala \
 	toolkit/toolkit-popup.vala \
+	toolkit/toolkit-stack-model.vala \
 	\
 	util/util-gfx.vala \
 	util/util-memory.vala \
@@ -125,12 +130,25 @@ california_VALASOURCES = \
 	unit-test/unit-test-harness.vala \
 	\
 	view/view.vala \
+	view/view-container.vala \
 	view/view-controllable.vala \
+	view/view-palette.vala \
+	\
+	view/common/common.vala \
+	view/common/common-events-cell.vala \
 	\
 	view/month/month.vala \
 	view/month/month-cell.vala \
 	view/month/month-controller.vala \
 	view/month/month-grid.vala \
+	\
+	view/week/week.vala \
+	view/week/week-all-day-cell.vala \
+	view/week/week-controller.vala \
+	view/week/week-day-pane.vala \
+	view/week/week-grid.vala \
+	view/week/week-hour-runner.vala \
+	view/week/week-pane.vala \
 	\
 	$(NULL)
 

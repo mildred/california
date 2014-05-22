@@ -44,25 +44,29 @@ public enum TimeUnit {
 
 private int init_count = 0;
 
-private static unowned string FMT_MONTH_YEAR_FULL;
-private static unowned string FMT_MONTH_YEAR_ABBREV;
-private static unowned string FMT_MONTH_FULL;
-private static unowned string FMT_MONTH_ABBREV;
-private static unowned string FMT_DAY_OF_WEEK_FULL;
-private static unowned string FMT_DAY_OF_WEEK_ABBREV;
-private static unowned string FMT_FULL_DATE;
-private static unowned string FMT_PRETTY_DATE;
-private static unowned string FMT_PRETTY_DATE_NO_YEAR;
-private static unowned string FMT_PRETTY_DATE_ABBREV;
-private static unowned string FMT_PRETTY_DATE_ABBREV_NO_YEAR;
-private static unowned string FMT_AM;
-private static unowned string FMT_BRIEF_AM;
-private static unowned string FMT_PM;
-private static unowned string FMT_BRIEF_PM;
-private static unowned string FMT_12HOUR_MIN_MERIDIEM;
-private static unowned string FMT_12HOUR_MIN_SEC_MERIDIEM;
-private static unowned string FMT_24HOUR_MIN;
-private static unowned string FMT_24HOUR_MIN_SEC;
+private unowned string FMT_MONTH_YEAR_FULL;
+private unowned string FMT_MONTH_YEAR_ABBREV;
+private unowned string FMT_MONTH_FULL;
+private unowned string FMT_MONTH_ABBREV;
+private unowned string FMT_DAY_OF_WEEK_FULL;
+private unowned string FMT_DAY_OF_WEEK_ABBREV;
+private unowned string FMT_FULL_DATE;
+private unowned string FMT_PRETTY_DATE;
+private unowned string FMT_PRETTY_DATE_NO_YEAR;
+private unowned string FMT_PRETTY_DATE_ABBREV;
+private unowned string FMT_PRETTY_DATE_ABBREV_NO_YEAR;
+private unowned string FMT_PRETTY_DATE_NO_DOW;
+private unowned string FMT_PRETTY_DATE_ABBREV_NO_DOW;
+private unowned string FMT_PRETTY_DATE_NO_DOW_NO_YEAR;
+private unowned string FMT_PRETTY_DATE_ABBREV_NO_DOW_NO_YEAR;
+private unowned string FMT_AM;
+private unowned string FMT_BRIEF_AM;
+private unowned string FMT_PM;
+private unowned string FMT_BRIEF_PM;
+private unowned string FMT_12HOUR_MIN_MERIDIEM;
+private unowned string FMT_12HOUR_MIN_SEC_MERIDIEM;
+private unowned string FMT_24HOUR_MIN;
+private unowned string FMT_24HOUR_MIN_SEC;
 
 private unowned string MIDNIGHT;
 private unowned string NOON;
@@ -128,6 +132,24 @@ public void init() throws Error {
     /// See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
     FMT_PRETTY_DATE_ABBREV_NO_YEAR = _("%a, %b %e");
     
+    // A "pretty" date with no day of week according to locale preferences, i.e. "March 10, 2014"
+    // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    FMT_PRETTY_DATE_NO_DOW = _("%B %e, %Y");
+    
+    // A "pretty" date abbreviated with no day of week according to locale preferences,
+    // i.e. "Mar 10, 2014"
+    // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    FMT_PRETTY_DATE_ABBREV_NO_DOW = _("%b %e, %Y");
+    
+    // A "pretty" date with no day of week or year according to locale preferences, i.e. "March 10"
+    // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    FMT_PRETTY_DATE_NO_DOW_NO_YEAR = _("%B %e");
+    
+    // A "pretty" date abbreviated with no day of week or year according to locale preferences,
+    // i.e. "Mar 10"
+    // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    FMT_PRETTY_DATE_ABBREV_NO_DOW_NO_YEAR = _("%b %e");
+    
     /// Ante meridiem
     /// (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
     /// format user settings to be honored)
@@ -159,10 +181,10 @@ public void init() throws Error {
     FMT_12HOUR_MIN_SEC_MERIDIEM = _("%d:%02d:%02d%s");
     
     /// The 24-hour time with minutes, i.e. "17:06"
-    FMT_24HOUR_MIN = _("%d:%02d");
+    FMT_24HOUR_MIN = _("%02d:%02d");
     
     /// The 24-hour time with minutes and seconds, i.e. "17:06:31"
-    FMT_24HOUR_MIN_SEC = _("%d:%02d:%02d");
+    FMT_24HOUR_MIN_SEC = _("%02d:%02d:%02d");
     
     // Used by quick-add to convert a user's day unit into an internal value.  Common abbreviations
     // (without punctuation) should be included.  Each word must be separated by semi-colons.

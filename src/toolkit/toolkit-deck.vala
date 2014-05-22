@@ -15,11 +15,6 @@ namespace California.Toolkit {
 
 public class Deck : Gtk.Stack {
     /**
-     * A slightly slower transition duration than default.
-     */
-    public const int DEFAULT_TRANSITION_MSEC = 300;
-    
-    /**
      * @inheritedDoc
      */
     public Gtk.Widget? default_widget { get { return null; } }
@@ -72,7 +67,7 @@ public class Deck : Gtk.Stack {
      */
     public Deck() {
         transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
-        transition_duration = DEFAULT_TRANSITION_MSEC;
+        transition_duration = DEFAULT_STACK_TRANSITION_DURATION_MSEC;
         
         notify["visible-child"].connect(on_child_to_top);
     }

@@ -25,19 +25,32 @@ public class MainWindow : Gtk.ApplicationWindow {
     private const string ACTION_PREVIOUS = "win.previous";
     private const string ACCEL_PREVIOUS = "<Alt>Left";
     
+    private const string ACTION_MONTH = "win.view-month";
+    private const string ACCEL_MONTH = "<Ctrl>M";
+    
+    private const string ACTION_WEEK = "win.view-week";
+    private const string ACCEL_WEEK = "<Ctrl>W";
+    
     private static const ActionEntry[] action_entries = {
         { "quick-create-event", on_quick_create_event },
         { "jump-to-today", on_jump_to_today },
         { "next", on_next },
-        { "previous", on_previous }
+        { "previous", on_previous },
+        { "view-month", on_view_month },
+        { "view-week", on_view_week }
     };
     
     // Set as a property so it can be bound to the current View.Controllable
     public Calendar.FirstOfWeek first_of_week { get; set; }
     
-    private View.Controllable current_view;
-    private View.Month.Controller month_view = new View.Month.Controller();
     private Gtk.Button quick_add_button;
+    private View.Controllable month_view = new View.Month.Controller();
+    private View.Controllable week_view = new View.Week.Controller();
+    private View.Controllable? current_controller = null;
+    private Gee.HashSet<Binding> current_bindings = new Gee.HashSet<Binding>();
+    private Gtk.Stack view_stack = new Gtk.Stack();
+    private Gtk.HeaderBar headerbar = new Gtk.HeaderBar();
+    private Gtk.Button today = new Gtk.Button.with_label(_("_Today"));
     
     public MainWindow(Application app) {
         Object (application: app);
@@ -54,12 +67,23 @@ public class MainWindow : Gtk.ApplicationWindow {
         Application.instance.add_accelerator(ACCEL_JUMP_TO_TODAY, ACTION_JUMP_TO_TODAY, null);
         Application.instance.add_accelerator(rtl ? ACCEL_PREVIOUS : ACCEL_NEXT, ACTION_NEXT, null);
         Application.instance.add_accelerator(rtl ? ACCEL_NEXT : ACCEL_PREVIOUS, ACTION_PREVIOUS, null);
+        Application.instance.add_accelerator(ACCEL_MONTH, ACTION_MONTH, null);
+        Application.instance.add_accelerator(ACCEL_WEEK, ACTION_WEEK, null);
         
-        // start in Month view
-        current_view = month_view;
+        // view stack settings
+        view_stack.homogeneous = true;
+        view_stack.transition_duration = Toolkit.DEFAULT_STACK_TRANSITION_DURATION_MSEC;
+        view_stack.transition_type = Gtk.StackTransitionType.SLIDE_UP_DOWN;
         
-        // create GtkHeaderBar and pack it in
-        Gtk.HeaderBar headerbar = new Gtk.HeaderBar();
+        // subscribe before adding so first add to initialize UI
+        view_stack.notify["visible-child"].connect(on_view_changed);
+        
+        // add views to view stack, first added is first shown
+        add_controller(month_view);
+        add_controller(week_view);
+        
+        // if not on Unity, use headerbar as the titlebar (removes window chrome) and provide close
+        // button for users who might have trouble finding it otherwise
 #if !ENABLE_UNITY
         // Unity doesn't support GtkHeaderBar-as-title-bar very well yet; when set, the main
         // window can't be resized no matter what additional GtkWindow properties are set
@@ -67,7 +91,6 @@ public class MainWindow : Gtk.ApplicationWindow {
         set_titlebar(headerbar);
 #endif
         
-        Gtk.Button today = new Gtk.Button.with_label(_("_Today"));
         today.valign = Gtk.Align.CENTER;
         today.use_underline = true;
         today.tooltip_text = _("Jump to today's date (Ctrl+T)");
@@ -91,9 +114,19 @@ public class MainWindow : Gtk.ApplicationWindow {
         nav_buttons.pack_start(prev);
         nav_buttons.pack_end(next);
         
+        // TODO:
+        // Remove Gtk.StackSwitcher for a few reasons: (a) the buttons are kinda wide and
+        // would like to conserve header bar space; (b) want to add tooltips to buttons; and (c)
+        // want to move to icons at some point
+        Gtk.StackSwitcher view_switcher = new Gtk.StackSwitcher();
+        view_switcher.stack = view_stack;
+        view_switcher.get_style_context().add_class(Gtk.STYLE_CLASS_LINKED);
+        view_switcher.get_style_context().add_class(Gtk.STYLE_CLASS_RAISED);
+        
         // pack left-side of window
         headerbar.pack_start(today);
         headerbar.pack_start(nav_buttons);
+        headerbar.pack_start(view_switcher);
         
         quick_add_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.MENU);
         quick_add_button.valign = Gtk.Align.CENTER;
@@ -121,23 +154,68 @@ public class MainWindow : Gtk.ApplicationWindow {
         headerbar.pack_end(calendars);
         
         Gtk.Box layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+        // if on Unity, since headerbar is not the titlebar, need to pack it like any other widget
 #if ENABLE_UNITY
         layout.pack_start(headerbar, false, true, 0);
 #endif
-        layout.pack_end(month_view.get_container(), true, true, 0);
-        
-        // current host bindings and signals
-        current_view.request_create_timed_event.connect(on_request_create_timed_event);
-        current_view.request_create_all_day_event.connect(on_request_create_all_day_event);
-        current_view.request_display_event.connect(on_request_display_event);
-        current_view.bind_property(View.Controllable.PROP_CURRENT_LABEL, headerbar, "title",
-            BindingFlags.SYNC_CREATE);
-        current_view.bind_property(View.Controllable.PROP_IS_VIEWING_TODAY, today, "sensitive",
-            BindingFlags.SYNC_CREATE | BindingFlags.INVERT_BOOLEAN);
-        current_view.bind_property(View.Controllable.PROP_FIRST_OF_WEEK, this, PROP_FIRST_OF_WEEK,
-            BindingFlags.BIDIRECTIONAL);
+        layout.pack_end(view_stack, true, true, 0);
         
         add(layout);
+    }
+    
+    public override void map() {
+        // give View.Palette a chance to gather display metrics for the various Views (week, months,
+        // etc.)
+        View.Palette.instance.main_window_mapped(this);
+        
+        base.map();
+    }
+    
+    private void add_controller(View.Controllable controller) {
+        view_stack.add_titled(controller.get_container(), controller.title, controller.title);
+        controller.get_container().show_all();
+    }
+    
+    private unowned View.Container? current_view_container() {
+        return (View.Container?) view_stack.get_visible_child();
+    }
+    
+    private void on_view_changed() {
+        View.Container? view_container = current_view_container();
+        if (view_container != null && view_container.owner == current_controller)
+            return;
+        
+        if (current_controller != null) {
+            // signals
+            current_controller.request_create_timed_event.disconnect(on_request_create_timed_event);
+            current_controller.request_create_all_day_event.disconnect(on_request_create_all_day_event);
+            current_controller.request_display_event.disconnect(on_request_display_event);
+            
+            // clear bindings to unbind all of them
+            current_bindings.clear();
+        }
+        
+        if (view_container != null) {
+            current_controller = view_container.owner;
+            
+            // signals
+            current_controller.request_create_timed_event.connect(on_request_create_timed_event);
+            current_controller.request_create_all_day_event.connect(on_request_create_all_day_event);
+            current_controller.request_display_event.connect(on_request_display_event);
+            
+            // bindings
+            Binding binding = current_controller.bind_property(View.Controllable.PROP_CURRENT_LABEL,
+                headerbar, "title", BindingFlags.SYNC_CREATE);
+            current_bindings.add(binding);
+            
+            binding = current_controller.bind_property(View.Controllable.PROP_IS_VIEWING_TODAY, today,
+                "sensitive", BindingFlags.SYNC_CREATE | BindingFlags.INVERT_BOOLEAN);
+            current_bindings.add(binding);
+            
+            binding = current_controller.bind_property(View.Controllable.PROP_FIRST_OF_WEEK, this,
+                PROP_FIRST_OF_WEEK, BindingFlags.BIDIRECTIONAL);
+            current_bindings.add(binding);
+        }
     }
     
     private void show_deck(Gtk.Widget relative_to, Gdk.Point? for_location, Toolkit.Deck deck) {
@@ -146,7 +224,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         // when the dialog closes, reset View.Controllable state (selection is maintained while
         // use is viewing/editing interaction) and destroy widgets
         deck_window.deck.dismiss.connect(() => {
-            current_view.unselect_all();
+            current_controller.unselect_all();
             deck_window.hide();
             // give the dialog a change to hide before allowing other signals to fire, which may
             // invoke another dialog (prevents multiple dialogs on screen at same time)
@@ -178,15 +256,23 @@ public class MainWindow : Gtk.ApplicationWindow {
     }
     
     private void on_jump_to_today() {
-        current_view.today();
+        current_controller.today();
     }
     
     private void on_next() {
-        current_view.next();
+        current_controller.next();
     }
     
     private void on_previous() {
-        current_view.previous();
+        current_controller.previous();
+    }
+    
+    private void on_view_month() {
+        view_stack.set_visible_child(month_view.get_container());
+    }
+    
+    private void on_view_week() {
+        view_stack.set_visible_child(week_view.get_container());
     }
     
     private void on_request_create_timed_event(Calendar.ExactTimeSpan initial, Gtk.Widget relative_to,

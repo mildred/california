@@ -63,6 +63,15 @@ public class Event : Instance, Gee.Comparable<Event> {
     public bool is_all_day { get; private set; }
     
     /**
+     * Convenience property for determining if {@link Event} spans one or more full days.
+     */
+    public bool is_day_spanning {
+        get {
+            return is_all_day || exact_time_span.duration.days >= 1;
+        }
+    }
+    
+    /**
      * Location of an {@link Event}.
      */
     public string? location { get; set; default = null; }

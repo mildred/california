@@ -5,10 +5,10 @@
  */
 
 /**
- * Views for displaying calendar information by the month.
+ * Views for displaying calendar information by the week.
  */
 
-namespace California.View.Month {
+namespace California.View.Week {
 
 private int init_count = 0;
 
@@ -17,20 +17,23 @@ public void init() throws Error {
         return;
     
     // unit initialization
-    View.Common.init();
     Calendar.init();
-    Component.init();
     Backing.init();
+    Component.init();
+    Toolkit.init();
+    View.Common.init();
 }
 
 public void terminate() {
     if (!Unit.do_terminate(ref init_count))
         return;
     
-    Backing.terminate();
-    Component.terminate();
-    Calendar.terminate();
     View.Common.terminate();
+    Toolkit.terminate();
+    Component.terminate();
+    Backing.terminate();
+    Calendar.terminate();
 }
 
 }
+

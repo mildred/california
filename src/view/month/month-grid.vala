@@ -77,7 +77,9 @@ private class Grid : Gtk.Grid {
         // pre-add grid elements for every cell, which are updated when the MonthYear changes
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
-                Cell cell = new Cell(this, row, col);
+                // use today's date as placeholder until update_cells() is called
+                // TODO: try to avoid this on first pass
+                Cell cell = new Cell(this, Calendar.System.today, row, col);
                 cell.expand = true;
                 cell.events |= Gdk.EventMask.BUTTON_PRESS_MASK & Gdk.EventMask.BUTTON1_MOTION_MASK;
                 cell.button_press_event.connect(on_cell_button_event);
@@ -155,15 +157,12 @@ private class Grid : Gtk.Grid {
     }
     
     private void update_week(int row, Calendar.Week week) {
+        Calendar.DateSpan week_as_date_span = week.to_date_span();
         foreach (Calendar.Date date in week) {
             int col = date.day_of_week.ordinal(owner.first_of_week) - 1;
             
             Cell cell = get_cell(row, col);
-            
-            // if the date is in the month or configured to show days outside the month, set
-            // the cell to show that date; otherwise, it'll be cleared
-            cell.clear();
-            cell.date = (date in month_of_year) || owner.show_outside_month ? date : null;
+            cell.change_date_and_neighbors(date, week_as_date_span);
             
             // add to map for quick lookups
             date_to_cell.set(date, cell);
@@ -190,7 +189,7 @@ private class Grid : Gtk.Grid {
     
     private void update_subscriptions() {
         // convert DateSpan window into an ExactTimeSpan, which is what the subscription wants
-        Calendar.ExactTimeSpan time_window = new Calendar.ExactTimeSpan.from_date_span(window,
+        Calendar.ExactTimeSpan time_window = new Calendar.ExactTimeSpan.from_span(window,
             Calendar.Timezone.local);
         
         if (subscriptions != null && subscriptions.window.equal_to(time_window))

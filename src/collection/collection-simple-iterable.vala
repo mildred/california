@@ -15,11 +15,25 @@ namespace California.Collection {
  * @see SimpleIterator
  */
 
+[GenericAccessors]
 public interface SimpleIterable<G> : BaseObject {
     /**
      * Returns a {@link SimpleIterator} that can be used with Vala's foreach keyword.
      */
     public abstract SimpleIterator<G> iterator();
+    
+    /**
+     * Returns all the items in the {@link SimpleIterable} as a single Gee.List.
+     */
+    public Gee.List<G> as_list(owned Gee.EqualDataFunc<G>? equal_func = null) {
+        Gee.List<G> list = new Gee.ArrayList<G>((owned) equal_func);
+        
+        SimpleIterator<G> iter = iterator();
+        while (iter.next())
+            list.add(iter.get());
+        
+        return list;
+    }
 }
 
 }

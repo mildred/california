@@ -21,6 +21,11 @@ public interface Controllable : Object {
     public const string PROP_FIRST_OF_WEEK = "first-of-week";
     
     /**
+     * A user-visible string (short) representing this view.
+     */
+    public abstract string title { get; }
+    
+    /**
      * A user-visible string representing the current calendar view.
      */
     public abstract string current_label { get; protected set; }
@@ -33,11 +38,6 @@ public interface Controllable : Object {
      * requirement for the {@link Controllable} to change its view as the day changes, however.
      */
     public abstract bool is_viewing_today { get; protected set; }
-    
-    /**
-     * Default {@link Calendar.Date} for the calendar unit in view.
-     */
-    public abstract Calendar.Date default_date { get; protected set; }
     
     /**
      * The first day of the week.
@@ -65,10 +65,13 @@ public interface Controllable : Object {
         Gdk.Point? for_location);
     
     /**
-     * Returns the Gtk.Widget container that should be used to display the {@link Controllable}'s
+     * Returns the {@link Container} that should be used to display the {@link Controllable}'s
      * contents.
+     *
+     * This should not return a new Gtk.Widget each time, rather it returns the Widget the
+     * Controllable is maintaining the current view(s) in.
      */
-    public abstract Gtk.Widget get_container();
+    public abstract View.Container get_container();
     
     /**
      * Move forward one calendar unit.
@@ -82,10 +85,8 @@ public interface Controllable : Object {
     
     /**
      * Jump to calendar unit representing the current date.
-     *
-     * Returns the Gtk.Widget displaying the current date.
      */
-    public abstract Gtk.Widget today();
+    public abstract void today();
     
     /**
      * If the view supports a notion of selection, this unselects all selected items.

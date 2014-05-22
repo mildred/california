@@ -337,6 +337,65 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
     }
     
     /**
+     * Round a unit of the {@link WallTime} to a multiple of a supplied value.
+     *
+     * By rounding wall-clock time, not only is the unit in question rounded down to a multiple of
+     * the supplied value, but the lesser units are truncated to zero.  Thus, 17:23:54 rounded down
+     * to a multiple of 10 minutes returns 17:20:00.
+     *
+     * If the {@link TimeUnit} is already a multiple of the value, no change is made (although
+     * there's no guarantee that the same WallTime instance will be returned, especially if the
+     * lesser units are truncated).
+     *
+     * A multiple of zero or a negative value is always rounded to the current WallTime.
+     *
+     * TODO: An interface to round up (which will need to deal with overflow).
+     */
+    public WallTime round_down(int multiple, TimeUnit time_unit) {
+        if (multiple <= 0)
+            return this;
+        
+        // get value being manipulated
+        int current;
+        switch (time_unit) {
+            case TimeUnit.HOUR:
+                current = hour;
+            break;
+            
+            case TimeUnit.MINUTE:
+                current = minute;
+            break;
+            
+            case TimeUnit.SECOND:
+                current = second;
+            break;
+            
+            default:
+                assert_not_reached();
+        }
+        
+        // round down and watch for underflow (which shouldn't happen)
+        int rounded = current - (current % multiple.abs());
+        if (rounded < 0)
+            rounded = 0;
+        
+        // return new value
+        switch (time_unit) {
+            case TimeUnit.HOUR:
+                return new WallTime(rounded, 0, 0);
+            
+            case TimeUnit.MINUTE:
+                return new WallTime(hour, rounded, 0);
+            
+            case TimeUnit.SECOND:
+                return new WallTime(hour, minute, rounded);
+            
+            default:
+                assert_not_reached();
+        }
+    }
+    
+    /**
      * Returns a prettified, localized user-visible string.
      *
      * The string respects {@link System.is_24hr}.
@@ -361,8 +420,9 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
         
         // Not marked for translation on thw assumption that a 12-hour hour followed by the meridiem
         // isn't something that varies between locales, on the assumption that the user has
-        // specified 12-hour time to begin with
-        if (optional_min && minute == 0)
+        // specified 12-hour time to begin with ... don't allow for 24-hour time because it doesn't
+        // look right (especially early hours, i.e. "0", "2")
+        if (optional_min && minute == 0 && !is_24hr)
             return "%d%s".printf(is_24hr ? hour : 12hour, meridiem);
         
         if (!include_sec) {

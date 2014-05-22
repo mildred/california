@@ -44,7 +44,11 @@ public class Date : Unit<Date>, Gee.Comparable<Date>, Gee.Hashable<Date> {
          * Indicates that the localized string for "Today" should not be used if the date matches
          * {@link System.today}.
          */
-        NO_TODAY
+        NO_TODAY,
+        /**
+         * Indicates the day of week should not be included.
+         */
+        NO_DAY_OF_WEEK
     }
     
     
@@ -299,15 +303,23 @@ public class Date : Unit<Date>, Gee.Comparable<Date>, Gee.Hashable<Date> {
         bool abbrev = (flags & PrettyFlag.ABBREV) != 0;
         bool with_year = (flags & PrettyFlag.INCLUDE_YEAR) != 0;
         bool no_today = (flags & PrettyFlag.NO_TODAY) != 0;
+        bool no_dow = (flags & PrettyFlag.NO_DAY_OF_WEEK) != 0;
         
         if (!no_today && !with_year && equal_to(System.today))
             return _("Today");
         
         unowned string fmt;
-        if (abbrev)
-            fmt = with_year ? FMT_PRETTY_DATE_ABBREV : FMT_PRETTY_DATE_ABBREV_NO_YEAR;
-        else
-            fmt = with_year ? FMT_PRETTY_DATE : FMT_PRETTY_DATE_NO_YEAR;
+        if (abbrev) {
+            if (no_dow)
+                fmt = with_year ? FMT_PRETTY_DATE_ABBREV_NO_DOW : FMT_PRETTY_DATE_ABBREV_NO_DOW_NO_YEAR;
+            else
+                fmt = with_year ? FMT_PRETTY_DATE_ABBREV : FMT_PRETTY_DATE_ABBREV_NO_YEAR;
+        } else {
+            if (no_dow)
+                fmt = with_year ? FMT_PRETTY_DATE_NO_DOW : FMT_PRETTY_DATE_NO_DOW_NO_YEAR;
+            else
+                fmt = with_year ? FMT_PRETTY_DATE : FMT_PRETTY_DATE_NO_YEAR;
+        }
         
         return String.reduce_whitespace(format(fmt));
     }
