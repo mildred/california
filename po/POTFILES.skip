@@ -13,4 +13,6 @@ src/host/host-import-calendar.c
 src/host/host-main-window.c
 src/host/host-show-event.c
 src/manager/manager-calendar-list-item.c
+src/view/month/month-controller.c
+src/view/week/week-controller.c
 
