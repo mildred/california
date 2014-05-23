@@ -11,7 +11,7 @@ namespace California.View.Common {
  * time information and summary and a capped bar for all-day or day-spanning events.
  */
 
-internal abstract class EventsCell : Gtk.EventBox {
+internal abstract class EventsCell : Gtk.EventBox, InstanceContainer {
     public const string PROP_DATE = "date";
     public const string PROP_NEIGHBORS = "neighbors";
     public const string PROP_TOP_LINE_TEXT = "top-line-text";
@@ -81,6 +81,16 @@ internal abstract class EventsCell : Gtk.EventBox {
             _selected = value;
         }
     }
+    
+    /**
+     * @inheritDoc
+     */
+    public int event_count { get { return sorted_events.size; } }
+    
+    /**
+     * @inheritDoc
+     */
+    public Calendar.Span contained_span { get { return date; } }
     
     private Gee.TreeSet<Component.Event> sorted_events = new Gee.TreeSet<Component.Event>(all_day_comparator);
     private Gee.HashMap<int, Component.Event> line_to_event = new Gee.HashMap<int, Component.Event>();
@@ -177,7 +187,7 @@ internal abstract class EventsCell : Gtk.EventBox {
             this.date = date;
             
             // stored events are now bogus
-            clear();
+            clear_events();
             queue_draw();
         }
         
@@ -190,7 +200,7 @@ internal abstract class EventsCell : Gtk.EventBox {
         }
     }
     
-    public void clear() {
+    public void clear_events() {
         line_to_event.clear();
         
         foreach (Component.Event event in sorted_events.to_array())
@@ -345,12 +355,8 @@ internal abstract class EventsCell : Gtk.EventBox {
         return line_number;
     }
     
-    public bool has_events() {
-        return sorted_events.size > 0;
-    }
-    
     private void on_24hr_changed() {
-        if (has_events())
+        if (has_events)
             queue_draw();
     }
     

@@ -283,10 +283,10 @@ public class MainWindow : Gtk.ApplicationWindow {
         create_event(event, relative_to, for_location);
     }
     
-    private void on_request_create_all_day_event(Calendar.DateSpan initial, Gtk.Widget relative_to,
+    private void on_request_create_all_day_event(Calendar.Span initial, Gtk.Widget relative_to,
         Gdk.Point? for_location) {
         Component.Event event = new Component.Event.blank();
-        event.set_event_date_span(initial);
+        event.set_event_date_span(initial.to_date_span());
         
         create_event(event, relative_to, for_location);
     }

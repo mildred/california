@@ -43,7 +43,7 @@ internal class Grid : Gtk.Box {
     private Gee.HashMap<Calendar.Date, DayPane> date_to_panes = new Gee.HashMap<Calendar.Date, DayPane>();
     private Gee.HashMap<Calendar.Date, AllDayCell> date_to_all_day = new Gee.HashMap<Calendar.Date,
         AllDayCell>();
-    private Toolkit.ButtonConnector day_pane_button_connector = new Toolkit.ButtonConnector();
+    private Toolkit.ButtonConnector instance_container_button_connector = new Toolkit.ButtonConnector();
     private Gtk.ScrolledWindow scrolled_panes;
     private Gtk.Widget right_spacer;
     private bool vadj_init = false;
@@ -103,6 +103,7 @@ internal class Grid : Gtk.Box {
             // All-day cells (for drawing all-day and day-spanning events) go between the date
             // label and the day panes
             AllDayCell all_day_cell = new AllDayCell(this, date);
+            instance_container_button_connector.connect_to(all_day_cell);
             top_grid.attach(all_day_cell, col, 1, 1, 1);
             
             // save mapping
@@ -110,7 +111,7 @@ internal class Grid : Gtk.Box {
             
             DayPane pane = new DayPane(this, date);
             pane.expand = true;
-            day_pane_button_connector.connect_to(pane);
+            instance_container_button_connector.connect_to(pane);
             pane_grid.attach(pane, col, 1, 1, 1);
             
             // save mapping
@@ -133,8 +134,8 @@ internal class Grid : Gtk.Box {
         scrolled_panes.get_vscrollbar().size_allocate.connect(on_realloc_right_spacer);
         
         // connect panes' event signal handlers
-        day_pane_button_connector.clicked.connect(on_day_pane_clicked);
-        day_pane_button_connector.double_clicked.connect(on_day_pane_double_clicked);
+        instance_container_button_connector.clicked.connect(on_instance_container_clicked);
+        instance_container_button_connector.double_clicked.connect(on_instance_container_double_clicked);
         
         // set up calendar subscriptions for the week
         subscriptions = new Backing.CalendarSubscriptionManager(
@@ -293,39 +294,49 @@ internal class Grid : Gtk.Box {
         return date_to_all_day.get(cell_date);
     }
     
-    private void on_day_pane_clicked(Toolkit.ButtonEvent details, bool guaranteed) {
+    private void on_instance_container_clicked(Toolkit.ButtonEvent details, bool guaranteed) {
         // only interested in unguaranteed clicks on the primary mouse button
         if (details.button != Toolkit.Button.PRIMARY || guaranteed)
             return;
         
-        DayPane day_pane = (DayPane) details.widget;
+        Common.InstanceContainer instance_container = (Common.InstanceContainer) details.widget;
         
-        Component.Event? event = day_pane.get_event_at(details.press_point);
+        Component.Event? event = instance_container.get_event_at(details.press_point);
         if (event != null)
-            owner.request_display_event(event, day_pane, details.press_point);
+            owner.request_display_event(event, instance_container, details.press_point);
     }
     
-    private void on_day_pane_double_clicked(Toolkit.ButtonEvent details, bool guaranteed) {
+    private void on_instance_container_double_clicked(Toolkit.ButtonEvent details, bool guaranteed) {
         // only interested in unguaranteed double-clicks on the primary mouse button
         if (details.button != Toolkit.Button.PRIMARY || guaranteed)
             return;
         
-        DayPane day_pane = (DayPane) details.widget;
+        Common.InstanceContainer instance_container = (Common.InstanceContainer) details.widget;
         
         // if an event is at this location, don't process
-        if (day_pane.get_event_at(details.press_point) != null)
+        if (instance_container.get_event_at(details.press_point) != null)
             return;
         
-        // convert click into starting time on the day pane rounded down to the nearest half-hour
-        Calendar.WallTime wall_time = day_pane.get_wall_time(details.press_point.y).round_down(
-            30, Calendar.TimeUnit.MINUTE);
+        // if a DayPane, use double-click to determine rounded time of the event's start
+        DayPane? day_pane = instance_container as DayPane;
+        if (day_pane != null) {
+            // convert click into starting time on the day pane rounded down to the nearest half-hour
+            Calendar.WallTime wall_time = day_pane.get_wall_time(details.press_point.y).round_down(
+                30, Calendar.TimeUnit.MINUTE);
+            
+            Calendar.ExactTime start_time = new Calendar.ExactTime(Calendar.Timezone.local,
+                day_pane.date, wall_time);
+            
+            owner.request_create_timed_event(
+                new Calendar.ExactTimeSpan(start_time, start_time.adjust_time(1, Calendar.TimeUnit.HOUR)),
+                day_pane, details.press_point);
+            
+            return;
+        }
         
-        Calendar.ExactTime start_time = new Calendar.ExactTime(Calendar.Timezone.local,
-            day_pane.date, wall_time);
-        
-        owner.request_create_timed_event(
-            new Calendar.ExactTimeSpan(start_time, start_time.adjust_time(1, Calendar.TimeUnit.HOUR)),
-            day_pane, details.press_point);
+        // otherwise, an all-day-cell, so request an all-day event
+        owner.request_create_all_day_event(instance_container.contained_span, instance_container,
+            details.press_point);
     }
 }
 

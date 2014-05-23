@@ -13,7 +13,7 @@ namespace California.View.Week {
  * @see AllDayCell
  */
 
-internal class DayPane : Pane {
+internal class DayPane : Pane, Common.InstanceContainer {
     public const string PROP_OWNER = "owner";
     public const string PROP_DATE = "date";
     public const string PROP_SELECTED = "selected";
@@ -25,6 +25,16 @@ internal class DayPane : Pane {
     public Calendar.Date date { get; set; }
     
     public bool selected { get; set; default = false; }
+    
+    /**
+     * @inheritDoc
+     */
+    public int event_count { get { return days_events.size; } }
+    
+    /**
+     * @inheritDoc
+     */
+    public Calendar.Span contained_span { get { return date; } }
     
     private Gee.TreeSet<Component.Event> days_events = new Gee.TreeSet<Component.Event>();
     private uint minutes_timeout_id = 0;
@@ -102,6 +112,12 @@ internal class DayPane : Pane {
     public void remove_event(Component.Event event) {
         if (!days_events.remove(event))
             return;
+        
+        queue_draw();
+    }
+    
+    public void clear_events() {
+        days_events.clear();
         
         queue_draw();
     }

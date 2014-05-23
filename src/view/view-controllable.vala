@@ -55,7 +55,7 @@ public interface Controllable : Object {
      * Signal from the {@link Controllable} that a DATE {@link Component.Event} should be
      * created with the specified initial parameters.
      */
-    public signal void request_create_all_day_event(Calendar.DateSpan initial, Gtk.Widget relative_to,
+    public signal void request_create_all_day_event(Calendar.Span initial, Gtk.Widget relative_to,
         Gdk.Point? for_location);
     
     /**

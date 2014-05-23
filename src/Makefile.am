@@ -136,6 +136,7 @@ california_VALASOURCES = \
 	\
 	view/common/common.vala \
 	view/common/common-events-cell.vala \
+	view/common/common-instance-container.vala \
 	\
 	view/month/month.vala \
 	view/month/month-cell.vala \
