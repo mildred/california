@@ -89,7 +89,6 @@
             <property name="hexpand">True</property>
             <property name="activates_default">True</property>
             <property name="width_chars">40</property>
-            <property name="secondary_icon_name">edit-delete-symbolic</property>
             <signal name="icon-release" handler="on_details_entry_icon_release" object="CaliforniaHostQuickCreateEvent" swapped="no"/>
           </object>
           <packing>

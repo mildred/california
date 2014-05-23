@@ -41,6 +41,9 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
                 model.add(calendar_source);
         }
         
+        details_entry.secondary_icon_name = get_direction() == Gtk.TextDirection.RTL
+            ? "edit-clear-rtl-symbolic" : "edit-clear-symbolic";
+        
         // make first item active
         calendar_combo_box.active = 0;
         
