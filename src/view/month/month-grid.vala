@@ -97,13 +97,11 @@ private class Grid : Gtk.Grid {
         
         owner.notify[Controller.PROP_MONTH_OF_YEAR].connect(on_controller_month_of_year_changed);
         owner.notify[View.Controllable.PROP_FIRST_OF_WEEK].connect(update_first_of_week);
-        owner.notify[Controller.PROP_SHOW_OUTSIDE_MONTH].connect(update_cells);
     }
     
     ~Grid() {
         owner.notify[Controller.PROP_MONTH_OF_YEAR].disconnect(on_controller_month_of_year_changed);
         owner.notify[View.Controllable.PROP_FIRST_OF_WEEK].disconnect(update_first_of_week);
-        owner.notify[Controller.PROP_SHOW_OUTSIDE_MONTH].disconnect(update_cells);
     }
     
     private Cell get_cell(int row, int col) {

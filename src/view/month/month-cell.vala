@@ -27,14 +27,12 @@ internal class Cell : Common.EventsCell {
         notify[PROP_DATE].connect(update_top_line);
         
         owner.notify[Grid.PROP_FIRST_OF_WEEK].connect(on_first_of_week_changed);
-        owner.owner.notify[Controller.PROP_SHOW_OUTSIDE_MONTH].connect(update_top_line);
         
         update_top_line();
     }
     
     ~Cell() {
         owner.notify[Grid.PROP_FIRST_OF_WEEK].disconnect(on_first_of_week_changed);
-        owner.owner.notify[Controller.PROP_SHOW_OUTSIDE_MONTH].disconnect(update_top_line);
     }
     
     protected override Common.EventsCell? get_cell_for_date(Calendar.Date cell_date) {
@@ -74,12 +72,6 @@ internal class Cell : Common.EventsCell {
     }
     
     private void update_top_line() {
-         if (!owner.owner.show_outside_month && !(date in owner.month_of_year)) {
-            top_line_text = null;
-            
-            return;
-        }
-        
         top_line_text = date.day_of_month.informal_number;
         top_line_rgba = (date in owner.month_of_year)
             ? Palette.instance.day_in_range
