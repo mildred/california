@@ -85,7 +85,7 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
             } else {
                 // All-day event spanning days, print "<abbrev date> to <abbrev date>"
                 date_flags |= Calendar.Date.PrettyFlag.ABBREV;
-                /// Prints a span of dates, i.e. "January 3 to January 6"
+                // Prints a span of dates, i.e. "January 3 to January 6"
                 span = _("%s to %s").printf(date_span.start_date.to_pretty_string(date_flags),
                     date_span.end_date.to_pretty_string(date_flags));
             }
@@ -95,7 +95,7 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
             if (exact_time_span.is_same_day) {
                 // Single-day timed event, print "<full date>\n<full start time> to <full end time>",
                 // including year if not current year
-                /// Prints a span of time, i.e. "3:30pm to 4:30pm"
+                // Prints a span of time, i.e. "3:30pm to 4:30pm"
                 string timespan = _("%s to %s").printf(
                     exact_time_span.start_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE),
                     exact_time_span.end_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE));
@@ -104,9 +104,9 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
             } else {
                 // Multi-day timed event, print "<full time>, <full date>" on both lines,
                 // including year if either not current year
-                /// Prints two full time and date strings on separate lines, i.e.:
-                /// 12 January 2012, 3:30pm
-                /// 13 January 2013, 6:30am
+                // Prints two full time and date strings on separate lines, i.e.:
+                // 12 January 2012, 3:30pm
+                // 13 January 2013, 6:30am
                 span = _("%s, %s\n%s, %s").printf(
                     exact_time_span.start_exact_time.to_pretty_date_string(date_flags),
                     exact_time_span.start_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE),

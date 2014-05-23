@@ -215,8 +215,8 @@ public class Application : Gtk.Application {
             "logo-icon-name", ICON_NAME,
             "website", WEBSITE_URL,
             "website-label", WEBSITE_NAME,
-            /// Translators: add your name and email address to receive credit in the About dialog
-            /// For example: Yamada Taro <yamada.taro@example.com>
+            // Translators: add your name and email address to receive credit in the About dialog
+            // For example: Yamada Taro <yamada.taro@example.com>
             "translator-credits", _("translator-credits")
         );
     }

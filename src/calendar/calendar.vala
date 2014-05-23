@@ -107,29 +107,29 @@ public void init() throws Error {
     FMT_DAY_OF_WEEK_ABBREV = "%a";
     FMT_FULL_DATE = "%x";
     
-    /// The month and year according to locale preferences, i.e. "March 2014"
-    /// See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    // The month and year according to locale preferences, i.e. "March 2014"
+    // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
     FMT_MONTH_YEAR_FULL = _("%B %Y");
     
-    /// The abbreviated month and year according to locale preferences, i.e. "Mar 2014"
-    /// See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    // The abbreviated month and year according to locale preferences, i.e. "Mar 2014"
+    // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
     FMT_MONTH_YEAR_ABBREV = _("%b %Y");
     
-    /// A "pretty" date according to locale preferences, i.e. "Monday, March 10, 2014"
-    /// See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    // A "pretty" date according to locale preferences, i.e. "Monday, March 10, 2014"
+    // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
     FMT_PRETTY_DATE = _("%A, %B %e, %Y");
     
-    /// A "pretty" date with no year according to locale preferences, i.e. "Monday, March 10"
-    /// See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    // A "pretty" date with no year according to locale preferences, i.e. "Monday, March 10"
+    // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
     FMT_PRETTY_DATE_NO_YEAR = _("%A, %B %e");
     
-    /// A "pretty" date abbreviated according to locale preferences, i.e. "Mon, Mar 10, 2014"
-    /// See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    // A "pretty" date abbreviated according to locale preferences, i.e. "Mon, Mar 10, 2014"
+    // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
     FMT_PRETTY_DATE_ABBREV = _("%a, %b %e, %Y");
     
-    /// A "pretty" date abbreviated and no year according to locale preferences, i.e.
-    /// "Mon, Mar 10"
-    /// See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    // A "pretty" date abbreviated and no year according to locale preferences, i.e.
+    // "Mon, Mar 10"
+    // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
     FMT_PRETTY_DATE_ABBREV_NO_YEAR = _("%a, %b %e");
     
     // A "pretty" date with no day of week according to locale preferences, i.e. "March 10, 2014"
@@ -150,40 +150,40 @@ public void init() throws Error {
     // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
     FMT_PRETTY_DATE_ABBREV_NO_DOW_NO_YEAR = _("%b %e");
     
-    /// Ante meridiem
-    /// (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
-    /// format user settings to be honored)
+    // Ante meridiem
+    // (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+    // format user settings to be honored)
     FMT_AM = _("am");
     
-    /// Brief ante meridiem, i.e. "am" -> "a"
-    /// (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
-    /// format user settings to be honored)
+    // Brief ante meridiem, i.e. "am" -> "a"
+    // (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+    // format user settings to be honored)
     FMT_BRIEF_AM = _("a");
     
-    /// Post meridiem
-    /// (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
-    /// format user settings to be honored)
+    // Post meridiem
+    // (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+    // format user settings to be honored)
     FMT_PM = _("pm");
     
-    /// Brief post meridiem, i.e. "pm" -> "p"
-    /// (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
-    /// format user settings to be honored)
+    // Brief post meridiem, i.e. "pm" -> "p"
+    // (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+    // format user settings to be honored)
     FMT_BRIEF_PM = _("p");
     
-    /// The 12-hour time with minute and meridiem ("am" or "pm"), i.e. "5:06pm"
-    /// (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
-    /// format user settings to be honored)
+    // The 12-hour time with minute and meridiem ("am" or "pm"), i.e. "5:06pm"
+    // (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+    // format user settings to be honored)
     FMT_12HOUR_MIN_MERIDIEM = _("%d:%02d%s");
     
-    /// The 12-hour time with minute, seconds, and meridiem ("am" or "pm"), i.e. "5:06:31pm"
-    /// (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
-    /// format user settings to be honored)
+    // The 12-hour time with minute, seconds, and meridiem ("am" or "pm"), i.e. "5:06:31pm"
+    // (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
+    // format user settings to be honored)
     FMT_12HOUR_MIN_SEC_MERIDIEM = _("%d:%02d:%02d%s");
     
-    /// The 24-hour time with minutes, i.e. "17:06"
+    // The 24-hour time with minutes, i.e. "17:06"
     FMT_24HOUR_MIN = _("%02d:%02d");
     
-    /// The 24-hour time with minutes and seconds, i.e. "17:06:31"
+    // The 24-hour time with minutes and seconds, i.e. "17:06:31"
     FMT_24HOUR_MIN_SEC = _("%02d:%02d:%02d");
     
     // Used by quick-add to convert a user's day unit into an internal value.  Common abbreviations
