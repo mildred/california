@@ -110,16 +110,6 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
     }
     
     /**
-     * Generate a new {@link WallTime} with the {@link ExactTIme}'s values.
-     *
-     * Because date and timezone information is lost in this conversion, the caller should convert
-     * the ExactTime to the desired timezone before constructing the WallTime.
-     */
-    public WallTime.from_exact_time(ExactTime exact_time) {
-        this (exact_time.hour, exact_time.minute, exact_time.second);
-    }
-    
-    /**
      * Called from Calendar.init().
      */
     internal static void init() {

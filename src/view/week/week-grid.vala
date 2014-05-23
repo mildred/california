@@ -174,7 +174,7 @@ internal class Grid : Gtk.Box {
         // scroll to 6am when first created, unless in the current date, in which case scroll to
         // current time
         Calendar.WallTime start_time = Calendar.System.today in week
-            ? new Calendar.WallTime.from_exact_time(Calendar.System.now)
+            ? Calendar.System.now.to_wall_time()
             : new Calendar.WallTime(6, 0, 0);
         
         // scroll there

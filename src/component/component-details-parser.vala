@@ -162,9 +162,9 @@ public class DetailsParser : BaseObject {
         // if no start time or date but a duration was specified, assume start is now and use
         // duration for end time
         if (start_time == null && start_date == null && duration != null) {
-            start_time = new Calendar.WallTime.from_exact_time(Calendar.System.now);
-            end_time = new Calendar.WallTime.from_exact_time(
-                Calendar.System.now.adjust_time((int) duration.minutes, Calendar.TimeUnit.MINUTE));
+            start_time = Calendar.System.now.to_wall_time();
+            end_time =
+                Calendar.System.now.adjust_time((int) duration.minutes, Calendar.TimeUnit.MINUTE).to_wall_time();
             duration = null;
         }
         
@@ -292,8 +292,8 @@ public class DetailsParser : BaseObject {
         if (delay == null)
             return false;
         
-        start_time = new Calendar.WallTime.from_exact_time(
-            Calendar.System.now.adjust_time((int) delay.minutes, Calendar.TimeUnit.MINUTE));
+        start_time =
+            Calendar.System.now.adjust_time((int) delay.minutes, Calendar.TimeUnit.MINUTE).to_wall_time();
         
         return true;
     }

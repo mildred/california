@@ -82,14 +82,12 @@ private class QuickAdd : UnitTest.Harness {
     private bool with_delay() throws Error {
         Component.DetailsParser parser = new Component.DetailsParser("meet Alice in 3 hours", null);
         
-        Calendar.WallTime start = new Calendar.WallTime.from_exact_time(Calendar.System.now).adjust(
-            3, Calendar.TimeUnit.HOUR, null);
+        Calendar.WallTime start = Calendar.System.now.to_wall_time().adjust(3, Calendar.TimeUnit.HOUR, null);
         Calendar.WallTime end = start.adjust(1, Calendar.TimeUnit.HOUR, null);
         
         assert(parser.event.summary == "meet Alice");
-        assert(new Calendar.WallTime.from_exact_time(parser.event.exact_time_span.start_exact_time).equal_to(start));
-        assert(new Calendar.WallTime.from_exact_time(
-                parser.event.exact_time_span.start_exact_time).adjust(1, Calendar.TimeUnit.HOUR, null).equal_to(end));
+        assert(parser.event.exact_time_span.start_exact_time.to_wall_time().equal_to(start));
+        assert(parser.event.exact_time_span.start_exact_time.to_wall_time().adjust(1, Calendar.TimeUnit.HOUR, null).equal_to(end));
         
         return true;
     }
@@ -97,23 +95,23 @@ private class QuickAdd : UnitTest.Harness {
     private bool with_duration() throws Error {
         Component.DetailsParser parser = new Component.DetailsParser("meet Alice for 2 hrs", null);
         
-        Calendar.WallTime start = new Calendar.WallTime.from_exact_time(Calendar.System.now);
+        Calendar.WallTime start = Calendar.System.now.to_wall_time();
         Calendar.WallTime end = start.adjust(2, Calendar.TimeUnit.HOUR, null);
         
         return parser.event.summary == "meet Alice"
-            && new Calendar.WallTime.from_exact_time(parser.event.exact_time_span.start_exact_time).equal_to(start)
-            && new Calendar.WallTime.from_exact_time(parser.event.exact_time_span.end_exact_time).equal_to(end);
+            && parser.event.exact_time_span.start_exact_time.to_wall_time().equal_to(start)
+            && parser.event.exact_time_span.end_exact_time.to_wall_time().equal_to(end);
     }
     
     private bool with_delay_and_duration() throws Error {
         Component.DetailsParser parser = new Component.DetailsParser("meet Alice in 3 hours for 30 min", null);
         
-        Calendar.WallTime start = new Calendar.WallTime.from_exact_time(Calendar.System.now.adjust_time(3, Calendar.TimeUnit.HOUR));
+        Calendar.WallTime start = Calendar.System.now.adjust_time(3, Calendar.TimeUnit.HOUR).to_wall_time();
         Calendar.WallTime end = start.adjust(30, Calendar.TimeUnit.MINUTE, null);
         
         return parser.event.summary == "meet Alice"
-            && new Calendar.WallTime.from_exact_time(parser.event.exact_time_span.start_exact_time).equal_to(start)
-            && new Calendar.WallTime.from_exact_time(parser.event.exact_time_span.end_exact_time).equal_to(end);
+            && parser.event.exact_time_span.start_exact_time.to_wall_time().equal_to(start)
+            && parser.event.exact_time_span.end_exact_time.to_wall_time().equal_to(end);
     }
     
     private bool indeterminate_time() throws Error {

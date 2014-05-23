@@ -148,10 +148,10 @@ internal class DayPane : Pane {
             if (!date_span.is_same_day || !(date in date_span))
                 continue;
             
-            Calendar.WallTime start_time = new Calendar.WallTime.from_exact_time(
-                event.exact_time_span.start_exact_time.to_timezone(Calendar.Timezone.local));
-            Calendar.WallTime end_time = new Calendar.WallTime.from_exact_time(
-                event.exact_time_span.end_exact_time.to_timezone(Calendar.Timezone.local));
+            Calendar.WallTime start_time =
+                event.exact_time_span.start_exact_time.to_timezone(Calendar.Timezone.local).to_wall_time();
+            Calendar.WallTime end_time =
+                event.exact_time_span.end_exact_time.to_timezone(Calendar.Timezone.local).to_wall_time();
             
             int start_y = get_line_y(start_time);
             int end_y = get_line_y(end_time);
@@ -187,7 +187,7 @@ internal class DayPane : Pane {
         
         // draw horizontal line indicating current time
         if (date.equal_to(Calendar.System.today)) {
-            int time_of_day_y = get_line_y(new Calendar.WallTime.from_exact_time(Calendar.System.now));
+            int time_of_day_y = get_line_y(Calendar.System.now.to_wall_time());
             
             Palette.prepare_hairline(ctx, Palette.instance.current_time);
             ctx.move_to(0, time_of_day_y);

@@ -176,6 +176,13 @@ public class ExactTime : BaseObject, Gee.Comparable<ExactTime>, Gee.Hashable<Exa
     }
     
     /**
+     * Returns the {@link WallTime} for the {@link ExactTime}.
+     */
+    public WallTime to_wall_time() {
+        return new WallTime(hour, minute, second);
+    }
+    
+    /**
      * Returns prettified, localized user-visible date string of an {@link ExactTime}.
      */
     public string to_pretty_date_string(Date.PrettyFlag date_flags) {
@@ -186,7 +193,7 @@ public class ExactTime : BaseObject, Gee.Comparable<ExactTime>, Gee.Hashable<Exa
      * Returns prettified, localized user-visible time string of an {@link ExactTime}.
      */
     public string to_pretty_time_string(WallTime.PrettyFlag time_flags) {
-        return new WallTime.from_exact_time(this).to_pretty_string(time_flags);
+        return to_wall_time().to_pretty_string(time_flags);
     }
      
     
