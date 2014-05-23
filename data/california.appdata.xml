@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Yorba Foundation <california@yorba.org> -->
+<application>
+<id type="desktop">california.desktop</id>
+<licence>CC0</licence>
+<summary>GNOME 3 calendar</summary>
+<description>
+<p>
+California is a new calendar application for GNOME 3 designed to let you work with your
+calendars quickly and easily.
+</p>
+California is currently in beta development and has a limited but growing set of features:
+</p>
+<ul>
+<li>Modern, clean interface</li>
+<li>Month and week view of your schedule</li>
+<li>Quick setup (if any is required at all)</li>
+<li>Integrates with Evolution Data Server</li>
+<li>Quickly add events with a natural-language parser</li>
+<li>Works with Google, WebCal, and CalDAV servers</li>
+</ul>
+</description>
+<url type="homepage">https://wiki.gnome.org/Apps/California</url>
+<screenshots>
+<screenshot type="default">http://yorba.org/california/california-month-view.png</screenshot>
+</screenshots>
+<updatecontact>california@yorba.org</updatecontact>
+</application>
