@@ -380,14 +380,11 @@ private class Grid : Gtk.Grid {
                 owner.request_display_event(event, release_cell, release_point);
                 stop_propagation = true;
             }
-        } else if (press_cell.date != null && release_cell.date != null) {
+        } else {
             // create multi-day event
             owner.request_create_all_day_event(new Calendar.DateSpan(press_cell.date, release_cell.date),
                 release_cell, release_point);
             stop_propagation = true;
-        } else {
-            // make sure to clear selections if no action is taken
-            unselect_all();
         }
         
         return stop_propagation;
@@ -441,15 +438,11 @@ private class Grid : Gtk.Grid {
         if (hover_cell == null || hover_cell == press_cell)
             return false;
         
-        // both must have dates as well
-        if (press_cell.date == null || hover_cell.date == null)
-            return false;
-        
         // mark two cells and all in-between as selected, being sure to mark any previous selected
         // as unselected
         Calendar.DateSpan span = new Calendar.DateSpan(press_cell.date, hover_cell.date);
         foreach_cell((cell) => {
-            cell.selected = (cell.date != null) ? cell.date in span : false;
+            cell.selected = cell.date in span;
             
             return true;
         });

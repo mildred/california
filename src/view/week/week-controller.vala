@@ -108,6 +108,13 @@ public class Controller : BaseObject, View.Controllable {
      * @inheritDoc
      */
     public void unselect_all() {
+        Grid? current = get_current_grid();
+        if (current != null)
+            current.unselect_all();
+    }
+    
+    private Grid? get_current_grid() {
+        return stack.get_visible_child() as Grid;
     }
     
     private Gtk.Widget model_presentation(Calendar.Week week, out string? id) {

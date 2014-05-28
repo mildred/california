@@ -118,6 +118,8 @@ california_VALASOURCES = \
 	toolkit/toolkit-editable-label.vala \
 	toolkit/toolkit-event-connector.vala \
 	toolkit/toolkit-listbox-model.vala \
+	toolkit/toolkit-motion-connector.vala \
+	toolkit/toolkit-motion-event.vala \
 	toolkit/toolkit-mutable-widget.vala \
 	toolkit/toolkit-popup.vala \
 	toolkit/toolkit-stack-model.vala \

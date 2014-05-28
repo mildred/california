@@ -44,6 +44,10 @@ internal class Grid : Gtk.Box {
     private Gee.HashMap<Calendar.Date, AllDayCell> date_to_all_day = new Gee.HashMap<Calendar.Date,
         AllDayCell>();
     private Toolkit.ButtonConnector instance_container_button_connector = new Toolkit.ButtonConnector();
+    private Toolkit.ButtonConnector all_day_button_connector = new Toolkit.ButtonConnector();
+    private Toolkit.ButtonConnector day_pane_button_connector = new Toolkit.ButtonConnector();
+    private Toolkit.MotionConnector day_pane_motion_connector = new Toolkit.MotionConnector.button_only();
+    private Toolkit.MotionConnector all_day_cell_motion_connector = new Toolkit.MotionConnector.button_only();
     private Gtk.ScrolledWindow scrolled_panes;
     private Gtk.Widget right_spacer;
     private bool vadj_init = false;
@@ -104,6 +108,8 @@ internal class Grid : Gtk.Box {
             // label and the day panes
             AllDayCell all_day_cell = new AllDayCell(this, date);
             instance_container_button_connector.connect_to(all_day_cell);
+            all_day_button_connector.connect_to(all_day_cell);
+            all_day_cell_motion_connector.connect_to(all_day_cell);
             top_grid.attach(all_day_cell, col, 1, 1, 1);
             
             // save mapping
@@ -112,6 +118,8 @@ internal class Grid : Gtk.Box {
             DayPane pane = new DayPane(this, date);
             pane.expand = true;
             instance_container_button_connector.connect_to(pane);
+            day_pane_button_connector.connect_to(pane);
+            day_pane_motion_connector.connect_to(pane);
             pane_grid.attach(pane, col, 1, 1, 1);
             
             // save mapping
@@ -133,9 +141,17 @@ internal class Grid : Gtk.Box {
         scrolled_panes.get_vscrollbar().realize.connect(on_realloc_right_spacer);
         scrolled_panes.get_vscrollbar().size_allocate.connect(on_realloc_right_spacer);
         
-        // connect panes' event signal handlers
+        // connect instance connectors button event signal handlers for click/double-clicked
         instance_container_button_connector.clicked.connect(on_instance_container_clicked);
         instance_container_button_connector.double_clicked.connect(on_instance_container_double_clicked);
+        
+        // connect to individual motion event handlers for different types of instance containers
+        all_day_cell_motion_connector.button_motion.connect(on_all_day_cell_button_motion);
+        day_pane_motion_connector.button_motion.connect(on_day_pane_motion);
+        
+        // connect to individual button released handlers for different types of instance containers
+        all_day_button_connector.released.connect(on_all_day_cell_button_released);
+        day_pane_button_connector.released.connect(on_day_pane_button_released);
         
         // set up calendar subscriptions for the week
         subscriptions = new Backing.CalendarSubscriptionManager(
@@ -165,6 +181,14 @@ internal class Grid : Gtk.Box {
         
         // watch for vertical adjustment to initialize to set the starting scroll position
         scrolled_panes.vadjustment.changed.connect(on_vadjustment_changed);
+    }
+    
+    public void unselect_all() {
+        foreach (AllDayCell day_cell in date_to_all_day.values)
+            day_cell.selected = false;
+        
+        foreach (DayPane day_pane in date_to_panes.values)
+            day_pane.clear_selection();
     }
     
     private void on_vadjustment_changed(Gtk.Adjustment vadj) {
@@ -337,6 +361,106 @@ internal class Grid : Gtk.Box {
         // otherwise, an all-day-cell, so request an all-day event
         owner.request_create_all_day_event(instance_container.contained_span, instance_container,
             details.press_point);
+    }
+    
+    private void on_day_pane_motion(Toolkit.MotionEvent details) {
+        DayPane day_pane = (DayPane) details.widget;
+        
+        // only update selection as long as button is depressed
+        if (details.is_button_pressed(Toolkit.Button.PRIMARY))
+            day_pane.update_selection(day_pane.get_wall_time(details.point.y));
+        else
+            day_pane.clear_selection();
+    }
+    
+    private bool on_day_pane_button_released(Gtk.Widget widget, Toolkit.Button button, Gdk.Point point,
+        Gdk.EventType event_type) {
+        if (button != Toolkit.Button.PRIMARY)
+            return Toolkit.PROPAGATE;
+        
+        DayPane day_pane = (DayPane) widget;
+        
+        Calendar.ExactTimeSpan? selection_span = day_pane.get_selection_span();
+        if (selection_span == null)
+            return Toolkit.PROPAGATE;
+        
+        owner.request_create_timed_event(selection_span, widget, point);
+        
+        return Toolkit.STOP;
+    }
+    
+    private AllDayCell? get_cell_at(AllDayCell widget, Gdk.Point widget_location) {
+        // convert widget's coordinates into grid coordinates
+        int grid_x, grid_y;
+        if (!widget.translate_coordinates(this, widget_location.x, widget_location.y,
+            out grid_x, out grid_y)) {
+            return null;
+        }
+        
+        // convert those coordinates into the day cell now being hovered over
+        // TODO: Obviously a better hit-test could be done here
+        foreach (AllDayCell day_cell in date_to_all_day.values) {
+            int cell_x, cell_y;
+            if (!translate_coordinates(day_cell, grid_x, grid_y, out cell_x, out cell_y))
+                continue;
+            
+            if (day_cell.is_hit(cell_x, cell_y))
+                return day_cell;
+        }
+        
+        return null;
+    }
+    
+    private void on_all_day_cell_button_motion(Toolkit.MotionEvent details) {
+        if (!details.is_button_pressed(Toolkit.Button.PRIMARY))
+            return;
+        
+        // widget is always the cell where the drag began, not ends
+        AllDayCell start_cell = (AllDayCell) details.widget;
+        
+        // get the widget now being hovered over
+        AllDayCell? hit_cell = get_cell_at(start_cell, details.point);
+        if (hit_cell == null)
+            return;
+        
+        // select everything from the start cell to the hit cell
+        Calendar.DateSpan span = new Calendar.DateSpan(start_cell.date, hit_cell.date);
+        foreach (AllDayCell day_cell in date_to_all_day.values)
+            day_cell.selected = day_cell.date in span;
+    }
+    
+    private bool on_all_day_cell_button_released(Gtk.Widget widget, Toolkit.Button button, Gdk.Point point,
+        Gdk.EventType event_type) {
+        if (button != Toolkit.Button.PRIMARY) {
+            unselect_all();
+            
+            return Toolkit.PROPAGATE;
+        }
+        
+        AllDayCell start_cell = (AllDayCell) widget;
+        
+        // only convert drag-and-release to new event if start is selected (this prevents single-clicks
+        // from being turned into new events)
+        if (!start_cell.selected) {
+            unselect_all();
+            
+            return Toolkit.PROPAGATE;
+        }
+        
+        // get widget button was released over
+        AllDayCell? release_cell = get_cell_at(start_cell, point);
+        if (release_cell == null) {
+            unselect_all();
+            
+            return Toolkit.PROPAGATE;
+        }
+        
+        // let the host unselect all once the event has been created, this keeps the selection on
+        // the display until the user has completed
+        owner.request_create_all_day_event(new Calendar.DateSpan(start_cell.date, release_cell.date),
+            widget, point);
+        
+        return Toolkit.STOP;
     }
 }
 

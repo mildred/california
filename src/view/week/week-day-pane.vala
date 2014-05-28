@@ -16,7 +16,8 @@ namespace California.View.Week {
 internal class DayPane : Pane, Common.InstanceContainer {
     public const string PROP_OWNER = "owner";
     public const string PROP_DATE = "date";
-    public const string PROP_SELECTED = "selected";
+    public const string PROP_SELECTION_STATE = "selection-start";
+    public const string PROP_SELECTION_END = "selection-end";
     
     // No matter how wide the event is in the day, always leave a little peeking out so the hour/min
     // lines are visible
@@ -24,7 +25,15 @@ internal class DayPane : Pane, Common.InstanceContainer {
     
     public Calendar.Date date { get; set; }
     
-    public bool selected { get; set; default = false; }
+    /**
+     * Where the current selection starts, if any.
+     */
+    public Calendar.WallTime? selection_start { get; private set; }
+    
+    /**
+     * Where the current selection ends, if any.
+     */
+    public Calendar.WallTime? selection_end { get; private set; }
     
     /**
      * @inheritDoc
@@ -45,7 +54,7 @@ internal class DayPane : Pane, Common.InstanceContainer {
         this.date = date;
         
         notify[PROP_DATE].connect(queue_draw);
-        notify[PROP_SELECTED].connect(queue_draw);
+        
         Calendar.System.instance.is_24hr_changed.connect(queue_draw);
         Calendar.System.instance.today_changed.connect(on_today_changed);
         
@@ -136,14 +145,53 @@ internal class DayPane : Pane, Common.InstanceContainer {
         return null;
     }
     
+    public void update_selection(Calendar.WallTime wall_time) {
+        // round down to the nearest 15-minute mark
+        Calendar.WallTime rounded_time = wall_time.round_down(15, Calendar.TimeUnit.MINUTE);
+        
+        // assign start first, end second (ordering doesn't matter, possible to select upwards)
+        if (selection_start == null) {
+            selection_start = rounded_time;
+            selection_end = null;
+        } else {
+            selection_end = rounded_time;
+        }
+        
+        // if same, treat as unselected
+        if (selection_start != null && selection_end != null && selection_start.equal_to(selection_end)) {
+            clear_selection();
+            
+            return;
+        }
+        
+        queue_draw();
+    }
+    
+    public Calendar.ExactTimeSpan? get_selection_span() {
+        if (selection_start == null || selection_end == null)
+            return null;
+        
+        return new Calendar.ExactTimeSpan(
+            new Calendar.ExactTime(Calendar.Timezone.local, date, selection_start),
+            new Calendar.ExactTime(Calendar.Timezone.local, date, selection_end)
+        );
+    }
+    
+    public void clear_selection() {
+        if (selection_start == null && selection_end == null)
+            return;
+        
+        selection_start = null;
+        selection_end = null;
+        
+        queue_draw();
+    }
+    
     // note that a painter's algorithm should be used here: background should be painted before
     // calling base method, and foreground afterward
     protected override bool on_draw(Cairo.Context ctx) {
-        // shade background color if this is current day or selected
-        if (selected) {
-            Gdk.cairo_set_source_rgba(ctx, Palette.instance.selection);
-            ctx.paint();
-        } else if (date.equal_to(Calendar.System.today)) {
+        // shade background color if this is current day
+        if (date.equal_to(Calendar.System.today)) {
             Gdk.cairo_set_source_rgba(ctx, Palette.instance.current_day);
             ctx.paint();
         }
@@ -209,6 +257,19 @@ internal class DayPane : Pane, Common.InstanceContainer {
             ctx.move_to(0, time_of_day_y);
             ctx.line_to(get_allocated_width(), time_of_day_y);
             ctx.stroke();
+        }
+        
+        // draw selection rectangle
+        if (selection_start != null && selection_end != null) {
+            int start_y = get_line_y(selection_start);
+            int end_y = get_line_y(selection_end);
+            
+            int y = int.min(start_y, end_y);
+            int height = int.max(start_y, end_y) - y;
+            
+            ctx.rectangle(0, y, get_allocated_width(), height);
+            Gdk.cairo_set_source_rgba(ctx, Palette.instance.selection);
+            ctx.fill();
         }
         
         return true;
