@@ -47,6 +47,9 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     private Gtk.CheckButton all_day_toggle;
     
     [GtkChild]
+    private Gtk.TextView description_textview;
+    
+    [GtkChild]
     private Gtk.ComboBoxText calendar_combo;
     
     [GtkChild]
@@ -180,6 +183,8 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
             is_update = false;
         }
         
+        description_textview.buffer.text = event.description ?? "";
+        
         accept_button.label = is_update ? _("_Update") : _("C_reate");
         original_calendar_source = event.calendar_source;
     }
@@ -228,6 +233,7 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         
         event.calendar_source = calendar_model.active;
         event.summary = summary_entry.text;
+        event.description = description_textview.buffer.text;
         
         if (all_day_toggle.active) {
             event.set_event_date_span(selected_date_span);
