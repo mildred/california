@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-23 16:54+0200\n"
-"PO-Revision-Date: 2014-05-23 16:55+0200\n"
+"POT-Creation-Date: 2014-05-30 19:40+0200\n"
+"PO-Revision-Date: 2014-05-30 19:41+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -90,19 +90,19 @@ msgstr "Copyright 2014 Fundacja Yorba"
 msgid "Visit California's home page"
 msgstr "Witryna programu California"
 
-#: ../src/application/california-application.vala:114
+#: ../src/application/california-application.vala:157
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "Nie można otworzyć programu California: %s"
 
-#: ../src/application/california-application.vala:214
+#: ../src/application/california-application.vala:260
 #, c-format
 msgid "About %s"
 msgstr "O programie %s"
 
 #. Translators: add your name and email address to receive credit in the About dialog
 #. For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:220
+#: ../src/application/california-application.vala:266
 msgid "translator-credits"
 msgstr ""
 "Piotr Drąg <piotrdrag@gmail.com>, 2014\n"
@@ -353,21 +353,21 @@ msgstr "w;na;"
 msgid "st;nd;rd;th"
 msgstr "st;nd;rd;th"
 
-#: ../src/host/host-create-update-event.vala:183 ../src/rc/show-event.ui.h:2
+#: ../src/host/host-create-update-event.vala:188 ../src/rc/show-event.ui.h:2
 msgid "_Update"
 msgstr "Z_aktualizuj"
 
-#: ../src/host/host-create-update-event.vala:183
+#: ../src/host/host-create-update-event.vala:188
 #: ../src/rc/create-update-event.ui.h:8
 msgid "C_reate"
 msgstr "U_twórz"
 
-#: ../src/host/host-create-update-event.vala:270
+#: ../src/host/host-create-update-event.vala:276
 #, c-format
 msgid "Unable to create event: %s"
 msgstr "Nie można utworzyć wydarzenia: %s"
 
-#: ../src/host/host-create-update-event.vala:283
+#: ../src/host/host-create-update-event.vala:289
 #, c-format
 msgid "Unable to update event: %s"
 msgstr "Nie można zaktualizować wydarzenia: %s"
@@ -383,23 +383,23 @@ msgstr[2] "Proszę wybrać kalendarz, do którego zaimportować wydarzenia:"
 msgid "_Today"
 msgstr "_Dzisiaj"
 
-#: ../src/host/host-main-window.vala:96
+#: ../src/host/host-main-window.vala:98
 msgid "Jump to today's date (Ctrl+T)"
 msgstr "Przechodzi do dzisiejszej daty (Ctrl+T)"
 
-#: ../src/host/host-main-window.vala:102
+#: ../src/host/host-main-window.vala:104
 msgid "Previous (Alt+Left)"
 msgstr "Poprzednie (Alt+Lewa strzałka)"
 
-#: ../src/host/host-main-window.vala:108
+#: ../src/host/host-main-window.vala:110
 msgid "Next (Alt+Right)"
 msgstr "Następne (Alt+Prawa strzałka)"
 
-#: ../src/host/host-main-window.vala:133
+#: ../src/host/host-main-window.vala:135
 msgid "Quick add event (Ctrl+N)"
 msgstr "Szybko tworzy nowe wydarzenie (Ctrl+N)"
 
-#: ../src/host/host-main-window.vala:139
+#: ../src/host/host-main-window.vala:141
 msgid "Calendars (Ctrl+L)"
 msgstr "Kalendarze (Ctrl+L)"
 
@@ -410,7 +410,7 @@ msgstr "Kalendarze (Ctrl+L)"
 #. Prints a span of time, i.e. "3:30pm to 4:30pm"
 #. date formatting: "<Start Date> to <End Date>"
 #: ../src/host/host-show-event.vala:89 ../src/host/host-show-event.vala:99
-#: ../src/view/week/week-controller.vala:157
+#: ../src/view/week/week-controller.vala:171
 #, c-format
 msgid "%s to %s"
 msgstr "%s do %s"
@@ -432,14 +432,14 @@ msgstr ""
 #. *
 #. * @inheritDoc
 #.
-#: ../src/view/month/month-controller.vala:48
+#: ../src/view/month/month-controller.vala:55
 msgid "Month"
 msgstr "Miesiąc"
 
 #. *
 #. * @inheritDoc
 #.
-#: ../src/view/week/week-controller.vala:35
+#: ../src/view/week/week-controller.vala:42
 msgid "Week"
 msgstr "Tydzień"
 
@@ -498,12 +498,12 @@ msgid "to"
 msgstr "do"
 
 #: ../src/rc/create-update-event.ui.h:6
-msgid "Calendar:"
-msgstr "Kalendarz:"
+msgid "_All-day"
+msgstr "_Cały dzień"
 
 #: ../src/rc/create-update-event.ui.h:9
-msgid "_All-day event"
-msgstr "Wydarzenie _całodniowe"
+msgid "Description"
+msgstr "Opis"
 
 #: ../src/rc/google-authenticating.ui.h:2
 msgid "_Try again"
