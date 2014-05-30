@@ -179,9 +179,13 @@ public class DetailsParser : BaseObject {
             }
         }
         
-        // if no start date was described but a start time was, assume for today
-        if (start_date == null && start_time != null)
+        // if no start date was described but a start time was, assume for today *unless* midnight
+        // was specified, in which case, tomorrow
+        if (start_date == null && start_time != null) {
             start_date = Calendar.System.today;
+            if (start_time.equal_to(Calendar.WallTime.earliest))
+                start_date = start_date.next();
+        }
         
         // if no end date was describe, assume ends today as well (unless midnight was crossed
         // due to duration)
@@ -343,21 +347,8 @@ public class DetailsParser : BaseObject {
         
         // attempt to parse into day of the week
         Calendar.DayOfWeek? dow = Calendar.DayOfWeek.parse(token.casefolded);
-        if (dow == null)
-            return null;
         
-        // find a Date for day of the week ... starting today, move forward up to one
-        // week
-        Calendar.Date upcoming = Calendar.System.today;
-        Calendar.Date next_week = upcoming.adjust_by(1, Calendar.DateUnit.WEEK);
-        do {
-            if (upcoming.day_of_week.equal_to(dow))
-                return upcoming;
-            
-            upcoming = upcoming.next();
-        } while (!upcoming.equal_to(next_week));
-        
-        return null;
+        return (dow != null) ? Calendar.System.today.upcoming(dow, true) : null;
     }
     
     // Parses potential date specifiers into a specific calendar date
