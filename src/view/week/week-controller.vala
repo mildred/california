@@ -13,6 +13,8 @@ namespace California.View.Week {
 public class Controller : BaseObject, View.Controllable {
     public const string PROP_WEEK = "week";
     
+    public const string VIEW_ID = "week";
+    
     private const int CACHE_NEIGHBORS_COUNT = 4;
     
     private class ViewContainer : Gtk.Stack, View.Container {
@@ -28,6 +30,11 @@ public class Controller : BaseObject, View.Controllable {
      * The current week of the year being displayed.
      */
     public Calendar.Week week { get; private set; }
+    
+    /**
+     * @inheritDoc
+     */
+    public string id { get { return VIEW_ID; } }
     
     /**
      * @inheritDoc

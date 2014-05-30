@@ -1,0 +1,14 @@
+<schemalist>
+
+<schema id="org.yorba.california" path="/org/yorba/california/">
+    <key name="calendar-view" type="s">
+        <default>"month"</default>
+        <summary>Current calendar view</summary>
+        <description>
+            Legal values include "week" and "month".
+        </description>
+    </key>
+</schema>
+
+</schemalist>
+

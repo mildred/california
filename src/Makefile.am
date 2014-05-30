@@ -25,6 +25,7 @@ california_VALASOURCES = \
 	application/california-application.vala \
 	application/california-commandline.vala \
 	application/california-resource.vala \
+	application/california-settings.vala \
 	application/main.vala \
 	\
 	backing/backing.vala \

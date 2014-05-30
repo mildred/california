@@ -51,6 +51,8 @@ public class MainWindow : Gtk.ApplicationWindow {
     private Gtk.Stack view_stack = new Gtk.Stack();
     private Gtk.HeaderBar headerbar = new Gtk.HeaderBar();
     private Gtk.Button today = new Gtk.Button.with_label(_("_Today"));
+    private Binding view_stack_binding;
+    private Gee.HashSet<string> view_stack_ids = new Gee.HashSet<string>();
     
     public MainWindow(Application app) {
         Object (application: app);
@@ -161,6 +163,26 @@ public class MainWindow : Gtk.ApplicationWindow {
         layout.pack_end(view_stack, true, true, 0);
         
         add(layout);
+        
+        // bind stack's visible child property to the settings for it, both ways ... because we want
+        // to initialize with the settings, use it as the source w/ SYNC_CREATE
+        view_stack_binding = Settings.instance.bind_property(Settings.PROP_CALENDAR_VIEW, view_stack,
+            "visible-child-name", BindingFlags.SYNC_CREATE | BindingFlags.BIDIRECTIONAL,
+            transform_setting_to_calendar_view);
+        
+        // to prevent storing the different children's names as the widget is destroyed (cleared,
+        // i.e. remove each one by one), unbind before that occurs
+        view_stack.destroy.connect(() => { BaseObject.unbind_property(ref view_stack_binding); });
+    }
+    
+    // only allow known stack children ids through
+    private bool transform_setting_to_calendar_view(Binding binding, Value source, ref Value target) {
+        if (!view_stack_ids.contains(source.get_string()))
+            return false;
+        
+        target = source;
+        
+        return true;
     }
     
     public override void map() {
@@ -172,7 +194,8 @@ public class MainWindow : Gtk.ApplicationWindow {
     }
     
     private void add_controller(View.Controllable controller) {
-        view_stack.add_titled(controller.get_container(), controller.title, controller.title);
+        view_stack_ids.add(controller.id);
+        view_stack.add_titled(controller.get_container(), controller.id, controller.title);
         controller.get_container().show_all();
     }
     

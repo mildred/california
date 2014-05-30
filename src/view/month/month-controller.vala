@@ -16,6 +16,8 @@ namespace California.View.Month {
 public class Controller : BaseObject, View.Controllable {
     public const string PROP_MONTH_OF_YEAR = "month-of-year";
     
+    public const string VIEW_ID = "month";
+    
     // number of Grids to keep in GtkStack and cache (in terms of months) ... this should be an
     // even number, as it is halved to determine neighboring months depths
     private const int CACHE_NEIGHBORS_COUNT = 4;
@@ -41,6 +43,11 @@ public class Controller : BaseObject, View.Controllable {
      * @inheritDoc
      */
     public Calendar.FirstOfWeek first_of_week { get; set; }
+    
+    /**
+     * @inheritDoc
+     */
+    public string id { get { return VIEW_ID; } }
     
     /**
      * @inheritDoc

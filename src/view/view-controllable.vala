@@ -21,6 +21,13 @@ public interface Controllable : Object {
     public const string PROP_FIRST_OF_WEEK = "first-of-week";
     
     /**
+     * A short string uniquely identifying this view.
+     *
+     * Since this value will be persisted, it's important it does not change without good reason.
+     */
+    public abstract string id { get; }
+    
+    /**
      * A user-visible string (short) representing this view.
      */
     public abstract string title { get; }
