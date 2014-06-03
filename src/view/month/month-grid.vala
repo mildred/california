@@ -405,18 +405,8 @@ private class Grid : Gtk.Grid {
         if (release_cell.date == null)
             return true;
         
-        // TODO: Define default time better
-        Calendar.ExactTime start;
-        if(release_cell.date.equal_to(Calendar.System.today)) {
-            start = new Calendar.ExactTime.now(Calendar.Timezone.local);
-        } else {
-            start = new Calendar.ExactTime(Calendar.Timezone.local, release_cell.date,
-                new Calendar.WallTime(13, 0, 0));
-        }
-        
-        Calendar.ExactTime end = start.adjust_time(1, Calendar.TimeUnit.HOUR);
-        
-        owner.request_create_timed_event(new Calendar.ExactTimeSpan(start, end), release_cell, release_point);
+        owner.request_create_all_day_event(new Calendar.DateSpan(press_cell.date, release_cell.date),
+            release_cell, release_point);
         
         // stop propagation
         return true;

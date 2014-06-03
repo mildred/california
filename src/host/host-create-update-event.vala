@@ -256,8 +256,6 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
             update_event_async.begin(null);
         else
             create_event_async.begin(null);
-        
-        notify_success();
     }
     
     [GtkCallback]
@@ -266,8 +264,11 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     }
     
     private async void create_event_async(Cancellable? cancellable) {
-        if (event.calendar_source == null)
+        if (event.calendar_source == null) {
+            notify_failure(_("Unable to create event: calendar must be specified"));
+            
             return;
+        }
         
         try {
             yield event.calendar_source.create_component_async(event, cancellable);
@@ -279,8 +280,11 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     
     // TODO: Delete from original source if not the same as the new source
     private async void update_event_async(Cancellable? cancellable) {
-        if (event.calendar_source == null)
+        if (event.calendar_source == null) {
+            notify_failure(_("Unable to update event: calendar must be specified"));
+            
             return;
+        }
         
         try {
             yield event.calendar_source.update_component_async(event, cancellable);
