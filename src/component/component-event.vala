@@ -263,8 +263,13 @@ public class Event : Instance, Gee.Comparable<Event> {
     /**
      * Returns a prettified string describing the {@link Event}'s time span in as concise and
      * economical manner possible.
+     *
+     * @return null if no time/date information is specified
      */
-    public string get_event_time_pretty_string(Calendar.Timezone timezone) {
+    public string? get_event_time_pretty_string(Calendar.Timezone timezone) {
+        if (date_span == null && exact_time_span == null)
+            return null;
+        
         // if any dates are not in current year, display year in all dates
         Calendar.Date.PrettyFlag date_flags = Calendar.Date.PrettyFlag.NONE;
         Calendar.DateSpan date_span = get_event_date_span(timezone);
@@ -281,9 +286,7 @@ public class Event : Instance, Gee.Comparable<Event> {
                 // current year
                 span = date_span.start_date.to_pretty_string(date_flags);
             } else {
-                // All-day event spanning days, print "<abbrev date> to <abbrev date>"
-                date_flags |= Calendar.Date.PrettyFlag.ABBREV;
-                // Prints a span of dates, i.e. "January 3 to January 6"
+                // Prints a span of dates, i.e. "Monday, January 3 to Thursday, January 6"
                 span = _("%s to %s").printf(date_span.start_date.to_pretty_string(date_flags),
                     date_span.end_date.to_pretty_string(date_flags));
             }

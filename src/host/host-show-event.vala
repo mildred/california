@@ -19,7 +19,22 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     public Gtk.Widget? initial_focus { get { return close_button; } }
     
     [GtkChild]
-    private Gtk.Label text_label;
+    private Gtk.Label summary_text;
+    
+    [GtkChild]
+    private Gtk.Label when_label;
+    
+    [GtkChild]
+    private Gtk.Label when_text;
+    
+    [GtkChild]
+    private Gtk.Label where_label;
+    
+    [GtkChild]
+    private Gtk.Label where_text;
+    
+    [GtkChild]
+    private Gtk.Label description_text;
     
     [GtkChild]
     private Gtk.Button update_button;
@@ -55,26 +70,17 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     }
     
     private void build_display() {
-        // Each string should end without whitespace; add_lf_lf will ensure each section is
-        // separated as long as there's preceding text
-        StringBuilder builder = new StringBuilder();
-        
         // summary
-        if (!String.is_empty(event.summary))
-            add_lf_lf(builder).append_printf("<b>%s</b>", Markup.escape_text(event.summary));
+        set_label(null, summary_text, event.summary);
         
         // location
-        if (!String.is_empty(event.location))
-            add_lf_lf(builder).append_printf(_("Location: %s"), Markup.escape_text(event.location));
+        set_label(where_label, where_text, event.location);
+        
+        // time
+        set_label(when_label, when_text, event.get_event_time_pretty_string(Calendar.Timezone.local));
         
         // description
-        if (!String.is_empty(event.description))
-            add_lf_lf(builder).append_printf("%s", Markup.escape_text(event.description));
-        
-        add_lf_lf(builder).append_printf("<small>%s</small>",
-            Markup.escape_text(event.get_event_time_pretty_string(Calendar.Timezone.local)));
-        
-        text_label.label = builder.str;
+        set_label(null, description_text, escape(event.description));
         
         // don't current support updating or removing recurring events properly; see
         // https://bugzilla.gnome.org/show_bug.cgi?id=725786
@@ -87,12 +93,24 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         remove_button.no_show_all = !visible;
     }
     
-    // Adds two linefeeds if there's existing text
-    private unowned StringBuilder add_lf_lf(StringBuilder builder) {
-        if (!String.is_empty(builder.str))
-            builder.append("\n\n");
-        
-        return builder;
+    private string? escape(string? plain) {
+        return !String.is_empty(plain) ? Markup.escape_text(plain) : plain;
+    }
+    
+    // Note that text is not escaped, up to caller to determine if necessary or not.
+    private void set_label(Gtk.Label? label, Gtk.Label text, string? str) {
+        if (!String.is_empty(str)) {
+            text.label = str;
+        } else {
+            text.visible = false;
+            text.no_show_all = true;
+            
+            // hide its associated label as well
+            if (label != null) {
+                label.visible = false;
+                label.no_show_all = true;
+            }
+        }
     }
     
     [GtkCallback]
