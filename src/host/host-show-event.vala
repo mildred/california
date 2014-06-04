@@ -63,6 +63,10 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         if (!String.is_empty(event.summary))
             add_lf_lf(builder).append_printf("<b>%s</b>", Markup.escape_text(event.summary));
         
+        // location
+        if (!String.is_empty(event.location))
+            add_lf_lf(builder).append_printf(_("Location: %s"), Markup.escape_text(event.location));
+        
         // description
         if (!String.is_empty(event.description))
             add_lf_lf(builder).append_printf("%s", Markup.escape_text(event.description));
