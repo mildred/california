@@ -71,12 +71,9 @@ internal class WebCalActivatorPane : Gtk.Grid, Toolkit.Card {
     }
     
     private async void subscribe_async() {
-        Gdk.Color color;
-        color_button.get_color(out color);
-        
         try {
             yield store.subscribe_webcal_async(name_entry.text, URI.parse(url_entry.text),
-                null, Gfx.rgb_to_uint8_rgb_string(color), null);
+                null, Gfx.rgba_to_uint8_rgb_string(color_button.rgba), null);
             notify_success();
         } catch (Error err) {
             notify_failure(_("Unable to subscribe to Web calendar at %s: %s").printf(url_entry.text,

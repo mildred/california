@@ -91,15 +91,6 @@ public abstract class Source : BaseObject, Gee.Comparable<Source> {
     }
     
     /**
-     * Returns the current {@link color} setting as a Gdk.Color.
-     *
-     * If the color string is unparseable, returns a Gdk.Color that corresponds to "dressy-black".
-     */
-    public Gdk.Color color_as_rgb() {
-        return Gfx.rgb_string_to_rgb(color, Gdk.Color() { red = 0, green = 0, blue = 0 }, null);
-    }
-    
-    /**
      * Returns the current {@link color} setting as a Gdk.RGBA.
      *
      * If the color string is unparseable, returns a Gdk.RGBA that corresponds to "dressy-black".
@@ -113,7 +104,7 @@ public abstract class Source : BaseObject, Gee.Comparable<Source> {
      * Set the {@link color} property to the string representation of the Gdk.RGBA structure.
      */
     public void set_color_to_rgba(Gdk.RGBA rgba) {
-        color = Gfx.rgb_to_uint8_rgb_string(Gfx.rgba_to_rgb(rgba));
+        color = Gfx.rgba_to_uint8_rgb_string(rgba);
     }
     
     /**

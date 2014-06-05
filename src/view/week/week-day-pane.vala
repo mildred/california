@@ -227,7 +227,7 @@ internal class DayPane : Pane, Common.InstanceContainer {
             ctx.rectangle(0, start_y, rect_width, end_y - start_y);
             
             // background rectangle (to prevent hour lines from showing when using alpha, below)
-            Gdk.cairo_set_source_rgba(ctx, Gfx.RGBA_WHITE);
+            Gdk.cairo_set_source_rgba(ctx, Gfx.WHITE);
             ctx.fill_preserve();
             
             // interior rectangle (use alpha to mute colors)

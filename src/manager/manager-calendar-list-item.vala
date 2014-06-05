@@ -102,13 +102,13 @@ internal class CalendarListItem : Gtk.Grid, Toolkit.MutableWidget {
     
     private bool source_to_color(Binding binding, Value source_value, ref Value target_value) {
         bool used_default;
-        target_value = Gfx.rgb_string_to_rgba(source.color, Gfx.RGBA_BLACK, out used_default);
+        target_value = Gfx.rgb_string_to_rgba(source.color, Gfx.BLACK, out used_default);
         
         return !used_default;
     }
     
     private bool color_to_source(Binding binding, Value source_value, ref Value target_value) {
-        target_value = Gfx.rgb_to_uint8_rgb_string(Gfx.rgba_to_rgb(color_button.rgba));
+        target_value = Gfx.rgba_to_uint8_rgb_string(color_button.rgba);
         
         return true;
     }
