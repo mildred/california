@@ -3,15 +3,15 @@
     <menu id="window-menu">
         <section>
             <item>
-                <attribute name="label" translatable="yes">_Increase font size</attribute>
+                <attribute name="label" translatable="yes">Zoom _In</attribute>
                 <attribute name="action">win.increase-font</attribute>
             </item>
             <item>
-                <attribute name="label" translatable="yes">_Decrease font size</attribute>
+                <attribute name="label" translatable="yes">Zoom _Out</attribute>
                 <attribute name="action">win.decrease-font</attribute>
             </item>
             <item>
-                <attribute name="label" translatable="yes">_Reset font size</attribute>
+                <attribute name="label" translatable="yes">_Normal Size</attribute>
                 <attribute name="action">win.reset-font</attribute>
             </item>
         </section>
