@@ -8,6 +8,23 @@
             Legal values include "week" and "month".
         </description>
     </key>
+    
+    <key name="small-font-pts" type="i">
+        <default>8</default>
+        <summary>Size (in points) of small font</summary>
+        <description>
+            The small font is generally used where lots of detail is being displayed.
+        </description>
+    </key>
+    
+    <key name="normal-font-pts" type="i">
+        <default>11</default>
+        <summary>Size (in points) of normal font</summary>
+        <description>
+            The normal font is used where less details is being displayed, such as the day of the
+            month.
+        </description>
+    </key>
 </schema>
 
 </schemalist>

@@ -56,11 +56,18 @@ public class Controller : BaseObject, View.Controllable {
      */
     public Calendar.FirstOfWeek first_of_week { get; set; }
     
+    /**
+     * {@link View.Palette} for the entire hosted view.
+     */
+    public View.Palette palette { get; private set; }
+    
     private ViewContainer stack;
     private Toolkit.StackModel<Calendar.Week> stack_model;
     private Calendar.WeekSpan cache_span;
     
-    public Controller() {
+    public Controller(View.Palette palette) {
+        this.palette = palette;
+        
         stack = new ViewContainer(this);
         stack.homogeneous = true;
         stack.transition_duration = Toolkit.SLOW_STACK_TRANSITION_DURATION_MSEC;

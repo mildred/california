@@ -12,6 +12,8 @@ namespace California {
 
 public class Settings : BaseObject {
     public const string PROP_CALENDAR_VIEW = "calendar-view";
+    public const string PROP_SMALL_FONT_PTS = "small-font-pts";
+    public const string PROP_NORMAL_FONT_PTS = "normal-font-pts";
     
     // GSettings schema identifier.
     private const string SCHEMA_ID = "org.yorba.california";
@@ -19,10 +21,47 @@ public class Settings : BaseObject {
     // schema key ids may be the same as property names, but want to keep them different in case
     // one or the other changes
     private const string KEY_CALENDAR_VIEW = "calendar-view";
+    private const string KEY_SMALL_FONT_PTS = "small-font-pts";
+    private const string KEY_NORMAL_FONT_PTS = "normal-font-pts";
     
     public static Settings instance { get; private set; }
     
+    /**
+     * Which view ("month", "week") is currently displayed.
+     *
+     * The string is determined by the various views' {@link View.Controllable.id}.
+     */
     public string calendar_view { get; set; }
+    
+    /**
+     * The size of the small font used throughout the application (in points).
+     */
+    public int small_font_pts {
+        get {
+            return settings.get_int(KEY_SMALL_FONT_PTS).clamp(View.Palette.MIN_SMALL_FONT_PTS,
+                View.Palette.MAX_SMALL_FONT_PTS);
+        }
+        
+        set {
+            settings.set_int(KEY_SMALL_FONT_PTS, value.clamp(View.Palette.MIN_SMALL_FONT_PTS,
+                View.Palette.MAX_SMALL_FONT_PTS));
+        }
+    }
+    
+    /**
+     * The size of the "normal" font used throughout the application (in points).
+     */
+    public int normal_font_pts {
+        get {
+            return settings.get_int(KEY_NORMAL_FONT_PTS).clamp(View.Palette.MIN_NORMAL_FONT_PTS,
+                View.Palette.MAX_NORMAL_FONT_PTS);
+        }
+        
+        set {
+            settings.set_int(KEY_NORMAL_FONT_PTS, value.clamp(View.Palette.MIN_NORMAL_FONT_PTS,
+                View.Palette.MAX_NORMAL_FONT_PTS));
+        }
+    }
     
     private GLib.Settings settings;
     

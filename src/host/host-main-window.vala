@@ -31,21 +31,34 @@ public class MainWindow : Gtk.ApplicationWindow {
     private const string ACTION_WEEK = "win.view-week";
     private const string ACCEL_WEEK = "<Ctrl>W";
     
+    private const string ACTION_INCREASE_FONT = "win.increase-font";
+    private const string ACCEL_INCREASE_FONT = "KP_Add";
+    
+    private const string ACTION_DECREASE_FONT = "win.decrease-font";
+    private const string ACCEL_DECREASE_FONT = "KP_Subtract";
+    
+    private const string ACTION_RESET_FONT = "win.reset-font";
+    private const string ACCEL_RESET_FONT = "KP_Multiply";
+    
     private static const ActionEntry[] action_entries = {
         { "quick-create-event", on_quick_create_event },
         { "jump-to-today", on_jump_to_today },
         { "next", on_next },
         { "previous", on_previous },
         { "view-month", on_view_month },
-        { "view-week", on_view_week }
+        { "view-week", on_view_week },
+        { "increase-font", on_increase_font },
+        { "decrease-font", on_decrease_font },
+        { "reset-font", on_reset_font }
     };
     
     // Set as a property so it can be bound to the current View.Controllable
     public Calendar.FirstOfWeek first_of_week { get; set; }
     
     private Gtk.Button quick_add_button;
-    private View.Controllable month_view = new View.Month.Controller();
-    private View.Controllable week_view = new View.Week.Controller();
+    private View.Palette palette;
+    private View.Controllable month_view;
+    private View.Controllable week_view;
     private View.Controllable? current_controller = null;
     private Gee.HashSet<Binding> current_bindings = new Gee.HashSet<Binding>();
     private Gtk.Stack view_stack = new Gtk.Stack();
@@ -71,6 +84,9 @@ public class MainWindow : Gtk.ApplicationWindow {
         Application.instance.add_accelerator(rtl ? ACCEL_NEXT : ACCEL_PREVIOUS, ACTION_PREVIOUS, null);
         Application.instance.add_accelerator(ACCEL_MONTH, ACTION_MONTH, null);
         Application.instance.add_accelerator(ACCEL_WEEK, ACTION_WEEK, null);
+        Application.instance.add_accelerator(ACCEL_INCREASE_FONT, ACTION_INCREASE_FONT, null);
+        Application.instance.add_accelerator(ACCEL_DECREASE_FONT, ACTION_DECREASE_FONT, null);
+        Application.instance.add_accelerator(ACCEL_RESET_FONT, ACTION_RESET_FONT, null);
         
         // view stack settings
         view_stack.homogeneous = true;
@@ -79,6 +95,13 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         // subscribe before adding so first add to initialize UI
         view_stack.notify["visible-child"].connect(on_view_changed);
+        
+        // create a View.Palette for all the hosted views ...
+        palette = new View.Palette(this);
+        
+        // ... then create the hosted views
+        month_view = new View.Month.Controller(palette);
+        week_view = new View.Week.Controller(palette);
         
         // add views to view stack, first added is first shown
         add_controller(month_view);
@@ -89,7 +112,6 @@ public class MainWindow : Gtk.ApplicationWindow {
 #if !ENABLE_UNITY
         // Unity doesn't support GtkHeaderBar-as-title-bar very well yet; when set, the main
         // window can't be resized no matter what additional GtkWindow properties are set
-        headerbar.show_close_button = true;
         set_titlebar(headerbar);
 #endif
         
@@ -140,7 +162,11 @@ public class MainWindow : Gtk.ApplicationWindow {
         calendars.valign = Gtk.Align.CENTER;
         calendars.tooltip_text = _("Calendars (Ctrl+L)");
         calendars.set_action_name(Application.ACTION_CALENDAR_MANAGER);
-
+        
+        Gtk.MenuButton window_menu = new Gtk.MenuButton();
+        window_menu.menu_model = Resource.load<MenuModel>("window-menu.interface", "window-menu");
+        window_menu.add(new Gtk.Image.from_icon_name("emblem-system-symbolic", Gtk.IconSize.SMALL_TOOLBAR));
+        
         // Vertically center all buttons and put them in a SizeGroup to handle situations where
         // the text button is smaller than the icons buttons due to language (i.e. Hebrew)
         // see https://bugzilla.gnome.org/show_bug.cgi?id=729771
@@ -150,10 +176,12 @@ public class MainWindow : Gtk.ApplicationWindow {
         size.add_widget(next);
         size.add_widget(quick_add_button);
         size.add_widget(calendars);
+        size.add_widget(window_menu);
         
         // pack right-side of window
         headerbar.pack_end(quick_add_button);
         headerbar.pack_end(calendars);
+        headerbar.pack_end(window_menu);
         
         Gtk.Box layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         // if on Unity, since headerbar is not the titlebar, need to pack it like any other widget
@@ -183,14 +211,6 @@ public class MainWindow : Gtk.ApplicationWindow {
         target = source;
         
         return true;
-    }
-    
-    public override void map() {
-        // give View.Palette a chance to gather display metrics for the various Views (week, months,
-        // etc.)
-        View.Palette.instance.main_window_mapped(this);
-        
-        base.map();
     }
     
     private void add_controller(View.Controllable controller) {
@@ -281,6 +301,21 @@ public class MainWindow : Gtk.ApplicationWindow {
     
     private void on_view_week() {
         view_stack.set_visible_child(week_view.get_container());
+    }
+    
+    private void on_increase_font() {
+        Settings.instance.small_font_pts++;
+        Settings.instance.normal_font_pts++;
+    }
+    
+    private void on_decrease_font() {
+        Settings.instance.small_font_pts--;
+        Settings.instance.normal_font_pts--;
+    }
+    
+    private void on_reset_font() {
+        Settings.instance.small_font_pts = View.Palette.DEFAULT_SMALL_FONT_PTS;
+        Settings.instance.normal_font_pts = View.Palette.DEFAULT_NORMAL_FONT_PTS;
     }
     
     private void on_request_create_timed_event(Calendar.ExactTimeSpan initial, Gtk.Widget relative_to,

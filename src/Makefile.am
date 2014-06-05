@@ -175,6 +175,7 @@ california_RC = \
 	rc/quick-create-event.ui \
 	rc/show-event.ui \
 	rc/webcal-subscribe.ui \
+	rc/window-menu.interface \
 	$(NULL)
 
 california_OPTIONAL_VALAFLAGS =

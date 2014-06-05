@@ -210,7 +210,7 @@ internal class Grid : Gtk.Box {
     }
     
     private bool on_draw_top_line(Gtk.Widget widget, Cairo.Context ctx) {
-        Palette.prepare_hairline(ctx, Palette.instance.border);
+        Palette.prepare_hairline(ctx, owner.palette.border);
         
         ctx.move_to(0, 0);
         ctx.line_to(widget.get_allocated_width(), 0);
@@ -223,7 +223,7 @@ internal class Grid : Gtk.Box {
         int width = widget.get_allocated_width();
         int height = widget.get_allocated_height();
         
-        Palette.prepare_hairline(ctx, Palette.instance.border);
+        Palette.prepare_hairline(ctx, owner.palette.border);
         
         ctx.move_to(0, height);
         ctx.line_to(width, height);
@@ -239,7 +239,7 @@ internal class Grid : Gtk.Box {
         int height = widget.get_allocated_height();
         Gtk.Widget adjacent = date_to_all_day.get(week.start_date);
         
-        Palette.prepare_hairline(ctx, Palette.instance.border);
+        Palette.prepare_hairline(ctx, owner.palette.border);
         
         ctx.move_to(width, height - adjacent.get_allocated_height());
         ctx.line_to(width, height);
@@ -253,7 +253,7 @@ internal class Grid : Gtk.Box {
         int height = widget.get_allocated_height();
         Gtk.Widget adjacent = date_to_all_day.get(week.end_date);
         
-        Palette.prepare_hairline(ctx, Palette.instance.border);
+        Palette.prepare_hairline(ctx, owner.palette.border);
         
         ctx.move_to(0, height - adjacent.get_allocated_height());
         ctx.line_to(0, height);

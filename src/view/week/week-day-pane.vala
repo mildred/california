@@ -192,14 +192,14 @@ internal class DayPane : Pane, Common.InstanceContainer {
     protected override bool on_draw(Cairo.Context ctx) {
         // shade background color if this is current day
         if (date.equal_to(Calendar.System.today)) {
-            Gdk.cairo_set_source_rgba(ctx, Palette.instance.current_day);
+            Gdk.cairo_set_source_rgba(ctx, palette.current_day);
             ctx.paint();
         }
         
         base.on_draw(ctx);
         
         // each event is drawn with a slightly-transparent rectangle with a solid hairline bounding
-        Palette.prepare_hairline(ctx, Palette.instance.border);
+        Palette.prepare_hairline(ctx, palette.border);
         
         foreach (Component.Event event in days_events) {
             // All-day events are handled in separate container ...
@@ -253,7 +253,7 @@ internal class DayPane : Pane, Common.InstanceContainer {
         if (date.equal_to(Calendar.System.today)) {
             int time_of_day_y = get_line_y(Calendar.System.now.to_wall_time());
             
-            Palette.prepare_hairline(ctx, Palette.instance.current_time);
+            Palette.prepare_hairline(ctx, palette.current_time);
             ctx.move_to(0, time_of_day_y);
             ctx.line_to(get_allocated_width(), time_of_day_y);
             ctx.stroke();
@@ -268,7 +268,7 @@ internal class DayPane : Pane, Common.InstanceContainer {
             int height = int.max(start_y, end_y) - y;
             
             ctx.rectangle(0, y, get_allocated_width(), height);
-            Gdk.cairo_set_source_rgba(ctx, Palette.instance.selection);
+            Gdk.cairo_set_source_rgba(ctx, palette.selection);
             ctx.fill();
         }
         
@@ -282,12 +282,12 @@ internal class DayPane : Pane, Common.InstanceContainer {
             layout.set_markup(text, -1);
         else
             layout.set_text(text, -1);
-        layout.set_font_description(Palette.instance.small_font);
+        layout.set_font_description(palette.small_font);
         layout.set_width((total_width - (Palette.TEXT_MARGIN_PX * 2)) * Pango.SCALE);
         layout.set_ellipsize(Pango.EllipsizeMode.END);
         
         int y = get_line_y(start_time) + Palette.LINE_PADDING_PX
-            + (Palette.instance.small_font_height_px * lineno);
+            + (palette.small_font_height_px * lineno);
         
         ctx.move_to(Palette.TEXT_MARGIN_PX, y);
         Gdk.cairo_set_source_rgba(ctx, rgba);

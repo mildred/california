@@ -92,17 +92,24 @@ internal abstract class EventsCell : Gtk.EventBox, InstanceContainer {
      */
     public Calendar.Span contained_span { get { return date; } }
     
+    /**
+     * {@link View.Palette} used by cell.
+     *
+     * The palette should be associated with the toplevel Gtk.Window this cell is contained within.
+     */
+    public View.Palette palette { get; private set; }
+    
     private Gee.TreeSet<Component.Event> sorted_events = new Gee.TreeSet<Component.Event>(all_day_comparator);
     private Gee.HashMap<int, Component.Event> line_to_event = new Gee.HashMap<int, Component.Event>();
-    
     private Gtk.DrawingArea canvas = new Gtk.DrawingArea();
     
-    public EventsCell(Calendar.Date date, Calendar.DateSpan neighbors) {
+    public EventsCell(View.Palette palette, Calendar.Date date, Calendar.DateSpan neighbors) {
         assert(date in neighbors);
         
+        this.palette = palette;
         this.date = date;
         this.neighbors = neighbors;
-        top_line_rgba = Palette.instance.day_in_range;
+        top_line_rgba = palette.day_in_range;
         
         // see query_tooltip() for implementation
         has_tooltip = true;
@@ -113,7 +120,7 @@ internal abstract class EventsCell : Gtk.EventBox, InstanceContainer {
         
         notify[PROP_TOP_LINE_TEXT].connect(queue_draw);
         
-        Palette.instance.palette_changed.connect(queue_draw);
+        palette.palette_changed.connect(queue_draw);
         Calendar.System.instance.is_24hr_changed.connect(on_24hr_changed);
         Calendar.System.instance.today_changed.connect(on_today_changed);
         
@@ -121,7 +128,7 @@ internal abstract class EventsCell : Gtk.EventBox, InstanceContainer {
     }
     
     ~EventsCell() {
-        Palette.instance.palette_changed.disconnect(queue_draw);
+        palette.palette_changed.disconnect(queue_draw);
         Calendar.System.instance.is_24hr_changed.disconnect(on_24hr_changed);
         Calendar.System.instance.today_changed.disconnect(on_today_changed);
     }
@@ -416,10 +423,10 @@ internal abstract class EventsCell : Gtk.EventBox, InstanceContainer {
     private bool on_draw(Cairo.Context ctx) {
         // shade background of cell for selection or if today
         if (selected) {
-            Gdk.cairo_set_source_rgba(ctx, Palette.instance.selection);
+            Gdk.cairo_set_source_rgba(ctx, palette.selection);
             ctx.paint();
         } else if (date.equal_to(Calendar.System.today)) {
-            Gdk.cairo_set_source_rgba(ctx, Palette.instance.current_day);
+            Gdk.cairo_set_source_rgba(ctx, palette.current_day);
             ctx.paint();
         }
         
@@ -498,10 +505,10 @@ internal abstract class EventsCell : Gtk.EventBox, InstanceContainer {
             
             // starting y of top line
             if (top_line_text != null)
-                y += Palette.instance.normal_font_height_px + Palette.LINE_PADDING_PX;
+                y += palette.normal_font_height_px + Palette.LINE_PADDING_PX;
             
             // add additional lines
-            y += line_number * (Palette.instance.small_font_height_px + Palette.LINE_PADDING_PX);
+            y += line_number * (palette.small_font_height_px + Palette.LINE_PADDING_PX);
         }
         
         return y;
@@ -516,7 +523,7 @@ internal abstract class EventsCell : Gtk.EventBox, InstanceContainer {
         int left = 0;
         int right = get_allocated_width();
         int top = get_line_top_y(line_number);
-        int bottom = top + Palette.instance.small_font_height_px;
+        int bottom = top + palette.small_font_height_px;
         
         // use event color for text unless reversed, where it becomes the background color
         Gdk.cairo_set_source_rgba(ctx, rgba);
@@ -534,7 +541,7 @@ internal abstract class EventsCell : Gtk.EventBox, InstanceContainer {
                 
                 case CapEffect.POINTED:
                     ctx.move_to(right - POINTED_CAP_WIDTH_PX, top);
-                    ctx.line_to(right - 1, top + (Palette.instance.small_font_height_px / 2));
+                    ctx.line_to(right - 1, top + (palette.small_font_height_px / 2));
                     ctx.line_to(right - POINTED_CAP_WIDTH_PX, bottom);
                 break;
                 
@@ -556,7 +563,7 @@ internal abstract class EventsCell : Gtk.EventBox, InstanceContainer {
                 
                 case CapEffect.POINTED:
                     ctx.line_to(left + POINTED_CAP_WIDTH_PX, bottom);
-                    ctx.line_to(left + 1, top + (Palette.instance.small_font_height_px / 2));
+                    ctx.line_to(left + 1, top + (palette.small_font_height_px / 2));
                     ctx.line_to(left + POINTED_CAP_WIDTH_PX, top);
                 break;
                 
@@ -585,8 +592,8 @@ internal abstract class EventsCell : Gtk.EventBox, InstanceContainer {
         Pango.Layout layout = create_pango_layout(text);
         // Use normal font for very top line, small font for all others (see get_line_top_y())
         layout.set_font_description((line_number < 0)
-            ? Palette.instance.normal_font
-            : Palette.instance.small_font);
+            ? palette.normal_font
+            : palette.small_font);
         layout.set_ellipsize(Pango.EllipsizeMode.END);
         layout.set_width((right - left - left_text_margin - right_text_margin) * Pango.SCALE);
         
@@ -604,7 +611,7 @@ internal abstract class EventsCell : Gtk.EventBox, InstanceContainer {
     public Component.Event? get_event_at(Gdk.Point point) {
         for (int line_number = 0; line_number < line_to_event.size; line_number++) {
             int y = get_line_top_y(line_number);
-            if (point.y >= y && point.y < (y + Palette.instance.small_font_height_px))
+            if (point.y >= y && point.y < (y + palette.small_font_height_px))
                 return line_to_event.get(line_number);
         }
         
