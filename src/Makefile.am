@@ -186,6 +186,7 @@ endif
 
 california_VALAFLAGS = \
 	--fatal-warnings --debug --enable-checking --vapidir $(top_srcdir)/vapi --target-glib=2.38 \
+	--enable-deprecated \
 	--gresources=california-resources.xml \
 	$(california_OPTIONAL_VALAFLAGS) \
 	--pkg gtk+-3.0 \
