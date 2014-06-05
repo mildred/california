@@ -13,43 +13,52 @@ namespace California.Host {
 public class MainWindow : Gtk.ApplicationWindow {
     private const string PROP_FIRST_OF_WEEK = "first-of-week";
     
-    private const string ACTION_QUICK_CREATE_EVENT = "win.quick-create-event";
+    private const string DETAILED_ACTION_QUICK_CREATE_EVENT = "win.quick-create-event";
+    private const string ACTION_QUICK_CREATE_EVENT = "quick-create-event";
     private const string ACCEL_QUICK_CREATE_EVENT = "<Primary>n";
     
-    private const string ACTION_JUMP_TO_TODAY = "win.jump-to-today";
+    private const string DETAILED_ACTION_JUMP_TO_TODAY = "win.jump-to-today";
+    private const string ACTION_JUMP_TO_TODAY = "jump-to-today";
     private const string ACCEL_JUMP_TO_TODAY = "<Primary>t";
     
-    private const string ACTION_NEXT = "win.next";
+    private const string DETAILED_ACTION_NEXT = "win.next";
+    private const string ACTION_NEXT = "next";
     private const string ACCEL_NEXT = "<Alt>Right";
     
-    private const string ACTION_PREVIOUS = "win.previous";
+    private const string DETAILED_ACTION_PREVIOUS = "win.previous";
+    private const string ACTION_PREVIOUS = "previous";
     private const string ACCEL_PREVIOUS = "<Alt>Left";
     
-    private const string ACTION_MONTH = "win.view-month";
+    private const string DETAILED_ACTION_MONTH = "win.view-month";
+    private const string ACTION_MONTH = "view-month";
     private const string ACCEL_MONTH = "<Ctrl>M";
     
-    private const string ACTION_WEEK = "win.view-week";
+    private const string DETAILED_ACTION_WEEK = "win.view-week";
+    private const string ACTION_WEEK = "view-week";
     private const string ACCEL_WEEK = "<Ctrl>W";
     
-    private const string ACTION_INCREASE_FONT = "win.increase-font";
+    private const string DETAILED_ACTION_INCREASE_FONT = "win.increase-font";
+    private const string ACTION_INCREASE_FONT = "increase-font";
     private const string ACCEL_INCREASE_FONT = "KP_Add";
     
-    private const string ACTION_DECREASE_FONT = "win.decrease-font";
+    private const string DETAILED_ACTION_DECREASE_FONT = "win.decrease-font";
+    private const string ACTION_DECREASE_FONT = "decrease-font";
     private const string ACCEL_DECREASE_FONT = "KP_Subtract";
     
-    private const string ACTION_RESET_FONT = "win.reset-font";
+    private const string DETAILED_ACTION_RESET_FONT = "win.reset-font";
+    private const string ACTION_RESET_FONT = "reset-font";
     private const string ACCEL_RESET_FONT = "KP_Multiply";
     
     private static const ActionEntry[] action_entries = {
-        { "quick-create-event", on_quick_create_event },
-        { "jump-to-today", on_jump_to_today },
-        { "next", on_next },
-        { "previous", on_previous },
-        { "view-month", on_view_month },
-        { "view-week", on_view_week },
-        { "increase-font", on_increase_font },
-        { "decrease-font", on_decrease_font },
-        { "reset-font", on_reset_font }
+        { ACTION_QUICK_CREATE_EVENT, on_quick_create_event },
+        { ACTION_JUMP_TO_TODAY, on_jump_to_today },
+        { ACTION_NEXT, on_next },
+        { ACTION_PREVIOUS, on_previous },
+        { ACTION_MONTH, on_view_month },
+        { ACTION_WEEK, on_view_week },
+        { ACTION_INCREASE_FONT, on_increase_font },
+        { ACTION_DECREASE_FONT, on_decrease_font },
+        { ACTION_RESET_FONT, on_reset_font }
     };
     
     // Set as a property so it can be bound to the current View.Controllable
@@ -78,15 +87,19 @@ public class MainWindow : Gtk.ApplicationWindow {
         bool rtl = get_direction() == Gtk.TextDirection.RTL;
         
         add_action_entries(action_entries, this);
-        Application.instance.add_accelerator(ACCEL_QUICK_CREATE_EVENT, ACTION_QUICK_CREATE_EVENT, null);
-        Application.instance.add_accelerator(ACCEL_JUMP_TO_TODAY, ACTION_JUMP_TO_TODAY, null);
-        Application.instance.add_accelerator(rtl ? ACCEL_PREVIOUS : ACCEL_NEXT, ACTION_NEXT, null);
-        Application.instance.add_accelerator(rtl ? ACCEL_NEXT : ACCEL_PREVIOUS, ACTION_PREVIOUS, null);
-        Application.instance.add_accelerator(ACCEL_MONTH, ACTION_MONTH, null);
-        Application.instance.add_accelerator(ACCEL_WEEK, ACTION_WEEK, null);
-        Application.instance.add_accelerator(ACCEL_INCREASE_FONT, ACTION_INCREASE_FONT, null);
-        Application.instance.add_accelerator(ACCEL_DECREASE_FONT, ACTION_DECREASE_FONT, null);
-        Application.instance.add_accelerator(ACCEL_RESET_FONT, ACTION_RESET_FONT, null);
+        Application.instance.add_accelerator(ACCEL_QUICK_CREATE_EVENT, DETAILED_ACTION_QUICK_CREATE_EVENT,
+            null);
+        Application.instance.add_accelerator(ACCEL_JUMP_TO_TODAY, DETAILED_ACTION_JUMP_TO_TODAY,
+            null);
+        Application.instance.add_accelerator(rtl ? ACCEL_PREVIOUS : ACCEL_NEXT, DETAILED_ACTION_NEXT,
+            null);
+        Application.instance.add_accelerator(rtl ? ACCEL_NEXT : ACCEL_PREVIOUS, DETAILED_ACTION_PREVIOUS,
+            null);
+        Application.instance.add_accelerator(ACCEL_MONTH, DETAILED_ACTION_MONTH, null);
+        Application.instance.add_accelerator(ACCEL_WEEK, DETAILED_ACTION_WEEK, null);
+        Application.instance.add_accelerator(ACCEL_INCREASE_FONT, DETAILED_ACTION_INCREASE_FONT, null);
+        Application.instance.add_accelerator(ACCEL_DECREASE_FONT, DETAILED_ACTION_DECREASE_FONT, null);
+        Application.instance.add_accelerator(ACCEL_RESET_FONT, DETAILED_ACTION_RESET_FONT, null);
         
         // view stack settings
         view_stack.homogeneous = true;
@@ -118,19 +131,19 @@ public class MainWindow : Gtk.ApplicationWindow {
         today.valign = Gtk.Align.CENTER;
         today.use_underline = true;
         today.tooltip_text = _("Jump to today's date (Ctrl+T)");
-        today.set_action_name(ACTION_JUMP_TO_TODAY);
+        today.set_action_name(DETAILED_ACTION_JUMP_TO_TODAY);
         
         Gtk.Button prev = new Gtk.Button.from_icon_name(rtl ? "go-previous-rtl-symbolic" : "go-previous-symbolic",
             Gtk.IconSize.MENU);
         prev.valign = Gtk.Align.CENTER;
         prev.tooltip_text = _("Previous (Alt+Left)");
-        prev.set_action_name(ACTION_PREVIOUS);
+        prev.set_action_name(DETAILED_ACTION_PREVIOUS);
         
         Gtk.Button next = new Gtk.Button.from_icon_name(rtl ? "go-next-rtl-symbolic" : "go-next-symbolic",
             Gtk.IconSize.MENU);
         next.valign = Gtk.Align.CENTER;
         next.tooltip_text = _("Next (Alt+Right)");
-        next.set_action_name(ACTION_NEXT);
+        next.set_action_name(DETAILED_ACTION_NEXT);
         
         Gtk.Box nav_buttons = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
         nav_buttons.get_style_context().add_class(Gtk.STYLE_CLASS_LINKED);
@@ -155,13 +168,13 @@ public class MainWindow : Gtk.ApplicationWindow {
         quick_add_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.MENU);
         quick_add_button.valign = Gtk.Align.CENTER;
         quick_add_button.tooltip_text = _("Quick add event (Ctrl+N)");
-        quick_add_button.set_action_name(ACTION_QUICK_CREATE_EVENT);
+        quick_add_button.set_action_name(DETAILED_ACTION_QUICK_CREATE_EVENT);
         
         Gtk.Button calendars = new Gtk.Button.from_icon_name("x-office-calendar-symbolic",
             Gtk.IconSize.MENU);
         calendars.valign = Gtk.Align.CENTER;
         calendars.tooltip_text = _("Calendars (Ctrl+L)");
-        calendars.set_action_name(Application.ACTION_CALENDAR_MANAGER);
+        calendars.set_action_name(Application.DETAILED_ACTION_CALENDAR_MANAGER);
         
         Gtk.MenuButton window_menu = new Gtk.MenuButton();
         window_menu.menu_model = Resource.load<MenuModel>("window-menu.interface", "window-menu");
@@ -201,6 +214,16 @@ public class MainWindow : Gtk.ApplicationWindow {
         // to prevent storing the different children's names as the widget is destroyed (cleared,
         // i.e. remove each one by one), unbind before that occurs
         view_stack.destroy.connect(() => { BaseObject.unbind_property(ref view_stack_binding); });
+        
+        // monitor Settings to adjust actions and such
+        Settings.instance.notify[Settings.PROP_SMALL_FONT_PTS].connect(on_font_size_changed);
+        Settings.instance.notify[Settings.PROP_NORMAL_FONT_PTS].connect(on_font_size_changed);
+        on_font_size_changed();
+    }
+    
+    ~MainWindow() {
+        Settings.instance.notify[Settings.PROP_SMALL_FONT_PTS].disconnect(on_font_size_changed);
+        Settings.instance.notify[Settings.PROP_NORMAL_FONT_PTS].disconnect(on_font_size_changed);
     }
     
     // only allow known stack children ids through
@@ -316,6 +339,18 @@ public class MainWindow : Gtk.ApplicationWindow {
     private void on_reset_font() {
         Settings.instance.small_font_pts = View.Palette.DEFAULT_SMALL_FONT_PTS;
         Settings.instance.normal_font_pts = View.Palette.DEFAULT_NORMAL_FONT_PTS;
+    }
+    
+    private void on_font_size_changed() {
+        ((SimpleAction) lookup_action(ACTION_INCREASE_FONT)).set_enabled(
+            Settings.instance.small_font_pts < View.Palette.MAX_SMALL_FONT_PTS
+            && Settings.instance.normal_font_pts < View.Palette.MAX_NORMAL_FONT_PTS);
+        ((SimpleAction) lookup_action(ACTION_DECREASE_FONT)).set_enabled(
+            Settings.instance.small_font_pts > View.Palette.MIN_SMALL_FONT_PTS
+            && Settings.instance.normal_font_pts > View.Palette.MIN_NORMAL_FONT_PTS);
+        ((SimpleAction) lookup_action(ACTION_RESET_FONT)).set_enabled(
+            Settings.instance.small_font_pts != View.Palette.DEFAULT_SMALL_FONT_PTS
+            && Settings.instance.normal_font_pts != View.Palette.DEFAULT_NORMAL_FONT_PTS);
     }
     
     private void on_request_create_timed_event(Calendar.ExactTimeSpan initial, Gtk.Widget relative_to,

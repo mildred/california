@@ -32,10 +32,17 @@ public class Application : Gtk.Application {
     
     // public application menu actions; note their "app." prefix which does not
     // match the actions in the action_entries table
-    public const string ACTION_NEW_CALENDAR = "app.new-calendar";
-    public const string ACTION_CALENDAR_MANAGER = "app.calendar-manager";
-    public const string ACTION_ABOUT = "app.about";
-    public const string ACTION_QUIT = "app.quit";
+    public const string DETAILED_ACTION_NEW_CALENDAR = "app.new-calendar";
+    public const string ACTION_NEW_CALENDAR = "new-calendar";
+    
+    public const string DETAILED_ACTION_CALENDAR_MANAGER = "app.calendar-manager";
+    public const string ACTION_CALENDAR_MANAGER = "calendar-manager";
+    
+    public const string DETAILED_ACTION_ABOUT = "app.about";
+    public const string ACTION_ABOUT = "about";
+    
+    public const string DETAILED_ACTION_QUIT = "app.quit";
+    public const string ACTION_QUIT = "quit";
     
     // internal actions; no "app." prefix
     private const string ACTION_PROCESS_FILE = "process-file";
@@ -49,10 +56,10 @@ public class Application : Gtk.Application {
     
     private static const ActionEntry[] action_entries = {
         // public actions
-        { "new-calendar", on_new_calendar },
-        { "calendar-manager", on_calendar_manager },
-        { "about", on_about },
-        { "quit", on_quit },
+        { ACTION_NEW_CALENDAR, on_new_calendar },
+        { ACTION_CALENDAR_MANAGER, on_calendar_manager },
+        { ACTION_ABOUT, on_about },
+        { ACTION_QUIT, on_quit },
         
         // internal
         { ACTION_PROCESS_FILE, on_process_file, "s" }
