@@ -25,6 +25,27 @@
             month.
         </description>
     </key>
+    
+    <key name="window-width" type="i">
+        <default>1024</default>
+        <summary>Width of main window (in pixels)</summary>
+        <description>
+        </description>
+    </key>
+    
+    <key name="window-height" type="i">
+        <default>768</default>
+        <summary>Height of main window (in pixels)</summary>
+        <description>
+        </description>
+    </key>
+    
+    <key name="window-maximized" type="b">
+        <default>false</default>
+        <summary>true if the main window is maximized</summary>
+        <description>
+        </description>
+    </key>
 </schema>
 
 </schemalist>

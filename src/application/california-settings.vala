@@ -14,6 +14,9 @@ public class Settings : BaseObject {
     public const string PROP_CALENDAR_VIEW = "calendar-view";
     public const string PROP_SMALL_FONT_PTS = "small-font-pts";
     public const string PROP_NORMAL_FONT_PTS = "normal-font-pts";
+    public const string PROP_WINDOW_WIDTH = "window-width";
+    public const string PROP_WINDOW_HEIGHT = "window-height";
+    public const string PROP_WINDOW_MAXIMIZED = "window-maximized";
     
     // GSettings schema identifier.
     private const string SCHEMA_ID = "org.yorba.california";
@@ -23,6 +26,9 @@ public class Settings : BaseObject {
     private const string KEY_CALENDAR_VIEW = "calendar-view";
     private const string KEY_SMALL_FONT_PTS = "small-font-pts";
     private const string KEY_NORMAL_FONT_PTS = "normal-font-pts";
+    private const string KEY_WINDOW_WIDTH = "window-width";
+    private const string KEY_WINDOW_HEIGHT = "window-height";
+    private const string KEY_WINDOW_MAXIMIZED = "window-maximized";
     
     public static Settings instance { get; private set; }
     
@@ -63,6 +69,43 @@ public class Settings : BaseObject {
         }
     }
     
+    /**
+     * The width of the main window (in pixels).
+     *
+     * Do not directly map the window's configuration to this property.  Only set the value after
+     * a reasonable delay of user input or when the window is closed (unmapped).
+     */
+    public int window_width {
+        get {
+            return settings.get_int(KEY_WINDOW_WIDTH).clamp(Host.MainWindow.MIN_WIDTH, int.MAX);
+        }
+        
+        set {
+            settings.set_int(KEY_WINDOW_WIDTH, value.clamp(Host.MainWindow.MIN_WIDTH, int.MAX));
+        }
+    }
+    
+    /**
+     * The height of the main window (in pixels).
+     *
+     * Do not directly map the window's configuration to this property.  Only set the value after
+     * a reasonable delay of user input or when the window is closed (unmapped).
+     */
+    public int window_height {
+        get {
+            return settings.get_int(KEY_WINDOW_HEIGHT).clamp(Host.MainWindow.MIN_HEIGHT, int.MAX);
+        }
+        
+        set {
+            settings.set_int(KEY_WINDOW_HEIGHT, value.clamp(Host.MainWindow.MIN_HEIGHT, int.MAX));
+        }
+    }
+    
+    /**
+     * Set if the main window is maximized.
+     */
+    public bool window_maximized { get; set; }
+    
     private GLib.Settings settings;
     
     private Settings() {
@@ -72,6 +115,7 @@ public class Settings : BaseObject {
         // bind GSettings values to properties here, which callers may access directly or bind to
         // themselves (with a bit more type safety)
         settings.bind(KEY_CALENDAR_VIEW, this, PROP_CALENDAR_VIEW, SettingsBindFlags.DEFAULT);
+        settings.bind(KEY_WINDOW_MAXIMIZED, this, PROP_WINDOW_MAXIMIZED, SettingsBindFlags.DEFAULT);
     }
     
     internal static void init() throws Error {

@@ -11,6 +11,30 @@ namespace California.Host {
  */
 
 public class MainWindow : Gtk.ApplicationWindow {
+    /**
+     * Minimum width of the main window (to be usable).
+     */
+    public const int MIN_WIDTH = 800;
+    
+    /**
+     * Default width of the main window (to be usable).
+     *
+     * This value is also set in the GSettings XML file.
+     */
+    public const int DEFAULT_WIDTH = 1024;
+    
+    /**
+     * Minimum height of the main window (to be usable).
+     */
+    public const int MIN_HEIGHT = 600;
+    
+    /**
+     * Default height of the main window (to be usable).
+     *
+     * This value is also set in the GSettings XML file.
+     */
+    public const int DEFAULT_HEIGHT = 768;
+    
     private const string PROP_FIRST_OF_WEEK = "first-of-week";
     
     private const string DETAILED_ACTION_QUICK_CREATE_EVENT = "win.quick-create-event";
@@ -75,14 +99,19 @@ public class MainWindow : Gtk.ApplicationWindow {
     private Gtk.Button today = new Gtk.Button.with_label(_("_Today"));
     private Binding view_stack_binding;
     private Gee.HashSet<string> view_stack_ids = new Gee.HashSet<string>();
+    private int window_width = -1;
+    private int window_height = -1;
     
     public MainWindow(Application app) {
         Object (application: app);
         
         title = Application.TITLE;
-        set_size_request(800, 600);
-        set_default_size(1024, 768);
+        set_size_request(MIN_WIDTH, MIN_HEIGHT);
         set_default_icon_name(Application.ICON_NAME);
+        
+        set_default_size(Settings.instance.window_width, Settings.instance.window_height);
+        if (Settings.instance.window_maximized)
+            maximize();
         
         bool rtl = get_direction() == Gtk.TextDirection.RTL;
         
@@ -224,6 +253,31 @@ public class MainWindow : Gtk.ApplicationWindow {
     ~MainWindow() {
         Settings.instance.notify[Settings.PROP_SMALL_FONT_PTS].disconnect(on_font_size_changed);
         Settings.instance.notify[Settings.PROP_NORMAL_FONT_PTS].disconnect(on_font_size_changed);
+    }
+    
+    public bool is_window_maximized() {
+        Gdk.Window? window = get_window();
+        if (window == null)
+            return false;
+        
+        return (window.get_state() & Gdk.WindowState.MAXIMIZED) != 0;
+    }
+    
+    public override void unmap() {
+        Settings.instance.window_width = window_width;
+        Settings.instance.window_height = window_height;
+        Settings.instance.window_maximized = is_window_maximized();
+        
+        base.unmap();
+    }
+    
+    public override bool configure_event(Gdk.EventConfigure event) {
+        // don't directly write to GSettings as these events can come in fast and furious,
+        // wait for unmap() to write them out
+        window_width = event.width;
+        window_height = event.height;
+        
+        return base.configure_event(event);
     }
     
     // only allow known stack children ids through
