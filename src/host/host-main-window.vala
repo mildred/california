@@ -206,8 +206,9 @@ public class MainWindow : Gtk.ApplicationWindow {
         calendars.set_action_name(Application.DETAILED_ACTION_CALENDAR_MANAGER);
         
         Gtk.MenuButton window_menu = new Gtk.MenuButton();
+        window_menu.valign = Gtk.Align.CENTER;
         window_menu.menu_model = Resource.load<MenuModel>("window-menu.interface", "window-menu");
-        window_menu.add(new Gtk.Image.from_icon_name("emblem-system-symbolic", Gtk.IconSize.SMALL_TOOLBAR));
+        window_menu.image = new Gtk.Image.from_icon_name("emblem-system-symbolic", Gtk.IconSize.MENU);
         
         // Vertically center all buttons and put them in a SizeGroup to handle situations where
         // the text button is smaller than the icons buttons due to language (i.e. Hebrew)
