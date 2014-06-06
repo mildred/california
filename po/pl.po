@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-05 17:44+0200\n"
-"PO-Revision-Date: 2014-06-05 17:45+0200\n"
+"POT-Creation-Date: 2014-06-06 23:24+0200\n"
+"PO-Revision-Date: 2014-06-06 23:25+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -90,19 +90,19 @@ msgstr "Copyright 2014 Fundacja Yorba"
 msgid "Visit California's home page"
 msgstr "Witryna programu California"
 
-#: ../src/application/california-application.vala:157
+#: ../src/application/california-application.vala:164
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "Nie można otworzyć programu California: %s"
 
-#: ../src/application/california-application.vala:260
+#: ../src/application/california-application.vala:267
 #, c-format
 msgid "About %s"
 msgstr "O programie %s"
 
 #. Translators: add your name and email address to receive credit in the About dialog
 #. For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:266
+#: ../src/application/california-application.vala:273
 msgid "translator-credits"
 msgstr ""
 "Piotr Drąg <piotrdrag@gmail.com>, 2014\n"
@@ -387,27 +387,27 @@ msgstr[0] "Proszę wybrać kalendarz, do którego zaimportować wydarzenie:"
 msgstr[1] "Proszę wybrać kalendarz, do którego zaimportować wydarzenia:"
 msgstr[2] "Proszę wybrać kalendarz, do którego zaimportować wydarzenia:"
 
-#: ../src/host/host-main-window.vala:66
+#: ../src/host/host-main-window.vala:99
 msgid "_Today"
 msgstr "_Dzisiaj"
 
-#: ../src/host/host-main-window.vala:120
+#: ../src/host/host-main-window.vala:162
 msgid "Jump to today's date (Ctrl+T)"
 msgstr "Przechodzi do dzisiejszej daty (Ctrl+T)"
 
-#: ../src/host/host-main-window.vala:126
+#: ../src/host/host-main-window.vala:168
 msgid "Previous (Alt+Left)"
 msgstr "Poprzednie (Alt+Lewa strzałka)"
 
-#: ../src/host/host-main-window.vala:132
+#: ../src/host/host-main-window.vala:174
 msgid "Next (Alt+Right)"
 msgstr "Następne (Alt+Prawa strzałka)"
 
-#: ../src/host/host-main-window.vala:157
+#: ../src/host/host-main-window.vala:199
 msgid "Quick add event (Ctrl+N)"
 msgstr "Szybko tworzy nowe wydarzenie (Ctrl+N)"
 
-#: ../src/host/host-main-window.vala:163
+#: ../src/host/host-main-window.vala:205
 msgid "Calendars (Ctrl+L)"
 msgstr "Kalendarze (Ctrl+L)"
 
@@ -566,13 +566,13 @@ msgid "Select a color for the Web calendar"
 msgstr "Wybór koloru kalendarza WWW"
 
 #: ../src/rc/window-menu.interface.h:1
-msgid "_Increase font size"
-msgstr "Z_większ rozmiar czcionki"
+msgid "Zoom _In"
+msgstr "Po_większ"
 
 #: ../src/rc/window-menu.interface.h:2
-msgid "_Decrease font size"
-msgstr "Z_mniejsz rozmiar czcionki"
+msgid "Zoom _Out"
+msgstr "Po_mniejsz"
 
 #: ../src/rc/window-menu.interface.h:3
-msgid "_Reset font size"
-msgstr "P_rzywróć rozmiar czcionki"
+msgid "_Normal Size"
+msgstr "Zwykły r_ozmiar"
