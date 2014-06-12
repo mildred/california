@@ -155,6 +155,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         // Unity doesn't support GtkHeaderBar-as-title-bar very well yet; when set, the main
         // window can't be resized no matter what additional GtkWindow properties are set
         set_titlebar(headerbar);
+        headerbar.show_close_button = true;
 #endif
         
         today.valign = Gtk.Align.CENTER;
