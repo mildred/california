@@ -114,6 +114,10 @@ public class Application : Gtk.Application {
         Object (application_id: ID);
     }
     
+    ~Application() {
+        Settings.terminate();
+    }
+    
     // This method is executed from run() every time.
     public override bool local_command_line(ref unowned string[] args, out int exit_status) {
         exec_file = File.new_for_path(Posix.realpath(Environment.find_program_in_path(args[0])));
@@ -122,6 +126,13 @@ public class Application : Gtk.Application {
         // the application will exit with the exit code
         if (!Commandline.parse(args, out exit_status))
             return true;
+        
+        // need to initialize this as early as possible
+        try {
+            Settings.init();
+        } catch (Error err) {
+            error("Unable to initialize Settings: %s", err.message);
+        }
         
         try {
             register();
@@ -156,7 +167,6 @@ public class Application : Gtk.Application {
         
         // unit initialization
         try {
-            Settings.init();
             Host.init();
             Manager.init();
             Activator.init();
@@ -178,7 +188,6 @@ public class Application : Gtk.Application {
         Activator.terminate();
         Manager.terminate();
         Host.terminate();
-        Settings.terminate();
         
         base.shutdown();
     }
