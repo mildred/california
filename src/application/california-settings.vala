@@ -29,6 +29,10 @@ public class Settings : BaseObject {
     private const string KEY_WINDOW_WIDTH = "window-width";
     private const string KEY_WINDOW_HEIGHT = "window-height";
     private const string KEY_WINDOW_MAXIMIZED = "window-maximized";
+    private const string KEY_FIRST_OF_WEEK = "first-of-week";
+    
+    private const string VALUE_FIRST_OF_WEEK_SUNDAY = "sunday";
+    private const string VALUE_FIRST_OF_WEEK_MONDAY = "monday";
     
     public static Settings instance { get; private set; }
     
@@ -116,6 +120,17 @@ public class Settings : BaseObject {
         // themselves (with a bit more type safety)
         settings.bind(KEY_CALENDAR_VIEW, this, PROP_CALENDAR_VIEW, SettingsBindFlags.DEFAULT);
         settings.bind(KEY_WINDOW_MAXIMIZED, this, PROP_WINDOW_MAXIMIZED, SettingsBindFlags.DEFAULT);
+        
+        // bind_mapping() isn't well-bound in the VAPI, so do some of these transformations manually
+        settings.changed.connect(on_setting_changed);
+        Calendar.System.instance.first_of_week_changed.connect(on_system_first_of_week_changed);
+        
+        // initialize these unbound values
+        on_setting_changed(KEY_FIRST_OF_WEEK);
+    }
+    
+    ~Settings() {
+        Calendar.System.instance.first_of_week_changed.disconnect(on_system_first_of_week_changed);
     }
     
     internal static void init() throws Error {
@@ -128,11 +143,66 @@ public class Settings : BaseObject {
             Environment.set_variable("GSETTINGS_SCHEMA_DIR", schema_dir.get_path(), true);
         }
         
+        // Calendar must be initialized for Settings to set/monitor first-of-week
+        Calendar.init();
+        
         instance = new Settings();
     }
     
     internal static void terminate() {
         instance = null;
+        
+        Calendar.terminate();
+    }
+    
+    private void on_setting_changed(string key) {
+        switch (key.casefold()) {
+            case KEY_FIRST_OF_WEEK:
+                on_setting_first_of_week_changed(settings.get_string(KEY_FIRST_OF_WEEK));
+            break;
+        }
+    }
+    
+    private void on_setting_first_of_week_changed(string value) {
+        Calendar.FirstOfWeek to_set;
+        switch (value.casefold()) {
+            case VALUE_FIRST_OF_WEEK_MONDAY:
+                to_set = Calendar.FirstOfWeek.MONDAY;
+            break;
+            
+            case VALUE_FIRST_OF_WEEK_SUNDAY:
+                to_set = Calendar.FirstOfWeek.SUNDAY;
+            break;
+            
+            default:
+                to_set = Calendar.FirstOfWeek.DEFAULT;
+            break;
+        }
+        
+        // prevent notification loops
+        if (Calendar.System.first_of_week != to_set)
+            Calendar.System.first_of_week = to_set;
+    }
+    
+    private void on_system_first_of_week_changed(Calendar.FirstOfWeek old_fow,
+        Calendar.FirstOfWeek new_fow) {
+        string value;
+        switch (new_fow) {
+            case Calendar.FirstOfWeek.MONDAY:
+                value = VALUE_FIRST_OF_WEEK_MONDAY;
+            break;
+            
+            case Calendar.FirstOfWeek.SUNDAY:
+                value = VALUE_FIRST_OF_WEEK_SUNDAY;
+            break;
+            
+            default:
+                assert_not_reached();
+        }
+        
+        // prevent costly writes and notification loops
+        if (settings.get_string(KEY_FIRST_OF_WEEK).casefold() != value)
+            settings.set_string(KEY_FIRST_OF_WEEK, value);
     }
     
     public override string to_string() {

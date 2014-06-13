@@ -35,8 +35,6 @@ public class MainWindow : Gtk.ApplicationWindow {
      */
     public const int DEFAULT_HEIGHT = 768;
     
-    private const string PROP_FIRST_OF_WEEK = "first-of-week";
-    
     private const string DETAILED_ACTION_QUICK_CREATE_EVENT = "win.quick-create-event";
     private const string ACTION_QUICK_CREATE_EVENT = "quick-create-event";
     private const string ACCEL_QUICK_CREATE_EVENT = "<Primary>n";
@@ -84,9 +82,6 @@ public class MainWindow : Gtk.ApplicationWindow {
         { ACTION_DECREASE_FONT, on_decrease_font },
         { ACTION_RESET_FONT, on_reset_font }
     };
-    
-    // Set as a property so it can be bound to the current View.Controllable
-    public Calendar.FirstOfWeek first_of_week { get; set; }
     
     private Gtk.Button quick_add_button;
     private View.Palette palette;
@@ -339,10 +334,6 @@ public class MainWindow : Gtk.ApplicationWindow {
             
             binding = current_controller.bind_property(View.Controllable.PROP_IS_VIEWING_TODAY, today,
                 "sensitive", BindingFlags.SYNC_CREATE | BindingFlags.INVERT_BOOLEAN);
-            current_bindings.add(binding);
-            
-            binding = current_controller.bind_property(View.Controllable.PROP_FIRST_OF_WEEK, this,
-                PROP_FIRST_OF_WEEK, BindingFlags.BIDIRECTIONAL);
             current_bindings.add(binding);
         }
     }

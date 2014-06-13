@@ -43,11 +43,6 @@ public class Controller : BaseObject, View.Controllable {
     /**
      * @inheritDoc
      */
-    public Calendar.FirstOfWeek first_of_week { get; set; }
-    
-    /**
-     * @inheritDoc
-     */
     public string id { get { return VIEW_ID; } }
     
     /**
@@ -78,6 +73,7 @@ public class Controller : BaseObject, View.Controllable {
     private MasterGrid master_grid;
     private Gtk.Stack stack = new Gtk.Stack();
     private Toolkit.StackModel<Calendar.MonthOfYear> stack_model;
+    private Gee.HashMap<int, Gtk.Label> dow_labels = new Gee.HashMap<int, Gtk.Label>();
     private Calendar.MonthSpan cache_span;
     
     public Controller(View.Palette palette) {
@@ -101,13 +97,10 @@ public class Controller : BaseObject, View.Controllable {
             Gtk.Label dow_label = new Gtk.Label(null);
             dow_label.margin_top = 2;
             dow_label.margin_bottom = 2;
+            dow_label.label = Calendar.DayOfWeek.for_checked(col + 1,
+                Calendar.System.first_of_week).abbrev_name;
             
-            // update label if first-of-week changes
-            int dow_col = col + Calendar.DayOfWeek.MIN;
-            notify[PROP_FIRST_OF_WEEK].connect(() => {
-                Calendar.DayOfWeek dow = Calendar.DayOfWeek.for_checked(dow_col, first_of_week);
-                dow_label.label = dow.abbrev_name;
-            });
+            dow_labels.set(col, dow_label);
             
             master_grid.attach(dow_label, col, 0, 1, 1);
         }
@@ -118,15 +111,15 @@ public class Controller : BaseObject, View.Controllable {
         
         notify[PROP_MONTH_OF_YEAR].connect(on_month_of_year_changed);
         Calendar.System.instance.today_changed.connect(on_today_changed);
+        Calendar.System.instance.first_of_week_changed.connect(on_first_of_week_changed);
         
-        // update now that signal handlers are in place ... do first_of_week first since more heavy
-        // processing is done when month_of_year changes
-        first_of_week = Calendar.FirstOfWeek.SUNDAY;
+        // update now that signal handlers are in place
         month_of_year = Calendar.System.today.month_of_year();
     }
     
     ~Controller() {
         Calendar.System.instance.today_changed.disconnect(on_today_changed);
+        Calendar.System.instance.first_of_week_changed.disconnect(on_first_of_week_changed);
     }
     
     private Gtk.Widget model_presentation(Calendar.MonthOfYear moy, out string? id) {
@@ -207,6 +200,15 @@ public class Controller : BaseObject, View.Controllable {
     private void on_today_changed() {
         // don't update view but indicate if it's still in view
         update_is_viewing_today();
+    }
+    
+    private void on_first_of_week_changed() {
+        Gee.MapIterator<int, Gtk.Label> iter = dow_labels.map_iterator();
+        while (iter.next()) {
+            Calendar.DayOfWeek dow = Calendar.DayOfWeek.for_checked(iter.get_key() + 1,
+                Calendar.System.first_of_week);
+            iter.get_value().label = dow.abbrev_name;
+        }
     }
     
     private void on_month_of_year_changed() {

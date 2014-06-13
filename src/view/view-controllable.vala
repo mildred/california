@@ -18,7 +18,6 @@ public interface Controllable : Object {
     public const string PROP_CURRENT_LABEL = "current-label";
     public const string PROP_IS_VIEWING_TODAY = "is-viewing-today";
     public const string PROP_DEFAULT_DATE = "default-date";
-    public const string PROP_FIRST_OF_WEEK = "first-of-week";
     
     /**
      * A short string uniquely identifying this view.
@@ -45,11 +44,6 @@ public interface Controllable : Object {
      * requirement for the {@link Controllable} to change its view as the day changes, however.
      */
     public abstract bool is_viewing_today { get; protected set; }
-    
-    /**
-     * The first day of the week.
-     */
-    public abstract Calendar.FirstOfWeek first_of_week { get; set; }
     
     /**
      * Signal from the {@link Controllable} that a DATE-TIME {@link Component.Event} should be

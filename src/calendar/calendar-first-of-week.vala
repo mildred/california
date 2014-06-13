@@ -12,8 +12,16 @@ namespace California.Calendar {
 
 public enum FirstOfWeek {
     MONDAY,
-    SUNDAY;
+    SUNDAY,
     
+    /**
+     * Default {@link FirstOfWeek}.
+     */
+    DEFAULT = SUNDAY;
+    
+    /**
+     * Converts the {@link FirstOfWeek} into an actual {@link DayOfWeek}.
+     */
     public DayOfWeek as_day_of_week() {
         switch (this) {
             case MONDAY:

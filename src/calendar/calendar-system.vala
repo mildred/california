@@ -60,6 +60,36 @@ public class System : BaseObject {
      */
     public static Timezone timezone { get; private set; }
     
+    /**
+     * The user's preferred start of the week.
+     *
+     * Unlike most of the other properties here (which are determined by examining and monitoring
+     * the system), this is strictly a user preference that should be configured by the outer
+     * application.  It's stored here because it's something that many components in {@link Calendar}
+     * need access to and passing it around is often inconvenient.  However, many of the "basic"
+     * classes (such as {@link Date} and {@link DayOfWeek}) still ask for it as a parameter to
+     * remain flexible.  In the case of {@link Week}, it ''must'' store it, as its span of days is
+     * strictly determined by the decision, which can change at runtime.
+     *
+     * @see first_of_week_changed
+     */
+    private static FirstOfWeek _first_of_week = FirstOfWeek.DEFAULT;
+    public static FirstOfWeek first_of_week {
+        get {
+            return _first_of_week;
+        }
+        
+        set {
+            if (_first_of_week == value)
+                return;
+            
+            FirstOfWeek old_fow = _first_of_week;
+            _first_of_week = value;
+            
+            instance.first_of_week_changed(old_fow, _first_of_week);
+        }
+    }
+    
     private static DBus.timedated timedated_service;
     private static DBus.Properties timedated_properties;
     
@@ -90,6 +120,11 @@ public class System : BaseObject {
      * Fired when {@link local_timezone} changes due to system configuration changes.
      */
     public signal void timezone_changed(Timezone old_timezone, Timezone new_timezone);
+    
+    /**
+     * Fired when {@link first_of_week} changes due to user configuration.
+     */
+    public signal void first_of_week_changed(FirstOfWeek old_fow, FirstOfWeek new_fow);
     
     private GLib.Settings system_clock_format_schema = new GLib.Settings(CLOCK_FORMAT_SCHEMA);
     private uint date_timer_id = 0;

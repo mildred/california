@@ -52,11 +52,6 @@ public class Controller : BaseObject, View.Controllable {
     public bool is_viewing_today { get; protected set; }
     
     /**
-     * @inheritDoc
-     */
-    public Calendar.FirstOfWeek first_of_week { get; set; }
-    
-    /**
      * {@link View.Palette} for the entire hosted view.
      */
     public View.Palette palette { get; private set; }
@@ -76,16 +71,16 @@ public class Controller : BaseObject, View.Controllable {
             Toolkit.StackModel.OrderedTransitionType.SLIDE_LEFT_RIGHT, model_presentation,
             trim_presentation_from_cache, ensure_presentation_in_cache);
         
-        // set this before signal handlers are in place (week and first_of_week are very closely
-        // tied in this view)
-        first_of_week = Calendar.FirstOfWeek.SUNDAY;
-        
         // changing these properties drives a lot of the what the view displays
-        notify[View.Controllable.PROP_FIRST_OF_WEEK].connect(on_first_of_week_changed);
+        Calendar.System.instance.first_of_week_changed.connect(on_first_of_week_changed);
         notify[PROP_WEEK].connect(on_week_changed);
         
         // set this now that signal handlers are in place
-        week = Calendar.System.today.week_of(first_of_week);
+        week = Calendar.System.today.week_of(Calendar.System.first_of_week);
+    }
+    
+    ~Controller() {
+        Calendar.System.instance.first_of_week_changed.disconnect(on_first_of_week_changed);
     }
     
     /**
@@ -113,7 +108,7 @@ public class Controller : BaseObject, View.Controllable {
      * @inheritDoc
      */
     public void today() {
-        Calendar.Week this_week = Calendar.System.today.week_of(first_of_week);
+        Calendar.Week this_week = Calendar.System.today.week_of(Calendar.System.first_of_week);
         if (!week.equal_to(this_week))
             week = this_week;
     }
@@ -140,7 +135,7 @@ public class Controller : BaseObject, View.Controllable {
     
     private bool trim_presentation_from_cache(Calendar.Week week, Calendar.Week? visible_week) {
         // always keep today's week in cache
-        if (week.equal_to(Calendar.System.today.week_of(first_of_week)))
+        if (week.equal_to(Calendar.System.today.week_of(Calendar.System.first_of_week)))
             return false;
         
         // otherwise only keep weeks that are in the current cache span
@@ -152,15 +147,14 @@ public class Controller : BaseObject, View.Controllable {
         Gee.List<Calendar.Week> weeks = cache_span.as_list();
         
         // add today's week to the mix
-        weeks.add(Calendar.System.today.week_of(first_of_week));
+        weeks.add(Calendar.System.today.week_of(Calendar.System.first_of_week));
         
         return weeks;
     }
     
     private void on_first_of_week_changed() {
-        // update week to reflect this change, but only if necessary
-        if (first_of_week != week.first_of_week)
-            week = week.start_date.week_of(first_of_week);
+        stack_model.clear();
+        week = week.start_date.week_of(Calendar.System.first_of_week);
     }
     
     private void on_week_changed() {

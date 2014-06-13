@@ -18,7 +18,7 @@ internal class Cell : Common.EventsCell {
     public int col { get; private set; }
     
     public Cell(Grid owner, Calendar.Date date, int row, int col) {
-        base (owner.owner.palette, date, date.week_of(owner.first_of_week).to_date_span());
+        base (owner.owner.palette, date, date.week_of(Calendar.System.first_of_week).to_date_span());
         
         this.owner = owner;
         this.row = row;
@@ -26,13 +26,13 @@ internal class Cell : Common.EventsCell {
         
         notify[PROP_DATE].connect(update_top_line);
         
-        owner.notify[Grid.PROP_FIRST_OF_WEEK].connect(on_first_of_week_changed);
+        Calendar.System.instance.first_of_week_changed.connect(on_first_of_week_changed);
         
         update_top_line();
     }
     
     ~Cell() {
-        owner.notify[Grid.PROP_FIRST_OF_WEEK].disconnect(on_first_of_week_changed);
+        Calendar.System.instance.first_of_week_changed.disconnect(on_first_of_week_changed);
     }
     
     protected override Common.EventsCell? get_cell_for_date(Calendar.Date cell_date) {
@@ -40,7 +40,7 @@ internal class Cell : Common.EventsCell {
     }
     
     private void on_first_of_week_changed() {
-        change_date_and_neighbors(date, date.week_of(owner.first_of_week).to_date_span());
+        change_date_and_neighbors(date, date.week_of(Calendar.System.first_of_week).to_date_span());
     }
     
     protected override void draw_borders(Cairo.Context ctx) {

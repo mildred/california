@@ -13,7 +13,6 @@ namespace California.View.Month {
 private class Grid : Gtk.Grid {
     public const string PROP_MONTH_OF_YEAR = "month-of-year";
     public const string PROP_WINDOW = "window";
-    public const string PROP_FIRST_OF_WEEK = "first-of-week";
     
     // days of the week
     public const int COLS = Calendar.DayOfWeek.COUNT;
@@ -36,11 +35,6 @@ private class Grid : Gtk.Grid {
     public Calendar.MonthOfYear month_of_year { get; private set; }
     
     /**
-     * The first day of the week, as defined by this {@link Grid}'s {@link Controller}.
-     */
-    public Calendar.FirstOfWeek first_of_week { get; private set; }
-    
-    /**
      * The span of dates being displayed.
      */
     public Calendar.DateSpan window { get; private set; }
@@ -60,7 +54,6 @@ private class Grid : Gtk.Grid {
     public Grid(Controller owner, Calendar.MonthOfYear month_of_year) {
         this.owner = owner;
         this.month_of_year = month_of_year;
-        first_of_week = owner.first_of_week;
         
         column_homogeneous = true;
         column_spacing = 0;
@@ -96,12 +89,12 @@ private class Grid : Gtk.Grid {
         update_subscriptions();
         
         owner.notify[Controller.PROP_MONTH_OF_YEAR].connect(on_controller_month_of_year_changed);
-        owner.notify[View.Controllable.PROP_FIRST_OF_WEEK].connect(update_first_of_week);
+        Calendar.System.instance.first_of_week_changed.connect(update_first_of_week);
     }
     
     ~Grid() {
         owner.notify[Controller.PROP_MONTH_OF_YEAR].disconnect(on_controller_month_of_year_changed);
-        owner.notify[View.Controllable.PROP_FIRST_OF_WEEK].disconnect(update_first_of_week);
+        Calendar.System.instance.first_of_week_changed.disconnect(update_first_of_week);
     }
     
     private Cell get_cell(int row, int col) {
@@ -157,7 +150,7 @@ private class Grid : Gtk.Grid {
     private void update_week(int row, Calendar.Week week) {
         Calendar.DateSpan week_as_date_span = week.to_date_span();
         foreach (Calendar.Date date in week) {
-            int col = date.day_of_week.ordinal(owner.first_of_week) - 1;
+            int col = date.day_of_week.ordinal(Calendar.System.first_of_week) - 1;
             
             Cell cell = get_cell(row, col);
             cell.change_date_and_neighbors(date, week_as_date_span);
@@ -173,8 +166,8 @@ private class Grid : Gtk.Grid {
         
         // create a WeekSpan for the first week of the month to the last displayed week (not all
         // months will fill all displayed weeks, but some will)
-        Calendar.WeekSpan span = new Calendar.WeekSpan.count(month_of_year.to_week_span(owner.first_of_week).first,
-            ROWS - 1);
+        Calendar.WeekSpan span = new Calendar.WeekSpan.count(
+            month_of_year.to_week_span(Calendar.System.first_of_week).first, ROWS - 1);
         
         // fill in weeks of the displayed month
         int row = 0;
@@ -234,12 +227,6 @@ private class Grid : Gtk.Grid {
     }
     
     private void update_first_of_week() {
-        // avoid some extra work
-        if (first_of_week == owner.first_of_week)
-            return;
-        
-        first_of_week = owner.first_of_week;
-        
         // requires updating all the cells as well, since all dates have to be shifted
         update_cells();
         update_subscriptions();

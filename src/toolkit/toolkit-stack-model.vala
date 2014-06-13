@@ -188,6 +188,14 @@ public class StackModel<G> : BaseObject {
     }
     
     /**
+     * Clear all items from the {@link StackModel}.
+     */
+    public void clear() {
+        foreach (G item in items.keys.to_array())
+            remove(item);
+    }
+    
+    /**
      * Show the item using the specified transition.
      *
      * If the item was not already present in {@link StackModel}, it will be added.
