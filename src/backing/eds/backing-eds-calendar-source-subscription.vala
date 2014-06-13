@@ -112,14 +112,27 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
     
     private void on_objects_added(SList<weak iCal.icalcomponent> objects) {
         foreach (weak iCal.icalcomponent ical_component in objects) {
-            try {
-                Component.Event? event = Component.Instance.convert(calendar, ical_component) as Component.Event;
-                if (event != null)
-                    notify_instance_added(event);
-            } catch (Error err) {
-                debug("Unable to generate added event for %s: %s", to_string(), err.message);
-            }
+            // TODO: Either use the async variant or run this in a background thread
+            view.client.generate_instances_for_object_sync(
+                ical_component,
+                window.start_exact_time.to_time_t(),
+                window.end_exact_time.to_time_t(),
+                on_instance_added);
         }
+    }
+    
+    private bool on_instance_added(E.CalComponent eds_component, time_t instance_start,
+        time_t instance_end) {
+        try {
+            Component.Event? event = Component.Instance.convert(calendar, eds_component.get_icalcomponent())
+                as Component.Event;
+            if (event != null)
+                notify_instance_added(event);
+        } catch (Error err) {
+            debug("Unable to generate added event for %s: %s", to_string(), err.message);
+        }
+        
+        return true;
     }
     
     private void on_objects_modified(SList<weak iCal.icalcomponent> objects) {

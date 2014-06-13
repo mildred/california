@@ -54,8 +54,17 @@ e_cal_client_generate_instances_sync.end type_name="time_t"
 e_cal_client_generate_instances_sync.cb delegate_target_pos="3.9"
 e_cal_client_generate_instances_sync.cb_data hidden="1"
 
+e_cal_client_generate_instances_for_object.start type_name="time_t"
+e_cal_client_generate_instances_for_object.end type_name="time_t"
 e_cal_client_generate_instances_for_object.cancellable nullable="1"
+e_cal_client_generate_instances_for_object.cb delegate_target_pos="6.9"
+e_cal_client_generate_instances_for_object.cb_data hidden="1"
 e_cal_client_generate_instances_for_object.destroy_cb_data value_owned="1" nullable="1"
+
+e_cal_client_generate_instances_for_object_sync.start type_name="time_t"
+e_cal_client_generate_instances_for_object_sync.end type_name="time_t"
+e_cal_client_generate_instances_for_object_sync.cb delegate_target_pos="6.9"
+e_cal_client_generate_instances_for_object_sync.cb_data hidden="1"
 
 e_cal_client_get_attachment_uris async="1"
 e_cal_client_get_attachment_uris.cancellable nullable="1"

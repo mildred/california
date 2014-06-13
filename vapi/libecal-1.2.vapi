@@ -31,8 +31,8 @@ namespace E {
 		public static void free_ecalcomp_slist (GLib.SList<E.CalComponent> ecalcomps);
 		public static void free_icalcomp_slist (GLib.SList icalcomps);
 		public void generate_instances (time_t start, time_t end, GLib.Cancellable? cancellable, [CCode (delegate_target_pos = 4.9)] E.CalRecurInstanceFn cb, [CCode (delegate_target_pos = 4.9)] owned GLib.DestroyNotify? destroy_cb_data);
-		public void generate_instances_for_object (iCal.icalcomponent icalcomp, ulong start, ulong end, GLib.Cancellable? cancellable, E.CalRecurInstanceFn cb, void* cb_data, owned GLib.DestroyNotify? destroy_cb_data);
-		public void generate_instances_for_object_sync (iCal.icalcomponent icalcomp, ulong start, ulong end, E.CalRecurInstanceFn cb, void* cb_data);
+		public void generate_instances_for_object (iCal.icalcomponent icalcomp, time_t start, time_t end, GLib.Cancellable? cancellable, [CCode (delegate_target_pos = 6.9)] E.CalRecurInstanceFn cb, owned GLib.DestroyNotify? destroy_cb_data);
+		public void generate_instances_for_object_sync (iCal.icalcomponent icalcomp, time_t start, time_t end, [CCode (delegate_target_pos = 6.9)] E.CalRecurInstanceFn cb);
 		public void generate_instances_sync (time_t start, time_t end, [CCode (delegate_target_pos = 3.9)] E.CalRecurInstanceFn cb);
 		public async bool get_attachment_uris (string uid, string rid, GLib.Cancellable? cancellable) throws GLib.Error;
 		public bool get_attachment_uris_sync (string uid, string rid, GLib.SList out_attachment_uris, GLib.Cancellable? cancellable) throws GLib.Error;
@@ -87,6 +87,7 @@ namespace E {
 		public unowned GLib.DBusConnection get_connection ();
 		public unowned string get_object_path ();
 		public bool is_running ();
+		public void* ref_client ();
 		public void set_fields_of_interest (GLib.SList? fields_of_interest) throws GLib.Error;
 		public void set_flags (E.CalClientViewFlags flags) throws GLib.Error;
 		public void start () throws GLib.Error;
@@ -300,6 +301,11 @@ namespace E {
 	public struct CalComponentId {
 		public weak string uid;
 		public weak string rid;
+		[CCode (has_construct_function = false)]
+		public CalComponentId (string uid, string rid);
+		public E.CalComponentId copy ();
+		public bool equal (E.CalComponentId id2);
+		public uint hash ();
 	}
 	[CCode (cheader_filename = "libecal/libecal.h")]
 	public struct CalComponentOrganizer {
