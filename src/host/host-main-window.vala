@@ -222,10 +222,17 @@ public class MainWindow : Gtk.ApplicationWindow {
         size.add_widget(calendars);
         size.add_widget(window_menu);
         
-        // pack right-side of window
+        // pack right-side of window ... note that this was fixed in 3.12, reversing the order of
+        // how widgets need to be packed at the end
+#if GTK_312
+        headerbar.pack_end(window_menu);
+        headerbar.pack_end(calendars);
+        headerbar.pack_end(quick_add_button);
+#else
         headerbar.pack_end(quick_add_button);
         headerbar.pack_end(calendars);
         headerbar.pack_end(window_menu);
+#endif
         
         Gtk.Box layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         // if on Unity, since headerbar is not the titlebar, need to pack it like any other widget
