@@ -109,6 +109,8 @@ public class DateTime : BaseObject, Gee.Hashable<DateTime>, Gee.Comparable<DateT
                 zone = new Calendar.OlsonZone(tz.get_location());
             else
                 zone = new Calendar.OlsonZone(param.get_tzid());
+        } else if (dt.zone != null) {
+            zone = new Calendar.OlsonZone(dt.zone->get_location());
         }
         
         kind = ical_prop_kind;

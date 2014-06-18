@@ -2468,7 +2468,7 @@ namespace iCal {
 	[CCode (cheader_filename = "libical/ical.h", cname = "icalenum_reqstat_minor")]
 	public static short icalenum_reqstat_minor (iCal.icalrequeststatus stat);
 	[CCode (cheader_filename = "libical/ical.h", cname = "icalerrno_return")]
-	public static iCal.icalerrorenum icalerrno_return ();
+	public static iCal.icalerrorenum* icalerrno_return ();
 	[CCode (cheader_filename = "libical/ical.h", cname = "icalerror_clear_errno")]
 	public static void icalerror_clear_errno ();
 	[CCode (cheader_filename = "libical/ical.h", cname = "icalerror_crash_here")]

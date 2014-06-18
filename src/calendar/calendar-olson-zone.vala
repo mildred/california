@@ -46,7 +46,12 @@ public class OlsonZone : BaseObject {
      */
     public string value { get; private set; }
     
-    public OlsonZone(string area_location) {
+    /**
+     * Create an {@link OlsonZone} for the specified area location.
+     *
+     * Passing null or an empty string results in an OlsonZone for {@link UTC}.
+     */
+    public OlsonZone(string? area_location) {
         value = !String.is_empty(area_location) ? area_location : UTC;
     }
     
