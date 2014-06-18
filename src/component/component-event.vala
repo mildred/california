@@ -60,7 +60,11 @@ public class Event : Instance, Gee.Comparable<Event> {
     /**
      * Convenience property for determining if an all-day event or not.
      */
-    public bool is_all_day { get; private set; }
+    public bool is_all_day {
+        get {
+            return date_span != null && exact_time_span == null;
+        }
+    }
     
     /**
      * Convenience property for determining if {@link Event} spans one or more full days.
@@ -131,9 +135,6 @@ public class Event : Instance, Gee.Comparable<Event> {
             set_event_date_span(date_span);
         }
         
-        // need to set this here because on_notify() doesn't update inside full update
-        is_all_day = (date_span != null);
-        
         location = ical_component.get_location();
         
         switch (ical_component.get_status()) {
@@ -160,10 +161,12 @@ public class Event : Instance, Gee.Comparable<Event> {
         bool altered = true;
         switch (pspec.name) {
             case PROP_SUMMARY:
+                remove_all_properties(iCal.icalproperty_kind.SUMMARY_PROPERTY);
                 ical_component.set_summary(summary);
             break;
             
             case PROP_DESCRIPTION:
+                remove_all_properties(iCal.icalproperty_kind.DESCRIPTION_PROPERTY);
                 ical_component.set_description(description);
             break;
             
@@ -186,18 +189,20 @@ public class Event : Instance, Gee.Comparable<Event> {
                 else
                     date_span_to_ical(date_span, false, &ical_dtstart, &ical_dtend);
                 
+                remove_all_properties(iCal.icalproperty_kind.DTSTART_PROPERTY);
                 ical_component.set_dtstart(ical_dtstart);
-                ical_component.set_dtend(ical_dtend);
                 
-                // updating here guarantees it's always accurate
-                is_all_day = (date_span != null);
+                remove_all_properties(iCal.icalproperty_kind.DTEND_PROPERTY);
+                ical_component.set_dtend(ical_dtend);
             break;
             
             case PROP_LOCATION:
+                remove_all_properties(iCal.icalproperty_kind.LOCATION_PROPERTY);
                 ical_component.set_location(location);
             break;
             
             case PROP_STATUS:
+                remove_all_properties(iCal.icalproperty_kind.STATUS_PROPERTY);
                 switch(status) {
                     case Status.TENTATIVE:
                         ical_component.set_status(iCal.icalproperty_status.TENTATIVE);

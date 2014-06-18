@@ -259,13 +259,13 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
         bool altered = true;
         switch (pspec.name) {
             case PROP_RID:
-                if (rid == null)
-                    remove_all_properties(iCal.icalproperty_kind.RECURRENCEID_PROPERTY);
-                else
+                remove_all_properties(iCal.icalproperty_kind.RECURRENCEID_PROPERTY);
+                if (rid != null)
                     ical_component.set_recurrenceid(rid.dt);
             break;
             
             case PROP_SEQUENCE:
+                remove_all_properties(iCal.icalproperty_kind.SEQUENCE_PROPERTY);
                 ical_component.set_sequence(sequence);
             break;
             
