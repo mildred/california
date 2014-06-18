@@ -167,6 +167,7 @@ public class Application : Gtk.Application {
         
         // unit initialization
         try {
+            Util.init();
             Host.init();
             Manager.init();
             Activator.init();
@@ -188,6 +189,7 @@ public class Application : Gtk.Application {
         Activator.terminate();
         Manager.terminate();
         Host.terminate();
+        Util.terminate();
         
         base.shutdown();
     }

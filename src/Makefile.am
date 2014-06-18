@@ -125,7 +125,9 @@ california_VALASOURCES = \
 	toolkit/toolkit-popup.vala \
 	toolkit/toolkit-stack-model.vala \
 	\
+	util/util.vala \
 	util/util-gfx.vala \
+	util/util-markup.vala \
 	util/util-memory.vala \
 	util/util-string.vala \
 	util/util-uri.vala \

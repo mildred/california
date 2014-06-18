@@ -80,7 +80,7 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         set_label(when_label, when_text, event.get_event_time_pretty_string(Calendar.Timezone.local));
         
         // description
-        set_label(null, description_text, escape(event.description));
+        set_label(null, description_text, Markup.linkify(escape(event.description), linkify_delegate));
         
         // don't current support updating or removing recurring events properly; see
         // https://bugzilla.gnome.org/show_bug.cgi?id=725786
@@ -94,7 +94,24 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     }
     
     private string? escape(string? plain) {
-        return !String.is_empty(plain) ? Markup.escape_text(plain) : plain;
+        return !String.is_empty(plain) ? GLib.Markup.escape_text(plain) : plain;
+    }
+    
+    private bool linkify_delegate(string uri, bool known_protocol, out string? pre_markup,
+        out string? post_markup) {
+        // preserve but don't linkify if unknown protocol
+        if (!known_protocol) {
+            pre_markup = null;
+            post_markup = null;
+            
+            return true;
+        }
+        
+        // anchor it
+        pre_markup = "<a href=\"%s\">".printf(uri);
+        post_markup = "</a>";
+        
+        return true;
     }
     
     // Note that text is not escaped, up to caller to determine if necessary or not.
