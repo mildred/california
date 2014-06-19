@@ -37,6 +37,10 @@ public class Date : Unit<Date>, Gee.Comparable<Date>, Gee.Hashable<Date> {
          */
         ABBREV,
         /**
+         * Indicates the returned string should be as compact as possible (implies {@link ABBREV}.
+         */
+        COMPACT,
+        /**
          * Indicates that the year should be included in the return date string.
          */
         INCLUDE_YEAR,
@@ -338,6 +342,7 @@ public class Date : Unit<Date>, Gee.Comparable<Date>, Gee.Hashable<Date> {
      * or INCLUDE_YEAR flag is specified.
      */
     public string to_pretty_string(PrettyFlag flags) {
+        bool compact = (flags & PrettyFlag.COMPACT) != 0;
         bool abbrev = (flags & PrettyFlag.ABBREV) != 0;
         bool with_year = (flags & PrettyFlag.INCLUDE_YEAR) != 0;
         bool no_today = (flags & PrettyFlag.NO_TODAY) != 0;
@@ -352,6 +357,11 @@ public class Date : Unit<Date>, Gee.Comparable<Date>, Gee.Hashable<Date> {
                 fmt = with_year ? FMT_PRETTY_DATE_ABBREV_NO_DOW : FMT_PRETTY_DATE_ABBREV_NO_DOW_NO_YEAR;
             else
                 fmt = with_year ? FMT_PRETTY_DATE_ABBREV : FMT_PRETTY_DATE_ABBREV_NO_YEAR;
+        } else if (compact) {
+            if (no_dow)
+                fmt = with_year ? FMT_PRETTY_DATE_COMPACT_NO_DOW : FMT_PRETTY_DATE_COMPACT_NO_DOW_NO_YEAR;
+            else
+                fmt = with_year ? FMT_PRETTY_DATE_COMPACT : FMT_PRETTY_DATE_COMPACT_NO_YEAR;
         } else {
             if (no_dow)
                 fmt = with_year ? FMT_PRETTY_DATE_NO_DOW : FMT_PRETTY_DATE_NO_DOW_NO_YEAR;
@@ -359,7 +369,8 @@ public class Date : Unit<Date>, Gee.Comparable<Date>, Gee.Hashable<Date> {
                 fmt = with_year ? FMT_PRETTY_DATE : FMT_PRETTY_DATE_NO_YEAR;
         }
         
-        return String.reduce_whitespace(format(fmt));
+        // Return string with leading zeros (from common separators) and extraneous whitespace removed
+        return String.reduce_whitespace(String.remove_leading_chars(format(fmt), '0', " /-:;,."));
     }
     
     public override string to_string() {

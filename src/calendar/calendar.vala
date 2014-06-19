@@ -59,6 +59,10 @@ private unowned string FMT_PRETTY_DATE_NO_DOW;
 private unowned string FMT_PRETTY_DATE_ABBREV_NO_DOW;
 private unowned string FMT_PRETTY_DATE_NO_DOW_NO_YEAR;
 private unowned string FMT_PRETTY_DATE_ABBREV_NO_DOW_NO_YEAR;
+private unowned string FMT_PRETTY_DATE_COMPACT;
+private unowned string FMT_PRETTY_DATE_COMPACT_NO_YEAR;
+private unowned string FMT_PRETTY_DATE_COMPACT_NO_DOW;
+private unowned string FMT_PRETTY_DATE_COMPACT_NO_DOW_NO_YEAR;
 private unowned string FMT_AM;
 private unowned string FMT_BRIEF_AM;
 private unowned string FMT_PM;
@@ -106,6 +110,7 @@ public void init() throws Error {
     FMT_DAY_OF_WEEK_FULL = "%A";
     FMT_DAY_OF_WEEK_ABBREV = "%a";
     FMT_FULL_DATE = "%x";
+    FMT_PRETTY_DATE_COMPACT_NO_DOW = "%x";
     
     // The month and year according to locale preferences, i.e. "March 2014"
     // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
@@ -149,6 +154,22 @@ public void init() throws Error {
     // i.e. "Mar 10"
     // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
     FMT_PRETTY_DATE_ABBREV_NO_DOW_NO_YEAR = _("%b %e");
+    
+    // A "pretty" date compacted according to locale preferences, i.e. "Mon 3/10/2014"
+    // Leading zeroes will be stripped.
+    // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    FMT_PRETTY_DATE_COMPACT = _("%a %x");
+    
+    // A "pretty" date abbreviated and no year according to locale preferences, i.e. "Mon 3/10"
+    // Leading zeroes will be stripped.
+    // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    FMT_PRETTY_DATE_COMPACT_NO_YEAR = _("%a %m/%d");
+    
+    // A "pretty" date abbreviated with no day of week or year according to locale preferences,
+    // i.e. "3/10"
+    // Leading zeroes will be stripped.
+    // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    FMT_PRETTY_DATE_COMPACT_NO_DOW_NO_YEAR = _("%m/%d");
     
     // Ante meridiem
     // (Please translate even if 24-hour clock used in your locale; this allows for GNOME time

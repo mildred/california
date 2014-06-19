@@ -69,5 +69,41 @@ public bool is_numeric(string? str) {
     return true;
 }
 
+/**
+ * Removes leading characters from throughout the string.
+ *
+ * Both the leading character and what constitutes tokens can be specified.
+ *
+ * Results are undefined if the leading character is also found in the delimiter string.
+ */
+public string? remove_leading_chars(string? str, unichar ch, string delims = " ") {
+    if (is_empty(str))
+        return str;
+    
+    StringBuilder builder = new StringBuilder();
+    unichar current_ch;
+    int index = 0;
+    bool leading = true;
+    while (str.get_next_char(ref index, out current_ch)) {
+        // if character is a delimiter, reset state, append, and move on
+        if (delims.index_of_char(current_ch) >= 0) {
+            leading = true;
+            builder.append_unichar(current_ch);
+            
+            continue;
+        }
+        
+        // if looking for leading characters and this matches, drop on the floor
+        if (leading && current_ch == ch)
+            continue;
+        
+        // done looking for leading characters until the next delimiter
+        leading = false;
+        builder.append_unichar(current_ch);
+    }
+    
+    return builder.str;
+}
+
 }
 

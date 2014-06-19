@@ -7,6 +7,7 @@
 namespace California.Tests {
 
 public int run(string[] args) {
+    UnitTest.Harness.register(new String());
     UnitTest.Harness.register(new QuickAdd());
     UnitTest.Harness.register(new CalendarDate());
     UnitTest.Harness.register(new CalendarMonthSpan());

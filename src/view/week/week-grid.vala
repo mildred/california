@@ -25,6 +25,9 @@ namespace California.View.Week {
 internal class Grid : Gtk.Box {
     public const string PROP_WEEK = "week";
     
+    private const Calendar.Date.PrettyFlag DATE_LABEL_FLAGS =
+        Calendar.Date.PrettyFlag.COMPACT | Calendar.Date.PrettyFlag.NO_TODAY;
+    
     public weak Controller owner { get; private set; }
     
     /**
@@ -98,8 +101,7 @@ internal class Grid : Gtk.Box {
         // to account for spacer/HourRunner
         int col = 1;
         foreach (Calendar.Date date in week) {
-            Gtk.Label date_label = new Gtk.Label("%s %d/%d".printf(date.day_of_week.abbrev_name,
-                date.month_of_year().month.value, date.day_of_month.value));
+            Gtk.Label date_label = new Gtk.Label(date.to_pretty_string(DATE_LABEL_FLAGS));
             // draw a line along the bottom of the label
             date_label.draw.connect(on_draw_bottom_line);
             top_grid.attach(date_label, col, 0, 1, 1);

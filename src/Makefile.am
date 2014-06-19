@@ -107,6 +107,7 @@ california_VALASOURCES = \
 	tests/tests-calendar-month-span.vala \
 	tests/tests-calendar-wall-time.vala \
 	tests/tests-quick-add.vala \
+	tests/tests-string.vala \
 	\
 	toolkit/toolkit.vala \
 	toolkit/toolkit-button-connector.vala \
