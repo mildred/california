@@ -25,6 +25,8 @@ private class QuickAdd : UnitTest.Harness {
         add_case("zero-hour", zero_hour);
         add_case("oh-twenty-four-hours", oh_twenty_four_hours);
         add_case("midnight-to-one", midnight_to_one);
+        add_case("separate-am", separate_am);
+        add_case("separate-pm", separate_pm);
     }
     
     protected override void setup() throws Error {
@@ -236,6 +238,28 @@ private class QuickAdd : UnitTest.Harness {
         return parser.event.summary == "Dinner"
             && parser.event.exact_time_span.start_exact_time.equal_to(start)
             && parser.event.exact_time_span.end_exact_time.equal_to(end);
+    }
+    
+    private bool separate_am() throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "Dinner at 1 pm with Denny", null);
+        
+        Calendar.ExactTime start = new Calendar.ExactTime(Calendar.Timezone.local, Calendar.System.today,
+            new Calendar.WallTime(13, 0, 0));
+        
+        return parser.event.summary == "Dinner with Denny"
+            && parser.event.exact_time_span.start_exact_time.equal_to(start);
+    }
+    
+    private bool separate_pm() throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "Dinner at 11 am", null);
+        
+        Calendar.ExactTime start = new Calendar.ExactTime(Calendar.Timezone.local, Calendar.System.today,
+            new Calendar.WallTime(11, 0, 0));
+        
+        return parser.event.summary == "Dinner"
+            && parser.event.exact_time_span.start_exact_time.equal_to(start);
     }
 }
 

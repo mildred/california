@@ -296,8 +296,27 @@ public class DetailsParser : BaseObject {
         if (date != null && add_date(date))
             return true;
         
+        // store locally so it can be modified w/o risk (tokens may be reused)
+        string specifier_casefolded = specifier.casefolded;
+        
+        // if meridiem found in next token, append to specifier for WallTime.parse()
+        bool found_meridiem = false;
+        stack.mark();
+        {
+            Token? meridiem = stack.pop();
+            if (meridiem != null
+                && (meridiem.casefolded == Calendar.FMT_AM.casefold() || meridiem.casefolded == Calendar.FMT_PM.casefold())) {
+                specifier_casefolded += meridiem.casefolded;
+                found_meridiem = true;
+            }
+        }
+        
+        // swallow meridiem if being used for WallTime.parse()
+        if (!found_meridiem)
+            stack.restore();
+        
         bool strictly_parsed;
-        Calendar.WallTime? wall_time = Calendar.WallTime.parse(specifier.casefolded,
+        Calendar.WallTime? wall_time = Calendar.WallTime.parse(specifier_casefolded,
             out strictly_parsed);
         if (wall_time != null && !strictly_parsed && strict)
             return false;
