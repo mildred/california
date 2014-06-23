@@ -100,7 +100,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
             // jump to Create/Update dialog and remove this Card from the Deck ... this ensures
             // that if the user presses Cancel in the Create/Update dialog the Deck exits rather
             // than returns here (via jump_home_or_user_closed())
-            jump_to_card_by_name(CreateUpdateEvent.ID, null);
+            jump_to_card_by_name(CreateUpdateEvent.ID, event);
             deck.remove_cards(iterate<Toolkit.Card>(this).to_array_list());
             
             return;
