@@ -247,12 +247,6 @@ public class DetailsParser : BaseObject {
         
         if (!String.is_empty(location.str))
             event.location = location.str;
-        
-        // store full detail text in the event description for user and for debugging
-        if (String.is_empty(event.description))
-            event.description = details;
-        else
-            event.description += "\n" + details;
     }
     
     private bool parse_time(Token? specifier, bool strict) {
