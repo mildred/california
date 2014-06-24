@@ -16,7 +16,7 @@ internal class EdsCalendarSource : CalendarSource {
     private E.Source eds_source;
     private E.SourceCalendar eds_calendar;
     private E.CalClient? client = null;
-    private uint source_write_id = 0;
+    private Scheduled? scheduled_source_write = null;
     private Cancellable? source_write_cancellable = null;
     
     public EdsCalendarSource(E.Source eds_source, E.SourceCalendar eds_calendar) {
@@ -38,10 +38,6 @@ internal class EdsCalendarSource : CalendarSource {
         notify[PROP_TITLE].connect(on_title_changed);
         notify[PROP_VISIBLE].connect(on_visible_changed);
         notify[PROP_COLOR].connect(on_color_changed);
-    }
-    
-    ~EdsCalendarSource() {
-        cancel_source_write();
     }
     
     private void on_title_changed() {
@@ -72,34 +68,20 @@ internal class EdsCalendarSource : CalendarSource {
     }
     
     private void schedule_source_write(string reason) {
-        cancel_source_write();
-        
         debug("Scheduling update of %s due to %s...", to_string(), reason);
         source_write_cancellable = new Cancellable();
-        source_write_id = Timeout.add(UPDATE_DELAY_MSEC, on_background_write_source, Priority.LOW);
+        scheduled_source_write = new Scheduled.once_after_msec(UPDATE_DELAY_MSEC,
+            on_background_write_source, Priority.LOW);
     }
     
-    private void cancel_source_write() {
-        if (source_write_id != 0) {
-            GLib.Source.remove(source_write_id);
-            source_write_id = 0;
-        }
-        
-        if (source_write_cancellable != null) {
-            source_write_cancellable.cancel();
-            source_write_cancellable = null;
-        }
-    }
-    
-    private bool on_background_write_source() {
+    private void on_background_write_source() {
         // in essence, say this is no longer scheduled ... for now, allow another write to be
         // scheduled while this one is occurring
-        source_write_id = 0;
         Cancellable? cancellable = source_write_cancellable;
         source_write_cancellable = null;
         
         if (cancellable == null || cancellable.is_cancelled())
-            return false;
+            return;
         
         try {
             debug("Updating EDS source %s...", to_string());
@@ -108,8 +90,6 @@ internal class EdsCalendarSource : CalendarSource {
         } catch (Error err) {
             debug("Error updating EDS source %s: %s", to_string(), err.message);
         }
-        
-        return false;
     }
     
     // Invoked by EdsStore prior to making it available outside of unit
