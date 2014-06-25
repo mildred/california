@@ -75,10 +75,6 @@ private unowned string FMT_24HOUR_MIN_SEC;
 private unowned string MIDNIGHT;
 private unowned string NOON;
 
-private string[] UNIT_DAYS;
-private string[] UNIT_HOURS;
-private string[] UNIT_MINS;
-
 public void init() throws Error {
     if (!California.Unit.do_init(ref init_count))
         return;
@@ -207,21 +203,6 @@ public void init() throws Error {
     // The 24-hour time with minutes and seconds, i.e. "17:06:31"
     FMT_24HOUR_MIN_SEC = _("%02d:%02d:%02d");
     
-    // Used by quick-add to convert a user's day unit into an internal value.  Common abbreviations
-    // (without punctuation) should be included.  Each word must be separated by semi-colons.
-    // For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-    UNIT_DAYS = _("day;days;").casefold().split(";");
-    
-    // Used by quick-add to convert a user's hours unit into an internal value.  Common abbreviations
-    // (without punctuation) should be included.  Each word must be separated by semi-colons.
-    // For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-    UNIT_HOURS = _("hour;hours;hr;hrs").casefold().split(";");
-    
-    // Used by quick-add to convert a user's minute unit into an internal value.  Common abbreviations
-    // (without punctuation) should be included.  Each word must be separated by semi-colons.
-    // For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-    UNIT_MINS = _("minute;minutes;min;mins").casefold().split(";");
-    
     // return LC_MESSAGES back to proper locale and return LANGUAGE environment variable
     if (messages_locale != null)
         Intl.setlocale(LocaleCategory.MESSAGES, messages_locale);
@@ -262,8 +243,6 @@ public void terminate() {
     DayOfWeek.terminate();
     OlsonZone.terminate();
     Collection.terminate();
-    
-    UNIT_DAYS = UNIT_HOURS = UNIT_MINS = null;
 }
 
 }

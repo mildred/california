@@ -85,6 +85,7 @@ california_VALASOURCES = \
 	component/component-event.vala \
 	component/component-icalendar.vala \
 	component/component-instance.vala \
+	component/component-recurrence-rule.vala \
 	component/component-uid.vala \
 	component/component-vtype.vala \
 	\
@@ -107,6 +108,7 @@ california_VALASOURCES = \
 	tests/tests-calendar-month-span.vala \
 	tests/tests-calendar-wall-time.vala \
 	tests/tests-quick-add.vala \
+	tests/tests-quick-add-recurring.vala \
 	tests/tests-string.vala \
 	\
 	toolkit/toolkit.vala \

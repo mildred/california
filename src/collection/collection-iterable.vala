@@ -30,6 +30,32 @@ public California.Iterable<G> iterate<G>(G g, ...) {
 }
 
 /**
+ * Take a non-null array of non-null items (all of type G) and return a California.Iterable
+ * for convenience.
+ */
+public California.Iterable<G> from_array<G>(G[] ar) {
+    Gee.ArrayList<G> list = new Gee.ArrayList<G>();
+    foreach (G item in ar)
+        list.add(item);
+    
+    return California.traverse<G>(list);
+}
+
+/**
+ * Returns an {@link Iterable} of Unicode characters for each in the supplied string.
+ */
+public Iterable<unichar> from_string(string str) {
+    Gee.ArrayList<unichar> list = new Gee.ArrayList<unichar>();
+    
+    int index = 0;
+    unichar ch;
+    while (str.get_next_char(ref index, out ch))
+        list.add(ch);
+    
+    return California.traverse<unichar>(list);
+}
+
+/**
  * An Iterable that simply wraps an existing Iterator.  You get one iteration,
  * and only one iteration.  Basically every method triggers one iteration and
  * returns a new object.
@@ -39,12 +65,17 @@ public California.Iterable<G> iterate<G>(G g, ...) {
  * works in foreach.
  */
 
-public class Iterable<G> : BaseObject {
+public class Iterable<G> : Object {
+    /**
+     * For {@link to_string}.
+     */
+    public delegate string? ToString<G>(G element);
+    
     /**
      * A private class that lets us take a California.Iterable and convert it back
      * into a Gee.Iterable.
      */
-    private class GeeIterable<G> : Gee.Traversable<G>, Gee.Iterable<G>, BaseObject {
+    private class GeeIterable<G> : Gee.Traversable<G>, Gee.Iterable<G>, Object {
         private Gee.Iterator<G> i;
         
         public GeeIterable(Gee.Iterator<G> iterator) {
@@ -62,10 +93,6 @@ public class Iterable<G> : BaseObject {
                     return false;
             }
             return true;
-        }
-        
-        public override string to_string() {
-            return "GeeIterable";
         }
     }
     
@@ -165,6 +192,17 @@ public class Iterable<G> : BaseObject {
         return new GeeIterable<G>(i);
     }
     
+    /**
+     * Convert the {@link Iterable} into a flat array of elements.
+     */
+    public G[] to_array() {
+        G[] ar = new G[0];
+        while (i.next())
+            ar += i.get();
+        
+        return ar;
+    }
+    
     public Gee.Collection<G> add_all_to(Gee.Collection<G> c) {
         while (i.next())
             c.add(i.@get());
@@ -188,7 +226,11 @@ public class Iterable<G> : BaseObject {
         return (Gee.TreeSet<G>) add_all_to(new Gee.TreeSet<G>((owned) compare_func));
     }
     
-    public Gee.Map<K, G> add_all_to_map<K>(Gee.Map<K, G> c, Gee.MapFunc<K, G> key_func) {
+    /**
+     * Add this {@link Iterable}'s values to an existing Gee.Map, with this Iterable's values as
+     * values for the map.
+     */
+    public Gee.Map<K, G> add_to_map_values<K>(Gee.Map<K, G> c, Gee.MapFunc<K, G> key_func) {
         while (i.next()) {
             G g = i.@get();
             c.@set(key_func(g), g);
@@ -196,16 +238,63 @@ public class Iterable<G> : BaseObject {
         return c;
     }
     
-    public Gee.HashMap<K, G> to_hash_map<K>(Gee.MapFunc<K, G> key_func,
+    /**
+     * Add this {@link Iterable}'s values to an existing Gee.Map, with this Iterable's values as
+     * keys for the map.
+     *
+     * @see add_to_map_keys
+     */
+    public Gee.Map<G, V> add_to_map_keys<V>(Gee.Map<G, V> map, Gee.MapFunc<V, G> value_func) {
+        while (i.next()) {
+            G g = i.get();
+            map.set(g, value_func(g));
+        }
+        
+        return map;
+    }
+    
+    /**
+     * Transform the {@link Iterable} into a Gee.HashMap, with this Iterable's values as values
+     * for the map.
+     *
+     * @see add_to_map_values
+     */
+    public Gee.HashMap<K, G> to_hash_map_as_values<K>(Gee.MapFunc<K, G> key_func,
         owned Gee.HashDataFunc<K>? key_hash_func = null,
         owned Gee.EqualDataFunc<K>? key_equal_func = null,
         owned Gee.EqualDataFunc<G>? value_equal_func = null) {
-        return (Gee.HashMap<K, G>) add_all_to_map<K>(new Gee.HashMap<K, G>(
+        return (Gee.HashMap<K, G>) add_to_map_values<K>(new Gee.HashMap<K, G>(
             (owned) key_hash_func, (owned) key_equal_func, (owned) value_equal_func), key_func);
     }
     
-    public override string to_string() {
-        return "Iterable";
+    /**
+     * Transform the {@link Iterable} into a Gee.HashMap, with this Iterable's values as keys
+     * for the map.
+     */
+    public Gee.HashMap<G, V> to_hash_map_as_keys<V>(Gee.MapFunc<V, G> value_func,
+        owned Gee.HashDataFunc<G>? key_hash_func = null,
+        owned Gee.EqualDataFunc<G>? key_equal_func = null,
+        owned Gee.EqualDataFunc<V>? value_equal_func = null) {
+        return (Gee.HashMap<G, V>) add_to_map_keys<V>(new Gee.HashMap<G, V>(
+            (owned) key_hash_func, (owned) key_equal_func, (owned) value_equal_func), value_func);
+    }
+    
+    /**
+     * Convert the {@link Iterable}'s values into a single plain string.
+     *
+     * If {@link ToString} returns null or an empty string, nothing is appended to the final string.
+     *
+     * If the final string is empty, null is returned instead.
+     */
+    public string? to_string(ToString<G> string_cb) {
+        StringBuilder builder = new StringBuilder();
+        foreach (G element in this) {
+            string? str = string_cb(element);
+            if (!String.is_empty(str))
+                builder.append(str);
+        }
+        
+        return !String.is_empty(builder.str) ? builder.str : null;
     }
 }
 

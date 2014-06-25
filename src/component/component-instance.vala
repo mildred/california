@@ -88,6 +88,11 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     public iCal.icalcomponent ical_component { get { return _ical_component; } }
     
     /**
+     * Returns the iCal source for this {@link Instance}.
+     */
+    public string source { get { return ical_component.as_ical_string(); } }
+    
+    /**
      * True if inside {@link full_update}.
      *
      * Subclasses want to ignore updates to various properties (their own and {@link Instance}'s)
@@ -300,22 +305,6 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     }
     
     /**
-     * Convenience method to convert a {@link Calendar.Date} to an iCal DATE.
-     */
-    protected static void date_to_ical(Calendar.Date date, iCal.icaltimetype *ical_dt) {
-        ical_dt->year = date.year.value;
-        ical_dt->month = date.month.value;
-        ical_dt->day = date.day_of_month.value;
-        ical_dt->hour = 0;
-        ical_dt->minute = 0;
-        ical_dt->second = 0;
-        ical_dt->is_utc = 0;
-        ical_dt->is_date = 1;
-        ical_dt->is_daylight = 0;
-        ical_dt->zone = null;
-    }
-    
-    /**
      * Convenience method to convert a {@link Calendar.DateSpan} to a pair of iCal DATEs.
      *
      * dtend_inclusive indicates whether the dt_end should be treated as inclusive or exclusive
@@ -327,24 +316,6 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
         date_to_ical(date_span.start_date, ical_dtstart);
         date_to_ical(date_span.end_date.adjust_by(dtend_inclusive ? 0 : 1, Calendar.DateUnit.DAY),
             ical_dtend);
-    }
-    
-    /**
-     * Convenience method to convert a {@link Calendar.ExactTime} to an iCal DATE-TIME.
-     */
-    protected static void exact_time_to_ical(Calendar.ExactTime exact_time, iCal.icaltimetype *ical_dt) {
-        ical_dt->year = exact_time.year.value;
-        ical_dt->month = exact_time.month.value;
-        ical_dt->day = exact_time.day_of_month.value;
-        ical_dt->hour = exact_time.hour;
-        ical_dt->minute = exact_time.minute;
-        ical_dt->second = exact_time.second;
-        ical_dt->is_utc = exact_time.tz.is_utc ? 1 : 0;
-        ical_dt->is_date = 0;
-        ical_dt->is_daylight = exact_time.is_dst ? 1 : 0;
-        ical_dt->zone = iCal.icaltimezone.get_builtin_timezone(exact_time.tz.zone.value);
-        if (ical_dt->zone == null)
-            message("Unable to get builtin iCal timezone for %s", exact_time.tz.zone.to_string());
     }
     
     /**
