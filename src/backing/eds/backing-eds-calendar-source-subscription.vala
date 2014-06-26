@@ -126,38 +126,31 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
         time_t instance_end) {
         unowned iCal.icalcomponent ical_component = eds_component.get_icalcomponent();
         
-        // if no UID, go no further
-        string? uid = ical_component.get_uid();
-        if (String.is_empty(uid))
-            return true;
-        
-        // if UID has been seen, go no further
-        if (has_uid(new Component.UID(uid)))
-            return true;
-        
+        // convert the added component into a new Event
+        Component.Event? added_event;
         try {
-            Component.Event? event = Component.Instance.convert(calendar, ical_component)
-                as Component.Event;
-            if (event != null)
-                notify_instance_added(event);
+            added_event = Component.Instance.convert(calendar, ical_component) as Component.Event;
+            if (added_event == null)
+                return true;
         } catch (Error err) {
-            debug("Unable to generate added event for %s: %s", to_string(), err.message);
+            debug("Unable to process added event: %s", err.message);
+            
+            return true;
         }
+        
+        // see if this was seen before
+        Component.Event? seen_event = has_instance(added_event) as Component.Event;
+        if (seen_event != null)
+            return true;
+        
+        // nope, it's a new one
+        notify_instance_added(added_event);
         
         return true;
     }
     
     private void on_objects_modified(SList<weak iCal.icalcomponent> objects) {
         foreach (weak iCal.icalcomponent ical_component in objects) {
-            // only update known objects
-            string? uid = ical_component.get_uid();
-            if (String.is_empty(uid))
-                continue;
-            
-            Gee.Collection<Component.Instance>? instances = for_uid(new Component.UID(uid));
-            if (instances == null || instances.size == 0)
-                continue;
-            
             // convert the modified event source into an orphaned event (for comparison purposes)
             Component.Event modified_event;
             try {
@@ -168,27 +161,18 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
                 continue;
             }
             
-            // for every instance matching its UID, look for the original
-            Component.Event? event = null;
-            foreach (Component.Instance instance in instances) {
-                Component.Event? stored_event = instance as Component.Event;
-                if (stored_event != null && stored_event.equal_to(modified_event)) {
-                    event = stored_event;
-                    
-                    break;
-                }
-            }
-            
-            if (event == null)
+            // find original event instance for this one
+            Component.Event? seen_event = has_instance(modified_event) as Component.Event;
+            if (seen_event == null)
                 continue;
             
             try {
-                event.full_update(ical_component, null);
+                seen_event.full_update(ical_component, null);
             } catch (Error err) {
-                debug("Unable to update event %s: %s", event.to_string(), err.message);
+                debug("Unable to update event %s: %s", seen_event.to_string(), err.message);
             }
             
-            notify_instance_altered(event);
+            notify_instance_altered(seen_event);
         }
     }
     
