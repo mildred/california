@@ -25,7 +25,7 @@ public class DetailsParser : BaseObject {
         
         public Token(string token) {
             original = token;
-            casefolded = from_string(token).filter(c => !c.ispunct()).to_string(c => c.to_string());
+            casefolded = from_string(token).filter(c => !c.ispunct()).to_string(c => c.to_string()) ?? "";
         }
         
         public bool equal_to(Token other) {
@@ -114,8 +114,10 @@ public class DetailsParser : BaseObject {
         // tokenize the string and arrange as a stack for the parser
         string[] tokenized = String.reduce_whitespace(this.details).split(" ");
         Gee.LinkedList<Token> list = new Gee.LinkedList<Token>();
-        foreach (string token in tokenized)
-            list.add(new Token(token));
+        foreach (string token in tokenized) {
+            if (!String.is_empty(token))
+                list.add(new Token(token));
+        }
         
         stack = new Collection.LookaheadStack<Token>(list);
         
@@ -127,6 +129,14 @@ public class DetailsParser : BaseObject {
             Token? token = stack.pop();
             if (token == null)
                 break;
+            
+            // because whitespace and punctuation is stripped from the original token, it's possible
+            // for the casefolded token to be empty
+            if (String.is_empty(token.casefolded)) {
+                add_text(token);
+                
+                continue;
+            }
             
             // mark the stack branch for each parsing branch so if it fails the state can be
             // restored and the next branch's read-ahead gets a chance; don't restore on success

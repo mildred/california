@@ -10,8 +10,10 @@ private class QuickAdd : UnitTest.Harness {
     public QuickAdd() {
         add_case("null", null_details);
         add_case("blank", blank);
+        add_case("punct", punct);
         add_case("summary", summary);
         add_case("summary-with-blanks", summary_with_blanks);
+        add_case("summary-with-punct", summary_with_punct);
         add_case("summary-location", summary_location);
         add_case("with-12hr-time", with_12hr_time);
         add_case("with-24hr-time", with_24hr_time);
@@ -56,6 +58,13 @@ private class QuickAdd : UnitTest.Harness {
         return !parser.event.is_valid();
     }
     
+    private bool punct() throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser("&", null);
+        
+        return !parser.event.is_valid()
+            && parser.event.summary == "&";
+    }
+    
     private bool summary() throws Error {
         Component.DetailsParser parser = new Component.DetailsParser("meet with Alice", null);
         
@@ -69,6 +78,15 @@ private class QuickAdd : UnitTest.Harness {
         Component.DetailsParser parser = new Component.DetailsParser("   meet  with   Alice    ", null);
         
         return parser.event.summary == "meet with Alice"
+            && parser.event.location == null
+            && parser.event.exact_time_span == null
+            && parser.event.date_span == null;
+    }
+    
+    private bool summary_with_punct() throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser("meet with Alice & Bob", null);
+        
+        return parser.event.summary == "meet with Alice & Bob"
             && parser.event.location == null
             && parser.event.exact_time_span == null
             && parser.event.date_span == null;
