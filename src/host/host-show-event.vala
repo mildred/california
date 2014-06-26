@@ -47,8 +47,6 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     
     private new Component.Event event;
     
-    public signal void remove_event(Component.Event event);
-    
     public ShowEvent() {
         Calendar.System.instance.is_24hr_changed.connect(build_display);
         Calendar.System.instance.today_changed.connect(build_display);
@@ -132,8 +130,7 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     
     [GtkCallback]
     private void on_remove_button_clicked() {
-        remove_event(event);
-        notify_success();
+        remove_event_async.begin();
     }
     
     [GtkCallback]
@@ -144,6 +141,24 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     [GtkCallback]
     private void on_close_button_clicked() {
         notify_user_closed();
+    }
+    
+    private async void remove_event_async() {
+        Gdk.Cursor? cursor = Toolkit.set_busy(this);
+        
+        Error? remove_err = null;
+        try {
+            yield event.calendar_source.remove_component_async(event.uid, null);
+        } catch (Error err) {
+            remove_err = err;
+        }
+        
+        Toolkit.set_unbusy(this, cursor);
+        
+        if (remove_err == null)
+            notify_success();
+        else
+            notify_failure(_("Unable to remove event: %s").printf(remove_err.message));
     }
 }
 

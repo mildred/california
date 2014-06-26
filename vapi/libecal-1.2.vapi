@@ -18,7 +18,7 @@ namespace E {
 		public static async unowned E.Client connect (E.Source source, E.CalClientSourceType source_type, GLib.Cancellable cancellable) throws GLib.Error;
 		public static unowned E.Client connect_sync (E.Source source, E.CalClientSourceType source_type, GLib.Cancellable cancellable) throws GLib.Error;
 		[CCode (finish_name = "e_cal_client_create_object_finish")]
-		public async bool create_object (iCal.icalcomponent icalcomp, GLib.Cancellable? cancellable) throws GLib.Error;
+		public async void create_object (iCal.icalcomponent icalcomp, GLib.Cancellable? cancellable, out string out_uid) throws GLib.Error;
 		public bool create_object_sync (iCal.icalcomponent icalcomp, out string out_uid, GLib.Cancellable? cancellable) throws GLib.Error;
 		public void create_objects (GLib.SList icalcomps, GLib.Cancellable cancellable, GLib.AsyncReadyCallback callback);
 		public bool create_objects_finish (GLib.AsyncResult _result, GLib.SList out_uids) throws GLib.Error;
@@ -31,7 +31,7 @@ namespace E {
 		public static void free_ecalcomp_slist (GLib.SList<E.CalComponent> ecalcomps);
 		public static void free_icalcomp_slist (GLib.SList icalcomps);
 		public void generate_instances (time_t start, time_t end, GLib.Cancellable? cancellable, [CCode (delegate_target_pos = 4.9)] E.CalRecurInstanceFn cb, [CCode (delegate_target_pos = 4.9)] owned GLib.DestroyNotify? destroy_cb_data);
-		public void generate_instances_for_object (iCal.icalcomponent icalcomp, time_t start, time_t end, GLib.Cancellable? cancellable, [CCode (delegate_target_pos = 6.9)] E.CalRecurInstanceFn cb, owned GLib.DestroyNotify? destroy_cb_data);
+		public void generate_instances_for_object (iCal.icalcomponent icalcomp, time_t start, time_t end, GLib.Cancellable? cancellable, [CCode (delegate_target_pos = 5.9)] E.CalRecurInstanceFn cb, [CCode (delegate_target_pos = 5.9)] owned GLib.DestroyNotify? destroy_cb_data);
 		public void generate_instances_for_object_sync (iCal.icalcomponent icalcomp, time_t start, time_t end, [CCode (delegate_target_pos = 6.9)] E.CalRecurInstanceFn cb);
 		public void generate_instances_sync (time_t start, time_t end, [CCode (delegate_target_pos = 3.9)] E.CalRecurInstanceFn cb);
 		public async bool get_attachment_uris (string uid, string rid, GLib.Cancellable? cancellable) throws GLib.Error;
@@ -55,17 +55,20 @@ namespace E {
 		public async bool get_timezone (string tzid, GLib.Cancellable? cancellable, out unowned iCal.icaltimezone out_zone) throws GLib.Error;
 		public bool get_timezone_sync (string tzid, out unowned iCal.icaltimezone out_zone, GLib.Cancellable? cancellable) throws GLib.Error;
 		[CCode (finish_name = "e_cal_client_get_view_finish")]
-		public async bool get_view (string sexp, GLib.Cancellable? cancellable, out unowned E.CalClientView out_view) throws GLib.Error;
-		public bool get_view_sync (string sexp, out unowned E.CalClientView out_view, GLib.Cancellable? cancellable) throws GLib.Error;
-		public async bool modify_object (iCal.icalcomponent icalcomp, E.CalObjModType mod, GLib.Cancellable? cancellable) throws GLib.Error;
-		public bool modify_object_sync (iCal.icalcomponent icalcomp, E.CalObjModType mod, GLib.Cancellable? cancellable) throws GLib.Error;
+		public async void get_view (string sexp, GLib.Cancellable? cancellable, out E.CalClientView out_view) throws GLib.Error;
+		public void get_view_sync (string sexp, out E.CalClientView out_view, GLib.Cancellable? cancellable) throws GLib.Error;
+		[CCode (finish_name = "e_cal_client_modify_object_finish")]
+		public async void modify_object (iCal.icalcomponent icalcomp, E.CalObjModType mod, GLib.Cancellable? cancellable) throws GLib.Error;
+		public void modify_object_sync (iCal.icalcomponent icalcomp, E.CalObjModType mod, GLib.Cancellable? cancellable) throws GLib.Error;
 		public void modify_objects (GLib.SList comps, E.CalObjModType mod, GLib.Cancellable cancellable, GLib.AsyncReadyCallback callback);
 		public bool modify_objects_finish (GLib.AsyncResult _result) throws GLib.Error;
 		public bool modify_objects_sync (GLib.SList comps, E.CalObjModType mod, GLib.Cancellable cancellable) throws GLib.Error;
-		public async bool receive_objects (iCal.icalcomponent icalcomp, GLib.Cancellable? cancellable) throws GLib.Error;
-		public bool receive_objects_sync (iCal.icalcomponent icalcomp, GLib.Cancellable? cancellable) throws GLib.Error;
-		public async bool remove_object (string uid, string rid, E.CalObjModType mod, GLib.Cancellable? cancellable) throws GLib.Error;
-		public bool remove_object_sync (string uid, string? rid, E.CalObjModType mod, GLib.Cancellable? cancellable) throws GLib.Error;
+		[CCode (finish_name = "e_cal_client_receive_objects_finish")]
+		public async void receive_objects (iCal.icalcomponent icalcomp, GLib.Cancellable? cancellable) throws GLib.Error;
+		public void receive_objects_sync (iCal.icalcomponent icalcomp, GLib.Cancellable? cancellable) throws GLib.Error;
+		[CCode (finish_name = "e_cal_client_remove_object_finish")]
+		public async void remove_object (string uid, string? rid, E.CalObjModType mod, GLib.Cancellable? cancellable) throws GLib.Error;
+		public void remove_object_sync (string uid, string? rid, E.CalObjModType mod, GLib.Cancellable? cancellable) throws GLib.Error;
 		public void remove_objects (GLib.SList ids, E.CalObjModType mod, GLib.Cancellable cancellable, GLib.AsyncReadyCallback callback);
 		public bool remove_objects_finish (GLib.AsyncResult _result) throws GLib.Error;
 		public bool remove_objects_sync (GLib.SList ids, E.CalObjModType mod, GLib.Cancellable cancellable) throws GLib.Error;

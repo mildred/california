@@ -437,9 +437,6 @@ public class MainWindow : Gtk.ApplicationWindow {
     private void on_request_display_event(Component.Event event, Gtk.Widget relative_to,
         Gdk.Point? for_location) {
         ShowEvent show_event = new ShowEvent();
-        show_event.remove_event.connect(() => {
-            remove_event_async.begin(event, null);
-        });
         
         CreateUpdateEvent create_update_event = new CreateUpdateEvent();
         create_update_event.is_update = true;
@@ -450,14 +447,6 @@ public class MainWindow : Gtk.ApplicationWindow {
         deck.go_home(event);
         
         show_deck(relative_to, for_location, deck);
-    }
-    
-    private async void remove_event_async(Component.Event event, Cancellable? cancellable) {
-        try {
-            yield event.calendar_source.remove_component_async(event.uid, cancellable);
-        } catch (Error err) {
-            debug("Unable to destroy event: %s", err.message);
-        }
     }
 }
 

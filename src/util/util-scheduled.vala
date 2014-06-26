@@ -139,6 +139,24 @@ public class Scheduled : BaseObject {
         source_id = 0;
     }
     
+    /**
+     * Wait for the scheduled code to execute.
+     *
+     * This waits for execution by spinning the event loop, which can cause reentrancy.  There is
+     * also the danger of waiting for continuously executing code that never returns
+     * {@link Reschedule.HALT}.  In that case, wait() will never return.
+     *
+     * If the scheduled code has been cancelled, is executing, or has already executed, wait()
+     * immediately returns.
+     */
+    public void wait(MainContext main_context = MainContext.default()) {
+        if (!is_scheduled || is_executing)
+            return;
+        
+        while (main_context.pending())
+            main_context.iteration(false);
+    }
+    
     private bool on_once() {
         is_executing = true;
         schedule_once();

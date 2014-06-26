@@ -40,6 +40,11 @@ internal class EdsCalendarSource : CalendarSource {
         notify[PROP_COLOR].connect(on_color_changed);
     }
     
+    ~EdsCalendarSource() {
+        if (scheduled_source_write != null)
+            scheduled_source_write.wait();
+    }
+    
     private void on_title_changed() {
         // on schedule write if something changed
         if (eds_source.display_name == title)
@@ -69,14 +74,17 @@ internal class EdsCalendarSource : CalendarSource {
     
     private void schedule_source_write(string reason) {
         debug("Scheduling update of %s due to %s...", to_string(), reason);
+        
+        // cancel an outstanding write
+        if (source_write_cancellable != null)
+            source_write_cancellable.cancel();
         source_write_cancellable = new Cancellable();
+        
         scheduled_source_write = new Scheduled.once_after_msec(UPDATE_DELAY_MSEC,
-            on_background_write_source, Priority.LOW);
+            () => on_background_write_source_async.begin(), Priority.LOW);
     }
     
-    private void on_background_write_source() {
-        // in essence, say this is no longer scheduled ... for now, allow another write to be
-        // scheduled while this one is occurring
+    private async void on_background_write_source_async() {
         Cancellable? cancellable = source_write_cancellable;
         source_write_cancellable = null;
         
@@ -85,8 +93,8 @@ internal class EdsCalendarSource : CalendarSource {
         
         try {
             debug("Updating EDS source %s...", to_string());
-            // TODO: Fix bindings to use async variant
-            eds_source.write_sync(cancellable);
+            yield eds_source.write(cancellable);
+            debug("Updated EDS source %s", to_string());
         } catch (Error err) {
             debug("Error updating EDS source %s: %s", to_string(), err.message);
         }
@@ -134,9 +142,8 @@ internal class EdsCalendarSource : CalendarSource {
         Cancellable? cancellable = null) throws Error {
         check_open();
         
-        // TODO: Fix create_object() bindings so async is possible
         string? uid;
-        client.create_object_sync(instance.ical_component, out uid, cancellable);
+        yield client.create_object(instance.ical_component, cancellable, out uid);
         
         return !String.is_empty(uid) ? new Component.UID(uid) : null;
     }
@@ -145,24 +152,21 @@ internal class EdsCalendarSource : CalendarSource {
         Cancellable? cancellable = null) throws Error {
         check_open();
         
-        // TODO: Fix modify_object() bindings so async is possible
-        client.modify_object_sync(instance.ical_component, E.CalObjModType.THIS, cancellable);
+        yield client.modify_object(instance.ical_component, E.CalObjModType.THIS, cancellable);
     }
     
     public override async void remove_component_async(Component.UID uid,
         Cancellable? cancellable = null) throws Error {
         check_open();
         
-        // TODO: Fix remove_object() bindings so async is possible
-        client.remove_object_sync(uid.value, null, E.CalObjModType.THIS, cancellable);
+        yield client.remove_object(uid.value, null, E.CalObjModType.THIS, cancellable);
     }
     
     public override async void import_icalendar_async(Component.iCalendar ical, Cancellable? cancellable = null)
         throws Error {
         check_open();
         
-        // TODO: Fix receive_objects() bindings so async is possible
-        client.receive_objects_sync(ical.ical_component, cancellable);
+        yield client.receive_objects(ical.ical_component, cancellable);
     }
 }
 

@@ -275,12 +275,21 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
             return;
         }
         
+        Gdk.Cursor? cursor = Toolkit.set_busy(this);
+        
+        Error? create_err = null;
         try {
             yield event.calendar_source.create_component_async(event, cancellable);
-            notify_success();
         } catch (Error err) {
-            notify_failure(_("Unable to create event: %s").printf(err.message));
+            create_err = err;
         }
+        
+        Toolkit.set_unbusy(this, cursor);
+        
+        if (create_err == null)
+            notify_success();
+        else
+            notify_failure(_("Unable to create event: %s").printf(create_err.message));
     }
     
     // TODO: Delete from original source if not the same as the new source
@@ -291,12 +300,21 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
             return;
         }
         
+        Gdk.Cursor? cursor = Toolkit.set_busy(this);
+        
+        Error? update_err = null;
         try {
             yield event.calendar_source.update_component_async(event, cancellable);
-            notify_success();
         } catch (Error err) {
-            notify_failure(_("Unable to update event: %s").printf(err.message));
+            update_err = err;
         }
+        
+        Toolkit.set_unbusy(this, cursor);
+        
+        if (update_err == null)
+            notify_success();
+        else
+            notify_failure(_("Unable to update event: %s").printf(update_err.message));
     }
     
 }

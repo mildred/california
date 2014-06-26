@@ -112,12 +112,13 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
     
     private void on_objects_added(SList<weak iCal.icalcomponent> objects) {
         foreach (weak iCal.icalcomponent ical_component in objects) {
-            // TODO: Either use the async variant or run this in a background thread
-            view.client.generate_instances_for_object_sync(
+            view.client.generate_instances_for_object(
                 ical_component,
                 window.start_exact_time.to_time_t(),
                 window.end_exact_time.to_time_t(),
-                on_instance_added);
+                null,
+                on_instance_added,
+                null);
         }
     }
     
