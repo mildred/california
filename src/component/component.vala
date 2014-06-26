@@ -128,9 +128,9 @@ public void init() throws Error {
     // It's allowable for some or all of these words to
     // be duplicated in the location prepositions list (elsewhere) but not another time list.
     // The list can be empty, but that will limit the parser.
-    // Examples: "at 9am", "from 10pm to 11:30pm", "on monday", "until June 3rd"
+    // Examples: "at 9am", "from 10pm to 11:30pm", "on monday", "until June 3rd", "this Friday"
     // For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-    TIME_PREPOSITIONS = _("at;from;to;on;until;").casefold().split(";");
+    TIME_PREPOSITIONS = _("at;from;to;on;until;this;").casefold().split(";");
     
     // Used by quick-add to determine if the word is a DURATION preposition (indicating a
     // a duration of time, not a specific time).  Each word must be separated by semi-colons.
