@@ -123,8 +123,19 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
     
     private bool on_instance_added(E.CalComponent eds_component, time_t instance_start,
         time_t instance_end) {
+        unowned iCal.icalcomponent ical_component = eds_component.get_icalcomponent();
+        
+        // if no UID, go no further
+        string? uid = ical_component.get_uid();
+        if (String.is_empty(uid))
+            return true;
+        
+        // if UID has been seen, go no further
+        if (has_uid(new Component.UID(uid)))
+            return true;
+        
         try {
-            Component.Event? event = Component.Instance.convert(calendar, eds_component.get_icalcomponent())
+            Component.Event? event = Component.Instance.convert(calendar, ical_component)
                 as Component.Event;
             if (event != null)
                 notify_instance_added(event);
@@ -137,32 +148,33 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
     
     private void on_objects_modified(SList<weak iCal.icalcomponent> objects) {
         foreach (weak iCal.icalcomponent ical_component in objects) {
-            Component.Event? event = null;
-            
             // only update known objects
             string? uid = ical_component.get_uid();
-            if (!String.is_empty(uid)) {
-                Gee.Collection<Component.Instance>? instances = for_uid(new Component.UID(uid));
-                if (instances != null && instances.size > 0) {
-                    // convert the modified event source into an orphaned event
-                    Component.Event modified_event;
-                    try {
-                        modified_event = new Component.Event(null, ical_component);
-                    } catch (Error err) {
-                        debug("Unable to process modified event: %s", err.message);
-                        
-                        continue;
-                    }
+            if (String.is_empty(uid))
+                continue;
+            
+            Gee.Collection<Component.Instance>? instances = for_uid(new Component.UID(uid));
+            if (instances == null || instances.size == 0)
+                continue;
+            
+            // convert the modified event source into an orphaned event (for comparison purposes)
+            Component.Event modified_event;
+            try {
+                modified_event = new Component.Event(null, ical_component);
+            } catch (Error err) {
+                debug("Unable to process modified event: %s", err.message);
+                
+                continue;
+            }
+            
+            // for every instance matching its UID, look for the original
+            Component.Event? event = null;
+            foreach (Component.Instance instance in instances) {
+                Component.Event? stored_event = instance as Component.Event;
+                if (stored_event != null && stored_event.equal_to(modified_event)) {
+                    event = stored_event;
                     
-                    // for every instance matching its UID, look for the original
-                    foreach (Component.Instance instance in instances) {
-                        Component.Event? stored_event = instance as Component.Event;
-                        if (stored_event != null && stored_event.equal_to(modified_event)) {
-                            event = stored_event;
-                            
-                            break;
-                        }
-                    }
+                    break;
                 }
             }
             

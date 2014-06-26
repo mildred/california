@@ -261,6 +261,14 @@ public abstract class CalendarSourceSubscription : BaseObject {
     }
     
     /**
+     * Returns true if the {@link Component.UID} has been seen in this
+     * {@link CalendarSourceSubscription}.
+     */
+    public bool has_uid(Component.UID uid) {
+        return instances.contains(uid);
+    }
+    
+    /**
      * Returns all {@link Component.Instance}s for the {@link Component.UID}.
      *
      * @returns null if the UID has not been seen.
