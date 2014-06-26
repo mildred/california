@@ -110,7 +110,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
             event);
         event = parser.event;
         
-        if (event.is_valid()) {
+        if (event.is_valid(true)) {
             create_event_async.begin(null);
         } else {
             // see note above about why the Deck jumps to Create/Update and then this Card is

@@ -191,8 +191,15 @@ public class DetailsParser : BaseObject {
             
             // if a recurring rule has been started and are adding to it, drop common prepositions
             // that indicate linkage
-            if (rrule != null && token.casefolded in COMMON_PREPOSITIONS)
-                continue;
+            stack.mark();
+            if (token.casefolded in COMMON_PREPOSITIONS) {
+                if (rrule != null)
+                    continue;
+                
+                if (parse_time(stack.pop(), true))
+                    continue;
+            }
+            stack.restore();
             
             // if a recurring rule has not been started, look for keywords which transform the
             // event into one
@@ -307,6 +314,16 @@ public class DetailsParser : BaseObject {
     private bool parse_time(Token? specifier, bool strict) {
         if (specifier == null)
             return false;
+        
+        // look for single-word date specifiers
+        if (specifier.casefolded in UNIT_WEEKENDS) {
+            Calendar.Date saturday = Calendar.System.today.upcoming(true,
+                date => date.day_of_week == Calendar.DayOfWeek.SAT);
+            Calendar.Date sunday = Calendar.System.today.upcoming(true,
+                date => date.day_of_week == Calendar.DayOfWeek.SUN);
+            
+            return add_date(saturday) && add_date(sunday);
+        }
         
         // look for day/month specifiers, in any order
         stack.mark();

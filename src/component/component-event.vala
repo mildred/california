@@ -380,8 +380,11 @@ public class Event : Instance, Gee.Comparable<Event> {
     /**
      * @inheritDoc
      */
-    public override bool is_valid() {
-        return base.is_valid() && (date_span != null || exact_time_span != null);
+    public override bool is_valid(bool and_useful) {
+        if (and_useful && String.is_empty(summary))
+            return false;
+        
+        return base.is_valid(and_useful) && (date_span != null || exact_time_span != null);
     }
     
     /**

@@ -348,8 +348,12 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      * present with proper values.
      *
      * The presence of {@link calendar_source} is not necessary to deem an Instance valid.
+     *
+     * and_useful indicates that, while technically valid according to the iCalendar specification,
+     * the Instance also has optional fields available that the user will almost likely need or
+     * require for the event to be of use.
      */
-    public virtual bool is_valid() {
+    public virtual bool is_valid(bool and_useful) {
         return dtstamp != null;
     }
     

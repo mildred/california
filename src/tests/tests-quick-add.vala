@@ -8,13 +8,14 @@ namespace California.Tests {
 
 private class QuickAdd : UnitTest.Harness {
     public QuickAdd() {
-        add_case("null", null_details);
+        add_case("null-details", null_details);
         add_case("blank", blank);
         add_case("punct", punct);
         add_case("summary", summary);
         add_case("summary-with-blanks", summary_with_blanks);
         add_case("summary-with-punct", summary_with_punct);
         add_case("summary-location", summary_location);
+        add_case("valid-no-summary", valid_no_summary);
         add_case("with-12hr-time", with_12hr_time);
         add_case("with-24hr-time", with_24hr_time);
         add_case("with-day-of-week", with_day_of_week);
@@ -34,6 +35,8 @@ private class QuickAdd : UnitTest.Harness {
         add_case("separate-pm", separate_pm);
         add_case("start-date-ordinal", start_date_ordinal);
         add_case("end-date-ordinal", end_date_ordinal);
+        add_case("simple-and", simple_and);
+        add_case("this-weekend", this_weekend);
     }
     
     protected override void setup() throws Error {
@@ -49,19 +52,19 @@ private class QuickAdd : UnitTest.Harness {
     private bool null_details() throws Error {
         Component.DetailsParser parser = new Component.DetailsParser(null, null);
         
-        return !parser.event.is_valid();
+        return !parser.event.is_valid(false);
     }
     
     private bool blank() throws Error {
         Component.DetailsParser parser = new Component.DetailsParser(" ", null);
         
-        return !parser.event.is_valid();
+        return !parser.event.is_valid(false);
     }
     
     private bool punct() throws Error {
         Component.DetailsParser parser = new Component.DetailsParser("&", null);
         
-        return !parser.event.is_valid()
+        return !parser.event.is_valid(false)
             && parser.event.summary == "&";
     }
     
@@ -99,6 +102,18 @@ private class QuickAdd : UnitTest.Harness {
             && parser.event.location == "Bob's"
             && parser.event.exact_time_span == null
             && parser.event.date_span == null;
+    }
+    
+    private bool valid_no_summary(out string? dump) throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser("7pm to 9pm", null);
+        
+        dump = parser.event.source;
+        
+        // valid but not "useful"
+        return parser.event.is_valid(false)
+            && !parser.event.is_valid(true)
+            && California.String.is_empty(parser.event.summary)
+            && parser.event.exact_time_span != null;
     }
     
     private bool with_12hr_time() throws Error {
@@ -332,6 +347,32 @@ private class QuickAdd : UnitTest.Harness {
         return parser.event.summary == "Off-site"
             && parser.event.date_span.start_date.equal_to(start)
             && parser.event.date_span.end_date.equal_to(end);
+    }
+    
+    private bool simple_and(out string? dump) throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "Manga & Anime Festival Saturday and Sunday at Airport Hyatt, Shelbyville", null);
+        
+        dump = parser.event.source;
+        
+        return parser.event.summary == "Manga & Anime Festival at Airport Hyatt, Shelbyville"
+            && parser.event.location == "Airport Hyatt, Shelbyville"
+            && parser.event.is_all_day
+            && parser.event.date_span.start_date.day_of_week == Calendar.DayOfWeek.SAT
+            && parser.event.date_span.end_date.day_of_week == Calendar.DayOfWeek.SUN;
+    }
+    
+    private bool this_weekend(out string? dump) throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "Manga & Anime Festival this weekend at Airport Hyatt, Shelbyville", null);
+        
+        dump = parser.event.source;
+        
+        return parser.event.summary == "Manga & Anime Festival at Airport Hyatt, Shelbyville"
+            && parser.event.location == "Airport Hyatt, Shelbyville"
+            && parser.event.is_all_day
+            && parser.event.date_span.start_date.day_of_week == Calendar.DayOfWeek.SAT
+            && parser.event.date_span.end_date.day_of_week == Calendar.DayOfWeek.SUN;
     }
 }
 
