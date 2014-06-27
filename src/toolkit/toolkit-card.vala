@@ -126,6 +126,14 @@ public interface Card : Gtk.Widget {
      * message may be null even if the Card expects one; generally this means {@link jump_back}
      * or {@link jump_home} was invoked, resulting in this Card being activated.
      *
+     * Due to some mechanism inside of GSignal or Vala, it's possible for a caller to pass null
+     * that gets translated into a Value object holding a null pointer.  Deck will watch for this
+     * situation and convert those Values into a null reference.  This means passing Value(null)
+     * as a message is impossible.
+     *
+     * In order for this null-checking to work, the message must be holding a pointer, Object, or
+     * a string.  Other types (including Vala-generated fundamental types!) are not safe-guarded.
+     *
      * This is called before dealing with {@link default_widget} and {@link initial_focus}, so
      * changes to those properties in this call, if need be.
      */

@@ -191,6 +191,22 @@ public class Deck : Gtk.Stack {
         }
     }
     
+    private Value? strip_null_value(Value? message) {
+        if (message == null)
+            return null;
+        
+        if (message.holds(typeof(string)))
+            return message.get_string() != null ? message : null;
+        
+        if (message.holds(typeof(Object)))
+            return message.get_object() != null ? message : null;
+        
+        if (message.holds(typeof(void*)))
+            return message.get_pointer() != null ? message : null;
+        
+        return message;
+    }
+    
     /**
      * Force the {@link Deck} to jump to the {@link home} {@link Card}.
      *
@@ -207,7 +223,7 @@ public class Deck : Gtk.Stack {
         navigation_stack.clear();
         
         set_visible_child(home);
-        home.jumped_to(null, message);
+        home.jumped_to(null, strip_null_value(message));
     }
     
     private void on_jump_to_card(Card card, Card next, Value? message) {
@@ -226,7 +242,7 @@ public class Deck : Gtk.Stack {
         }
         
         set_visible_child(next);
-        next.jumped_to(card, message);
+        next.jumped_to(card, strip_null_value(message));
     }
     
     private void on_jump_to_card_by_name(Card card, string name, Value? message) {
