@@ -204,7 +204,7 @@ msgstr "%b. %e."
 #: ../src/calendar/calendar.vala:157
 #, c-format
 msgid "%a %x"
-msgstr "%x, %a."
+msgstr "%a, %x"
 
 #. A "pretty" date abbreviated and no year according to locale preferences, i.e. "Mon 3/10"
 #. Leading zeroes will be stripped.
@@ -212,7 +212,7 @@ msgstr "%x, %a."
 #: ../src/calendar/calendar.vala:162
 #, c-format
 msgid "%a %m/%d"
-msgstr "%m. %d., %a."
+msgstr "%a, %m-%d"
 
 #. A "pretty" date abbreviated with no day of week or year according to locale preferences,
 #. i.e. "3/10"
@@ -221,7 +221,7 @@ msgstr "%m. %d., %a."
 #: ../src/calendar/calendar.vala:168
 #, c-format
 msgid "%m/%d"
-msgstr "%m. %d."
+msgstr "%m-%d"
 
 #. Ante meridiem
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
