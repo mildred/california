@@ -2,6 +2,14 @@
 
 [CCode (cprefix = "E", gir_namespace = "ECalendar", gir_version = "1.2", lower_case_cprefix = "e_")]
 namespace E {
+	namespace Util {
+		[CCode (cheader_filename = "libecal/libecal.h", cname = "e_cal_util_component_has_recurrences")]
+		public static bool component_has_recurrences (iCal.icalcomponent ical_component);
+		[CCode (cheader_filename = "libecal/libecal.h", cname = "e_cal_util_component_is_instance")]
+		public static bool component_is_instance (iCal.icalcomponent ical_component);
+		[CCode (cheader_filename = "libecal/libecal.h", cname = "e_cal_util_remove_instances")]
+		public static bool remove_instances (iCal.icalcomponent ical_component, iCal.icaltimetype rid, E.CalObjModType mod);
+	}
 	[CCode (cheader_filename = "libecal/libecal.h", type_id = "e_cal_client_get_type ()")]
 	public class CalClient : E.Client, GLib.Initable, GLib.AsyncInitable, E.TimezoneCache {
 		[CCode (has_construct_function = false)]
@@ -43,7 +51,8 @@ namespace E {
 		public async bool get_free_busy (ulong start, ulong end, GLib.SList users, GLib.Cancellable? cancellable) throws GLib.Error;
 		public bool get_free_busy_sync (ulong start, ulong end, GLib.SList users, GLib.Cancellable? cancellable) throws GLib.Error;
 		public unowned string get_local_attachment_store ();
-		public async bool get_object (string uid, string rid, GLib.Cancellable? cancellable, out unowned iCal.icalcomponent out_icalcomp) throws GLib.Error;
+		[CCode (finish_name = "e_cal_client_get_object_finish")]
+		public async void get_object (string uid, string? rid, GLib.Cancellable? cancellable, out iCal.icalcomponent out_icalcomp) throws GLib.Error;
 		public async bool get_object_list (string sexp, GLib.Cancellable? cancellable) throws GLib.Error;
 		public async bool get_object_list_as_comps (string sexp, GLib.Cancellable? cancellable) throws GLib.Error;
 		public bool get_object_list_as_comps_sync (string sexp, GLib.SList out_ecalcomps, GLib.Cancellable? cancellable) throws GLib.Error;
@@ -248,6 +257,17 @@ namespace E {
 		public void set_repeat (E.CalComponentAlarmRepeat repeat);
 		public void set_trigger (E.CalComponentAlarmTrigger trigger);
 	}
+	[CCode (cheader_filename = "libecal/libecal.h", copy_function = "e_cal_component_id_copy", free_function = "e_cal_component_free_id")]
+	[Compact]
+	public class CalComponentId {
+		public weak string rid;
+		public weak string uid;
+		[CCode (has_construct_function = false)]
+		public CalComponentId (string uid, string rid);
+		public E.CalComponentId copy ();
+		public bool equal (E.CalComponentId id2);
+		public uint hash ();
+	}
 	[CCode (cheader_filename = "libecal/libecal.h")]
 	public interface TimezoneCache : GLib.Object {
 		public abstract unowned GLib.List list_timezones ();
@@ -299,16 +319,6 @@ namespace E {
 	public struct CalComponentDateTime {
 		public iCal.icaltimetype* value;
 		public weak string tzid;
-	}
-	[CCode (cheader_filename = "libecal/libecal.h")]
-	public struct CalComponentId {
-		public weak string uid;
-		public weak string rid;
-		[CCode (has_construct_function = false)]
-		public CalComponentId (string uid, string rid);
-		public E.CalComponentId copy ();
-		public bool equal (E.CalComponentId id2);
-		public uint hash ();
 	}
 	[CCode (cheader_filename = "libecal/libecal.h")]
 	public struct CalComponentOrganizer {

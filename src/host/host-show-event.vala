@@ -45,6 +45,12 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     [GtkChild]
     private Gtk.Button close_button;
     
+    [GtkChild]
+    private Gtk.Revealer button_box_revealer;
+    
+    [GtkChild]
+    private Gtk.Revealer remove_recurring_revealer;
+    
     private new Component.Event event;
     
     public ShowEvent() {
@@ -80,15 +86,16 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         // description
         set_label(null, description_text, Markup.linkify(escape(event.description), linkify_delegate));
         
-        // don't current support updating or removing recurring events properly; see
+        // don't current support updating recurring events properly; see
         // https://bugzilla.gnome.org/show_bug.cgi?id=725786
-        // https://bugzilla.gnome.org/show_bug.cgi?id=725787
         bool read_only = event.calendar_source != null && event.calendar_source.read_only;
-        bool visible = !event.is_recurring && !read_only;
-        update_button.visible = visible;
-        update_button.no_show_all = !visible;
-        remove_button.visible = visible;
-        remove_button.no_show_all = !visible;
+        
+        bool updatable = !event.is_recurring && !read_only;
+        update_button.visible = updatable;
+        update_button.no_show_all = updatable;
+        
+        remove_button.visible = !read_only;
+        remove_button.no_show_all = !read_only;
     }
     
     private string? escape(string? plain) {
@@ -130,7 +137,40 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     
     [GtkCallback]
     private void on_remove_button_clicked() {
-        remove_event_async.begin();
+        // If recurring (and so this is a generated instance of the VEVENT, not the VEVENT itself),
+        // reveal additional remove buttons
+        //
+        // TODO: Gtk.Stack would be a better widget for this animation, but it's unavailable in
+        // Glade as of GTK+ 3.12.
+        if (event.is_recurring) {
+            button_box_revealer.reveal_child = false;
+            remove_recurring_revealer.reveal_child = true;
+            
+            return;
+        }
+        
+        remove_events_async.begin(null, Backing.CalendarSource.AffectedInstances.ALL);
+    }
+    
+    [GtkCallback]
+    private void on_cancel_remove_recurring_button_clicked() {
+        button_box_revealer.reveal_child = true;
+        remove_recurring_revealer.reveal_child = false;
+    }
+    
+    [GtkCallback]
+    private void on_remove_this_button_clicked() {
+        remove_events_async.begin(event.rid, Backing.CalendarSource.AffectedInstances.THIS);
+    }
+    
+    [GtkCallback]
+    private void on_remove_future_button_clicked() {
+        remove_events_async.begin(event.rid, Backing.CalendarSource.AffectedInstances.THIS_AND_FUTURE);
+    }
+    
+    [GtkCallback]
+    private void on_remove_all_button_clicked() {
+        remove_events_async.begin(null, Backing.CalendarSource.AffectedInstances.ALL);
     }
     
     [GtkCallback]
@@ -143,22 +183,32 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         notify_user_closed();
     }
     
-    private async void remove_event_async() {
+    private async void remove_events_async(Component.DateTime? rid,
+        Backing.CalendarSource.AffectedInstances affected) {
         Gdk.Cursor? cursor = Toolkit.set_busy(this);
         
         Error? remove_err = null;
         try {
-            yield event.calendar_source.remove_component_async(event.uid, null);
+            if (rid == null || affected == Backing.CalendarSource.AffectedInstances.ALL)
+                yield event.calendar_source.remove_all_instances_async(event.uid, null);
+            else
+                yield event.calendar_source.remove_instances_async(event.uid, rid, affected, null);
         } catch (Error err) {
             remove_err = err;
         }
         
         Toolkit.set_unbusy(this, cursor);
         
-        if (remove_err == null)
+        if (remove_err == null) {
             notify_success();
-        else
-            notify_failure(_("Unable to remove event: %s").printf(remove_err.message));
+        } else {
+            bool multiple = (rid != null) || (affected != Backing.CalendarSource.AffectedInstances.THIS);
+            
+            // No number is supplied because the number of events removed is indefinite in certain
+            // situations ... plural text should simply be for "more than one"
+            notify_failure(ngettext("Unable to remove event: %s", "Unable to remove events: %s",
+                !multiple ? 1 : 2).printf(remove_err.message));
+        }
     }
 }
 

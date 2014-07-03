@@ -45,6 +45,13 @@ public class DateTime : BaseObject, Gee.Hashable<DateTime>, Gee.Comparable<DateT
     public bool is_date { get { return iCal.icaltime_is_date(dt) != 0; } }
     
     /**
+     * Returns the original iCalendar string representing the DATE/DATE-TIME property value.
+     *
+     * This does not include the iCal key string preceding the value, i.e. "DTSTAMP:"
+     */
+    public string value { get; private set; }
+    
+    /**
      * The DATE-TIME for the iCal component and property kind.
      */
     public iCal.icaltimetype dt;
@@ -114,6 +121,7 @@ public class DateTime : BaseObject, Gee.Hashable<DateTime>, Gee.Comparable<DateT
         }
         
         kind = ical_prop_kind;
+        value = prop.get_value_as_string();
     }
     
     /**
@@ -161,7 +169,7 @@ public class DateTime : BaseObject, Gee.Hashable<DateTime>, Gee.Comparable<DateT
      *
      * Returns null if {@link is_date} is true.
      */
-    public Calendar.ExactTime? to_exact_time() throws CalendarError{
+    public Calendar.ExactTime? to_exact_time() throws CalendarError {
         if (is_date)
             return null;
         
