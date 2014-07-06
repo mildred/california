@@ -1,0 +1,49 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      xmlns:ui="http://projectmallard.org/ui/1.0/ui_expanded.html"
+      type="guide" style="tip"
+      id="cal-shortcut-keys">
+
+  <info>
+    <link type="guide" xref="index"/>
+    <revision pkgversion="3.14" date="2014-07-05" status="draft"/>
+
+    <credit type="author copyright">
+      <name>Jim Campbell</name>
+      <email its:translate="no">jcampbell@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+  </info>
+
+  <title>Shortcut keys</title>
+
+  <p>Use <gui>shortcut keys</gui> to perform common tasks more quickly than with
+  the mouse and menus. The following table lists <app>California's</app>
+  shortcut keys.</p>
+
+    <table rules="rows" frame="top bottom" ui:expanded="true">
+      <thead>
+        <tr>
+          <td><p>To Do This</p></td>
+          <td><p>Press This</p></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><p>Open the <em>Quick-add</em> window</p></td>
+          <td><p><keyseq><key>Ctrl</key><key>N</key></keyseq></p></td>
+        </tr>
+        <tr>
+          <td><p>Open the list of calendars</p></td>
+          <td><p><keyseq><key>Ctrl</key><key>L</key></keyseq></p></td>
+        </tr>
+        <tr>
+          <td><p>Quit the application</p></td>
+          <td><p><keyseq><key>Ctrl</key><key>Q</key></keyseq></p></td>
+        </tr>
+      </tbody>
+    </table>
+
+</page>
