@@ -1,5 +1,6 @@
 [encoding: UTF-8]
 # List of source files which contain translatable strings.
+data/california.appdata.xml.in
 data/california.desktop.in.in
 src/activator/activator.vala
 src/activator/google/activator-google-authenticating-pane.vala
