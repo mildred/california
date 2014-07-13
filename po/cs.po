@@ -198,7 +198,6 @@ msgstr "%a %x"
 #. Leading zeroes will be stripped.
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
 #: ../src/calendar/calendar.vala:162
-#, c-format
 msgid "%a %m/%d"
 msgstr "%a %e.%m."
 
@@ -207,7 +206,6 @@ msgstr "%a %e.%m."
 #. Leading zeroes will be stripped.
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
 #: ../src/calendar/calendar.vala:168
-#, c-format
 msgid "%m/%d"
 msgstr "%e.%m."
 
