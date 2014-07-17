@@ -92,6 +92,7 @@ california_VALASOURCES = \
 	host/host.vala \
 	host/host-calendar-list-item.vala \
 	host/host-create-update-event.vala \
+	host/host-create-update-recurring.vala \
 	host/host-import-calendar.vala \
 	host/host-main-window.vala \
 	host/host-quick-create-event.vala \
@@ -107,6 +108,7 @@ california_VALASOURCES = \
 	tests/tests-calendar-month-of-year.vala \
 	tests/tests-calendar-month-span.vala \
 	tests/tests-calendar-wall-time.vala \
+	tests/tests-iterable.vala \
 	tests/tests-quick-add.vala \
 	tests/tests-quick-add-recurring.vala \
 	tests/tests-string.vala \
@@ -126,12 +128,14 @@ california_VALASOURCES = \
 	toolkit/toolkit-motion-event.vala \
 	toolkit/toolkit-mutable-widget.vala \
 	toolkit/toolkit-popup.vala \
+	toolkit/toolkit-rotating-button-box.vala \
 	toolkit/toolkit-stack-model.vala \
 	\
 	util/util.vala \
 	util/util-gfx.vala \
 	util/util-markup.vala \
 	util/util-memory.vala \
+	util/util-numeric.vala \
 	util/util-scheduled.vala \
 	util/util-string.vala \
 	util/util-uri.vala \
@@ -175,6 +179,7 @@ california_RC = \
 	rc/calendar-manager-list.ui \
 	rc/calendar-manager-list-item.ui \
 	rc/create-update-event.ui \
+	rc/create-update-recurring.ui \
 	rc/google-authenticating.ui \
 	rc/google-calendar-list.ui \
 	rc/google-login.ui \

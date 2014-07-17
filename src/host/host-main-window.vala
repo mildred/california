@@ -351,6 +351,10 @@ public class MainWindow : Gtk.ApplicationWindow {
             Toolkit.spin_event_loop();
         });
         
+        deck_window.deck.failure.connect((msg) => {
+            Application.instance.error_message(msg);
+        });
+        
         deck_window.show_all();
         deck_window.run();
         deck_window.destroy();
@@ -424,12 +428,21 @@ public class MainWindow : Gtk.ApplicationWindow {
     }
     
     private void quick_create_event(Component.Event? initial, Gtk.Widget relative_to, Gdk.Point? for_location) {
-        QuickCreateEvent quick_create = new QuickCreateEvent(initial);
+        QuickCreateEvent quick_create = new QuickCreateEvent();
+        
         CreateUpdateEvent create_update = new CreateUpdateEvent();
         create_update.is_update = false;
         
+        CreateUpdateRecurring create_update_recurring = new CreateUpdateRecurring();
+        
         Toolkit.Deck deck = new Toolkit.Deck();
-        deck.add_cards(iterate<Toolkit.Card>(quick_create, create_update).to_array_list());
+        deck.add_cards(
+            iterate<Toolkit.Card>(quick_create, create_update, create_update_recurring)
+            .to_array_list()
+        );
+        
+        // initialize the Deck with the initial event (if any)
+        deck.go_home(initial);
         
         show_deck(relative_to, for_location, deck);
     }
@@ -438,12 +451,18 @@ public class MainWindow : Gtk.ApplicationWindow {
         Gdk.Point? for_location) {
         ShowEvent show_event = new ShowEvent();
         
-        CreateUpdateEvent create_update_event = new CreateUpdateEvent();
-        create_update_event.is_update = true;
+        CreateUpdateEvent create_update = new CreateUpdateEvent();
+        create_update.is_update = true;
+        
+        CreateUpdateRecurring create_update_recurring = new CreateUpdateRecurring();
         
         Toolkit.Deck deck = new Toolkit.Deck();
-        deck.add_card(show_event);
-        deck.add_card(create_update_event);
+        deck.add_cards(
+            iterate<Toolkit.Card>(show_event, create_update, create_update_recurring)
+            .to_array_list()
+        );
+        
+        // "initialize" the Deck with the requested Event (because ShowEvent is first, it's home)
         deck.go_home(event);
         
         show_deck(relative_to, for_location, deck);

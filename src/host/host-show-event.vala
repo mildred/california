@@ -6,6 +6,10 @@
 
 namespace California.Host {
 
+/**
+ * MESSAGE IN: Send the Component.Event to be displayed.
+ */
+
 [GtkTemplate (ui = "/org/yorba/california/rc/show-event.ui")]
 public class ShowEvent : Gtk.Grid, Toolkit.Card {
     public const string ID = "ShowEvent";
@@ -63,7 +67,8 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         Calendar.System.instance.today_changed.disconnect(build_display);
     }
     
-    public void jumped_to(Toolkit.Card? from, Value? message) {
+    public void jumped_to(Toolkit.Card? from, Toolkit.Card.Jump reason, Value? message) {
+        // no message, don't update display
         if (message == null)
             return;
         
@@ -86,13 +91,10 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         // description
         set_label(null, description_text, Markup.linkify(escape(event.description), linkify_delegate));
         
-        // don't current support updating recurring events properly; see
-        // https://bugzilla.gnome.org/show_bug.cgi?id=725786
         bool read_only = event.calendar_source != null && event.calendar_source.read_only;
         
-        bool updatable = !event.is_recurring && !read_only;
-        update_button.visible = updatable;
-        update_button.no_show_all = updatable;
+        update_button.visible = !read_only;
+        update_button.no_show_all = !read_only;
         
         remove_button.visible = !read_only;
         remove_button.no_show_all = !read_only;
@@ -142,7 +144,7 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         //
         // TODO: Gtk.Stack would be a better widget for this animation, but it's unavailable in
         // Glade as of GTK+ 3.12.
-        if (event.is_recurring) {
+        if (event.is_generated_instance) {
             button_box_revealer.reveal_child = false;
             remove_recurring_revealer.reveal_child = true;
             
@@ -175,7 +177,12 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     
     [GtkCallback]
     private void on_update_button_clicked() {
-        jump_to_card_by_name(CreateUpdateEvent.ID, event);
+        // pass a clone of the existing event for editing
+        try {
+            jump_to_card_by_name(CreateUpdateEvent.ID, event.clone() as Component.Event);
+        } catch (Error err) {
+            notify_failure(_("Unable to update event: %s").printf(err.message));
+        }
     }
     
     [GtkCallback]

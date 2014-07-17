@@ -24,7 +24,7 @@ public class RecurrenceRule : BaseObject {
      * Enumeration of various BY rules (BYSECOND, BYMINUTE, etc.)
      */
     public enum ByRule {
-        SECOND,
+        SECOND = 0,
         MINUTE,
         HOUR,
         DAY,
@@ -32,7 +32,11 @@ public class RecurrenceRule : BaseObject {
         YEAR_DAY,
         WEEK_NUM,
         MONTH,
-        SET_POS
+        SET_POS,
+        /**
+         * The number of {@link ByRule}s, this is not a valid value.
+         */
+        COUNT;
     }
     
     /**
@@ -137,7 +141,7 @@ public class RecurrenceRule : BaseObject {
         this.freq = freq;
     }
     
-    internal RecurrenceRule.from_ical(iCal.icalcomponent ical_component) throws Error {
+    internal RecurrenceRule.from_ical(iCal.icalcomponent ical_component, bool strict) throws Error {
         // need DTSTART for timezone purposes
         DateTime dtstart = new DateTime(ical_component, iCal.icalproperty_kind.DTSTART_PROPERTY);
         
@@ -155,11 +159,16 @@ public class RecurrenceRule : BaseObject {
         if (rrule.count > 0) {
             set_recurrence_count(rrule.count);
         } else {
-            Component.DateTime date_time = new DateTime.rrule_until(rrule, dtstart);
-            if (date_time.is_date)
-                set_recurrence_end_date(date_time.to_date());
-            else
-                set_recurrence_end_exact_time(date_time.to_exact_time());
+            try {
+                Component.DateTime date_time = new DateTime.rrule_until(rrule, dtstart, strict);
+                if (date_time.is_date)
+                    set_recurrence_end_date(date_time.to_date());
+                else
+                    set_recurrence_end_exact_time(date_time.to_exact_time());
+            } catch (ComponentError comperr) {
+                if (!(comperr is ComponentError.UNAVAILABLE))
+                    throw comperr;
+            }
         }
         
         switch (rrule.week_start) {
@@ -253,6 +262,23 @@ public class RecurrenceRule : BaseObject {
     }
     
     /**
+     * Returns the UNTIL property as a {@link Calendar.Date}.
+     *
+     * If {@link until_exact_time} is set, only the Date portion is returned.
+     *
+     * @returns null if neither {@link until_date} or until_exact_time is set.
+     */
+    public Calendar.Date? get_recurrence_end_date() {
+        if (until_date != null)
+            return until_date;
+        
+        if (until_exact_time != null)
+            return new Calendar.Date.from_exact_time(until_exact_time);
+        
+        return null;
+    }
+    
+    /**
      * Sets the {@link count} property.
      *
      * Also clears {@link until_date} and {@link until_exact_time}.
@@ -316,6 +342,8 @@ public class RecurrenceRule : BaseObject {
                 dow = Calendar.DayOfWeek.for(dow_value, Calendar.FirstOfWeek.SUNDAY);
             } catch (CalendarError calerr) {
                 debug("Unable to decode day of week value %d: %s", dow_value, calerr.message);
+                
+                return false;
             }
         }
         
@@ -462,6 +490,21 @@ public class RecurrenceRule : BaseObject {
             by_set.add_all(traverse<int>(values).filter(is_int_short).to_array_list());
         
         by_rule_updated(by_rule);
+    }
+    
+    /**
+     * Returns a Gee.Set of {@link ByRule}s that are active, i.e. have defined rules.
+     */
+    public Gee.Set<ByRule> get_active_by_rules() {
+        Gee.Set<ByRule> active = new Gee.HashSet<ByRule>();
+        for (int ctr = 0; ctr < ByRule.COUNT; ctr++) {
+            ByRule by_rule = (ByRule) ctr;
+            
+            if (get_by_set(by_rule).size > 0)
+                active.add(by_rule);
+        }
+        
+        return active;
     }
     
     /**
