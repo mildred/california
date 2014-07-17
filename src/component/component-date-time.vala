@@ -92,7 +92,8 @@ public class DateTime : BaseObject, Gee.Hashable<DateTime>, Gee.Comparable<DateT
             break;
             
             default:
-                throw new ComponentError.INVALID("Not a DATE/DATE-TIME value: %s", prop_value.isa().to_string());
+                throw new ComponentError.INVALID("%s not a DATE/DATE-TIME value: %s",
+                    prop.isa().to_string(), prop_value.isa().to_string());
         }
         
         if (iCal.icaltime_is_null_time(dt) != 0)
