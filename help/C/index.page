@@ -32,5 +32,14 @@
 
   <p>Other help topics are grouped together into sections below.  Enjoy using
   <app>California</app>!</p>
+  
+  <section id="cal-manage-calendars" style="2column">
+    <title>Manage Calendars</title>
+  </section>
+
+  <section id="cal-manage-events">
+    <title>Manage Calendar Events</title>
+  </section>
+
 
 </page>
