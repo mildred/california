@@ -1,0 +1,43 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      xmlns:ui="http://projectmallard.org/ui/1.0/"
+      type="guide" style="tip" version="1.0 ui/1.0"
+      id="cal-add-calendar">
+
+  <info>
+    <link type="guide" xref="index#cal-manage-calendars"/>
+    <link type="seealso" xref="cal-hide-a-calendar"/>
+    <link type="seealso" xref="cal-remove-calendar"/>
+    <revision pkgversion="3.14" date="2014-07-20" status="incomplete"/>
+
+    <credit type="author copyright">
+      <name>Jim Campbell</name>
+      <email its:translate="no">jcampbell@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+  </info>
+
+  <title>Add a Calendar</title>
+    
+  <p>By default, <app>California</app> includes two calendars: a
+  <em>Personal</em> calendar and a <em>Birthdays &amp; Anniversaries</em>
+  calendar. You can add or sync other calendars, as well. Select the type of
+  calendar that you want to add from the list below:</p>
+
+  <section id="cal-sync-gcal" ui:expanded="false">
+    <title>Sync with a Google Calendar</title>
+    <p>Instructions here . . .</p>
+  </section>
+  
+  <section id="cal-sync-owncloud" ui:expanded="false">
+    <title>Sync with an OwnCloud Calendar</title>
+    <p>Instructions here . . .</p>
+  </section>
+
+  <section id="cal-display-ics" ui:expanded="false">
+    <title>Display an ICS Calendar Feed</title>
+    <p>Instructions here . . .</p>
+  </section>   
+</page>
