@@ -41,8 +41,6 @@
             <property name="has_default">True</property>
             <property name="receives_default">True</property>
             <property name="use_underline">True</property>
-            <property name="xalign">0.62999999523162842</property>
-            <property name="yalign">0.52999997138977051</property>
             <signal name="clicked" handler="on_login_button_clicked" object="CaliforniaActivatorGoogleLoginPane" swapped="no"/>
             <style>
               <class name="suggested-action"/>
