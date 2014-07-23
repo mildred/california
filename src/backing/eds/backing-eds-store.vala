@@ -125,6 +125,12 @@ internal class EdsStore : Store, WebCalSubscribable, CalDAVSubscribable {
     }
     
     private async void add_eds_source_async(E.Source eds_source) {
+        // if Source not enabled, skip
+        // TODO: Probably need to create an object for this and only make it available when/if
+        // its "enabled" property changes, but this will have to do for now
+        if (!eds_source.enabled)
+            return;
+        
         // only interested in calendars for now
         E.SourceCalendar? eds_calendar =
             eds_source.get_extension(E.SOURCE_EXTENSION_CALENDAR) as E.SourceCalendar;
