@@ -72,7 +72,10 @@ internal class Cell : Common.EventsCell {
     }
     
     private void update_top_line() {
-        top_line_text = date.day_of_month.informal_number;
+        // include abbreviate month name on first of the month
+        top_line_text = (date.day_of_month.value == 1)
+            ? "%s %s".printf(date.month.abbrev_name, date.day_of_month.informal_number)
+            : date.day_of_month.informal_number;
         top_line_rgba = (date in owner.month_of_year)
             ? palette.day_in_range
             : palette.day_outside_range;
