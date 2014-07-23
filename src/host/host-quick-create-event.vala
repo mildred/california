@@ -52,6 +52,14 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
         
         details_entry.secondary_icon_name = get_direction() == Gtk.TextDirection.RTL
             ? "edit-clear-rtl-symbolic" : "edit-clear-symbolic";
+        details_entry.bind_property("text", create_button, "sensitive", BindingFlags.SYNC_CREATE,
+            transform_text_to_sensitivity);
+    }
+    
+    private bool transform_text_to_sensitivity(Binding binding, Value source_value, ref Value target_value) {
+        target_value = from_string(details_entry.text).any(ch => !ch.isspace());
+        
+        return true;
     }
     
     public void jumped_to(Toolkit.Card? from, Toolkit.Card.Jump reason, Value? message) {
@@ -93,25 +101,37 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
     
     [GtkCallback]
     private void on_create_button_clicked() {
+        // shouldn't be sensitive if no text
         string details = details_entry.text.strip();
-        
-        if (String.is_empty(details)) {
-            create_empty_event();
-            
+        if (String.is_empty(details))
             return;
-        }
         
         Component.DetailsParser parser = new Component.DetailsParser(details, model.active,
             event);
         event = parser.event;
         
+        // create if possible, otherwise jump to editor
         if (event.is_valid(true))
             create_event_async.begin(null);
         else
-            create_empty_event();
+            edit_event();
     }
     
-    private void create_empty_event() {
+    [GtkCallback]
+    private void on_edit_button_clicked() {
+        // empty text okay
+        string details = details_entry.text.strip();
+        if (!String.is_empty(details)) {
+            Component.DetailsParser parser = new Component.DetailsParser(details, model.active,
+                event);
+            event = parser.event;
+        }
+        
+        // always edit
+        edit_event();
+    }
+    
+    private void edit_event() {
         // Must pass some kind of event to create/update, so use blank if required
         if (event == null)
             event = new Component.Event.blank();
