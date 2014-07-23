@@ -51,12 +51,12 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     private Toolkit.RotatingButtonBox rotating_button_box = new Toolkit.RotatingButtonBox();
     
     private Gtk.Button close_button = new Gtk.Button.with_mnemonic(_("_Close"));
-    private Gtk.Button update_button = new Gtk.Button.with_mnemonic(_("_Update"));
-    private Gtk.Button remove_button = new Gtk.Button.with_mnemonic(_("_Remove"));
-    private Gtk.Button remove_all_button = new Gtk.Button.with_mnemonic(_("Remove A_ll Events"));
-    private Gtk.Button remove_this_button = new Gtk.Button.with_mnemonic(_("Remove _This Event"));
+    private Gtk.Button update_button = new Gtk.Button.with_mnemonic(_("_Edit"));
+    private Gtk.Button remove_button = new Gtk.Button.with_mnemonic(_("_Delete"));
+    private Gtk.Button remove_all_button = new Gtk.Button.with_mnemonic(_("Delete A_ll Events"));
+    private Gtk.Button remove_this_button = new Gtk.Button.with_mnemonic(_("Delete _This Event"));
     private Gtk.Button remove_this_future_button = new Gtk.Button.with_mnemonic(
-        _("Remove This and _Future Events"));
+        _("Delete This and _Future Events"));
     private Gtk.Button cancel_remove_button = new Gtk.Button.with_mnemonic(_("_Cancel"));
     
     public ShowEvent() {
