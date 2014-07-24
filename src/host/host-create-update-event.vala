@@ -76,6 +76,8 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     private bool both_date_buttons_touched = false;
     
     private Toolkit.RotatingButtonBox rotating_button_box = new Toolkit.RotatingButtonBox();
+    private Toolkit.EntryClearTextConnector summary_clear_text_connector;
+    private Toolkit.EntryClearTextConnector location_clear_text_connector;
     
     private Gtk.Button accept_button = new Gtk.Button();
     private Gtk.Button cancel_button = new Gtk.Button.with_mnemonic(_("_Cancel"));
@@ -92,8 +94,11 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         
         // create button is active only if summary is filled out; all other fields (so far)
         // guarantee valid values at all times
+        summary_clear_text_connector = new Toolkit.EntryClearTextConnector(summary_entry);
         summary_entry.bind_property("text-length", accept_button, "sensitive",
             BindingFlags.SYNC_CREATE);
+        
+        location_clear_text_connector = new Toolkit.EntryClearTextConnector(location_entry);
         
         // hide start/end time widgets if an all-day event ..."no-show-all" needed to avoid the
         // merciless effects of show_all()

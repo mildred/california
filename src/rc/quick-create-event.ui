@@ -120,7 +120,6 @@
             <property name="hexpand">True</property>
             <property name="activates_default">True</property>
             <property name="width_chars">40</property>
-            <signal name="icon-release" handler="on_details_entry_icon_release" object="CaliforniaHostQuickCreateEvent" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>

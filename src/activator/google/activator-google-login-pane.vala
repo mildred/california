@@ -27,9 +27,15 @@ internal class GoogleLoginPane : Gtk.Grid, Toolkit.Card {
     [GtkChild]
     private Gtk.Button login_button;
     
+    private Toolkit.EntryClearTextConnector account_clear_text_connector;
+    private Toolkit.EntryClearTextConnector password_clear_text_connector;
+    
     public GoogleLoginPane() {
+        account_clear_text_connector = new Toolkit.EntryClearTextConnector(account_entry);
         account_entry.bind_property("text-length", login_button, "sensitive",
             BindingFlags.SYNC_CREATE, on_entry_changed);
+        
+        password_clear_text_connector = new Toolkit.EntryClearTextConnector(password_entry);
         password_entry.bind_property("text-length", login_button, "sensitive",
             BindingFlags.SYNC_CREATE, on_entry_changed);
     }

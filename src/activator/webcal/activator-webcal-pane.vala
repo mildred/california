@@ -31,6 +31,8 @@ internal class WebCalActivatorPane : Gtk.Grid, Toolkit.Card {
     private Gtk.Button subscribe_button;
     
     private Backing.WebCalSubscribable store;
+    private Toolkit.EntryClearTextConnector name_clear_text_connector;
+    private Toolkit.EntryClearTextConnector url_clear_text_connector;
     
     public WebCalActivatorPane(Backing.WebCalSubscribable store, Soup.URI? supplied_url) {
         this.store = store;
@@ -40,8 +42,11 @@ internal class WebCalActivatorPane : Gtk.Grid, Toolkit.Card {
             url_entry.sensitive = false;
         }
         
+        name_clear_text_connector = new Toolkit.EntryClearTextConnector(name_entry);
         name_entry.bind_property("text-length", subscribe_button, "sensitive",
             BindingFlags.SYNC_CREATE, on_entry_changed);
+        
+        url_clear_text_connector = new Toolkit.EntryClearTextConnector(url_entry);
         url_entry.bind_property("text-length", subscribe_button, "sensitive",
             BindingFlags.SYNC_CREATE, on_entry_changed);
     }

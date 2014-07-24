@@ -122,6 +122,7 @@ california_VALASOURCES = \
 	toolkit/toolkit-deck.vala \
 	toolkit/toolkit-deck-window.vala \
 	toolkit/toolkit-editable-label.vala \
+	toolkit/toolkit-entry-clear-text-connector.vala \
 	toolkit/toolkit-event-connector.vala \
 	toolkit/toolkit-listbox-model.vala \
 	toolkit/toolkit-motion-connector.vala \

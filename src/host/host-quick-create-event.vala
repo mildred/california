@@ -39,6 +39,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
     private Gtk.Button create_button;
     
     private Toolkit.ComboBoxTextModel<Backing.CalendarSource> model;
+    private Toolkit.EntryClearTextConnector entry_clear_text_connector;
     
     public QuickCreateEvent() {
         // create and initialize combo box model
@@ -50,8 +51,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
                 model.add(calendar_source);
         }
         
-        details_entry.secondary_icon_name = get_direction() == Gtk.TextDirection.RTL
-            ? "edit-clear-rtl-symbolic" : "edit-clear-symbolic";
+        entry_clear_text_connector = new Toolkit.EntryClearTextConnector(details_entry);
         details_entry.bind_property("text", create_button, "sensitive", BindingFlags.SYNC_CREATE,
             transform_text_to_sensitivity);
     }
@@ -84,14 +84,6 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
         
         // make first item active
         calendar_combo_box.active = 0;
-    }
-    
-    [GtkCallback]
-    private void on_details_entry_icon_release(Gtk.Entry entry, Gtk.EntryIconPosition icon,
-        Gdk.Event event) {
-        // check for clear icon being pressed
-        if (icon == Gtk.EntryIconPosition.SECONDARY)
-            details_entry.text = "";
     }
     
     [GtkCallback]
