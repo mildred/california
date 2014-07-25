@@ -81,8 +81,8 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     
     private Gtk.Button accept_button = new Gtk.Button();
     private Gtk.Button cancel_button = new Gtk.Button.with_mnemonic(_("_Cancel"));
-    private Gtk.Button update_all_button = new Gtk.Button.with_mnemonic(_("Edit A_ll Events"));
-    private Gtk.Button update_this_button = new Gtk.Button.with_mnemonic(_("Edit _This Event"));
+    private Gtk.Button update_all_button = new Gtk.Button.with_mnemonic(_("Save A_ll Events"));
+    private Gtk.Button update_this_button = new Gtk.Button.with_mnemonic(_("Save _This Event"));
     private Gtk.Button cancel_recurring_button = new Gtk.Button.with_mnemonic(_("_Cancel"));
     
     public CreateUpdateEvent() {
@@ -241,7 +241,7 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         location_entry.text = event.location ?? "";
         description_textview.buffer.text = event.description ?? "";
         
-        accept_button.label = is_update ? _("_Edit") : _("C_reate");
+        accept_button.label = is_update ? _("_Save") : _("C_reate");
         accept_button.use_underline = true;
         
         rotating_button_box.family = FAMILY_NORMAL;
