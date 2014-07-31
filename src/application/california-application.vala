@@ -22,6 +22,7 @@ public class Application : Gtk.Application {
     public const string WEBSITE_NAME = _("Visit California's home page");
     public const string WEBSITE_URL = "https://wiki.gnome.org/Apps/California";
     public const string BUGREPORT_URL = "https://bugzilla.gnome.org/enter_bug.cgi?product=california";
+    public const string QUICK_ADD_HELP_URL = "https://wiki.gnome.org/Apps/California/HowToUseQuickAdd";
     public const string ID = "org.yorba.california";
     public const string ICON_NAME = "x-office-calendar";
     

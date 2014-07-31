@@ -87,6 +87,15 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
     }
     
     [GtkCallback]
+    private void on_help_button_clicked() {
+        try {
+            Gtk.show_uri(null, Application.QUICK_ADD_HELP_URL, Gtk.get_current_event_time());
+        } catch (Error err) {
+            Application.instance.error_message("Error opening help: %s".printf(err.message));
+        }
+    }
+    
+    [GtkCallback]
     private void on_cancel_button_clicked() {
         notify_user_closed();
     }
