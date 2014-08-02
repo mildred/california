@@ -3,6 +3,18 @@
     <menu id="window-menu">
         <section>
             <item>
+                <attribute name="label" translatable="yes">_Monday</attribute>
+                <attribute name="action">win.first-of-week</attribute>
+                <attribute name="target">monday</attribute>
+            </item>
+            <item>
+                <attribute name="label" translatable="yes">_Sunday</attribute>
+                <attribute name="action">win.first-of-week</attribute>
+                <attribute name="target">sunday</attribute>
+            </item>
+        </section>
+        <section>
+            <item>
                 <attribute name="label" translatable="yes">Zoom _In</attribute>
                 <attribute name="action">win.increase-font</attribute>
             </item>
