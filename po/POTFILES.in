@@ -29,6 +29,7 @@ src/view/week/week-controller.vala
 [type: gettext/glade]src/rc/google-authenticating.ui
 [type: gettext/glade]src/rc/google-calendar-list.ui
 [type: gettext/glade]src/rc/google-login.ui
+[type: gettext/glade]src/rc/preferences.ui
 [type: gettext/glade]src/rc/quick-create-event.ui
 [type: gettext/glade]src/rc/show-event.ui
 [type: gettext/glade]src/rc/webcal-subscribe.ui

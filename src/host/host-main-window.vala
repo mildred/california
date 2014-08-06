@@ -71,9 +71,6 @@ public class MainWindow : Gtk.ApplicationWindow {
     private const string ACTION_RESET_FONT = "reset-font";
     private const string ACCEL_RESET_FONT = "KP_Multiply";
     
-    private const string DETAILED_ACTION_FOW = "win.first-of-week";
-    private const string ACTION_FOW = "first-of-week";
-    
     private static const ActionEntry[] action_entries = {
         { ACTION_QUICK_CREATE_EVENT, on_quick_create_event },
         { ACTION_JUMP_TO_TODAY, on_jump_to_today },
@@ -83,8 +80,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         { ACTION_WEEK, on_view_week },
         { ACTION_INCREASE_FONT, on_increase_font },
         { ACTION_DECREASE_FONT, on_decrease_font },
-        { ACTION_RESET_FONT, on_reset_font },
-        { ACTION_FOW, on_first_of_week, "s" }
+        { ACTION_RESET_FONT, on_reset_font }
     };
     
     private Gtk.Button quick_add_button;
@@ -207,8 +203,12 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         Gtk.MenuButton window_menu = new Gtk.MenuButton();
         window_menu.valign = Gtk.Align.CENTER;
-        window_menu.menu_model = Resource.load<MenuModel>("window-menu.interface", "window-menu");
         window_menu.image = new Gtk.Image.from_icon_name("emblem-system-symbolic", Gtk.IconSize.MENU);
+        
+        Gtk.Popover preferences_popover = new Gtk.Popover(window_menu);
+        preferences_popover.add(new Preferences());
+        
+        window_menu.popover = preferences_popover;
         
         // Vertically center all buttons and put them in a SizeGroup to handle situations where
         // the text button is smaller than the icons buttons due to language (i.e. Hebrew)
@@ -256,15 +256,11 @@ public class MainWindow : Gtk.ApplicationWindow {
         Settings.instance.notify[Settings.PROP_SMALL_FONT_PTS].connect(on_font_size_changed);
         Settings.instance.notify[Settings.PROP_NORMAL_FONT_PTS].connect(on_font_size_changed);
         on_font_size_changed();
-        
-        Calendar.System.instance.first_of_week_changed.connect(on_first_of_week_changed);
-        on_first_of_week_changed(Calendar.FirstOfWeek.DEFAULT, Calendar.System.first_of_week);
     }
     
     ~MainWindow() {
         Settings.instance.notify[Settings.PROP_SMALL_FONT_PTS].disconnect(on_font_size_changed);
         Settings.instance.notify[Settings.PROP_NORMAL_FONT_PTS].disconnect(on_font_size_changed);
-        Calendar.System.instance.first_of_week_changed.disconnect(on_first_of_week_changed);
     }
     
     public bool is_window_maximized() {
@@ -407,7 +403,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         Settings.instance.normal_font_pts = View.Palette.DEFAULT_NORMAL_FONT_PTS;
     }
     
-    public SimpleAction action_for(string action_name) {
+    private SimpleAction action_for(string action_name) {
         SimpleAction? action = lookup_action(action_name) as SimpleAction;
         assert(action != null);
         
@@ -415,52 +411,15 @@ public class MainWindow : Gtk.ApplicationWindow {
     }
     
     private void on_font_size_changed() {
-        ((SimpleAction) lookup_action(ACTION_INCREASE_FONT)).set_enabled(
+        action_for(ACTION_INCREASE_FONT).set_enabled(
             Settings.instance.small_font_pts < View.Palette.MAX_SMALL_FONT_PTS
             && Settings.instance.normal_font_pts < View.Palette.MAX_NORMAL_FONT_PTS);
-        ((SimpleAction) lookup_action(ACTION_DECREASE_FONT)).set_enabled(
+        action_for(ACTION_DECREASE_FONT).set_enabled(
             Settings.instance.small_font_pts > View.Palette.MIN_SMALL_FONT_PTS
             && Settings.instance.normal_font_pts > View.Palette.MIN_NORMAL_FONT_PTS);
-        ((SimpleAction) lookup_action(ACTION_RESET_FONT)).set_enabled(
+        action_for(ACTION_RESET_FONT).set_enabled(
             Settings.instance.small_font_pts != View.Palette.DEFAULT_SMALL_FONT_PTS
             && Settings.instance.normal_font_pts != View.Palette.DEFAULT_NORMAL_FONT_PTS);
-    }
-    
-    private void on_first_of_week(SimpleAction action, Variant? value) {
-        string? value_string = value as string;
-        if (String.is_empty(value_string))
-            return;
-        
-        Calendar.System.instance.first_of_week_changed.disconnect(on_first_of_week_changed);
-        switch (value_string) {
-            case "monday":
-                Calendar.System.first_of_week = Calendar.FirstOfWeek.MONDAY;
-            break;
-            
-            case "sunday":
-                Calendar.System.first_of_week = Calendar.FirstOfWeek.SUNDAY;
-            break;
-            
-            default:
-                assert_not_reached();
-        }
-        Calendar.System.instance.first_of_week_changed.connect(on_first_of_week_changed);
-    }
-    
-    private void on_first_of_week_changed(Calendar.FirstOfWeek old_fow, Calendar.FirstOfWeek new_fow) {
-        debug("on_first_of_week_changed: %s", new_fow.to_string());
-        switch (new_fow) {
-            case Calendar.FirstOfWeek.MONDAY:
-                action_for(ACTION_FOW).change_state("monday");
-            break;
-            
-            case Calendar.FirstOfWeek.SUNDAY:
-                action_for(ACTION_FOW).change_state("sunday");
-            break;
-            
-            default:
-                assert_not_reached();
-        }
     }
     
     private void on_request_create_timed_event(Calendar.ExactTimeSpan initial, Gtk.Widget relative_to,

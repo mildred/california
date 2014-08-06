@@ -40,6 +40,9 @@
         <file compressed="true">rc/google-login.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
+        <file compressed="true">rc/preferences.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
         <file compressed="true">rc/quick-create-event.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
@@ -47,9 +50,6 @@
     </gresource>
     <gresource prefix="/org/yorba/california">
         <file compressed="true">rc/webcal-subscribe.ui</file>
-    </gresource>
-    <gresource prefix="/org/yorba/california">
-        <file compressed="true">rc/window-menu.interface</file>
     </gresource>
 </gresources>
 
