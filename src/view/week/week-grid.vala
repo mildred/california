@@ -318,35 +318,35 @@ internal class Grid : Gtk.Box {
         return date_to_all_day.get(cell_date);
     }
     
-    private void on_instance_container_clicked(Toolkit.ButtonEvent details, bool guaranteed) {
-        // only interested in unguaranteed clicks on the primary mouse button
-        if (details.button != Toolkit.Button.PRIMARY || guaranteed)
-            return;
+    private bool on_instance_container_clicked(Toolkit.ButtonEvent details) {
+        if (details.button != Toolkit.Button.PRIMARY)
+            return Toolkit.PROPAGATE;
         
         Common.InstanceContainer instance_container = (Common.InstanceContainer) details.widget;
         
         Component.Event? event = instance_container.get_event_at(details.press_point);
         if (event != null)
             owner.request_display_event(event, instance_container, details.press_point);
+        
+        return Toolkit.STOP;
     }
     
-    private void on_instance_container_double_clicked(Toolkit.ButtonEvent details, bool guaranteed) {
-        // only interested in unguaranteed double-clicks on the primary mouse button
-        if (details.button != Toolkit.Button.PRIMARY || guaranteed)
-            return;
+    private bool on_instance_container_double_clicked(Toolkit.ButtonEvent details) {
+        if (details.button != Toolkit.Button.PRIMARY)
+            return Toolkit.PROPAGATE;
         
         Common.InstanceContainer instance_container = (Common.InstanceContainer) details.widget;
         
         // if an event is at this location, don't process
         if (instance_container.get_event_at(details.press_point) != null)
-            return;
+            return Toolkit.PROPAGATE;
         
         // if a DayPane, use double-click to determine rounded time of the event's start
         DayPane? day_pane = instance_container as DayPane;
         if (day_pane != null) {
             // convert click into starting time on the day pane rounded down to the nearest half-hour
-            Calendar.WallTime wall_time = day_pane.get_wall_time(details.press_point.y).round_down(
-                30, Calendar.TimeUnit.MINUTE);
+            Calendar.WallTime wall_time = day_pane.get_wall_time(details.press_point.y).round(-30,
+                Calendar.TimeUnit.MINUTE, null);
             
             Calendar.ExactTime start_time = new Calendar.ExactTime(Calendar.Timezone.local,
                 day_pane.date, wall_time);
@@ -355,12 +355,14 @@ internal class Grid : Gtk.Box {
                 new Calendar.ExactTimeSpan(start_time, start_time.adjust_time(1, Calendar.TimeUnit.HOUR)),
                 day_pane, details.press_point);
             
-            return;
+            return Toolkit.STOP;
         }
         
         // otherwise, an all-day-cell, so request an all-day event
         owner.request_create_all_day_event(instance_container.contained_span, instance_container,
             details.press_point);
+        
+        return Toolkit.STOP;
     }
     
     private void on_day_pane_motion(Toolkit.MotionEvent details) {

@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.1 -->
+<interface>
+  <requires lib="gtk+" version="3.10"/>
+  <template class="CaliforniaHostDateTimeWidget" parent="GtkBox">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="halign">center</property>
+    <property name="valign">center</property>
+    <property name="orientation">vertical</property>
+    <property name="spacing">8</property>
+    <child>
+      <object class="GtkCalendar" id="calendar">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="halign">end</property>
+        <property name="hexpand">False</property>
+        <property name="year">2014</property>
+        <property name="month">6</property>
+        <property name="day">23</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkGrid" id="time_grid">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">center</property>
+        <property name="valign">center</property>
+        <property name="hexpand">False</property>
+        <property name="vexpand">False</property>
+        <child>
+          <object class="GtkEntry" id="hour_entry">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="hexpand">False</property>
+            <property name="vexpand">False</property>
+            <property name="max_length">2</property>
+            <property name="width_chars">2</property>
+            <property name="xalign">1</property>
+            <property name="input_purpose">digits</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="colon_label">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="hexpand">False</property>
+            <property name="label" translatable="yes">:</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="minutes_entry">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="halign">start</property>
+            <property name="hexpand">False</property>
+            <property name="max_length">2</property>
+            <property name="width_chars">2</property>
+            <property name="input_purpose">digits</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEventBox" id="hour_up">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="visible_window">False</property>
+            <child>
+              <object class="GtkArrow" id="from_hour_up_arrow">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">center</property>
+                <property name="hexpand">False</property>
+                <property name="arrow_type">up</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEventBox" id="hour_down">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="visible_window">False</property>
+            <child>
+              <object class="GtkArrow" id="from_hour_down_arrow">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">center</property>
+                <property name="hexpand">False</property>
+                <property name="arrow_type">down</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="meridiem_label">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label">am</property>
+            <property name="width_chars">3</property>
+            <property name="max_width_chars">2</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEventBox" id="minutes_up">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="visible_window">False</property>
+            <child>
+              <object class="GtkArrow" id="from_minutes_up_arrow">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">center</property>
+                <property name="hexpand">False</property>
+                <property name="arrow_type">up</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEventBox" id="minutes_down">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="visible_window">False</property>
+            <child>
+              <object class="GtkArrow" id="from_minutes_down_arrow">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">center</property>
+                <property name="hexpand">False</property>
+                <property name="arrow_type">down</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEventBox" id="meridiem_up">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="visible_window">False</property>
+            <child>
+              <object class="GtkArrow" id="from_meridiem_up_arrow">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">center</property>
+                <property name="hexpand">False</property>
+                <property name="arrow_type">up</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEventBox" id="meridiem_down">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="visible_window">False</property>
+            <child>
+              <object class="GtkArrow" id="from_meridiem_down_arrow">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">center</property>
+                <property name="hexpand">False</property>
+                <property name="arrow_type">down</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+  </template>
+</interface>

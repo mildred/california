@@ -118,7 +118,8 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         set_label(where_label, where_text, event.location);
         
         // time
-        set_label(when_label, when_text, event.get_event_time_pretty_string(Calendar.Timezone.local));
+        set_label(when_label, when_text, event.get_event_time_pretty_string(Calendar.Date.PrettyFlag.NONE,
+            Calendar.ExactTimeSpan.PrettyFlag.NONE, Calendar.Timezone.local));
         
         // description
         set_label(null, description_text, Markup.linkify(escape(event.description), linkify_delegate));

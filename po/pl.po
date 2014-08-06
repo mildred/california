@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-20 16:45+0200\n"
-"PO-Revision-Date: 2014-07-20 16:48+0200\n"
+"POT-Creation-Date: 2014-08-03 20:19+0200\n"
+"PO-Revision-Date: 2014-08-03 20:20+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -145,19 +145,19 @@ msgstr "Copyright 2014 Fundacja Yorba"
 msgid "Visit California's home page"
 msgstr "Witryna programu California"
 
-#: ../src/application/california-application.vala:168
+#: ../src/application/california-application.vala:169
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "Nie można otworzyć programu California: %s"
 
-#: ../src/application/california-application.vala:271
+#: ../src/application/california-application.vala:272
 #, c-format
 msgid "About %s"
 msgstr "O programie %s"
 
 #. Translators: add your name and email address to receive credit in the About dialog
 #. For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:277
+#: ../src/application/california-application.vala:278
 msgid "translator-credits"
 msgstr ""
 "Piotr Drąg <piotrdrag@gmail.com>, 2014\n"
@@ -511,8 +511,8 @@ msgstr "w;na;"
 msgid "st;nd;rd;th"
 msgstr "st;nd;rd;th"
 
-#: ../src/host/host-create-update-event.vala:81
-#: ../src/host/host-create-update-event.vala:84
+#: ../src/host/host-create-update-event.vala:83
+#: ../src/host/host-create-update-event.vala:86
 #: ../src/host/host-show-event.vala:60 ../src/rc/calendar-import.ui.h:1
 #: ../src/rc/create-update-recurring.ui.h:24
 #: ../src/rc/google-authenticating.ui.h:1
@@ -521,38 +521,37 @@ msgstr "st;nd;rd;th"
 msgid "_Cancel"
 msgstr "_Anuluj"
 
-#: ../src/host/host-create-update-event.vala:82
-msgid "Update A_ll Events"
-msgstr "Zaktua_lizuj wszystkie wydarzenia"
+#: ../src/host/host-create-update-event.vala:84
+msgid "Save A_ll Events"
+msgstr "Zapisz _wszystkie wydarzenia"
 
-#: ../src/host/host-create-update-event.vala:83
-msgid "Update _This Event"
-msgstr "Zaktualizuj _to wydarzenie"
+#: ../src/host/host-create-update-event.vala:85
+msgid "Save _This Event"
+msgstr "Zapisz _to wydarzenie"
 
-#: ../src/host/host-create-update-event.vala:237
-#: ../src/host/host-show-event.vala:54
-msgid "_Update"
-msgstr "Z_aktualizuj"
+#: ../src/host/host-create-update-event.vala:244
+msgid "_Save"
+msgstr "_Zapisz"
 
-#: ../src/host/host-create-update-event.vala:237
+#: ../src/host/host-create-update-event.vala:244
 msgid "C_reate"
 msgstr "U_twórz"
 
-#: ../src/host/host-create-update-event.vala:374
+#: ../src/host/host-create-update-event.vala:381
 msgid "Unable to create event: calendar must be specified"
 msgstr "Nie można utworzyć wydarzenia: należy podać kalendarz"
 
-#: ../src/host/host-create-update-event.vala:393
+#: ../src/host/host-create-update-event.vala:400
 #, c-format
 msgid "Unable to create event: %s"
 msgstr "Nie można utworzyć wydarzenia: %s"
 
-#: ../src/host/host-create-update-event.vala:399
+#: ../src/host/host-create-update-event.vala:406
 msgid "Unable to update event: calendar must be specified"
 msgstr "Nie można zaktualizować wydarzenia: należy podać kalendarz"
 
-#: ../src/host/host-create-update-event.vala:418
-#: ../src/host/host-show-event.vala:205
+#: ../src/host/host-create-update-event.vala:425
+#: ../src/host/host-show-event.vala:208
 #, c-format
 msgid "Unable to update event: %s"
 msgstr "Nie można zaktualizować wydarzenia: %s"
@@ -628,25 +627,29 @@ msgstr "Kalendarze (Ctrl+L)"
 msgid "_Close"
 msgstr "Za_mknij"
 
+#: ../src/host/host-show-event.vala:54 ../src/rc/quick-create-event.ui.h:4
+msgid "_Edit"
+msgstr "_Edycja"
+
 #: ../src/host/host-show-event.vala:55
-msgid "_Remove"
+msgid "_Delete"
 msgstr "_Usuń"
 
 #: ../src/host/host-show-event.vala:56
-msgid "Remove A_ll Events"
-msgstr "_Usuń wszystkie wydarzenia"
+msgid "Delete A_ll Events"
+msgstr "U_suń wszystkie wydarzenia"
 
 #: ../src/host/host-show-event.vala:57
-msgid "Remove _This Event"
+msgid "Delete _This Event"
 msgstr "Usuń _to wydarzenie"
 
 #: ../src/host/host-show-event.vala:59
-msgid "Remove This and _Future Events"
+msgid "Delete This and _Future Events"
 msgstr "Usuń to i p_rzyszłe wydarzenia"
 
 #. No number is supplied because the number of events removed is indefinite in certain
 #. situations ... plural text should simply be for "more than one"
-#: ../src/host/host-show-event.vala:236
+#: ../src/host/host-show-event.vala:239
 #, c-format
 msgid "Unable to remove event: %s"
 msgid_plural "Unable to remove events: %s"
@@ -867,14 +870,18 @@ msgid "_Quick add event"
 msgstr "_Szybkie dodanie wydarzenia"
 
 #: ../src/rc/quick-create-event.ui.h:2
+msgid "_Help"
+msgstr "Pomo_c"
+
+#: ../src/rc/quick-create-event.ui.h:3
 msgid "C_ancel"
 msgstr "_Anuluj"
 
-#: ../src/rc/quick-create-event.ui.h:3
+#: ../src/rc/quick-create-event.ui.h:5
 msgid "_Create"
 msgstr "U_twórz"
 
-#: ../src/rc/quick-create-event.ui.h:4 ../src/rc/show-event.ui.h:1
+#: ../src/rc/quick-create-event.ui.h:6 ../src/rc/show-event.ui.h:1
 msgid "When"
 msgstr "Kiedy"
 

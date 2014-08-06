@@ -17,6 +17,18 @@ namespace California.Calendar {
 
 public class ExactTimeSpan : BaseObject, Gee.Comparable<ExactTimeSpan>, Gee.Hashable<ExactTimeSpan> {
     /**
+     * Pretty-printing flags for {@link to_pretty_string}.
+     */
+    [Flags]
+    public enum PrettyFlag {
+        NONE = 0,
+        /**
+         * Use multiple lines to format string if lengthy.
+         */
+        ALLOW_MULTILINE
+    }
+    
+    /**
      * Starting {@link ExactTime} of the span.
      *
      * start_exact_time will always be earlier to or equal to {@link end_exact_time}.
@@ -93,6 +105,54 @@ public class ExactTimeSpan : BaseObject, Gee.Comparable<ExactTimeSpan>, Gee.Hash
     public bool contains(ExactTime exact_time) {
         return start_exact_time.compare_to(exact_time) <= 0
             && end_exact_time.compare_to(exact_time) >= 0;
+    }
+    
+    /**
+     * Returns a prettified string describing the {@link Event}'s time span in as concise and
+     * economical manner possible.
+     *
+     * The supplied {@link Date} pretty flags are applied to the two Date strings.  If either of
+     * the {@link DateSpan} crosses a year boundary, the INCLUDE_YEAR flag is automatically added.
+     */
+    public string to_pretty_string(Calendar.Date.PrettyFlag date_flags, PrettyFlag time_flags) {
+        bool allow_multiline = (time_flags & PrettyFlag.ALLOW_MULTILINE) != 0;
+        
+        if (!start_date.year.equal_to(Calendar.System.today.year)
+            || !end_date.year.equal_to(Calendar.System.today.year)) {
+            date_flags |= Calendar.Date.PrettyFlag.INCLUDE_YEAR;
+        }
+        
+        if (is_same_day) {
+            // A span of time, i.e. "3:30pm to 4:30pm"
+            string timespan = _("%s to %s").printf(
+                start_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE),
+                end_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE));
+            
+            // Single-day timed event, print "<full date>, <full start time> to <full end time>",
+            // including year if not current year
+            return "%s, %s".printf(start_date.to_pretty_string(date_flags), timespan);
+        }
+        
+        if (allow_multiline) {
+            // Multi-day timed event, print "<full time>, <full date>" on both lines,
+            // including year if either not current year
+            // Prints two full time and date strings on separate lines, i.e.:
+            // 12 January 2012, 3:30pm
+            // 13 January 2013, 6:30am
+            return _("%s, %s\n%s, %s").printf(
+                start_exact_time.to_pretty_date_string(date_flags),
+                start_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE),
+                end_exact_time.to_pretty_date_string(date_flags),
+                end_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE));
+        }
+        
+        // Prints full time and date strings on a single line, i.e.:
+        // 12 January 2012, 3:30pm to 13 January 2013, 6:30am
+        return _("%s, %s to %s, %s").printf(
+                start_exact_time.to_pretty_date_string(date_flags),
+                start_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE),
+                end_exact_time.to_pretty_date_string(date_flags),
+                end_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE));
     }
     
     /**

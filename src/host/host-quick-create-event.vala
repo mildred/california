@@ -69,7 +69,8 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
         string eg;
         if (event != null && (event.date_span != null || event.exact_time_span != null)) {
             when_box.visible = true;
-            when_text_label.label = event.get_event_time_pretty_string(Calendar.Timezone.local);
+            when_text_label.label = event.get_event_time_pretty_string(Calendar.Date.PrettyFlag.NONE,
+                Calendar.ExactTimeSpan.PrettyFlag.ALLOW_MULTILINE, Calendar.Timezone.local);
             if (event.date_span != null)
                 eg = _("Example: Dinner at Tadich Grill 7:30pm");
             else
@@ -136,6 +137,10 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
         // Must pass some kind of event to create/update, so use blank if required
         if (event == null)
             event = new Component.Event.blank();
+        
+        // ensure it's at least valid
+        if (!event.is_valid(false))
+            event.set_event_date_span(Calendar.System.today.to_date_span());
         
         // jump to Create/Update dialog and remove this Card from the Deck ... this ensures
         // that if the user presses Cancel in the Create/Update dialog the Deck exits rather

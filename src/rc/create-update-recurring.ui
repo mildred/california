@@ -369,7 +369,6 @@
                     <property name="width_chars">5</property>
                     <property name="input_purpose">number</property>
                     <signal name="changed" handler="on_after_entry_changed" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
-                    <signal name="insert-text" handler="on_insert_text_numbers_only" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -434,7 +433,6 @@
                 <property name="width_chars">5</property>
                 <property name="input_purpose">number</property>
                 <signal name="changed" handler="on_every_entry_changed" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
-                <signal name="insert-text" handler="on_insert_text_numbers_only" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
