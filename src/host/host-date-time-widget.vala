@@ -99,16 +99,6 @@ public class DateTimeWidget : Gtk.Box {
                 transform_adjustment_widget_to_sensitive);
         }
         
-        // update out_of_range when its dependencies change
-        bind_property(PROP_DATE, this, PROP_OUT_OF_RANGE, BindingFlags.SYNC_CREATE,
-            transform_to_out_of_range);
-        bind_property(PROP_WALL_TIME, this, PROP_OUT_OF_RANGE, BindingFlags.SYNC_CREATE,
-            transform_to_out_of_range);
-        bind_property(PROP_FLOOR, this, PROP_OUT_OF_RANGE, BindingFlags.SYNC_CREATE,
-            transform_to_out_of_range);
-        bind_property(PROP_CEILING, this, PROP_OUT_OF_RANGE, BindingFlags.SYNC_CREATE,
-            transform_to_out_of_range);
-        
         bind_bool_to_time_controls(PROP_ENABLE_DATE, iterate<Gtk.Widget>(calendar));
         
         // use signal handlers to initialize widgets
@@ -147,12 +137,6 @@ public class DateTimeWidget : Gtk.Box {
             return false;
         
         target_value = is_valid_date_time(date, wall_time.adjust(amount, time_unit, null));
-        
-        return true;
-    }
-    
-    private bool transform_to_out_of_range(Binding binding, Value source_value, ref Value target_value) {
-        target_value = is_valid_date_time(date, wall_time);
         
         return true;
     }
