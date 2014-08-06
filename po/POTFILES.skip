@@ -7,6 +7,8 @@ src/application/california-application.c
 src/application/california-commandline.c
 src/calendar/calendar.c
 src/calendar/calendar-date.c
+src/calendar/calendar-date-span.c
+src/calendar/calendar-exact-time-span.c
 src/component/component.c
 src/component/component-event.c
 src/host/host-create-update-event.c
