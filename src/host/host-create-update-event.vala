@@ -54,7 +54,7 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     
     private new Component.Event event = new Component.Event.blank();
     private EventTimeSettings.Message? dt = null;
-    private Backing.CalendarSource? original_calendar_source;
+    private Backing.CalendarSource? original_calendar_source = null;
     private Toolkit.ComboBoxTextModel<Backing.CalendarSource> calendar_model;
     
     private Toolkit.RotatingButtonBox rotating_button_box = new Toolkit.RotatingButtonBox();
@@ -138,6 +138,8 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
             event = (Component.Event) message;
             if (dt == null)
                 dt = new EventTimeSettings.Message.from_event(event);
+            
+            original_calendar_source = event.calendar_source;
         }
         
         update_controls();
@@ -166,8 +168,6 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         accept_button.use_underline = true;
         
         rotating_button_box.family = FAMILY_NORMAL;
-        
-        original_calendar_source = event.calendar_source;
     }
     
     private void on_update_time_summary() {
@@ -196,6 +196,9 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     private void on_edit_time_button_clicked() {
         if (dt == null)
             dt = new EventTimeSettings.Message.from_event(event);
+        
+        // save changes with what's in the component now
+        update_component(event, true);
         
         jump_to_card_by_name(EventTimeSettings.ID, dt);
     }
@@ -284,7 +287,7 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         
         Error? create_err = null;
         try {
-            yield event.calendar_source.create_component_async(target, cancellable);
+            yield target.calendar_source.create_component_async(target, cancellable);
         } catch (Error err) {
             create_err = err;
         }
@@ -297,7 +300,6 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
             notify_failure(_("Unable to create event: %s").printf(create_err.message));
     }
     
-    // TODO: Delete from original source if not the same as the new source
     private async void update_event_async(Component.Event target, Cancellable? cancellable) {
         if (target.calendar_source == null) {
             notify_failure(_("Unable to update event: calendar must be specified"));
@@ -305,13 +307,39 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
             return;
         }
         
+        // no original calendar source, then not an update or a move but a create
+        if (original_calendar_source == null) {
+            yield create_event_async(target, cancellable);
+            
+            return;
+        }
+        
         Gdk.Cursor? cursor = Toolkit.set_busy(this);
         
         Error? update_err = null;
-        try {
-            yield event.calendar_source.update_component_async(target, cancellable);
-        } catch (Error err) {
-            update_err = err;
+        if (target.calendar_source == original_calendar_source) {
+            // straight-up update
+            try {
+                yield target.calendar_source.update_component_async(target, cancellable);
+            } catch (Error err) {
+                update_err = err;
+            }
+        } else {
+            // move event from one calendar to another ... start with create on new calendar
+            try {
+                yield target.calendar_source.create_component_async(target, cancellable);
+            } catch (Error err) {
+                update_err = err;
+            }
+            
+            // only delete old one if new one created
+            if (update_err == null) {
+                try {
+                    yield original_calendar_source.remove_all_instances_async(target.uid, cancellable);
+                } catch (Error err) {
+                    update_err = err;
+                }
+            }
         }
         
         Toolkit.set_unbusy(this, cursor);
