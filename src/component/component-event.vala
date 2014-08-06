@@ -244,6 +244,7 @@ public class Event : Instance, Gee.Comparable<Event> {
      *
      * This will return a DateSpan whether the Event is a DATE or DATE-TIME VEVENT.
      */
+    // TODO: Make date_span/exact_time_span a separate object
     public Calendar.DateSpan get_event_date_span(Calendar.Timezone? tz) {
         if (date_span != null)
             return date_span;
@@ -350,57 +351,23 @@ public class Event : Instance, Gee.Comparable<Event> {
      *
      * @return null if no time/date information is specified
      */
-    public string? get_event_time_pretty_string(Calendar.Timezone timezone) {
+    public string? get_event_time_pretty_string(Calendar.Date.PrettyFlag date_flags,
+        Calendar.ExactTimeSpan.PrettyFlag time_flags, Calendar.Timezone timezone) {
         if (date_span == null && exact_time_span == null)
             return null;
         
         // if any dates are not in current year, display year in all dates
-        Calendar.Date.PrettyFlag date_flags = Calendar.Date.PrettyFlag.NONE;
         Calendar.DateSpan date_span = get_event_date_span(timezone);
         if (!date_span.start_date.year.equal_to(Calendar.System.today.year)
             || !date_span.end_date.year.equal_to(Calendar.System.today.year)) {
             date_flags |= Calendar.Date.PrettyFlag.INCLUDE_YEAR;
         }
         
-        // span string is kinda tricky
-        string span;
-        if (is_all_day) {
-            if (date_span.is_same_day) {
-                // All-day one-day event, print that date's "<full date>", including year if not
-                // current year
-                span = date_span.start_date.to_pretty_string(date_flags);
-            } else {
-                // Prints a span of dates, i.e. "Monday, January 3 to Thursday, January 6"
-                span = _("%s to %s").printf(date_span.start_date.to_pretty_string(date_flags),
-                    date_span.end_date.to_pretty_string(date_flags));
-            }
-        } else {
-            Calendar.ExactTimeSpan exact_time_span = exact_time_span.to_timezone(timezone);
-            if (exact_time_span.is_same_day) {
-                // A span of time, i.e. "3:30pm to 4:30pm"
-                string timespan = _("%s to %s").printf(
-                    exact_time_span.start_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE),
-                    exact_time_span.end_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE));
-                
-                // Single-day timed event, print "<full date>, <full start time> to <full end time>",
-                // including year if not current year
-                span = "%s, %s".printf(exact_time_span.start_date.to_pretty_string(date_flags),
-                    timespan);
-            } else {
-                // Multi-day timed event, print "<full time>, <full date>" on both lines,
-                // including year if either not current year
-                // Prints two full time and date strings on separate lines, i.e.:
-                // 12 January 2012, 3:30pm
-                // 13 January 2013, 6:30am
-                span = _("%s, %s\n%s, %s").printf(
-                    exact_time_span.start_exact_time.to_pretty_date_string(date_flags),
-                    exact_time_span.start_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE),
-                    exact_time_span.end_exact_time.to_pretty_date_string(date_flags),
-                    exact_time_span.end_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE));
-            }
-        }
+        // if all day, just use the DateSpan's pretty string
+        if (is_all_day)
+            return date_span.to_pretty_string(date_flags);
         
-        return span;
+        return exact_time_span.to_timezone(timezone).to_pretty_string(date_flags, time_flags);
     }
     
     /**

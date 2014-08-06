@@ -73,6 +73,30 @@ public class DateSpan : UnitSpan<Date> {
     }
     
     /**
+     * Returns a prettified string describing the {@link Event}'s time span in as concise and
+     * economical manner possible.
+     *
+     * The supplied {@link Date} pretty flags are applied to the two Date strings.  If either of
+     * the {@link DateSpan} crosses a year boundary, the INCLUDE_YEAR flag is automatically added.
+     */
+    public string to_pretty_string(Calendar.Date.PrettyFlag date_flags) {
+        if (!start_date.year.equal_to(Calendar.System.today.year)
+            || !end_date.year.equal_to(Calendar.System.today.year)) {
+            date_flags |= Calendar.Date.PrettyFlag.INCLUDE_YEAR;
+        }
+        
+        if (is_same_day) {
+            // One-day event, print that date's "<full date>", including year if not
+            // current year
+            return start_date.to_pretty_string(date_flags);
+        }
+        
+        // Prints a span of dates, i.e. "Monday, January 3 to Thursday, January 6"
+        return _("%s to %s").printf(start_date.to_pretty_string(date_flags),
+            end_date.to_pretty_string(date_flags));
+    }
+    
+    /**
      * @inheritDoc
      */
     public override bool contains(Date date) {

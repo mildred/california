@@ -162,6 +162,27 @@ public class ExactTime : BaseObject, Gee.Comparable<ExactTime>, Gee.Hashable<Exa
     }
     
     /**
+     * Clamp the {@link ExactTime} between a supplied floor and ceiling ExactTime.
+     *
+     * If null is passed for either value, it will be ignored (effectively making clamp() work like
+     * a floor() or ceiling() method).  If null is passed for both, the current ExactTime is
+     * returned.
+     *
+     * Results are indeterminate if a floor chronologically later than a ceiling is passed in.
+     */
+    public ExactTime clamp(ExactTime? floor, ExactTime? ceiling) {
+        ExactTime clamped = this;
+        
+        if (floor != null && clamped.compare_to(floor) < 0)
+            clamped = floor;
+        
+        if (ceiling != null && clamped.compare_to(ceiling) > 0)
+            clamped = ceiling;
+        
+        return clamped;
+    }
+    
+    /**
      * See DateTime.to_unix_time.
      */
     public time_t to_time_t() {

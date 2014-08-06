@@ -17,8 +17,6 @@ namespace California.Host {
 public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     public const string ID = "CreateUpdateEvent";
     
-    public const string PROP_SELECTED_DATE_SPAN = "selected-date-span";
-    
     private const int START_HOUR = 0;
     private const int END_HOUR = 23;
     private const int MIN_DIVISIONS = 15;
@@ -38,19 +36,7 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     private Gtk.Entry summary_entry;
     
     [GtkChild]
-    private Gtk.Button dtstart_date_button;
-    
-    [GtkChild]
-    private Gtk.ComboBoxText dtstart_time_combo;
-    
-    [GtkChild]
-    private Gtk.Button dtend_date_button;
-    
-    [GtkChild]
-    private Gtk.ComboBoxText dtend_time_combo;
-    
-    [GtkChild]
-    private Gtk.CheckButton all_day_toggle;
+    private Gtk.Label time_summary_label;
     
     [GtkChild]
     private Gtk.Entry location_entry;
@@ -64,16 +50,12 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     [GtkChild]
     private Gtk.Box rotating_button_box_container;
     
-    public Calendar.DateSpan selected_date_span { get; set; }
-    
     public bool is_update { get; set; default = false; }
     
     private new Component.Event event = new Component.Event.blank();
-    private Gee.HashMap<string, Calendar.WallTime> time_map = new Gee.HashMap<string, Calendar.WallTime>();
+    private EventTimeSettings.Message? dt = null;
     private Backing.CalendarSource? original_calendar_source;
     private Toolkit.ComboBoxTextModel<Backing.CalendarSource> calendar_model;
-    private Gtk.Button? last_date_button_touched = null;
-    private bool both_date_buttons_touched = false;
     
     private Toolkit.RotatingButtonBox rotating_button_box = new Toolkit.RotatingButtonBox();
     private Toolkit.EntryClearTextConnector summary_clear_text_connector;
@@ -86,28 +68,13 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     private Gtk.Button cancel_recurring_button = new Gtk.Button.with_mnemonic(_("_Cancel"));
     
     public CreateUpdateEvent() {
-        // when selected_date_span updates, update date buttons as well
-        notify[PROP_SELECTED_DATE_SPAN].connect(() => {
-            dtstart_date_button.label = selected_date_span.start_date.to_standard_string();
-            dtend_date_button.label = selected_date_span.end_date.to_standard_string();
-        });
-        
         // create button is active only if summary is filled out; all other fields (so far)
         // guarantee valid values at all times
         summary_clear_text_connector = new Toolkit.EntryClearTextConnector(summary_entry);
-        summary_entry.bind_property("text-length", accept_button, "sensitive",
-            BindingFlags.SYNC_CREATE);
+        summary_entry.bind_property("text", accept_button, "sensitive", BindingFlags.SYNC_CREATE,
+            transform_summary_to_accept);
         
         location_clear_text_connector = new Toolkit.EntryClearTextConnector(location_entry);
-        
-        // hide start/end time widgets if an all-day event ..."no-show-all" needed to avoid the
-        // merciless effects of show_all()
-        all_day_toggle.bind_property("active", dtstart_time_combo, "visible",
-            BindingFlags.INVERT_BOOLEAN | BindingFlags.SYNC_CREATE);
-        dtstart_time_combo.no_show_all = true;
-        all_day_toggle.bind_property("active", dtend_time_combo, "visible",
-            BindingFlags.INVERT_BOOLEAN | BindingFlags.SYNC_CREATE);
-        dtend_time_combo.no_show_all = true;
         
         // use model to control calendars combo box
         calendar_model = new Toolkit.ComboBoxTextModel<Backing.CalendarSource>(calendar_combo,
@@ -147,7 +114,17 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         rotating_button_box.valign = Gtk.Align.END;
         rotating_button_box_container.add(rotating_button_box);
         
-        update_controls();
+        Calendar.System.instance.is_24hr_changed.connect(on_update_time_summary);
+    }
+    
+    ~CreateUpdateEvent() {
+        Calendar.System.instance.is_24hr_changed.disconnect(on_update_time_summary);
+    }
+    
+    private bool transform_summary_to_accept(Binding binding, Value source_value, ref Value target_value) {
+        target_value = summary_entry.text_length > 0 && (event != null ? event.is_valid(false) : false);
+        
+        return true;
     }
     
     public void jumped_to(Toolkit.Card? from, Toolkit.Card.Jump reason, Value? message) {
@@ -155,7 +132,13 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         if (message == null)
             return;
         
-        event = (Component.Event) message;
+        if (message.type() == typeof(EventTimeSettings.Message)) {
+            dt = (EventTimeSettings.Message) message;
+        } else {
+            event = (Component.Event) message;
+            if (dt == null)
+                dt = new EventTimeSettings.Message.from_event(event);
+        }
         
         update_controls();
     }
@@ -166,69 +149,7 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         else
             summary_entry.text = "";
         
-        Calendar.WallTime initial_start_time, initial_end_time;
-        if (event.exact_time_span != null) {
-            all_day_toggle.active = false;
-            selected_date_span = event.exact_time_span.get_date_span();
-            initial_start_time =
-                event.exact_time_span.start_exact_time.to_timezone(Calendar.Timezone.local).to_wall_time();
-            initial_end_time =
-                event.exact_time_span.end_exact_time.to_timezone(Calendar.Timezone.local).to_wall_time();
-        } else if (event.date_span != null) {
-            all_day_toggle.active = true;
-            selected_date_span = event.date_span;
-            initial_start_time = Calendar.System.now.to_wall_time();
-            initial_end_time = Calendar.System.now.adjust_time(1, Calendar.TimeUnit.HOUR).to_wall_time();
-        } else {
-            all_day_toggle.active = false;
-            selected_date_span = new Calendar.DateSpan(Calendar.System.today, Calendar.System.today);
-            initial_start_time = Calendar.System.now.to_wall_time();
-            initial_end_time = Calendar.System.now.adjust_time(1, Calendar.TimeUnit.HOUR).to_wall_time();
-            
-            // set in Component.Event as well, to at least initialize it for use elsewhere while
-            // editing (such as the RRULE)
-            event.set_event_exact_time_span(new Calendar.ExactTimeSpan(
-                new Calendar.ExactTime(Calendar.Timezone.local, Calendar.System.today, initial_start_time),
-                new Calendar.ExactTime(Calendar.Timezone.local, Calendar.System.today, initial_end_time)
-            ));
-        }
-        
-        // initialize start and end time controls (as in, wall clock time)
-        Calendar.WallTime current = new Calendar.WallTime(START_HOUR, Calendar.WallTime.MIN_MINUTE, 0);
-        Calendar.WallTime end = new Calendar.WallTime(END_HOUR, Calendar.WallTime.MAX_MINUTE, 0);
-        int index = 0;
-        int dtstart_active_index = -1, dtend_active_index = -1;
-        bool rollover = false;
-        while (current.compare_to(end) <= 0 && !rollover) {
-            string fmt = current.to_pretty_string(Calendar.WallTime.PrettyFlag.NONE);
-            
-            dtstart_time_combo.append_text(fmt);
-            dtend_time_combo.append_text(fmt);
-            
-            // use the latest time for each end of the span to initialize combo boxes, looking for
-            // exact match, otherwise taking the *next* index (to default to the future slot, not
-            // one that's past)
-            int cmp = initial_start_time.compare_to(current);
-            if (cmp == 0)
-                dtstart_active_index = index;
-            else if (cmp > 0)
-                dtstart_active_index = index + 1;
-            
-            cmp = initial_end_time.compare_to(current);
-            if (cmp == 0)
-                dtend_active_index = index;
-            else if (cmp > 0)
-                dtend_active_index = index + 1;
-            
-            index++;
-            
-            time_map.set(fmt, current);
-            current = current.adjust(MIN_DIVISIONS, Calendar.TimeUnit.MINUTE, out rollover);
-        }
-        
-        // set initial indices, careful to avoid overrun
-        dtstart_time_combo.set_active(dtstart_active_index.clamp(0, index - 1));
-        dtend_time_combo.set_active(dtend_active_index.clamp(0, index - 1));
+        on_update_time_summary();
         
         // set combo to event's calendar
         if (event.calendar_source != null) {
@@ -249,41 +170,17 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         original_calendar_source = event.calendar_source;
     }
     
-    [GtkCallback]
-    private void on_date_button_clicked(Gtk.Button button) {
-        bool is_dtstart = (button == dtstart_date_button);
-        
-        // if both buttons have been touched, go into free-selection mode with the dates, otherwise
-        // respect the original span duration
-        both_date_buttons_touched =
-            both_date_buttons_touched
-            || (last_date_button_touched != null && last_date_button_touched != button);
-        
-        Toolkit.CalendarPopup popup = new Toolkit.CalendarPopup(button,
-            is_dtstart ? selected_date_span.start_date : selected_date_span.end_date);
-        
-        popup.date_selected.connect((date) => {
-            // if both buttons touched, use free date selection, otherwise respect the original
-            // span duration
-            if (both_date_buttons_touched) {
-                selected_date_span = new Calendar.DateSpan(
-                    is_dtstart ? date : selected_date_span.start_date,
-                    !is_dtstart ? date : selected_date_span.end_date
-                );
-            } else {
-                selected_date_span = is_dtstart
-                    ? selected_date_span.adjust_start_date(date)
-                    : selected_date_span.adjust_end_date(date);
-            }
-        });
-        
-        popup.dismissed.connect(() => {
-            popup.destroy();
-        });
-        
-        popup.show_all();
-        
-        last_date_button_touched = button;
+    private void on_update_time_summary() {
+        // use the Message, not the Event, to load this up
+        time_summary_label.visible = true;
+        if (dt.date_span != null) {
+            time_summary_label.label = dt.date_span.to_pretty_string(Calendar.Date.PrettyFlag.NONE);
+        } else if (dt.exact_time_span != null) {
+            time_summary_label.label = dt.exact_time_span.to_timezone(Calendar.Timezone.local).to_pretty_string(
+                Calendar.Date.PrettyFlag.NONE, Calendar.ExactTimeSpan.PrettyFlag.NONE);
+        } else {
+            time_summary_label.visible = false;
+        }
     }
     
     [GtkCallback]
@@ -293,6 +190,14 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         
         // send off to recurring editor
         jump_to_card_by_name(CreateUpdateRecurring.ID, event);
+    }
+    
+    [GtkCallback]
+    private void on_edit_time_button_clicked() {
+        if (dt == null)
+            dt = new EventTimeSettings.Message.from_event(event);
+        
+        jump_to_card_by_name(EventTimeSettings.ID, dt);
     }
     
     private void on_accept_button_clicked() {
@@ -322,13 +227,13 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         // if updating the master, don't replace the dtstart/dtend, but do want to adjust it from
         // DATE to DATE-TIME or vice-versa
         if (!replace_dtstart) {
-            if (target.is_all_day != all_day_toggle.active) {
-                if (all_day_toggle.active) {
+            if (target.is_all_day != dt.is_all_day) {
+                if (dt.is_all_day) {
                     target.timed_to_all_day_event();
                 } else {
                     target.all_day_to_timed_event(
-                        time_map.get(dtstart_time_combo.get_active_text()),
-                        time_map.get(dtend_time_combo.get_active_text()),
+                        dt.exact_time_span.start_exact_time.to_wall_time(),
+                        dt.exact_time_span.end_exact_time.to_wall_time(),
                         Calendar.Timezone.local
                     );
                 }
@@ -337,18 +242,10 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
             return;
         }
         
-        if (all_day_toggle.active) {
-            target.set_event_date_span(selected_date_span);
-        } else {
-            target.set_event_exact_time_span(
-                new Calendar.ExactTimeSpan(
-                    new Calendar.ExactTime(Calendar.Timezone.local, selected_date_span.start_date,
-                        time_map.get(dtstart_time_combo.get_active_text())),
-                    new Calendar.ExactTime(Calendar.Timezone.local, selected_date_span.end_date,
-                        time_map.get(dtend_time_combo.get_active_text()))
-                )
-            );
-        }
+        if (dt.is_all_day)
+            target.set_event_date_span(dt.date_span);
+        else
+            target.set_event_exact_time_span(dt.exact_time_span);
     }
     
     private void create_update_event(Component.Event target, bool replace_dtstart) {

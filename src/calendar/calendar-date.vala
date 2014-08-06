@@ -296,6 +296,8 @@ public class Date : Unit<Date>, Gee.Comparable<Date>, Gee.Hashable<Date> {
     
     /**
      * Returns a {@link Date} clamped between the two supplied Dates, inclusive.
+     *
+     * @see Span.clamp_between
      */
     public Date clamp(Date min, Date max) {
         GLib.Date clone = gdate;

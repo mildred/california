@@ -152,7 +152,7 @@ internal class DayPane : Pane, Common.InstanceContainer {
     
     public void update_selection(Calendar.WallTime wall_time) {
         // round down to the nearest 15-minute mark
-        Calendar.WallTime rounded_time = wall_time.round_down(15, Calendar.TimeUnit.MINUTE);
+        Calendar.WallTime rounded_time = wall_time.round(-15, Calendar.TimeUnit.MINUTE, null);
         
         // assign start first, end second (ordering doesn't matter, possible to select upwards)
         if (selection_start == null) {

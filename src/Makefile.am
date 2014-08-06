@@ -93,6 +93,8 @@ california_VALASOURCES = \
 	host/host-calendar-list-item.vala \
 	host/host-create-update-event.vala \
 	host/host-create-update-recurring.vala \
+	host/host-date-time-widget.vala \
+	host/host-event-time-settings.vala \
 	host/host-import-calendar.vala \
 	host/host-main-window.vala \
 	host/host-quick-create-event.vala \
@@ -105,6 +107,7 @@ california_VALASOURCES = \
 	\
 	tests/tests.vala \
 	tests/tests-calendar-date.vala \
+	tests/tests-calendar-exact-time.vala \
 	tests/tests-calendar-month-of-year.vala \
 	tests/tests-calendar-month-span.vala \
 	tests/tests-calendar-wall-time.vala \
@@ -123,6 +126,7 @@ california_VALASOURCES = \
 	toolkit/toolkit-deck-window.vala \
 	toolkit/toolkit-editable-label.vala \
 	toolkit/toolkit-entry-clear-text-connector.vala \
+	toolkit/toolkit-entry-filter-connector.vala \
 	toolkit/toolkit-event-connector.vala \
 	toolkit/toolkit-listbox-model.vala \
 	toolkit/toolkit-motion-connector.vala \
@@ -181,6 +185,8 @@ california_RC = \
 	rc/calendar-manager-list-item.ui \
 	rc/create-update-event.ui \
 	rc/create-update-recurring.ui \
+	rc/date-time-widget.ui \
+	rc/event-time-settings.ui \
 	rc/google-authenticating.ui \
 	rc/google-calendar-list.ui \
 	rc/google-login.ui \

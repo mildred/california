@@ -107,7 +107,7 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
     private Component.Event? master = null;
     private Gee.HashMap<Calendar.DayOfWeek, Gtk.CheckButton> on_day_checkbuttons = new Gee.HashMap<
         Calendar.DayOfWeek, Gtk.CheckButton>();
-    private bool blocking_insert_text_numbers_only_signal = false;
+    private Toolkit.EntryFilterConnector numeric_filter = new Toolkit.EntryFilterConnector.only_numeric();
     
     public CreateUpdateRecurring() {
         // "Repeating event" checkbox activates almost every other control in this dialog
@@ -140,6 +140,9 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
         on_day_checkbuttons[Calendar.DayOfWeek.THU] = thursday_checkbutton;
         on_day_checkbuttons[Calendar.DayOfWeek.FRI] = friday_checkbutton;
         on_day_checkbuttons[Calendar.DayOfWeek.SAT] = saturday_checkbutton;
+        
+        numeric_filter.connect_to(every_entry);
+        numeric_filter.connect_to(after_entry);
         
         // Ok button's sensitivity is tied to a whole-lotta controls here
         make_recurring_checkbutton.bind_property("active", ok_button, "sensitive",
@@ -442,32 +445,6 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
         });
         
         popup.show_all();
-    }
-    
-    [GtkCallback]
-    private void on_insert_text_numbers_only(Gtk.Editable editable, string new_text, int new_text_length,
-        ref int position) {
-        // prevent recursion when our modified text is inserted (i.e. allow the base handler to
-        // deal new text directly)
-        if (blocking_insert_text_numbers_only_signal)
-            return;
-        
-        // filter out everything not a number
-        string numbers_only = from_string(new_text)
-            .filter(ch => ch.isdigit())
-            .to_string(ch => ch.to_string());
-        
-        // insert new text into place, ensure this handler doesn't attempt to process this
-        // modified text ... would use SignalHandler.block_by_func() and unblock_by_func(), but
-        // the bindings are ungood
-        if (!String.is_empty(numbers_only)) {
-            blocking_insert_text_numbers_only_signal = true;
-            editable.insert_text(numbers_only, numbers_only.length, ref position);
-            blocking_insert_text_numbers_only_signal = false;
-        }
-        
-        // don't let the base handler have at the original text
-        Signal.stop_emission_by_name(editable, "insert-text");
     }
     
     [GtkCallback]

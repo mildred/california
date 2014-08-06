@@ -15,7 +15,15 @@ namespace California {
  */
 
 public abstract class BaseObject : Object {
-    public BaseObject() {
+    /**
+     * Returns the base class name as a string.
+     *
+     * This can be used as a dummy to_string() for {@link BaseObject}s that don't carry state to
+     * report.
+     */
+    public string classname { get { return get_type().name(); } }
+    
+    protected BaseObject() {
     }
     
     /**

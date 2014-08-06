@@ -106,7 +106,7 @@ public class ButtonEvent : BaseObject {
     }
     
     // Update state with the next button press
-    internal virtual void update_press(Gtk.Widget widget, Gdk.EventButton press_event) {
+    internal void update_press(Gtk.Widget widget, Gdk.EventButton press_event) {
         assert(this.widget == widget);
         assert(Button.from_button_event(press_event) == button);
         
@@ -116,7 +116,7 @@ public class ButtonEvent : BaseObject {
     }
     
     // Update state with the next button release and start the release timer
-    internal virtual void update_release(Gtk.Widget widget, Gdk.EventButton release_event) {
+    internal void update_release(Gtk.Widget widget, Gdk.EventButton release_event) {
         assert(this.widget == widget);
         assert(Button.from_button_event(release_event) == button);
         
