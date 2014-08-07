@@ -33,7 +33,7 @@ msgstr "Koledar okolja Gnome 3"
 #: ../data/california.desktop.in.in.h:3
 #, fuzzy
 msgid "Event;Events;Schedule;"
-msgstr "Ali naj se izbrani dogodek vpiše v urnik snemanja?"
+msgstr "Event;Events;Schedule;"
 
 #: ../src/activator/activator.vala:36
 msgid "Web calendar (.ics)"
