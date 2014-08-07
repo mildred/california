@@ -54,6 +54,19 @@ AC_SUBST(CALIFORNIA_LIBS)
 GLIB_GSETTINGS
 
 #
+# system capabilities
+#
+
+# _NL_TIME_FIRST_WEEKDAY is an enum and not a define
+AC_MSG_CHECKING([for _NL_TIME_FIRST_WEEKDAY])
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <langinfo.h>]],
+                                [[char c;
+                                  c = *((unsigned char *)  nl_langinfo(_NL_TIME_FIRST_WEEKDAY));]])],
+               [california_ok=yes], [california_ok=no])
+AC_MSG_RESULT($california_ok)
+AM_CONDITIONAL(HAVE__NL_TIME_FIRST_WEEKDAY, test "$california_ok" = "yes")
+
+#
 # configure switches
 #
 # Unity support

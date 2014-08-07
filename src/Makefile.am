@@ -206,6 +206,10 @@ if IS_GTK_312
 california_OPTIONAL_VALAFLAGS += --define GTK_312
 endif
 
+if HAVE__NL_TIME_FIRST_WEEKDAY
+california_OPTIONAL_VALAFLAGS += --define HAVE__NL_TIME_FIRST_WEEKDAY
+endif
+
 california_VALAFLAGS = \
 	--fatal-warnings --debug --enable-checking --vapidir $(top_srcdir)/vapi --target-glib=2.38 \
 	--enable-deprecated \
@@ -220,7 +224,8 @@ california_VALAFLAGS = \
 	--pkg libical \
 	--pkg libsoup-2.4 \
 	--pkg libgdata \
-	--pkg=Goa-1.0 \
+	--pkg Goa-1.0 \
+	--pkg langinfo \
 	$(NULL)
 
 california_CFLAGS = \

@@ -16,6 +16,8 @@ namespace California.Calendar {
  */
 
 public class System : BaseObject {
+    public const string PROP_SYSTEM_FIRST_OF_WEEK = "system-first-of-week";
+    
     private const string CLOCK_FORMAT_SCHEMA = "org.gnome.desktop.interface";
     private const string CLOCK_FORMAT_KEY = "clock-format";
     private const string CLOCK_FORMAT_24H = "24h";
@@ -64,12 +66,18 @@ public class System : BaseObject {
      * The user's preferred start of the week.
      *
      * Unlike most of the other properties here (which are determined by examining and monitoring
-     * the system), this is strictly a user preference that should be configured by the outer
-     * application.  It's stored here because it's something that many components in {@link Calendar}
-     * need access to and passing it around is often inconvenient.  However, many of the "basic"
-     * classes (such as {@link Date} and {@link DayOfWeek}) still ask for it as a parameter to
-     * remain flexible.  In the case of {@link Week}, it ''must'' store it, as its span of days is
-     * strictly determined by the decision, which can change at runtime.
+     * the system), this is a combination of a user preference (configured by the outer application)
+     * and a system/locale setting.  It's stored here because it's something that many components
+     * in {@link Calendar} need access to and passing it around throughout the stack is
+     * inconvenient.  However, many of the "basic" classes (such as {@link Date} and
+     * {@link DayOfWeek}) still ask for it as a parameter to remain flexible.  In the case of
+     * {@link Week}, it ''must'' store it, as its span of days is strictly determined by the
+     * decision, which can change at runtime.
+     *
+     * When {@link Calendar.System} is first created, it's initialized to
+     * {@link system_first_of_week}.  The outer application may pull an overriding value from the
+     * configuration and override the original value.  (The outer application may want to have some
+     * way to store "use system default" as a possible value.)
      *
      * @see first_of_week_changed
      */
@@ -89,6 +97,13 @@ public class System : BaseObject {
             instance.first_of_week_changed(old_fow, _first_of_week);
         }
     }
+    
+    /**
+     * System-defined (or locale-defined) start of the week.
+     *
+     * @see first_of_week
+     */
+    public FirstOfWeek system_first_of_week { get; private set; }
     
     private static DBus.timedated timedated_service;
     private static DBus.Properties timedated_properties;
@@ -155,6 +170,57 @@ public class System : BaseObject {
         today = new Date.now(Timezone.local);
         scheduled_date_timer = new Scheduled.once_after_sec(next_check_today_interval_sec(),
             check_today_changed, CHECK_DATE_PRIORITY);
+        
+        // Borrowed liberally (but not exactly) from GtkCalendar; see gtk_calendar_init
+#if HAVE__NL_TIME_FIRST_WEEKDAY
+        // 1-based day (1 == Sunday)
+        int first_weekday = Langinfo.lookup_int(Langinfo.Item.INT_TIME_FIRST_WEEKDAY);
+        
+        // I haven't the foggiest what this is returning, but note that Nov 30 1997 is a Sunday and
+        // Dec 01 1997 is a Monday.
+        int week_origin = (int) Langinfo.lookup(Langinfo.Item.TIME_WEEK_1STDAY);
+        
+        // values are translated into 0-based day (as per gtkcalendar.c), 0 == Sunday
+        int week_1stday;
+        switch (week_origin) {
+            case 19971130:
+                week_1stday = 0;
+            break;
+            
+            case 19971201:
+                week_1stday = 1;
+            break;
+            
+            default:
+                warning("Unknown value of _NL_TIME_WEEK_1STDAY: %d (%Xh)", week_origin, week_origin);
+                week_1stday = 0;
+            break;
+        }
+        
+        // this yields a 0-based value, 0 == Sunday
+        int week_start = (week_1stday + first_weekday - 1) % 7;
+        
+        // convert into our first day of week value
+        switch (week_start) {
+            case 0:
+                system_first_of_week = FirstOfWeek.SUNDAY;
+            break;
+            
+            case 1:
+                system_first_of_week = FirstOfWeek.MONDAY;
+            break;
+            
+            default:
+                warning("Unknown week start value, using default: %d", week_start);
+                system_first_of_week = FirstOfWeek.DEFAULT;
+            break;
+        }
+#else
+        // For now, just use the default.  Later, user will be able to configure this.
+        system_first_of_week = FirstOfWeek.DEFAULT;
+#endif
+        
+        debug("System first day of week: %s", system_first_of_week.to_string());
     }
     
     internal static void preinit() throws IOError {
@@ -166,6 +232,10 @@ public class System : BaseObject {
     
     internal static void init() {
         instance = new System();
+        
+        // initialize, application may override (can't do this in ctor due to how first_of_week
+        // setter is built)
+        first_of_week = instance.system_first_of_week;
     }
     
     internal static void terminate() {

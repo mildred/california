@@ -48,10 +48,10 @@
     </key>
     
     <key name="first-of-week" type="s">
-        <default>"sunday"</default>
+        <default>"system"</default>
         <summary>The first day of the week</summary>
         <description>
-            For now, the only two respected values are "sunday" and "monday".
+            For now, the only respected values are "sunday", "monday", and "system".
         </description>
     </key>
 </schema>
