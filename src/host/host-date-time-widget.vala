@@ -131,6 +131,12 @@ public class DateTimeWidget : Gtk.Box {
     // Determine if the up/down adjustments should be sensitive (if they're next value is valid)
     private bool transform_adjustment_widget_to_sensitive(Binding binding, Value source_value,
         ref Value target_value) {
+        if (!enable_time) {
+            target_value = false;
+            
+            return true;
+        }
+        
         int amount;
         Calendar.TimeUnit time_unit;
         if (!adjust_time_controls((Gtk.Widget) binding.target, out amount, out time_unit))
