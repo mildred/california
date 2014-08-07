@@ -229,6 +229,13 @@ public class DateTimeWidget : Gtk.Box {
         return exact_time.clamp(floor, ceiling).equal_to(exact_time);
     }
     
+    private Calendar.ExactTime get_clamped(Calendar.Date proposed_date, Calendar.WallTime proposed_time) {
+        Calendar.ExactTime exact_time = new Calendar.ExactTime(Calendar.Timezone.local, proposed_date,
+            proposed_time);
+        
+        return exact_time.clamp(floor, ceiling);
+    }
+    
     private Calendar.Date? get_selected_date() {
         if (calendar.day == 0)
             return null;
@@ -250,11 +257,11 @@ public class DateTimeWidget : Gtk.Box {
         disconnect_property_signals();
         
         Calendar.Date? selected = get_selected_date();
-        if (selected != null && is_valid_date_time(selected, wall_time) && !selected.equal_to(date))
-            date = selected;
-        
-        // even if user picked invalid date, this resets selection to valid one
-        on_date_changed();
+        if (selected != null) {
+            date = new Calendar.Date.from_exact_time(get_clamped(selected, wall_time));
+            if (!selected.equal_to(date))
+                on_date_changed();
+        }
         
         connect_property_signals();
     }
