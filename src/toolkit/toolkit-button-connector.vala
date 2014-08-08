@@ -207,13 +207,13 @@ public class ButtonConnector : EventConnector {
                     return Toolkit.STOP;
                 }
                 
-                // update saved state (if any) with release info and start timer
+                // update saved state (if any) with release info and synthesize click
                 if (button_states != null) {
                     ButtonEvent? details = button_states.get(widget);
                     if (details != null) {
                         details.update_release(widget, event);
                         
-                        return synthesize_click(details);
+                        synthesize_click(details);
                     }
                 }
             break;
@@ -222,7 +222,7 @@ public class ButtonConnector : EventConnector {
         return Toolkit.PROPAGATE;
     }
     
-    private bool synthesize_click(ButtonEvent details) {
+    private void synthesize_click(ButtonEvent details) {
         // use Accept flags to indicate which signal(s) to fire
         bool result = Toolkit.PROPAGATE;
         switch (details.press_type) {
@@ -246,14 +246,12 @@ public class ButtonConnector : EventConnector {
             break;
         }
         
-        if (result == Toolkit.STOP) {
-            // drop event entirely
+        // drop event details if done here or if end-of-the-road click-wise
+        if (result == Toolkit.STOP || details.press_type == Gdk.EventType.3BUTTON_PRESS) {
             Gee.HashMap<Gtk.Widget, ButtonEvent>? states_map = get_states_map(details.button);
             if (states_map != null)
                 states_map.unset(details.widget);
         }
-        
-        return result;
     }
 }
 
