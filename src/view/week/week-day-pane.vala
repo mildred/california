@@ -19,6 +19,8 @@ internal class DayPane : Pane, Common.InstanceContainer {
     public const string PROP_SELECTION_STATE = "selection-start";
     public const string PROP_SELECTION_END = "selection-end";
     
+    private const string KEY_TOOLTIP = "california-week-day-pane-tooltip";
+    
     // No matter how wide the event is in the day, always leave a little peeking out so the hour/min
     // lines are visible
     private const int RIGHT_MARGIN_PX = 10;
@@ -52,6 +54,9 @@ internal class DayPane : Pane, Common.InstanceContainer {
         base (owner, -1);
         
         this.date = date;
+        
+        // see query_tooltip()
+        has_tooltip = true;
         
         notify[PROP_DATE].connect(queue_draw);
         
@@ -192,6 +197,27 @@ internal class DayPane : Pane, Common.InstanceContainer {
         queue_draw();
     }
     
+    public override bool query_tooltip(int x, int y, bool keyboard_mode, Gtk.Tooltip tooltip) {
+        // convery y into a time of day
+        Calendar.WallTime wall_time = get_wall_time(y);
+        Calendar.ExactTime exact_time = new Calendar.ExactTime(Calendar.Timezone.local, date, wall_time);
+        
+        // find event in list that spans this time
+        // TODO: This won't work when events are stacked in the UI
+        Component.Event? found = traverse<Component.Event>(days_events)
+            .first_matching(event => event.exact_time_span.to_timezone(Calendar.Timezone.local).contains(exact_time));
+        if (found == null)
+            return false;
+        
+        string? tooltip_text = found.get_data<string?>(KEY_TOOLTIP);
+        if (String.is_empty(tooltip_text))
+            return false;
+        
+        tooltip.set_markup(tooltip_text);
+        
+        return true;
+    }
+    
     // note that a painter's algorithm should be used here: background should be painted before
     // calling base method, and foreground afterward
     protected override bool on_draw(Cairo.Context ctx) {
@@ -250,8 +276,13 @@ internal class DayPane : Pane, Common.InstanceContainer {
             string timespan = "%s &#x2013; %s".printf(
                 start_time.to_pretty_string(Calendar.WallTime.PrettyFlag.NONE),
                 end_time.to_pretty_string(Calendar.WallTime.PrettyFlag.NONE));
-            print_line(ctx, start_time, 0, timespan, rgba, rect_width, true);
-            print_line(ctx, start_time, 1, event.summary, rgba, rect_width, false);
+            Pango.Layout layout_0 = print_line(ctx, start_time, 0, timespan, rgba, rect_width, true);
+            Pango.Layout layout_1 = print_line(ctx, start_time, 1, event.summary, rgba, rect_width, false);
+            
+            // if either was ellipsized, set tooltip (otherwise clear any existing)
+            bool is_ellipsized = layout_0.is_ellipsized() || layout_1.is_ellipsized();
+            event.set_data<string?>(KEY_TOOLTIP,
+                is_ellipsized ? "%s\n%s".printf(timespan, GLib.Markup.escape_text(event.summary)) : null);
         }
         
         // draw horizontal line indicating current time
@@ -280,7 +311,7 @@ internal class DayPane : Pane, Common.InstanceContainer {
         return true;
     }
     
-    private void print_line(Cairo.Context ctx, Calendar.WallTime start_time, int lineno, string text,
+    private Pango.Layout print_line(Cairo.Context ctx, Calendar.WallTime start_time, int lineno, string text,
         Gdk.RGBA rgba, int total_width, bool is_markup) {
         Pango.Layout layout = create_pango_layout(null);
         if (is_markup)
@@ -297,6 +328,8 @@ internal class DayPane : Pane, Common.InstanceContainer {
         ctx.move_to(Palette.TEXT_MARGIN_PX, y);
         Gdk.cairo_set_source_rgba(ctx, rgba);
         Pango.cairo_show_layout(ctx, layout);
+        
+        return layout;
     }
 }
 
