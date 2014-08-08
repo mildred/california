@@ -19,6 +19,7 @@ public class Window : Toolkit.DeckWindow {
         base (parent, null);
         
         deck.add_cards(iterate<Toolkit.Card>(calendar_list).to_array_list());
+        Activator.prepare_deck(deck, null);
     }
     
     public static void display(Gtk.Window? parent) {

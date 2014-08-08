@@ -6,40 +6,6 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkButtonBox" id="calendar_list_button_box">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="valign">end</property>
-        <property name="margin_top">8</property>
-        <property name="baseline_position">bottom</property>
-        <property name="layout_style">end</property>
-        <child>
-          <object class="GtkButton" id="close_button">
-            <property name="label" translatable="yes">_Close</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="can_default">True</property>
-            <property name="has_default">True</property>
-            <property name="receives_default">True</property>
-            <property name="valign">end</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="on_close_button_clicked" object="CaliforniaManagerCalendarList" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">1</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkScrolledWindow" id="calendar_list_scrolledwindow">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
@@ -70,6 +36,130 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButtonBox" id="calendar_list_button_box">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="valign">end</property>
+        <property name="margin_top">8</property>
+        <property name="baseline_position">bottom</property>
+        <property name="layout_style">end</property>
+        <child>
+          <object class="GtkButton" id="close_button">
+            <property name="label" translatable="yes">_Close</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="can_default">True</property>
+            <property name="has_default">True</property>
+            <property name="receives_default">True</property>
+            <property name="valign">end</property>
+            <property name="use_underline">True</property>
+            <signal name="clicked" handler="on_close_button_clicked" object="CaliforniaManagerCalendarList" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">2</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="box1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkButton" id="add_button">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Add calendar</property>
+            <property name="halign">center</property>
+            <property name="valign">start</property>
+            <property name="hexpand">False</property>
+            <property name="vexpand">False</property>
+            <signal name="clicked" handler="on_add_button_clicked" object="CaliforniaManagerCalendarList" swapped="no"/>
+            <child>
+              <object class="GtkImage" id="image1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="pixel_size">12</property>
+                <property name="icon_name">list-add-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="edit_button">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Rename calendar</property>
+            <property name="halign">start</property>
+            <property name="valign">center</property>
+            <property name="hexpand">False</property>
+            <property name="vexpand">False</property>
+            <signal name="clicked" handler="on_edit_button_clicked" object="CaliforniaManagerCalendarList" swapped="no"/>
+            <child>
+              <object class="GtkImage" id="image2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="pixel_size">12</property>
+                <property name="icon_name">accessories-text-editor-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="remove_button">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Delete calendar</property>
+            <property name="halign">start</property>
+            <property name="valign">center</property>
+            <property name="hexpand">False</property>
+            <property name="vexpand">False</property>
+            <signal name="clicked" handler="on_remove_button_clicked" object="CaliforniaManagerCalendarList" swapped="no"/>
+            <child>
+              <object class="GtkImage" id="image3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="pixel_size">12</property>
+                <property name="icon_name">list-remove-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
         <property name="width">1</property>
         <property name="height">1</property>
       </packing>

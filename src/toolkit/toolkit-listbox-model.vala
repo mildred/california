@@ -197,6 +197,16 @@ public class ListBoxModel<G> : BaseObject {
     }
     
     /**
+     * Returns the {@link ModelPresentation} widget for the item.
+     */
+    public Gtk.Widget? get_widget_for_item(G item) {
+        if (!items.has_key(item))
+            return null;
+        
+        return items.get(item).get_child();
+    }
+    
+    /**
      * Call to indicate that the contents of the item has mutated, i.e. changed or been altered,
      * in such a way to affect sorting or filtering.
      */

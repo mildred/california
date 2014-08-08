@@ -12,7 +12,6 @@ california_VALASOURCES = \
 	activator/activator.vala \
 	activator/activator-instance.vala \
 	activator/activator-instance-list.vala \
-	activator/activator-window.vala \
 	\
 	activator/caldav/caldav-activator-instance.vala \
 	activator/caldav/caldav-subscribe.vala \

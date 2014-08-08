@@ -48,5 +48,19 @@ public void terminate() {
     Toolkit.terminate();
 }
 
+/**
+ * Adds all known {@link Instance}s to the supplied {@link Toolkit.Deck} (each having their own set
+ * of {@link Toolkit.Card}s) as well as an {@link InstanceList} Card.
+ */
+public Toolkit.Deck prepare_deck(Toolkit.Deck deck, Soup.URI? supplied_uri) {
+    deck.add_card(new InstanceList());
+    deck.add_cards(traverse<Instance>(activators)
+        .bloom<Toolkit.Card>(instance => instance.create_cards(supplied_uri))
+        .to_array_list()
+    );
+    
+    return deck;
+}
+
 }
 

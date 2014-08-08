@@ -109,6 +109,11 @@ public class Iterable<G> : Object {
     public delegate void Iterate<G>(G element);
     
     /**
+     * For mapping a single value of one type to multiple values of another.
+     */
+    public delegate Gee.Collection<A> Bloom<A, G>(G element);
+    
+    /**
      * A private class that lets us take a California.Iterable and convert it back
      * into a Gee.Iterable.
      */
@@ -161,6 +166,14 @@ public class Iterable<G> : Object {
     
     public Iterable<A> map<A>(Gee.MapFunc<A, G> f) {
         return new Iterable<A>(i.map<A>(f));
+    }
+    
+    public Iterable<A> bloom<A>(Bloom<A, G> bloom_cb) {
+        Gee.ArrayList<A> list = new Gee.ArrayList<A>();
+        foreach (G element in this)
+            list.add_all(bloom_cb(element));
+        
+        return new Iterable<A>(list.iterator());
     }
     
     public Iterable<A> scan<A>(Gee.FoldFunc<A, G> f, owned A seed) {

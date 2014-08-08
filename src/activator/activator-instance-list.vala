@@ -44,6 +44,7 @@ public class InstanceList : Gtk.Grid, Toolkit.Card {
     }
     
     public void jumped_to(Toolkit.Card? from, Toolkit.Card.Jump reason, Value? message) {
+        listbox.select_row(listbox.get_row_at_index(0));
     }
     
     private void on_item_activated(Instance activator) {
@@ -58,7 +59,7 @@ public class InstanceList : Gtk.Grid, Toolkit.Card {
     
     [GtkCallback]
     private void on_cancel_button_clicked() {
-        notify_user_closed();
+        jump_home();
     }
     
     private void start(Instance activator) {

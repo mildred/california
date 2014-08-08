@@ -33,9 +33,6 @@ public class Application : Gtk.Application {
     
     // public application menu actions; note their "app." prefix which does not
     // match the actions in the action_entries table
-    public const string DETAILED_ACTION_NEW_CALENDAR = "app.new-calendar";
-    public const string ACTION_NEW_CALENDAR = "new-calendar";
-    
     public const string DETAILED_ACTION_CALENDAR_MANAGER = "app.calendar-manager";
     public const string ACTION_CALENDAR_MANAGER = "calendar-manager";
     
@@ -57,7 +54,6 @@ public class Application : Gtk.Application {
     
     private static const ActionEntry[] action_entries = {
         // public actions
-        { ACTION_NEW_CALENDAR, on_new_calendar },
         { ACTION_CALENDAR_MANAGER, on_calendar_manager },
         { ACTION_ABOUT, on_about },
         { ACTION_QUIT, on_quit },
@@ -209,10 +205,6 @@ public class Application : Gtk.Application {
             Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "%s", msg);
         dialog.run();
         dialog.destroy();
-    }
-    
-    private void on_new_calendar() {
-        Activator.Window.display(main_window);
     }
     
     private void on_calendar_manager() {
