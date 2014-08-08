@@ -4,10 +4,10 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Activator {
+namespace California.Activator.Google {
 
 [GtkTemplate (ui = "/org/yorba/california/rc/google-authenticating.ui")]
-public class GoogleAuthenticatingPane : Gtk.Grid, Toolkit.Card {
+public class AuthenticatingPane : Gtk.Grid, Toolkit.Card {
     public const string ID = "GoogleAuthenticatingPane";
     
     private const int SUCCESS_DELAY_MSEC = 1500;
@@ -50,7 +50,7 @@ public class GoogleAuthenticatingPane : Gtk.Grid, Toolkit.Card {
     
     private Cancellable cancellable = new Cancellable();
     
-    public GoogleAuthenticatingPane() {
+    public AuthenticatingPane() {
         if (app_id == null)
             app_id = "yorba-california-%s".printf(Application.VERSION);
     }
@@ -134,7 +134,7 @@ public class GoogleAuthenticatingPane : Gtk.Grid, Toolkit.Card {
         // delay gives the user a chance to see what's transpired
         yield sleep_msec_async(SUCCESS_DELAY_MSEC);
         
-        jump_to_card_by_name(GoogleCalendarListPane.ID, new GoogleCalendarListPane.Message(
+        jump_to_card_by_name(CalendarListPane.ID, new CalendarListPane.Message(
             credentials.username, own_calendars, all_calendars));
     }
     

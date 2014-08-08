@@ -58,8 +58,7 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     private Toolkit.ComboBoxTextModel<Backing.CalendarSource> calendar_model;
     
     private Toolkit.RotatingButtonBox rotating_button_box = new Toolkit.RotatingButtonBox();
-    private Toolkit.EntryClearTextConnector summary_clear_text_connector;
-    private Toolkit.EntryClearTextConnector location_clear_text_connector;
+    private Toolkit.EntryClearTextConnector clear_text_connector = new Toolkit.EntryClearTextConnector();
     
     private Gtk.Button accept_button = new Gtk.Button();
     private Gtk.Button cancel_button = new Gtk.Button.with_mnemonic(_("_Cancel"));
@@ -70,11 +69,11 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     public CreateUpdateEvent() {
         // create button is active only if summary is filled out; all other fields (so far)
         // guarantee valid values at all times
-        summary_clear_text_connector = new Toolkit.EntryClearTextConnector(summary_entry);
+        clear_text_connector.connect_to(summary_entry);
         summary_entry.bind_property("text", accept_button, "sensitive", BindingFlags.SYNC_CREATE,
             transform_summary_to_accept);
         
-        location_clear_text_connector = new Toolkit.EntryClearTextConnector(location_entry);
+        clear_text_connector.connect_to(location_entry);
         
         // use model to control calendars combo box
         calendar_model = new Toolkit.ComboBoxTextModel<Backing.CalendarSource>(calendar_combo,

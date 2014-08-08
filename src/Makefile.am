@@ -14,13 +14,18 @@ california_VALASOURCES = \
 	activator/activator-instance-list.vala \
 	activator/activator-window.vala \
 	\
-	activator/google/activator-google.vala \
-	activator/google/activator-google-authenticating-pane.vala \
-	activator/google/activator-google-calendar-list-pane.vala \
-	activator/google/activator-google-login-pane.vala \
+	activator/caldav/caldav-activator-instance.vala \
+	activator/caldav/caldav-subscribe.vala \
 	\
-	activator/webcal/activator-webcal.vala \
-	activator/webcal/activator-webcal-pane.vala \
+	activator/generic/generic-subscribe.vala \
+	\
+	activator/google/google-activator-instance.vala \
+	activator/google/google-authenticating-pane.vala \
+	activator/google/google-calendar-list-pane.vala \
+	activator/google/google-login-pane.vala \
+	\
+	activator/webcal/webcal-activator-instance.vala \
+	activator/webcal/webcal-subscribe.vala \
 	\
 	application/california-application.vala \
 	application/california-commandline.vala \
@@ -187,12 +192,12 @@ california_RC = \
 	rc/create-update-recurring.ui \
 	rc/date-time-widget.ui \
 	rc/event-time-settings.ui \
+	rc/generic-subscribe.ui \
 	rc/google-authenticating.ui \
 	rc/google-calendar-list.ui \
 	rc/google-login.ui \
 	rc/quick-create-event.ui \
 	rc/show-event.ui \
-	rc/webcal-subscribe.ui \
 	rc/window-menu.interface \
 	$(NULL)
 

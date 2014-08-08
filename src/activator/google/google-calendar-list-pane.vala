@@ -4,10 +4,10 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Activator {
+namespace California.Activator.Google {
 
 [GtkTemplate (ui = "/org/yorba/california/rc/google-calendar-list.ui")]
-public class GoogleCalendarListPane : Gtk.Grid, Toolkit.Card {
+public class CalendarListPane : Gtk.Grid, Toolkit.Card {
     public const string ID = "GoogleCalendarListPane";
     
     public class Message : BaseObject {
@@ -48,7 +48,7 @@ public class GoogleCalendarListPane : Gtk.Grid, Toolkit.Card {
     private Toolkit.ListBoxModel<GData.CalendarCalendar> own_calendars_model;
     private Toolkit.ListBoxModel<GData.CalendarCalendar> unowned_calendars_model;
     
-    public GoogleCalendarListPane(Backing.CalDAVSubscribable store) {
+    public CalendarListPane(Backing.CalDAVSubscribable store) {
         this.store = store;
         
         own_calendars_listbox.set_placeholder(create_placeholder());

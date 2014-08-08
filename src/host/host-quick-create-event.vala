@@ -39,7 +39,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
     private Gtk.Button create_button;
     
     private Toolkit.ComboBoxTextModel<Backing.CalendarSource> model;
-    private Toolkit.EntryClearTextConnector entry_clear_text_connector;
+    private Toolkit.EntryClearTextConnector clear_text_connector = new Toolkit.EntryClearTextConnector();
     
     public QuickCreateEvent() {
         // create and initialize combo box model
@@ -51,7 +51,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
                 model.add(calendar_source);
         }
         
-        entry_clear_text_connector = new Toolkit.EntryClearTextConnector(details_entry);
+        clear_text_connector.connect_to(details_entry);
         details_entry.bind_property("text", create_button, "sensitive", BindingFlags.SYNC_CREATE,
             transform_text_to_sensitivity);
     }

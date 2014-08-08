@@ -31,6 +31,9 @@
         <file compressed="false">rc/event-time-settings.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
+        <file compressed="true">rc/generic-subscribe.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
         <file compressed="true">rc/google-authenticating.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
@@ -44,9 +47,6 @@
     </gresource>
     <gresource prefix="/org/yorba/california">
         <file compressed="false">rc/show-event.ui</file>
-    </gresource>
-    <gresource prefix="/org/yorba/california">
-        <file compressed="true">rc/webcal-subscribe.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
         <file compressed="true">rc/window-menu.interface</file>

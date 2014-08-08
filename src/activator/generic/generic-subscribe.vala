@@ -4,15 +4,13 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Activator {
+namespace California.Activator.Generic {
 
-[GtkTemplate (ui = "/org/yorba/california/rc/webcal-subscribe.ui")]
-internal class WebCalActivatorPane : Gtk.Grid, Toolkit.Card {
-    public const string ID = "WebCalActivatorPane";
+[GtkTemplate (ui = "/org/yorba/california/rc/generic-subscribe.ui")]
+internal abstract class Subscribe : Gtk.Grid, Toolkit.Card {
+    public abstract string card_id { get; }
     
-    public string card_id { get { return ID; } }
-    
-    public string? title { get { return null; } }
+    public abstract string? title { get; }
     
     public Gtk.Widget? default_widget { get { return subscribe_button; } }
     
@@ -28,37 +26,42 @@ internal class WebCalActivatorPane : Gtk.Grid, Toolkit.Card {
     private Gtk.Entry url_entry;
     
     [GtkChild]
+    private Gtk.Entry username_entry;
+    
+    [GtkChild]
     private Gtk.Button subscribe_button;
     
-    private Backing.WebCalSubscribable store;
-    private Toolkit.EntryClearTextConnector name_clear_text_connector;
-    private Toolkit.EntryClearTextConnector url_clear_text_connector;
+    private Gee.Set<string> schemes;
+    private Toolkit.EntryClearTextConnector clear_text_connector = new Toolkit.EntryClearTextConnector();
     
-    public WebCalActivatorPane(Backing.WebCalSubscribable store, Soup.URI? supplied_url) {
-        this.store = store;
+    public Subscribe(Soup.URI? supplied_url, Gee.Set<string> schemes) {
+        this.schemes = schemes;
         
         if (supplied_url != null) {
             url_entry.text = supplied_url.to_string(false);
             url_entry.sensitive = false;
         }
         
-        name_clear_text_connector = new Toolkit.EntryClearTextConnector(name_entry);
+        clear_text_connector.connect_to(name_entry);
         name_entry.bind_property("text-length", subscribe_button, "sensitive",
             BindingFlags.SYNC_CREATE, on_entry_changed);
         
-        url_clear_text_connector = new Toolkit.EntryClearTextConnector(url_entry);
+        clear_text_connector.connect_to(url_entry);
         url_entry.bind_property("text-length", subscribe_button, "sensitive",
             BindingFlags.SYNC_CREATE, on_entry_changed);
+        
+        // user name is optional
+        clear_text_connector.connect_to(username_entry);
     }
     
-    public void jumped_to(Toolkit.Card? from, Toolkit.Card.Jump reason, Value? message) {
+    public virtual void jumped_to(Toolkit.Card? from, Toolkit.Card.Jump reason, Value? message) {
     }
     
     private bool on_entry_changed(Binding binding, Value source_value, ref Value target_value) {
         target_value =
             name_entry.text_length > 0 
             && url_entry.text_length > 0
-            && URI.is_valid(url_entry.text, { "http://", "https://", "webcal://" });
+            && URI.is_valid(url_entry.text, schemes);
         
         return true;
     }
@@ -72,16 +75,16 @@ internal class WebCalActivatorPane : Gtk.Grid, Toolkit.Card {
     private void on_subscribe_button_clicked() {
         sensitive = false;
         
-        subscribe_async.begin();
+        do_subscribe_async.begin();
     }
     
-    private async void subscribe_async() {
+    private async void do_subscribe_async() {
         Gdk.Cursor? cursor = Toolkit.set_busy(this);
         
         Error? subscribe_err = null;
         try {
-            yield store.subscribe_webcal_async(name_entry.text, URI.parse(url_entry.text),
-                null, Gfx.rgba_to_uint8_rgb_string(color_button.rgba), null);
+            yield subscribe_async(name_entry.text, URI.parse(url_entry.text), username_entry.text,
+                Gfx.rgba_to_uint8_rgb_string(color_button.rgba), null);
         } catch (Error err) {
             subscribe_err = err;
         }
@@ -91,10 +94,13 @@ internal class WebCalActivatorPane : Gtk.Grid, Toolkit.Card {
         if (subscribe_err == null) {
             notify_success();
         } else {
-            notify_failure(_("Unable to subscribe to Web calendar at %s: %s").printf(url_entry.text,
+            notify_failure(_("Unable to subscribe to calendar at %s: %s").printf(url_entry.text,
                 subscribe_err.message));
         }
     }
+    
+    protected abstract async void subscribe_async(string name, Soup.URI uri, string? username,
+        string color, Cancellable? cancellable) throws Error;
 }
 
 }

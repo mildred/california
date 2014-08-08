@@ -33,8 +33,9 @@ public void init() throws Error {
     Backing.EdsStore? eds_store = Backing.Manager.instance.get_store_of_type<Backing.EdsStore>()
         as Backing.EdsStore;
     assert(eds_store != null);
-    activators.add(new WebCalActivator(_("Web calendar (.ics)"), eds_store));
-    activators.add(new GoogleActivator(_("Google Calendar"), eds_store));
+    activators.add(new WebCal.ActivatorInstance(_("Web calendar (.ics)"), eds_store));
+    activators.add(new Google.ActivatorInstance(_("Google Calendar"), eds_store));
+    activators.add(new CalDAV.ActivatorInstance(_("CalDAV"), eds_store));
 }
 
 public void terminate() {

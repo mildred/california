@@ -12,20 +12,32 @@ namespace California.Toolkit {
  */
 
 public class EntryClearTextConnector : BaseObject {
-    public Gtk.Entry entry { get; private set; }
+    private Gee.HashMap<Gtk.Entry, Binding> entries = new Gee.HashMap<Gtk.Entry, Binding>();
     
-    private Binding text_binding;
-    
-    public EntryClearTextConnector(Gtk.Entry entry) {
-        this.entry = entry;
-        
-        text_binding = entry.bind_property("text", entry, "secondary-icon-name", BindingFlags.SYNC_CREATE,
-            transform_text_to_icon_name);
-        entry.icon_release.connect(on_entry_icon_released);
+    public EntryClearTextConnector() {
     }
     
     ~EntryClearTextConnector() {
-        text_binding.unref();
+        traverse_safely<Gtk.Entry>(entries.keys).iterate(disconnect_from);
+    }
+    
+    public void connect_to(Gtk.Entry entry) {
+        if (entries.has_key(entry))
+            return;
+        
+        Binding binding = entry.bind_property("text", entry, "secondary-icon-name", BindingFlags.SYNC_CREATE,
+            transform_text_to_icon_name);
+        entry.icon_release.connect(on_entry_icon_released);
+        
+        entries.set(entry, binding);
+    }
+    
+    public void disconnect_from(Gtk.Entry entry) {
+        Binding binding;
+        if (!entries.unset(entry, out binding))
+            return;
+        
+        binding.unbind();
         entry.icon_release.disconnect(on_entry_icon_released);
     }
     
@@ -33,14 +45,14 @@ public class EntryClearTextConnector : BaseObject {
         if (String.is_empty((string) source_value)) {
             target_value = "";
         } else {
-            target_value = entry.get_direction() == Gtk.TextDirection.RTL
+            target_value = ((Gtk.Entry) binding.source).get_direction() == Gtk.TextDirection.RTL
                 ? "edit-clear-rtl-symbolic" : "edit-clear-symbolic";
         }
         
         return true;
     }
     
-    private void on_entry_icon_released(Gtk.EntryIconPosition icon, Gdk.Event event) {
+    private void on_entry_icon_released(Gtk.Entry entry, Gtk.EntryIconPosition icon, Gdk.Event event) {
         if (icon == Gtk.EntryIconPosition.SECONDARY)
             entry.text = "";
     }
