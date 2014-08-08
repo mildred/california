@@ -36,8 +36,8 @@ public class EntryClearTextConnector : BaseObject {
         Binding binding;
         if (!entries.unset(entry, out binding))
             return;
-        
-        binding.unbind();
+
+        California.BaseObject.unbind_property(ref binding);
         entry.icon_release.disconnect(on_entry_icon_released);
     }
     
