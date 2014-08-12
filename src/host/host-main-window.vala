@@ -91,6 +91,7 @@ public class MainWindow : Gtk.ApplicationWindow {
     private Gee.HashSet<Binding> current_bindings = new Gee.HashSet<Binding>();
     private Gtk.Stack view_stack = new Gtk.Stack();
     private Gtk.HeaderBar headerbar = new Gtk.HeaderBar();
+    private MainWindowTitle custom_title = new MainWindowTitle();
     private Gtk.Button today = new Gtk.Button.with_label(_("_Today"));
     private Binding view_stack_binding;
     private Gee.HashSet<string> view_stack_ids = new Gee.HashSet<string>();
@@ -153,28 +154,13 @@ public class MainWindow : Gtk.ApplicationWindow {
         headerbar.show_close_button = true;
 #endif
         
+        // Use custom headerbar title
+        headerbar.custom_title = custom_title;
+        
         today.valign = Gtk.Align.CENTER;
         today.use_underline = true;
         today.tooltip_text = _("Jump to today's date (Ctrl+T)");
         today.set_action_name(DETAILED_ACTION_JUMP_TO_TODAY);
-        
-        Gtk.Button prev = new Gtk.Button.from_icon_name(rtl ? "go-previous-rtl-symbolic" : "go-previous-symbolic",
-            Gtk.IconSize.MENU);
-        prev.valign = Gtk.Align.CENTER;
-        prev.tooltip_text = _("Previous (Alt+Left)");
-        prev.set_action_name(DETAILED_ACTION_PREVIOUS);
-        
-        Gtk.Button next = new Gtk.Button.from_icon_name(rtl ? "go-next-rtl-symbolic" : "go-next-symbolic",
-            Gtk.IconSize.MENU);
-        next.valign = Gtk.Align.CENTER;
-        next.tooltip_text = _("Next (Alt+Right)");
-        next.set_action_name(DETAILED_ACTION_NEXT);
-        
-        Gtk.Box nav_buttons = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        nav_buttons.get_style_context().add_class(Gtk.STYLE_CLASS_LINKED);
-        nav_buttons.get_style_context().add_class(Gtk.STYLE_CLASS_RAISED);
-        nav_buttons.pack_start(prev);
-        nav_buttons.pack_end(next);
         
         // TODO:
         // Remove Gtk.StackSwitcher for a few reasons: (a) the buttons are kinda wide and
@@ -187,7 +173,6 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         // pack left-side of window
         headerbar.pack_start(today);
-        headerbar.pack_start(nav_buttons);
         headerbar.pack_start(view_switcher);
         
         quick_add_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.MENU);
@@ -211,8 +196,8 @@ public class MainWindow : Gtk.ApplicationWindow {
         // see https://bugzilla.gnome.org/show_bug.cgi?id=729771
         Gtk.SizeGroup size = new Gtk.SizeGroup(Gtk.SizeGroupMode.VERTICAL);
         size.add_widget(today);
-        size.add_widget(prev);
-        size.add_widget(next);
+        size.add_widget(custom_title.next_button);
+        size.add_widget(custom_title.prev_button);
         size.add_widget(quick_add_button);
         size.add_widget(calendars);
         size.add_widget(window_menu);
@@ -329,7 +314,7 @@ public class MainWindow : Gtk.ApplicationWindow {
             
             // bindings
             Binding binding = current_controller.bind_property(View.Controllable.PROP_CURRENT_LABEL,
-                headerbar, "title", BindingFlags.SYNC_CREATE);
+                custom_title.title_label, "label", BindingFlags.SYNC_CREATE);
             current_bindings.add(binding);
             
             binding = current_controller.bind_property(View.Controllable.PROP_IS_VIEWING_TODAY, today,

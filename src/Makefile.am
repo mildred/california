@@ -101,6 +101,7 @@ california_VALASOURCES = \
 	host/host-event-time-settings.vala \
 	host/host-import-calendar.vala \
 	host/host-main-window.vala \
+	host/host-main-window-title.vala \
 	host/host-quick-create-event.vala \
 	host/host-show-event.vala \
 	\
@@ -195,6 +196,7 @@ california_RC = \
 	rc/google-authenticating.ui \
 	rc/google-calendar-list.ui \
 	rc/google-login.ui \
+	rc/main-window-title.ui \
 	rc/quick-create-event.ui \
 	rc/show-event.ui \
 	rc/window-menu.interface \

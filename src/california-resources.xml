@@ -43,6 +43,9 @@
         <file compressed="true">rc/google-login.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
+        <file compressed="true">rc/main-window-title.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
         <file compressed="true">rc/quick-create-event.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
