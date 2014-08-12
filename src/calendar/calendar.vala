@@ -110,50 +110,61 @@ public void init() throws Error {
     
     // The month and year according to locale preferences, i.e. "March 2014"
     // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    /* xgettext:no-c-format */
     FMT_MONTH_YEAR_FULL = _("%B %Y");
     
     // The abbreviated month and year according to locale preferences, i.e. "Mar 2014"
     // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    /* xgettext:no-c-format */
     FMT_MONTH_YEAR_ABBREV = _("%b %Y");
     
     // A "pretty" date according to locale preferences, i.e. "Monday, March 10, 2014"
     // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    /* xgettext:no-c-format */
     FMT_PRETTY_DATE = _("%A, %B %e, %Y");
     
     // A "pretty" date with no year according to locale preferences, i.e. "Monday, March 10"
     // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    /* xgettext:no-c-format */
     FMT_PRETTY_DATE_NO_YEAR = _("%A, %B %e");
     
     // A "pretty" date abbreviated according to locale preferences, i.e. "Mon, Mar 10, 2014"
     // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    /* xgettext:no-c-format */
     FMT_PRETTY_DATE_ABBREV = _("%a, %b %e, %Y");
     
     // A "pretty" date abbreviated and no year according to locale preferences, i.e.
     // "Mon, Mar 10"
     // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    /* xgettext:no-c-format */
     FMT_PRETTY_DATE_ABBREV_NO_YEAR = _("%a, %b %e");
     
     // A "pretty" date with no day of week according to locale preferences, i.e. "March 10, 2014"
     // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    /* xgettext:no-c-format */
     FMT_PRETTY_DATE_NO_DOW = _("%B %e, %Y");
     
     // A "pretty" date abbreviated with no day of week according to locale preferences,
     // i.e. "Mar 10, 2014"
     // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    /* xgettext:no-c-format */
     FMT_PRETTY_DATE_ABBREV_NO_DOW = _("%b %e, %Y");
     
     // A "pretty" date with no day of week or year according to locale preferences, i.e. "March 10"
     // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    /* xgettext:no-c-format */
     FMT_PRETTY_DATE_NO_DOW_NO_YEAR = _("%B %e");
     
     // A "pretty" date abbreviated with no day of week or year according to locale preferences,
     // i.e. "Mar 10"
     // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    /* xgettext:no-c-format */
     FMT_PRETTY_DATE_ABBREV_NO_DOW_NO_YEAR = _("%b %e");
     
     // A "pretty" date compacted according to locale preferences, i.e. "Mon 3/10/2014"
     // Leading zeroes will be stripped.
     // See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+    /* xgettext:no-c-format */
     FMT_PRETTY_DATE_COMPACT = _("%a %x");
     
     // A "pretty" date abbreviated and no year according to locale preferences, i.e. "Mon 3/10"
