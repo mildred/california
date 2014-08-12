@@ -75,11 +75,12 @@
       </packing>
     </child>
     <child>
-      <object class="GtkBox" id="box1">
+      <object class="GtkToolbar" id="inline-toolbar">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="icon_size">2</property>
         <child>
-          <object class="GtkButton" id="add_button">
+          <object class="GtkToolButton" id="add_button">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -88,24 +89,16 @@
             <property name="valign">start</property>
             <property name="hexpand">False</property>
             <property name="vexpand">False</property>
+            <property name="icon_name">list-add-symbolic</property>
             <signal name="clicked" handler="on_add_button_clicked" object="CaliforniaManagerCalendarList" swapped="no"/>
-            <child>
-              <object class="GtkImage" id="image1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="pixel_size">12</property>
-                <property name="icon_name">list-add-symbolic</property>
-              </object>
-            </child>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="homogeneous">True</property>
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="edit_button">
+          <object class="GtkToolButton" id="edit_button">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -114,24 +107,16 @@
             <property name="valign">center</property>
             <property name="hexpand">False</property>
             <property name="vexpand">False</property>
+            <property name="icon_name">accessories-text-editor-symbolic</property>
             <signal name="clicked" handler="on_edit_button_clicked" object="CaliforniaManagerCalendarList" swapped="no"/>
-            <child>
-              <object class="GtkImage" id="image2">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="pixel_size">12</property>
-                <property name="icon_name">accessories-text-editor-symbolic</property>
-              </object>
-            </child>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="homogeneous">True</property>
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="remove_button">
+          <object class="GtkToolButton" id="remove_button">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -140,22 +125,17 @@
             <property name="valign">center</property>
             <property name="hexpand">False</property>
             <property name="vexpand">False</property>
+            <property name="icon_name">list-remove-symbolic</property>
             <signal name="clicked" handler="on_remove_button_clicked" object="CaliforniaManagerCalendarList" swapped="no"/>
-            <child>
-              <object class="GtkImage" id="image3">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="pixel_size">12</property>
-                <property name="icon_name">list-remove-symbolic</property>
-              </object>
-            </child>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="homogeneous">True</property>
           </packing>
         </child>
+        <style>
+          <class name="inline-toolbar"/>
+        </style>
       </object>
       <packing>
         <property name="left_attach">0</property>

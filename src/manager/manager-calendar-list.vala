@@ -30,10 +30,10 @@ internal class CalendarList : Gtk.Grid, Toolkit.Card {
     private Gtk.ListBox calendar_list_box;
     
     [GtkChild]
-    private Gtk.Button edit_button;
+    private Gtk.ToolButton edit_button;
     
     [GtkChild]
-    private Gtk.Button remove_button;
+    private Gtk.ToolButton remove_button;
     
     private Toolkit.ListBoxModel<Backing.CalendarSource> model;
     
