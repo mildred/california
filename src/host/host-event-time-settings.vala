@@ -74,6 +74,7 @@ public class EventTimeSettings : Gtk.Box, Toolkit.Card {
     private Message? message = null;
     private DateTimeWidget from_widget = new DateTimeWidget();
     private DateTimeWidget to_widget = new DateTimeWidget();
+    private Calendar.Duration duration = new Calendar.Duration();
     
     public EventTimeSettings() {
         // need to manually pack the date/time widgets
@@ -112,6 +113,8 @@ public class EventTimeSettings : Gtk.Box, Toolkit.Card {
     public void jumped_to(Toolkit.Card? from, Toolkit.Card.Jump reason, Value? message_value) {
         message = (Message) message_value;
         
+        freeze_widget_notifications();
+        
         Calendar.DateSpan date_span = message.get_event_date_span(Calendar.Timezone.local);
         from_widget.date = date_span.start_date;
         to_widget.date = date_span.end_date;
@@ -122,6 +125,8 @@ public class EventTimeSettings : Gtk.Box, Toolkit.Card {
             Calendar.ExactTimeSpan time_span = message.exact_time_span.to_timezone(Calendar.Timezone.local);
             from_widget.wall_time = time_span.start_exact_time.to_wall_time();
             to_widget.wall_time = time_span.end_exact_time.to_wall_time();
+            
+            duration = time_span.duration;
         } else {
             // set to defaults in case user wants to change from all-day to timed event
             from_widget.wall_time = Calendar.System.now.to_wall_time().round(15, Calendar.TimeUnit.MINUTE,
@@ -133,9 +138,13 @@ public class EventTimeSettings : Gtk.Box, Toolkit.Card {
                 // different days, same time on each day
                 to_widget.wall_time = from_widget.wall_time;
             }
+            
+            duration = date_span.duration;
         }
         
         all_day_checkbutton.active = (message.exact_time_span == null);
+        
+        thaw_widget_notifications();
     }
     
     [GtkCallback]
@@ -153,6 +162,16 @@ public class EventTimeSettings : Gtk.Box, Toolkit.Card {
         jump_to_card_by_name(CreateUpdateEvent.ID, message);
     }
     
+    private void freeze_widget_notifications() {
+        from_widget.freeze_notify();
+        to_widget.freeze_notify();
+    }
+    
+    private void thaw_widget_notifications() {
+        from_widget.thaw_notify();
+        to_widget.thaw_notify();
+    }
+    
     // This does not respect the all-day checkbox
     private Calendar.DateSpan get_date_span() {
         return new Calendar.DateSpan(from_widget.date, to_widget.date);
@@ -160,10 +179,8 @@ public class EventTimeSettings : Gtk.Box, Toolkit.Card {
     
     // This does not respect the all-day checkbox
     private Calendar.ExactTimeSpan get_exact_time_span() {
-        return new Calendar.ExactTimeSpan(
-            new Calendar.ExactTime(Calendar.System.timezone, from_widget.date, from_widget.wall_time),
-            new Calendar.ExactTime(Calendar.System.timezone, to_widget.date, to_widget.wall_time)
-        );
+        return new Calendar.ExactTimeSpan(from_widget.get_exact_time(Calendar.Timezone.local),
+            to_widget.get_exact_time(Calendar.Timezone.local));
     }
     
     private void on_update_summary() {
@@ -177,17 +194,30 @@ public class EventTimeSettings : Gtk.Box, Toolkit.Card {
     }
     
     private void on_from_changed() {
-        // clamp to_widget to not allow earlier date/times than from_widget
-        to_widget.floor = new Calendar.ExactTime(Calendar.System.timezone, from_widget.date,
-            from_widget.wall_time);
-        
-        on_update_summary();
+        on_date_time_changed(from_widget, to_widget, (int) duration.seconds);
     }
     
     private void on_to_changed() {
-        // clamp from_widget to not allow later date/times than to_widget
-        from_widget.ceiling = new Calendar.ExactTime(Calendar.System.timezone, to_widget.date,
-            to_widget.wall_time);
+        on_date_time_changed(to_widget, from_widget, 0 - (int) duration.seconds);
+    }
+    
+    private void on_date_time_changed(DateTimeWidget source, DateTimeWidget other, int duration_adjustment) {
+        // if From is pushed forward beyond To (or To pushed back before From), adjust the other
+        // widget to maintain the user's duration
+        Calendar.ExactTime from_exact_time = from_widget.get_exact_time(Calendar.Timezone.local);
+        Calendar.ExactTime to_exact_time = to_widget.get_exact_time(Calendar.Timezone.local);
+        if (from_exact_time.compare_to(to_exact_time) >= 0) {
+            Calendar.ExactTime adjusted = source.get_exact_time(Calendar.Timezone.local)
+                .adjust_time(duration_adjustment, Calendar.TimeUnit.SECOND);
+            
+            freeze_widget_notifications();
+            other.date = new Calendar.Date.from_exact_time(adjusted);
+            other.wall_time = adjusted.to_wall_time();
+            thaw_widget_notifications();
+        } else {
+            // otherwise, this is the new duration to be maintained
+            duration = new Calendar.Duration(0, 0, 0, to_exact_time.difference(from_exact_time));
+        }
         
         on_update_summary();
     }

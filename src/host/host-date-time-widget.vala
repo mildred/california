@@ -147,6 +147,10 @@ public class DateTimeWidget : Gtk.Box {
         return true;
     }
     
+    public Calendar.ExactTime get_exact_time(Calendar.Timezone timezone) {
+        return new Calendar.ExactTime(timezone, date, wall_time);
+    }
+    
     private void connect_property_signals() {
         notify[PROP_DATE].connect(on_date_changed);
         notify[PROP_WALL_TIME].connect(on_wall_time_changed);
