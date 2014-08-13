@@ -41,6 +41,12 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     private Gtk.Label where_text;
     
     [GtkChild]
+    private Gtk.Label calendar_label;
+    
+    [GtkChild]
+    private Gtk.Label calendar_text;
+    
+    [GtkChild]
     private Gtk.Label description_text;
     
     [GtkChild]
@@ -120,6 +126,9 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         // time
         set_label(when_label, when_text, event.get_event_time_pretty_string(Calendar.Date.PrettyFlag.NONE,
             Calendar.ExactTimeSpan.PrettyFlag.NONE, Calendar.Timezone.local));
+        
+        // calendar
+        set_label(calendar_label, calendar_text, event.calendar_source != null ? event.calendar_source.title : null);
         
         // description
         set_label(null, description_text, Markup.linkify(escape(event.description), linkify_delegate));
