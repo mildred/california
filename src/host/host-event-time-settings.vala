@@ -214,8 +214,9 @@ public class EventTimeSettings : Gtk.Box, Toolkit.Card {
             other.date = new Calendar.Date.from_exact_time(adjusted);
             other.wall_time = adjusted.to_wall_time();
             thaw_widget_notifications();
-        } else {
-            // otherwise, this is the new duration to be maintained
+        } else if (!source.in_time_edit) {
+            // otherwise, this is the new duration to be maintained (but only adjust if not editing
+            // a time field ... typing numbers can lead to wild fluctuations in duration otherwise)
             duration = new Calendar.Duration(0, 0, 0, to_exact_time.difference(from_exact_time));
         }
         

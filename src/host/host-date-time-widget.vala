@@ -10,6 +10,7 @@ namespace California.Host {
 public class DateTimeWidget : Gtk.Box {
     public const string PROP_ENABLE_TIME = "enable-time";
     public const string PROP_ENABLE_DATE = "enable-date";
+    public const string PROP_IN_TIME_EDIT = "in-time-edit";
     public const string PROP_DATE = "date";
     public const string PROP_WALL_TIME = "wall-time";
     public const string PROP_FLOOR = "floor";
@@ -19,6 +20,8 @@ public class DateTimeWidget : Gtk.Box {
     public bool enable_time { get; set; default = true; }
     
     public bool enable_date { get; set; default = true; }
+    
+    public bool in_time_edit { get; protected set; default = false; }
     
     public Calendar.Date date { get; set; default = Calendar.System.today; }
     
@@ -85,6 +88,9 @@ public class DateTimeWidget : Gtk.Box {
         bind_bool_to_time_controls(PROP_ENABLE_TIME, iterate<Gtk.Widget>(
             hour_up, hour_down, minutes_up, minutes_down, meridiem_up, meridiem_down,
             hour_entry, colon_label, minutes_entry, meridiem_label));
+        
+        hour_entry.bind_property("has-focus", this, PROP_IN_TIME_EDIT, BindingFlags.SYNC_CREATE);
+        minutes_entry.bind_property("has-focus", this, PROP_IN_TIME_EDIT, BindingFlags.SYNC_CREATE);
         
         // set sensitivities for up/down widgets
         foreach (Gtk.Widget widget in
