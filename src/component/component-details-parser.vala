@@ -25,7 +25,7 @@ public class DetailsParser : BaseObject {
         
         public Token(string token) {
             original = token;
-            casefolded = from_string(token).filter(c => !c.ispunct()).to_string(c => c.to_string()) ?? "";
+            casefolded = from_string(token.casefold()).filter(c => !c.ispunct()).to_string(c => c.to_string()) ?? "";
         }
         
         public bool equal_to(Token other) {
@@ -323,6 +323,13 @@ public class DetailsParser : BaseObject {
                 date => date.day_of_week == Calendar.DayOfWeek.SUN);
             
             return add_date(saturday) && add_date(sunday);
+        }
+        
+        // look for fully numeric date specifier
+        {
+            Calendar.Date? date = parse_numeric_date(specifier);
+            if (date != null && add_date(date))
+                return true;
         }
         
         // look for day/month specifiers, in any order
@@ -738,6 +745,100 @@ public class DetailsParser : BaseObject {
         }
         
         return true;
+    }
+    
+    private Calendar.Date? parse_numeric_date(Token token) {
+        // look for three-number then two-number dates ... use original because casefolded has
+        // punctuation removed
+        int a, b, c;
+        char[] separator = new char[token.original.length];
+        if (token.original.scanf("%d%[/.-]%d%[/.-]%d", out a, separator, out b, separator, out c) == 5) {
+            // good to go
+        } else if (token.original.scanf("%d%[/.-]%d", out a, separator, out b) == 3) {
+            // -1 means two-number date was found, i.e. year must be determined manually
+            c = -1;
+        } else {
+            // nothing doing
+            return null;
+        }
+        
+        int d, m, y;
+        switch (Calendar.System.date_ordering) {
+            case Calendar.DateOrdering.DMY:
+                d = a;
+                m = b;
+                y = c;
+            break;
+            
+            case Calendar.DateOrdering.MDY:
+                d = b;
+                m = a;
+                y = c;
+            break;
+            
+            case Calendar.DateOrdering.YDM:
+                // watch out for two-number date
+                if (c != -1) {
+                    d = b;
+                    m = c;
+                    y = a;
+                } else {
+                    // DM
+                    d = a;
+                    m = b;
+                    y = -1;
+                }
+            break;
+            
+            case Calendar.DateOrdering.YMD:
+                // watch out for two-number date
+                if (c != -1) {
+                    d = c;
+                    m = b;
+                    y = a;
+                } else {
+                    // MD
+                    d = b;
+                    m = a;
+                    y = -1;
+                }
+            break;
+            
+            default:
+                assert_not_reached();
+        }
+        
+        // Determine year
+        Calendar.Year year;
+        if (c != -1) {
+            // two-digit numbers get adjusted to this century
+            // TODO: Y3K problem!
+            year = new Calendar.Year(y < 100 ? y + 2000 : y);
+        } else {
+            // if year not specified, assume the nearest date in the future
+            try {
+                Calendar.Date test = new Calendar.Date(Calendar.DayOfMonth.for(d),
+                    Calendar.Month.for(m), Calendar.System.today.year);
+                if (test.compare_to(Calendar.System.today) >= 0)
+                    year = test.year;
+                else
+                    year = test.year.adjust(1);
+            } catch (Error err) {
+                // bogus date, bail out
+                debug("Unable to parse date %s: %s", token.to_string(), err.message);
+                
+                return null;
+            }
+        }
+        
+        // build final date and return it
+        try {
+            return new Calendar.Date(Calendar.DayOfMonth.for(d), Calendar.Month.for(m), year);
+        } catch (Error err) {
+            debug("Unable to parse date %s: %s", token.to_string(), err.message);
+            
+            return null;
+        }
     }
     
     // Parses a potential date specifier into a calendar date relative to today

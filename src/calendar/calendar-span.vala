@@ -72,7 +72,7 @@ public abstract class Span : BaseObject {
     /**
      * Returns the {@link Duration} this {@link Span} represents.
      */
-    public Duration duration { owned get { return new Duration(end_date.difference(start_date).abs()); } }
+    public Duration duration { owned get { return new Duration(end_date.difference(start_date).abs() + 1); } }
     
     protected Span(Date start_date, Date end_date) {
         init_span(start_date, end_date);

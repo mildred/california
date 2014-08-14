@@ -55,6 +55,7 @@ california_VALASOURCES = \
 	calendar/calendar-day-of-month.vala \
 	calendar/calendar-day-of-week.vala \
 	calendar/calendar-date.vala \
+	calendar/calendar-date-ordering.vala \
 	calendar/calendar-dbus.vala \
 	calendar/calendar-duration.vala \
 	calendar/calendar-error.vala \

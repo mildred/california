@@ -50,6 +50,30 @@ public class System : BaseObject {
     public static bool is_24hr { get; private set; }
     
     /**
+     * The user's locale's {@link DateOrdering}.
+     *
+     * Date ordering may be set, but this is only for unit testing (hence there's no signal
+     * reporting its change).  The application shouldn't set this and let the value be determined
+     * at startup.
+     *
+     * @see date_separator
+     */
+    public static DateOrdering date_ordering { get; set; }
+    
+    /**
+     * The user's locale's date separator character.
+     *
+     * Generally this is expected to be a slash ("/"), a dot ("."), or a dash ("-').  Not all
+     * cultures use consistent separators (i.e. Chinese uses marks indicating year, day, and month).
+     * It's assumed this is merely a common (or common enough) character to be used when displaying
+     * or parsing dates.
+     *
+     * Like {@link date_ordering}, this may be set for unit testing, but the application should
+     * let this be determined at startup.
+     */
+    public static string date_separator { get; set; }
+    
+    /**
      * Returns the system's configured zone as an {@link OlsonZone}.
      */
     public static OlsonZone zone { get; private set; }
@@ -170,6 +194,56 @@ public class System : BaseObject {
         today = new Date.now(Timezone.local);
         scheduled_date_timer = new Scheduled.once_after_sec(next_check_today_interval_sec(),
             check_today_changed, CHECK_DATE_PRIORITY);
+        
+        // determine the date ordering and separator by using strftime's response
+        Calendar.Date unique_date;
+        try {
+            unique_date = new Calendar.Date(Calendar.DayOfMonth.for_checked(3),
+                Calendar.Month.for_checked(4), new Calendar.Year(2001));
+        } catch (Error err) {
+            error("Unable to generate test date 3/4/2001: %s", err.message);
+        }
+        
+        string formatted = unique_date.format("%x");
+        
+        int a, b, c;
+        char first_separator, second_separator;
+        if (formatted.scanf("%d%c%d%c%d", out a, out first_separator, out b, out second_separator, out c) == 5) {
+            // convert four-digit year to two-digit
+            a = (a == 2001) ? 1 : a;
+            b = (b == 2001) ? 1 : b;
+            c = (c == 2001) ? 1 : c;
+            
+            if (a == 3 && b == 4 && c == 1)
+                date_ordering = DateOrdering.DMY;
+            else if (a == 4 && b == 3 && c == 1)
+                date_ordering = DateOrdering.MDY;
+            else if (a == 1 && b == 3 && c == 4)
+                date_ordering = DateOrdering.YDM;
+            else if (a == 1 && b == 4 && c == 3)
+                date_ordering = DateOrdering.YMD;
+            else
+                date_ordering = DateOrdering.DEFAULT;
+        } else {
+            // couldn't determine
+            date_ordering = DateOrdering.DEFAULT;
+        }
+        
+        // use first separator as date separator ... do some sanity checking here
+        switch (first_separator) {
+            case '/':
+            case '.':
+            case '-':
+                date_separator = first_separator.to_string();
+            break;
+            
+            default:
+                date_separator = "/";
+            break;
+        }
+        
+        debug("Date ordering: %s, separator: %s (formatted=%s)", date_ordering.to_string(),
+            date_separator.to_string(), formatted);
         
         // Borrowed liberally (but not exactly) from GtkCalendar; see gtk_calendar_init
 #if HAVE__NL_TIME_FIRST_WEEKDAY
