@@ -156,16 +156,34 @@ public class DetailsParser : BaseObject {
         }
         
         // tokenize the string and arrange as a stack for the parser
-        string[] tokenized = String.reduce_whitespace(this.details).split(" ");
-        Gee.LinkedList<Token> list = new Gee.LinkedList<Token>();
-        foreach (string token in tokenized) {
-            if (!String.is_empty(token))
-                list.add(new Token(token));
-        }
-        
-        stack = new Collection.LookaheadStack<Token>(list);
+        stack = new Collection.LookaheadStack<Token>(tokenize());
         
         parse();
+    }
+    
+    Gee.List<Token> tokenize() {
+        Gee.List<Token> tokens = new Gee.ArrayList<Token>();
+        
+        StringBuilder builder = new StringBuilder();
+        bool in_quotes = false;
+        from_string(details).iterate(ch => {
+            // switch state but include quotes in token
+            if (ch == '"')
+                in_quotes = !in_quotes;
+            
+            if (!ch.isspace() || in_quotes) {
+                builder.append_unichar(ch);
+            } else if (!String.is_empty(builder.str)) {
+                tokens.add(new Token(builder.str));
+                builder = new StringBuilder();
+            }
+        });
+        
+        // get any trailing text
+        if (!String.is_empty(builder.str))
+            tokens.add(new Token(builder.str));
+        
+        return tokens;
     }
     
     private void parse() {

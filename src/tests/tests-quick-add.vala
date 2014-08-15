@@ -55,6 +55,9 @@ private class QuickAdd : UnitTest.Harness {
         add_case("time-range-no-meridiem", time_range_no_meridiem);
         add_case("atsign-location", atsign_location);
         add_case("atsign-time", atsign_time);
+        add_case("quoted", quoted);
+        add_case("open-quoted", open_quoted);
+        add_case("quoted-atsign", quoted_atsign);
     }
     
     protected override void setup() throws Error {
@@ -625,6 +628,48 @@ private class QuickAdd : UnitTest.Harness {
         
         return parser.event.summary == "Dinner"
             && parser.event.location == null
+            && !parser.event.is_all_day
+            && parser.event.exact_time_span.start_exact_time.hour == 19
+            && parser.event.exact_time_span.start_exact_time.minute == 0
+            && parser.event.exact_time_span.end_exact_time.hour == 20
+            && parser.event.exact_time_span.end_exact_time.minute == 0
+            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span());
+    }
+    
+    private bool quoted(out string? dump) throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "\"Live at Budokon\" at The Roxy 7pm", null);
+        
+        dump = parser.event.source;
+        
+        return parser.event.summary == "\"Live at Budokon\" at The Roxy"
+            && parser.event.location == "The Roxy"
+            && !parser.event.is_all_day
+            && parser.event.exact_time_span.start_exact_time.hour == 19
+            && parser.event.exact_time_span.start_exact_time.minute == 0
+            && parser.event.exact_time_span.end_exact_time.hour == 20
+            && parser.event.exact_time_span.end_exact_time.minute == 0
+            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span());
+    }
+    
+    private bool open_quoted(out string? dump) throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "\"Live at Budokon", null);
+        
+        dump = parser.event.source;
+        
+        return parser.event.summary == "\"Live at Budokon"
+            && parser.event.location == null;
+    }
+    
+    private bool quoted_atsign(out string? dump) throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "\"Live at Budokon\" @ The Roxy 7pm", null);
+        
+        dump = parser.event.source;
+        
+        return parser.event.summary == "\"Live at Budokon\""
+            && parser.event.location == "The Roxy"
             && !parser.event.is_all_day
             && parser.event.exact_time_span.start_exact_time.hour == 19
             && parser.event.exact_time_span.start_exact_time.minute == 0
