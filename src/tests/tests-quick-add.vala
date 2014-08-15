@@ -45,11 +45,14 @@ private class QuickAdd : UnitTest.Harness {
         add_case("numeric-mdyyyy", numeric_mdyyyy);
         add_case("numeric-dmyyyy", numeric_dmyyyy);
         add_case("numeric-dot", numeric_dot);
-        add_case("numeric-dash", numeric_dash);
         add_case("numeric-leading-zeros", numeric_leading_zeroes);
         add_case("street-address_3", street_address_3);
         add_case("street-address_3a", street_address_3a);
         add_case("street-address_4", street_address_4);
+        add_case("time-range-both-meridiem", time_range_both_meridiem);
+        add_case("time-range-one-meridiem", time_range_one_meridiem);
+        add_case("time-range-24hr", time_range_24hr);
+        add_case("time-range-no-meridiem", time_range_no_meridiem);
     }
     
     protected override void setup() throws Error {
@@ -504,27 +507,11 @@ private class QuickAdd : UnitTest.Harness {
             && parser.event.date_span.start_date.year.value == 2014;
     }
     
-    private bool numeric_dash(out string? dump) throws Error {
-        Calendar.System.date_ordering = Calendar.DateOrdering.MDY;
-        Calendar.System.date_separator = "-";
-        Component.DetailsParser parser = new Component.DetailsParser(
-            "7-2-14 Offsite", null);
-        
-        dump = parser.event.source;
-        
-        return parser.event.summary == "Offsite"
-            && parser.event.is_all_day
-            && parser.event.date_span.duration.days == 1
-            && parser.event.date_span.start_date.month == Calendar.Month.JUL
-            && parser.event.date_span.start_date.day_of_month.value == 2
-            && parser.event.date_span.start_date.year.value == 2014;
-    }
-    
     private bool numeric_leading_zeroes(out string? dump) throws Error {
         Calendar.System.date_ordering = Calendar.DateOrdering.MDY;
         Calendar.System.date_separator = "/";
         Component.DetailsParser parser = new Component.DetailsParser(
-            "07-02-14 Offsite", null);
+            "07/02/14 Offsite", null);
         
         dump = parser.event.source;
         
@@ -575,6 +562,41 @@ private class QuickAdd : UnitTest.Harness {
             && !parser.event.is_all_day
             && parser.event.exact_time_span.start_exact_time.hour == 18
             && parser.event.exact_time_span.start_exact_time.minute == 30;
+    }
+    
+    private bool test_time_range(string details, out string? dump) throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(details, null);
+        
+        dump = parser.event.source;
+        
+        return parser.event.summary == "Opus Affair"
+            && !parser.event.is_all_day
+            && parser.event.exact_time_span.start_exact_time.hour == 18
+            && parser.event.exact_time_span.start_exact_time.minute == 0
+            && parser.event.exact_time_span.end_exact_time.hour == 21
+            && parser.event.exact_time_span.end_exact_time.minute == 0;
+    }
+    
+    private bool time_range_both_meridiem(out string? dump) throws Error {
+        return test_time_range("6p-9p Opus Affair", out dump);
+    }
+    
+    private bool time_range_one_meridiem(out string? dump) throws Error {
+        return test_time_range("6-9p Opus Affair", out dump);
+    }
+    
+    private bool time_range_24hr(out string? dump) throws Error {
+        return test_time_range("18:00-21:00 Opus Affair", out dump);
+    }
+    
+    private bool time_range_no_meridiem(out string? dump) throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "6-9 Opus Affair", null);
+        
+        dump = parser.event.source;
+        
+        return parser.event.summary == "6-9 Opus Affair"
+            && !parser.event.is_valid(false);
     }
 }
 

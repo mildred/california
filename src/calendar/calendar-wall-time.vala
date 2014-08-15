@@ -150,22 +150,8 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
             return new WallTime(12, 0, 0);
         }
         
-        // look for meridiem tacked on to end
-        bool pm = false;
-        bool meridiem_unknown = false;
-        if (token.has_suffix(FMT_AM.casefold())) {
-            token = token.slice(0, token.length - FMT_AM.casefold().length);
-        } else if (token.has_suffix(FMT_BRIEF_AM.casefold())) {
-            token = token.slice(0, token.length - FMT_BRIEF_AM.casefold().length);
-        } else if (token.has_suffix(FMT_PM.casefold())) {
-            token = token.slice(0, token.length - FMT_PM.casefold().length);
-            pm = true;
-        } else if (token.has_suffix(FMT_BRIEF_PM.casefold())) {
-            token = token.slice(0, token.length - FMT_BRIEF_PM.casefold().length);
-            pm = true;
-        } else {
-            meridiem_unknown = true;
-        }
+        bool meridiem_unknown, pm;
+        token = parse_meridiem(token, out meridiem_unknown, out pm);
         
         // remove colon (can be present for 12- or 24-hour time)
         bool has_colon = token.index_of(":") > 0;

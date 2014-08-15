@@ -258,4 +258,35 @@ public void terminate() {
     Collection.terminate();
 }
 
+/**
+ * Detects if the string has a meridiem prefix, either brief or full, depending on the locale.
+ *
+ * The string should be casefolded and stripped of leading and trailing whitespace.
+ *
+ * Returns the string with the meridiem stripped off as well as indicators about what was found,
+ * if anything.  If no meridiem was found, the original string is returned.
+ */
+private string parse_meridiem(string str, out bool meridiem_unknown, out bool is_pm) {
+    meridiem_unknown = false;
+    is_pm = false;
+    
+    string stripped;
+    if (str.has_suffix(FMT_AM.casefold())) {
+        stripped = str.slice(0, str.length - FMT_AM.casefold().length);
+    } else if (str.has_suffix(FMT_BRIEF_AM.casefold())) {
+        stripped = str.slice(0, str.length - FMT_BRIEF_AM.casefold().length);
+    } else if (str.has_suffix(FMT_PM.casefold())) {
+        stripped = str.slice(0, str.length - FMT_PM.casefold().length);
+        is_pm = true;
+    } else if (str.has_suffix(FMT_BRIEF_PM.casefold())) {
+        stripped = str.slice(0, str.length - FMT_BRIEF_PM.casefold().length);
+        is_pm = true;
+    } else {
+        stripped = str;
+        meridiem_unknown = true;
+    }
+    
+    return stripped;
+}
+
 }

@@ -326,11 +326,23 @@ public class DetailsParser : BaseObject {
             return add_date(saturday) && add_date(sunday);
         }
         
-        // look for fully numeric date specifier
+        // look for fully numeric date specifier (i.e. "7/2/14")
         {
             Calendar.Date? date = parse_numeric_date(specifier);
             if (date != null && add_date(date))
                 return true;
+        }
+        
+        // look for time range (i.e. "6p-9p", "6-9p")
+        {
+            Calendar.WallTime start, end;
+            bool strictly_parsed;
+            if (parse_time_range(specifier, out start, out end, out strictly_parsed)) {
+                if (!strict || (strict && strictly_parsed)) {
+                    if (add_wall_time(start, strictly_parsed) && add_wall_time(end, strictly_parsed))
+                        return true;
+                }
+            }
         }
         
         // look for day/month specifiers, in any order
@@ -753,9 +765,9 @@ public class DetailsParser : BaseObject {
         // punctuation removed
         int a, b, c;
         char[] separator = new char[token.original.length];
-        if (token.original.scanf("%d%[/.-]%d%[/.-]%d", out a, separator, out b, separator, out c) == 5) {
+        if (token.original.scanf("%d%[/.]%d%[/.]%d", out a, separator, out b, separator, out c) == 5) {
             // good to go
-        } else if (token.original.scanf("%d%[/.-]%d", out a, separator, out b) == 3) {
+        } else if (token.original.scanf("%d%[/.]%d", out a, separator, out b) == 3) {
             // -1 means two-number date was found, i.e. year must be determined manually
             c = -1;
         } else {
@@ -840,6 +852,49 @@ public class DetailsParser : BaseObject {
             
             return null;
         }
+    }
+    
+    // strictly parsed means *both* were strictly parsed
+    private bool parse_time_range(Token token, out Calendar.WallTime start, out Calendar.WallTime end,
+        out bool strictly_parsed) {
+        start = null;
+        end = null;
+        strictly_parsed = false;
+        
+        string[] separated = token.original.split("-");
+        if (separated.length != 2)
+            return false;
+        
+        // fixup meridiems: if one has a specifier, assume for both
+        
+        string start_string = separated[0].casefold().strip();
+        bool start_meridiem_unknown, is_start_pm;
+        Calendar.parse_meridiem(start_string, out start_meridiem_unknown, out is_start_pm);
+        
+        string end_string = separated[1].casefold().strip();
+        bool end_meridiem_unknown, is_end_pm;
+        Calendar.parse_meridiem(end_string, out end_meridiem_unknown, out is_end_pm);
+        
+        if (!start_meridiem_unknown && end_meridiem_unknown)
+            end_string += is_start_pm ? Calendar.FMT_PM : Calendar.FMT_AM;
+        else if (start_meridiem_unknown && !end_meridiem_unknown)
+            start_string += is_end_pm ? Calendar.FMT_PM : Calendar.FMT_AM;
+        
+        // parse away
+        
+        bool start_strictly_parsed;
+        start = Calendar.WallTime.parse(start_string, out start_strictly_parsed);
+        if (start == null)
+            return false;
+        
+        bool end_strictly_parsed;
+        end = Calendar.WallTime.parse(end_string, out end_strictly_parsed);
+        if (end == null)
+            return false;
+        
+        strictly_parsed = start_strictly_parsed && end_strictly_parsed;
+        
+        return true;
     }
     
     // Parses a potential date specifier into a calendar date relative to today
