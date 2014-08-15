@@ -53,6 +53,8 @@ private class QuickAdd : UnitTest.Harness {
         add_case("time-range-one-meridiem", time_range_one_meridiem);
         add_case("time-range-24hr", time_range_24hr);
         add_case("time-range-no-meridiem", time_range_no_meridiem);
+        add_case("atsign-location", atsign_location);
+        add_case("atsign-time", atsign_time);
     }
     
     protected override void setup() throws Error {
@@ -597,6 +599,38 @@ private class QuickAdd : UnitTest.Harness {
         
         return parser.event.summary == "6-9 Opus Affair"
             && !parser.event.is_valid(false);
+    }
+    
+    private bool atsign_location(out string? dump) throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "Dinner @ Tadich Grill 7pm", null);
+        
+        dump = parser.event.source;
+        
+        return parser.event.summary == "Dinner"
+            && parser.event.location == "Tadich Grill"
+            && !parser.event.is_all_day
+            && parser.event.exact_time_span.start_exact_time.hour == 19
+            && parser.event.exact_time_span.start_exact_time.minute == 0
+            && parser.event.exact_time_span.end_exact_time.hour == 20
+            && parser.event.exact_time_span.end_exact_time.minute == 0
+            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span());
+    }
+    
+    private bool atsign_time(out string? dump) throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "Dinner @ 7pm", null);
+        
+        dump = parser.event.source;
+        
+        return parser.event.summary == "Dinner"
+            && parser.event.location == null
+            && !parser.event.is_all_day
+            && parser.event.exact_time_span.start_exact_time.hour == 19
+            && parser.event.exact_time_span.start_exact_time.minute == 0
+            && parser.event.exact_time_span.end_exact_time.hour == 20
+            && parser.event.exact_time_span.end_exact_time.minute == 0
+            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span());
     }
 }
 

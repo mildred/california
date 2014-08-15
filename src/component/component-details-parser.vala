@@ -19,13 +19,56 @@ namespace California.Component {
  */
 
 public class DetailsParser : BaseObject {
+    /**
+     * Recognized "special" symbols.
+     */
+    private enum Shorthand {
+        NONE,
+        /**
+         * {@link Shorthand} for TIME or LOCATION.
+         */
+        ATSIGN;
+        
+        /**
+         * Converts a string to a recognized {@link Shorthand}.
+         */
+        public static Shorthand parse(string str) {
+            switch (str) {
+                case "@":
+                    return ATSIGN;
+                
+                default:
+                    return NONE;
+            }
+        }
+    }
+    
     private class Token : BaseObject, Gee.Hashable<Token> {
+        /**
+         * Original token.
+         */
         public string original;
+        
+        /*
+         * Casefolded and punctuation removed.
+         */
         public string casefolded;
+        
+        /**
+         * {@link Shorthand} parsed from {@link original}.
+         */
+        public Shorthand shorthand;
         
         public Token(string token) {
             original = token;
-            casefolded = from_string(token.casefold()).filter(c => !c.ispunct()).to_string(c => c.to_string()) ?? "";
+            casefolded = from_string(token.casefold())
+                .filter(c => !c.ispunct())
+                .to_string(c => c.to_string()) ?? "";
+            shorthand = Shorthand.parse(original);
+        }
+        
+        public bool is_empty() {
+            return String.is_empty(casefolded) && shorthand == Shorthand.NONE;
         }
         
         public bool equal_to(Token other) {
@@ -64,6 +107,7 @@ public class DetailsParser : BaseObject {
     private Calendar.Date? end_date = null;
     private Calendar.Duration? duration = null;
     private bool adding_location = false;
+    private bool adding_summary = true;
     private RecurrenceRule? rrule = null;
     
     /**
@@ -131,8 +175,8 @@ public class DetailsParser : BaseObject {
                 break;
             
             // because whitespace and punctuation is stripped from the original token, it's possible
-            // for the casefolded token to be empty
-            if (String.is_empty(token.casefolded)) {
+            // for the casefolded token to be empty (and an unrecognized Shorthand)
+            if (token.is_empty()) {
                 add_text(token);
                 
                 continue;
@@ -152,6 +196,12 @@ public class DetailsParser : BaseObject {
             // preposition offers a clue that a time is being specified.
             stack.mark();
             if (token.casefolded in TIME_PREPOSITIONS && parse_time(stack.pop(), false))
+                continue;
+            stack.restore();
+            
+            // The ATSIGN is also recognized as a TIME preposition
+            stack.mark();
+            if (token.shorthand == Shorthand.ATSIGN && parse_time(stack.pop(), false))
                 continue;
             stack.restore();
             
@@ -176,15 +226,24 @@ public class DetailsParser : BaseObject {
                 continue;
             stack.restore();
             
-            // only look for location prepositions if not already adding text to the location field
-            if (!adding_location && token.casefolded in LOCATION_PREPOSITIONS) {
+            // only look for LOCATION prepositions if not already adding text to the location field
+            // (ATSIGN is considered a LOCATION preposition)
+            if (!adding_location
+                && (token.casefolded in LOCATION_PREPOSITIONS || token.shorthand == Shorthand.ATSIGN)) {
                 // add current token (the preposition) to summary but not location (because location
                 // tokens are added to summary, i.e. "dinner at John's" yields "John's" for location
-                // and "dinner at John's" for summary)
-                add_text(token);
+                // and "dinner at John's" for summary) ... note that ATSIGN does not add to summary
+                // to allow for more concise summaries
+                if (token.shorthand != Shorthand.ATSIGN)
+                    add_text(token);
                 
                 // now adding to both summary and location
                 adding_location = true;
+                
+                // ...unless at-sign used, which has the side-effect of not adding to summary
+                // (see above)
+                if (token.shorthand == Shorthand.ATSIGN)
+                    adding_summary = false;
                 
                 continue;
             }
@@ -727,12 +786,11 @@ public class DetailsParser : BaseObject {
         return true;
     }
     
-    // Adds the text to the summary and location field, if adding_location is set
+    // Adds the text to the summary and location field, if adding_location/summary is set
     private void add_text(Token token) {
-        // always add to summary
-        add_to_builder(summary, token);
+        if (adding_summary)
+            add_to_builder(summary, token);
         
-        // add to location if in that mode
         if (adding_location)
             add_to_builder(location, token);
     }
