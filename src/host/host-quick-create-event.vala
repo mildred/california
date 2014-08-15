@@ -21,7 +21,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
     public Gtk.Widget? initial_focus { get { return details_entry; } }
     
     [GtkChild]
-    private Gtk.Box when_box;
+    private Gtk.Label when_label;
     
     [GtkChild]
     private Gtk.Label when_text_label;
@@ -68,7 +68,8 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
         // if initial date/times supplied, reveal to the user and change the example
         string eg;
         if (event != null && (event.date_span != null || event.exact_time_span != null)) {
-            when_box.visible = true;
+            when_label.visible = when_text_label.visible = true;
+            when_label.no_show_all = when_text_label.no_show_all = false;
             when_text_label.label = event.get_event_time_pretty_string(Calendar.Date.PrettyFlag.NONE,
                 Calendar.ExactTimeSpan.PrettyFlag.ALLOW_MULTILINE, Calendar.Timezone.local);
             if (event.date_span != null)
@@ -76,11 +77,11 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
             else
                 eg = _("Example: Dinner at Tadich Grill");
         } else {
-            when_box.visible = false;
-            when_box.no_show_all = true;
+            when_label.visible = when_text_label.visible = false;
+            when_label.no_show_all = when_text_label.no_show_all = true;
             eg = _("Example: Dinner at Tadich Grill 7:30pm tomorrow");
         }
-
+        
         example_label.label = "<small><i>%s</i></small>".printf(eg);
         
         // make first item active
