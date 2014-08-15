@@ -18,6 +18,7 @@ private class QuickAdd : UnitTest.Harness {
         add_case("valid-no-summary", valid_no_summary);
         add_case("with-12hr-time", with_12hr_time);
         add_case("with-24hr-time", with_24hr_time);
+        add_case("with-24hr-time-no-preposition", with_24hr_time_no_preposition);
         add_case("with-day-of-week", with_day_of_week);
         add_case("with-delay", with_delay);
         add_case("with-duration", with_duration);
@@ -46,6 +47,9 @@ private class QuickAdd : UnitTest.Harness {
         add_case("numeric-dot", numeric_dot);
         add_case("numeric-dash", numeric_dash);
         add_case("numeric-leading-zeros", numeric_leading_zeroes);
+        add_case("street-address_3", street_address_3);
+        add_case("street-address_3a", street_address_3a);
+        add_case("street-address_4", street_address_4);
     }
     
     protected override void setup() throws Error {
@@ -130,15 +134,21 @@ private class QuickAdd : UnitTest.Harness {
     }
     
     private bool with_24hr_time() throws Error {
-        return with_time(new Component.DetailsParser("dinner at 1900 with Alice", null));
+        return with_time(new Component.DetailsParser("dinner at 19:00 with Alice", null));
     }
     
-    private bool with_time(Component.DetailsParser parser) {
+    private bool with_24hr_time_no_preposition(out string? dump) throws Error {
+        return with_time(new Component.DetailsParser("19:00 dinner with Alice", null), out dump);
+    }
+    
+    private bool with_time(Component.DetailsParser parser, out string? dump = null) {
         Calendar.ExactTime time = new Calendar.ExactTime(
             Calendar.System.timezone,
             Calendar.System.today,
             new Calendar.WallTime(19, 0, 0)
         );
+        
+        dump = parser.event.source;
         
         return parser.event.summary == "dinner with Alice"
             && parser.event.location == null
@@ -524,6 +534,47 @@ private class QuickAdd : UnitTest.Harness {
             && parser.event.date_span.start_date.month == Calendar.Month.JUL
             && parser.event.date_span.start_date.day_of_month.value == 2
             && parser.event.date_span.start_date.year.value == 2014;
+    }
+    
+    private bool street_address_3(out string? dump) throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "6:30pm Alice at Burrito Shack, 450 Main", null);
+        
+        dump = parser.event.source;
+        
+        return parser.event.summary == "Alice at Burrito Shack, 450 Main"
+            && parser.event.location == "Burrito Shack, 450 Main"
+            && !parser.event.is_all_day
+            && parser.event.exact_time_span.start_exact_time.hour == 18
+            && parser.event.exact_time_span.start_exact_time.minute == 30;
+    }
+    
+    private bool street_address_3a(out string? dump) throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "Friday 6:30pm meet eric at 431 natoma", null);
+        
+        dump = parser.event.source;
+        
+        return parser.event.summary == "meet eric at 431 natoma"
+            && parser.event.location == "431 natoma"
+            && !parser.event.is_all_day
+            && parser.event.exact_time_span.start_exact_time.hour == 18
+            && parser.event.exact_time_span.start_exact_time.minute == 30
+            && parser.event.exact_time_span.start_date.day_of_week == Calendar.DayOfWeek.FRI
+            && parser.event.exact_time_span.duration.hours == 1;
+    }
+    
+    private bool street_address_4(out string? dump) throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "6:30pm Alice at Burrito Shack, 1235 Main", null);
+        
+        dump = parser.event.source;
+        
+        return parser.event.summary == "Alice at Burrito Shack, 1235 Main"
+            && parser.event.location == "Burrito Shack, 1235 Main"
+            && !parser.event.is_all_day
+            && parser.event.exact_time_span.start_exact_time.hour == 18
+            && parser.event.exact_time_span.start_exact_time.minute == 30;
     }
 }
 

@@ -168,6 +168,7 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
         }
         
         // remove colon (can be present for 12- or 24-hour time)
+        bool has_colon = token.index_of(":") > 0;
         token = token.replace(":", "");
         int length = token.length;
         
@@ -177,6 +178,11 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
         
         // look for 24-hour time or a fully-detailed 12-hour time
         if ((length == 3 || length == 4)) {
+            // 3- and 4-digit time requires colon, otherwise it could be any 3- or 4-digit number
+            // (i.e. a street address)
+            if (!has_colon)
+                return null;
+            
             int h, m;
             if (length == 3) {
                 h = int.parse(token.slice(0, 1));

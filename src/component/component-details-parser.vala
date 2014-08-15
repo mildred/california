@@ -220,7 +220,8 @@ public class DetailsParser : BaseObject {
                 continue;
             stack.restore();
             
-            // attempt to (strictly) parse into wall-clock time
+            // attempt to parse into wall-clock time, strictly if adding location (to prevent street
+            // numbers from being interpreted as 24-hour time)
             stack.mark();
             if (parse_time(token, true))
                 continue;
@@ -369,8 +370,9 @@ public class DetailsParser : BaseObject {
         if (date != null && add_date(date))
             return true;
         
-        // store locally so it can be modified w/o risk (tokens may be reused)
-        string specifier_casefolded = specifier.casefolded;
+        // store locally so it can be modified w/o risk (tokens may be reused) ... don't use
+        // casefolded because important punctuation has been stripped
+        string specifier_string = specifier.original;
         
         // if meridiem found in next token, append to specifier for WallTime.parse()
         bool found_meridiem = false;
@@ -379,7 +381,7 @@ public class DetailsParser : BaseObject {
             Token? meridiem = stack.pop();
             if (meridiem != null
                 && (meridiem.casefolded == Calendar.FMT_AM.casefold() || meridiem.casefolded == Calendar.FMT_PM.casefold())) {
-                specifier_casefolded += meridiem.casefolded;
+                specifier_string += meridiem.casefolded;
                 found_meridiem = true;
             }
         }
@@ -389,8 +391,7 @@ public class DetailsParser : BaseObject {
             stack.restore();
         
         bool strictly_parsed;
-        Calendar.WallTime? wall_time = Calendar.WallTime.parse(specifier_casefolded,
-            out strictly_parsed);
+        Calendar.WallTime? wall_time = Calendar.WallTime.parse(specifier_string, out strictly_parsed);
         if (wall_time != null && !strictly_parsed && strict)
             return false;
         
