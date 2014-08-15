@@ -1,3 +1,14 @@
+California 0.1.3 - 15 August 2014
+---------------------------------
+
+  * Generic CalDAV support
+  * Numerous Quick Add parser improvements
+  * Use system/locale's defined first day of week
+  * Move events between calendars
+  * Improved event viewing and editing
+  * Various bug fixes and improvements
+  * Updated translations
+
 California 0.1.2 - 18 July 2014
 -------------------------------
 
