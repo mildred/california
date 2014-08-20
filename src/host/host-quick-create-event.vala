@@ -100,11 +100,6 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
     }
     
     [GtkCallback]
-    private void on_cancel_button_clicked() {
-        notify_user_closed();
-    }
-    
-    [GtkCallback]
     private void on_create_button_clicked() {
         // shouldn't be sensitive if no text
         string details = details_entry.text.strip();

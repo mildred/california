@@ -21,9 +21,9 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     
     public string? title { get { return null; } }
     
-    public Gtk.Widget? default_widget { get { return close_button; } }
+    public Gtk.Widget? default_widget { get { return null; } }
     
-    public Gtk.Widget? initial_focus { get { return close_button; } }
+    public Gtk.Widget? initial_focus { get { return null; } }
     
     public bool edit_requested { get; private set; default = false; }
     
@@ -61,7 +61,6 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     
     private Toolkit.RotatingButtonBox rotating_button_box = new Toolkit.RotatingButtonBox();
     
-    private Gtk.Button close_button = new Gtk.Button.with_mnemonic(_("_Close"));
     private Gtk.Button update_button = new Gtk.Button.with_mnemonic(_("_Edit"));
     private Gtk.Button remove_button = new Gtk.Button.with_mnemonic(_("_Delete"));
     private Gtk.Label delete_label = new Gtk.Label(_("Delete"));
@@ -75,15 +74,11 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         Calendar.System.instance.is_24hr_changed.connect(build_display);
         Calendar.System.instance.today_changed.connect(build_display);
         
-        close_button.can_default = true;
-        close_button.has_default = true;
-        
         remove_button.get_style_context().add_class("destructive-action");
         remove_this_button.get_style_context().add_class("destructive-action");
         remove_this_future_button.get_style_context().add_class("destructive-action");
         remove_all_button.get_style_context().add_class("destructive-action");
         
-        close_button.clicked.connect(on_close_button_clicked);
         update_button.clicked.connect(on_update_button_clicked);
         remove_button.clicked.connect(on_remove_button_clicked);
         remove_all_button.clicked.connect(on_remove_all_button_clicked);
@@ -93,7 +88,6 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         
         rotating_button_box.pack_end(FAMILY_NORMAL, remove_button);
         rotating_button_box.pack_end(FAMILY_NORMAL, update_button);
-        rotating_button_box.pack_end(FAMILY_NORMAL, close_button);
         
         delete_label.xalign = 1.0f;
         delete_label.get_style_context().add_class(Gtk.STYLE_CLASS_DIM_LABEL);
@@ -151,13 +145,11 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         // description
         set_label(null, description_text, Markup.linkify(escape(event.description), linkify_delegate));
         
+        // if read-only, don't show Delete or Edit buttons; since they're the only two, don't show
+        // the entire button box
         bool read_only = event.calendar_source != null && event.calendar_source.read_only;
-        
-        update_button.visible = !read_only;
-        update_button.no_show_all = read_only;
-        
-        remove_button.visible = !read_only;
-        remove_button.no_show_all = read_only;
+        rotating_button_box.visible = !read_only;
+        rotating_button_box.no_show_all = read_only;
     }
     
     private string? escape(string? plain) {
@@ -228,10 +220,6 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     private void on_update_button_clicked() {
         edit_requested = true;
         
-        notify_user_closed();
-    }
-    
-    private void on_close_button_clicked() {
         notify_user_closed();
     }
     
