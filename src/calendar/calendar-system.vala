@@ -247,6 +247,8 @@ public class System : BaseObject {
         
         // Borrowed liberally (but not exactly) from GtkCalendar; see gtk_calendar_init
 #if HAVE__NL_TIME_FIRST_WEEKDAY
+        debug("Using _NL_TIME_FIRST_WEEKDAY for system first of week");
+        
         // 1-based day (1 == Sunday)
         int first_weekday = Langinfo.lookup_int(Langinfo.Item.INT_TIME_FIRST_WEEKDAY);
         
@@ -290,6 +292,8 @@ public class System : BaseObject {
             break;
         }
 #else
+        debug("_NL_TIME_FIRST_WEEKDAY unavailable for system first of week");
+        
         // For now, just use the default.  Later, user will be able to configure this.
         system_first_of_week = FirstOfWeek.DEFAULT;
 #endif

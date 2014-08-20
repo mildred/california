@@ -18,8 +18,16 @@ californiadoc_DATA = \
 	NEWS\
 	$(NULL)
 
+BUILD_VAPI = \
+	vapi/libical.vapi \
+	vapi/libecal-1.2.vapi \
+	vapi/libecal-1.2/libecal-1.2.deps \
+	vapi/langinfo.vapi \
+	$(NULL)
+
 EXTRA_DIST = \
 	$(californiadoc_DATA) \
+	$(BUILD_VAPI) \
 	intltool-extract.in \
 	intltool-merge.in \
 	intltool-update.in\

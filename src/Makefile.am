@@ -8,6 +8,10 @@ AM_CPPFLAGS = \
 
 bin_PROGRAMS = california
 
+# This ensures that all ./configure switches and detected configuration variances are accounted for
+# when compiling the Vala files.  However, this also means Vala is required to build California.
+california_vala.stamp: ../config.status
+
 california_VALASOURCES = \
 	activator/activator.vala \
 	activator/activator-instance.vala \
