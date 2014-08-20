@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-07-13 09:02+0000\n"
-"PO-Revision-Date: 2014-07-13 11:11+0200\n"
+"POT-Creation-Date: 2014-08-19 19:38+0000\n"
+"PO-Revision-Date: 2014-08-20 17:36+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -91,39 +91,53 @@ msgstr "Webový kalendář (.ics)"
 msgid "Google Calendar"
 msgstr "Kalendář Google"
 
-#: ../src/activator/google/activator-google-authenticating-pane.vala:97
+#: ../src/activator/activator.vala:38
+msgid "CalDAV"
+msgstr "CalDAV"
+
+#: ../src/activator/generic/generic-subscribe.vala:97
+#, c-format
+msgid "Unable to subscribe to calendar at %s: %s"
+msgstr "Nelze se přihlásit ke kalendáři na %s: %s"
+
+#: ../src/activator/google/google-authenticating-pane.vala:89
+#: ../src/rc/google-authenticating.ui.h:3
+msgid "Authenticating…"
+msgstr "Ověřuje se…"
+
+#: ../src/activator/google/google-authenticating-pane.vala:97
 msgid "Unable to authenticate with Google Calendar service"
 msgstr "Nelze ověřit vůči službě Kalendář Google"
 
-#: ../src/activator/google/activator-google-authenticating-pane.vala:105
+#: ../src/activator/google/google-authenticating-pane.vala:105
 msgid "Unable to authenticate: Incorrect account name or password"
 msgstr "Nelze ověřit: Nesprávný název účtu nebo heslo"
 
-#: ../src/activator/google/activator-google-authenticating-pane.vala:107
+#: ../src/activator/google/google-authenticating-pane.vala:107
 #, c-format
 msgid "Unable to authenticate: %s"
 msgstr "Nelze ověřit: %s"
 
-#: ../src/activator/google/activator-google-authenticating-pane.vala:125
+#: ../src/activator/google/google-authenticating-pane.vala:125
 #, c-format
 msgid "Unable to retrieve calendar list: %s"
 msgstr "Nelze získat seznam kalendářů: %s"
 
-#: ../src/activator/google/activator-google-authenticating-pane.vala:134
+#: ../src/activator/google/google-authenticating-pane.vala:131
 msgid "Authenticated"
 msgstr "Ověřeno"
 
-#: ../src/activator/google/activator-google-calendar-list-pane.vala:65
+#: ../src/activator/google/google-calendar-list-pane.vala:65
 msgid "None"
 msgstr "Žádný"
 
-#: ../src/activator/google/activator-google-calendar-list-pane.vala:158
+#: ../src/activator/google/google-calendar-list-pane.vala:158
 #, c-format
 msgid "Bad Google URI \"%s\""
 msgstr "Chybná adresa URI „%s“ pro Google"
 
-#: ../src/activator/google/activator-google-calendar-list-pane.vala:166
-#: ../src/activator/google/activator-google-calendar-list-pane.vala:188
+#: ../src/activator/google/google-calendar-list-pane.vala:166
+#: ../src/activator/google/google-calendar-list-pane.vala:188
 #, c-format
 msgid "Unable to subscribe to %s: %s"
 msgstr "Nelze se přihlásit k %s: %s"
@@ -136,19 +150,19 @@ msgstr "Copyright 2014 Yorba Foundation"
 msgid "Visit California's home page"
 msgstr "Navštívit domovskou stránku California"
 
-#: ../src/application/california-application.vala:168
+#: ../src/application/california-application.vala:165
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "Nelze otevřít aplikaci California: %s"
 
-#: ../src/application/california-application.vala:271
+#: ../src/application/california-application.vala:264
 #, c-format
 msgid "About %s"
 msgstr "O aplikaci %s"
 
 #. Translators: add your name and email address to receive credit in the About dialog
 #. For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:277
+#: ../src/application/california-application.vala:270
 msgid "translator-credits"
 msgstr "Marek Černocký <marek@manet.cz>"
 
@@ -169,85 +183,126 @@ msgstr "Problémy a požadavky oznamujte prosím na:"
 msgid "Unknown options: %s\n"
 msgstr "Neznámé volby: %s\n"
 
-#: ../src/calendar/calendar-date.vala:350
+#. Prints a span of dates, i.e. "Monday, January 3 to Thursday, January 6"
+#. A span of time, i.e. "3:30pm to 4:30pm"
+#. date formatting: "<Start Date> to <End Date>"
+#: ../src/calendar/calendar-date-span.vala:95
+#: ../src/calendar/calendar-exact-time-span.vala:127
+#: ../src/view/week/week-controller.vala:172
+#, c-format
+msgid "%s to %s"
+msgstr "%s až %s"
+
+#: ../src/calendar/calendar-date.vala:352
 msgid "Today"
 msgstr "Dnes"
 
+#. Multi-day timed event, print "<full time>, <full date>" on both lines,
+#. including year if either not current year
+#. Prints two full time and date strings on separate lines, i.e.:
+#. 12 January 2012, 3:30pm
+#. 13 January 2013, 6:30am
+#: ../src/calendar/calendar-exact-time-span.vala:142
+#, c-format
+msgid ""
+"%s, %s\n"
+"%s, %s"
+msgstr ""
+"%s, %s\n"
+"%s, %s"
+
+#. Prints full time and date strings on a single line, i.e.:
+#. 12 January 2012, 3:30pm to 13 January 2013, 6:30am
+#: ../src/calendar/calendar-exact-time-span.vala:151
+#, c-format
+msgid "%s, %s to %s, %s"
+msgstr "%s, %s až %s, %s"
+
 #. The month and year according to locale preferences, i.e. "March 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:113
+#: ../src/calendar/calendar.vala:114
+#, no-c-format
 msgid "%B %Y"
 msgstr "%B %Y"
 
 #. The abbreviated month and year according to locale preferences, i.e. "Mar 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:117
+#: ../src/calendar/calendar.vala:119
+#, no-c-format
 msgid "%b %Y"
 msgstr "%b %Y"
 
 #. A "pretty" date according to locale preferences, i.e. "Monday, March 10, 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:121
+#: ../src/calendar/calendar.vala:124
+#, no-c-format
 msgid "%A, %B %e, %Y"
 msgstr "%A, %e. %B %Y"
 
 #. A "pretty" date with no year according to locale preferences, i.e. "Monday, March 10"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:125
+#: ../src/calendar/calendar.vala:129
+#, no-c-format
 msgid "%A, %B %e"
 msgstr "%A, %e. %B"
 
 #. A "pretty" date abbreviated according to locale preferences, i.e. "Mon, Mar 10, 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:129
+#: ../src/calendar/calendar.vala:134
+#, no-c-format
 msgid "%a, %b %e, %Y"
 msgstr "%a, %e. %b %Y"
 
 #. A "pretty" date abbreviated and no year according to locale preferences, i.e.
 #. "Mon, Mar 10"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:134
+#: ../src/calendar/calendar.vala:140
+#, no-c-format
 msgid "%a, %b %e"
 msgstr "%a, %e. %b"
 
 #. A "pretty" date with no day of week according to locale preferences, i.e. "March 10, 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:138
+#: ../src/calendar/calendar.vala:145
+#, no-c-format
 msgid "%B %e, %Y"
 msgstr "%e. %B %Y"
 
 #. A "pretty" date abbreviated with no day of week according to locale preferences,
 #. i.e. "Mar 10, 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:143
+#: ../src/calendar/calendar.vala:151
+#, no-c-format
 msgid "%b %e, %Y"
 msgstr "%e. %b %Y"
 
 #. A "pretty" date with no day of week or year according to locale preferences, i.e. "March 10"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:147
+#: ../src/calendar/calendar.vala:156
+#, no-c-format
 msgid "%B %e"
 msgstr "%e. %B"
 
 #. A "pretty" date abbreviated with no day of week or year according to locale preferences,
 #. i.e. "Mar 10"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:152
+#: ../src/calendar/calendar.vala:162
+#, no-c-format
 msgid "%b %e"
 msgstr "%e. %b"
 
 #. A "pretty" date compacted according to locale preferences, i.e. "Mon 3/10/2014"
 #. Leading zeroes will be stripped.
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:157
-#, c-format
+#: ../src/calendar/calendar.vala:168
+#, no-c-format
 msgid "%a %x"
 msgstr "%a %x"
 
 #. A "pretty" date abbreviated and no year according to locale preferences, i.e. "Mon 3/10"
 #. Leading zeroes will be stripped.
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:162
+#: ../src/calendar/calendar.vala:174
 #, no-c-format
 msgid "%a %m/%d"
 msgstr "%a %e.%m."
@@ -256,7 +311,7 @@ msgstr "%a %e.%m."
 #. i.e. "3/10"
 #. Leading zeroes will be stripped.
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:168
+#: ../src/calendar/calendar.vala:181
 #, no-c-format
 msgid "%m/%d"
 msgstr "%e.%m."
@@ -264,35 +319,35 @@ msgstr "%e.%m."
 #. Ante meridiem
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
-#: ../src/calendar/calendar.vala:173
+#: ../src/calendar/calendar.vala:186
 msgid "am"
 msgstr "dop."
 
 #. Brief ante meridiem, i.e. "am" -> "a"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
-#: ../src/calendar/calendar.vala:178
+#: ../src/calendar/calendar.vala:191
 msgid "a"
 msgstr "d."
 
 #. Post meridiem
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
-#: ../src/calendar/calendar.vala:183
+#: ../src/calendar/calendar.vala:196
 msgid "pm"
 msgstr "odp."
 
 #. Brief post meridiem, i.e. "pm" -> "p"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
-#: ../src/calendar/calendar.vala:188
+#: ../src/calendar/calendar.vala:201
 msgid "p"
 msgstr "o."
 
 #. The 12-hour time with minute and meridiem ("am" or "pm"), i.e. "5:06pm"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
-#: ../src/calendar/calendar.vala:193
+#: ../src/calendar/calendar.vala:206
 #, c-format
 msgid "%d:%02d%s"
 msgstr "%d∶%02d %s"
@@ -300,32 +355,32 @@ msgstr "%d∶%02d %s"
 #. The 12-hour time with minute, seconds, and meridiem ("am" or "pm"), i.e. "5:06:31pm"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
-#: ../src/calendar/calendar.vala:198
+#: ../src/calendar/calendar.vala:211
 #, c-format
 msgid "%d:%02d:%02d%s"
 msgstr "%d∶%02d∶%02d %s"
 
 #. The 24-hour time with minutes, i.e. "17:06"
-#: ../src/calendar/calendar.vala:201
+#: ../src/calendar/calendar.vala:214
 #, c-format
 msgid "%02d:%02d"
 msgstr "%d∶%02d"
 
 #. The 24-hour time with minutes and seconds, i.e. "17:06:31"
-#: ../src/calendar/calendar.vala:204
+#: ../src/calendar/calendar.vala:217
 #, c-format
 msgid "%02d:%02d:%02d"
 msgstr "%d∶%02d∶%02d"
 
 #. Used by quick-add to indicate the user wants to create an event at midnight.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/calendar/calendar.vala:214
+#: ../src/calendar/calendar.vala:227
 msgid "midnight"
 msgstr "půlnoc;půlnoci;"
 
 #. Used by quick-add to indicate the user wants to create an event at noon.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/calendar/calendar.vala:218
+#: ../src/calendar/calendar.vala:231
 msgid "noon"
 msgstr "poledne;poledni;"
 
@@ -501,32 +556,87 @@ msgstr "v;na;u;"
 msgid "st;nd;rd;th"
 msgstr ".;"
 
-#: ../src/host/host-create-update-event.vala:192 ../src/rc/show-event.ui.h:9
-msgid "_Update"
-msgstr "Akt_ualizovat"
+#: ../src/host/host-create-update-event.vala:64
+#: ../src/host/host-create-update-event.vala:67
+#: ../src/host/host-show-event.vala:66 ../src/rc/activator-list.ui.h:1
+#: ../src/rc/calendar-import.ui.h:1 ../src/rc/create-update-recurring.ui.h:24
+#: ../src/rc/event-time-settings.ui.h:4 ../src/rc/generic-subscribe.ui.h:5
+#: ../src/rc/google-authenticating.ui.h:1
+#: ../src/rc/google-calendar-list.ui.h:2 ../src/rc/google-login.ui.h:1
+msgid "_Cancel"
+msgstr "_Zrušit"
 
-#: ../src/host/host-create-update-event.vala:192
-#: ../src/rc/create-update-event.ui.h:10
+#: ../src/host/host-create-update-event.vala:65
+msgid "Save A_ll Events"
+msgstr "U_ložit všechny události"
+
+#: ../src/host/host-create-update-event.vala:66
+msgid "Save _This Event"
+msgstr "Uložit _tuto událost"
+
+#: ../src/host/host-create-update-event.vala:166
+msgid "_Save"
+msgstr "_Uložit"
+
+#: ../src/host/host-create-update-event.vala:166
 msgid "C_reate"
 msgstr "_Vytvořit"
 
-#: ../src/host/host-create-update-event.vala:273
+#: ../src/host/host-create-update-event.vala:280
+#: ../src/host/host-quick-create-event.vala:155
 msgid "Unable to create event: calendar must be specified"
 msgstr "Nelze vytvořit událost: musí být určen kalendář"
 
-#: ../src/host/host-create-update-event.vala:292
+#: ../src/host/host-create-update-event.vala:299
+#: ../src/host/host-quick-create-event.vala:174
 #, c-format
 msgid "Unable to create event: %s"
 msgstr "Nelze vytvořit událost: %s"
 
-#: ../src/host/host-create-update-event.vala:298
+#: ../src/host/host-create-update-event.vala:304
 msgid "Unable to update event: calendar must be specified"
 msgstr "Nelze aktualizovat událost: musí být určen kalendář"
 
-#: ../src/host/host-create-update-event.vala:317
+#: ../src/host/host-create-update-event.vala:349
+#: ../src/host/host-show-event.vala:218
 #, c-format
 msgid "Unable to update event: %s"
 msgstr "Nelze aktualizovat událost: %s"
+
+#: ../src/host/host-create-update-recurring.vala:401
+msgid "month"
+msgid_plural "months"
+msgstr[0] "měsíc"
+msgstr[1] "měsíce"
+msgstr[2] "měsíců"
+
+#: ../src/host/host-create-update-recurring.vala:405
+msgid "week"
+msgid_plural "weeks"
+msgstr[0] "týden"
+msgstr[1] "týdny"
+msgstr[2] "týdnů"
+
+#: ../src/host/host-create-update-recurring.vala:409
+msgid "year"
+msgid_plural "years"
+msgstr[0] "rok"
+msgstr[1] "roky"
+msgstr[2] "let"
+
+#: ../src/host/host-create-update-recurring.vala:414
+msgid "day"
+msgid_plural "days"
+msgstr[0] "den"
+msgstr[1] "dny"
+msgstr[2] "dní"
+
+#: ../src/host/host-create-update-recurring.vala:426
+msgid "event"
+msgid_plural "events"
+msgstr[0] "události"
+msgstr[1] "událostech"
+msgstr[2] "událostech"
 
 #: ../src/host/host-import-calendar.vala:33
 msgid "Select calendar to import event into:"
@@ -535,33 +645,61 @@ msgstr[0] "Vyberte kalednář pro import události:"
 msgstr[1] "Vyberte kalednář pro import událostí:"
 msgstr[2] "Vyberte kalednář pro import událostí:"
 
-#: ../src/host/host-main-window.vala:94
+#: ../src/host/host-main-window.vala:95
 msgid "_Today"
 msgstr "_Dnes"
 
-#: ../src/host/host-main-window.vala:158
+#: ../src/host/host-main-window.vala:162
 msgid "Jump to today's date (Ctrl+T)"
 msgstr "Přejít na dnešní datum (Ctrl+T)"
 
-#: ../src/host/host-main-window.vala:164
-msgid "Previous (Alt+Left)"
-msgstr "Předchozí (alt+←)"
-
-#: ../src/host/host-main-window.vala:170
-msgid "Next (Alt+Right)"
-msgstr "Následující (Alt+→)"
-
-#: ../src/host/host-main-window.vala:195
+#: ../src/host/host-main-window.vala:180
 msgid "Quick add event (Ctrl+N)"
 msgstr "Rychle přidat událost (Ctrl+N)"
 
-#: ../src/host/host-main-window.vala:201
+#: ../src/host/host-main-window.vala:186
 msgid "Calendars (Ctrl+L)"
 msgstr "Kalendáře (Ctrl+L)"
 
+#: ../src/host/host-quick-create-event.vala:76
+msgid "Example: Dinner at Tadich Grill 7:30pm"
+msgstr "Příklad: Večeře U mlsné kozy v 19:30"
+
+#: ../src/host/host-quick-create-event.vala:78
+msgid "Example: Dinner at Tadich Grill"
+msgstr "Příklad: Večeře U mlsné kozy"
+
+#: ../src/host/host-quick-create-event.vala:82
+msgid "Example: Dinner at Tadich Grill 7:30pm tomorrow"
+msgstr "Příklad: Večeře U mlsné kozy zítra v 19:30"
+
+#: ../src/host/host-show-event.vala:59 ../src/rc/calendar-manager-list.ui.h:1
+msgid "_Close"
+msgstr "_Zavřít"
+
+#: ../src/host/host-show-event.vala:60 ../src/rc/quick-create-event.ui.h:7
+msgid "_Edit"
+msgstr "_Upravit"
+
+#: ../src/host/host-show-event.vala:61
+msgid "_Delete"
+msgstr "O_dstranit"
+
+#: ../src/host/host-show-event.vala:62
+msgid "Delete A_ll Events"
+msgstr "Odstranit _všechny události"
+
+#: ../src/host/host-show-event.vala:63
+msgid "Delete _This Event"
+msgstr "Odstranit _tuto událost"
+
+#: ../src/host/host-show-event.vala:65
+msgid "Delete This and _Future Events"
+msgstr "Odstranit tuto a bu_doucí události"
+
 #. No number is supplied because the number of events removed is indefinite in certain
 #. situations ... plural text should simply be for "more than one"
-#: ../src/host/host-show-event.vala:209
+#: ../src/host/host-show-event.vala:249
 #, c-format
 msgid "Unable to remove event: %s"
 msgid_plural "Unable to remove events: %s"
@@ -583,161 +721,283 @@ msgstr "Měsíc"
 msgid "Week"
 msgstr "Týden"
 
-#. date formatting: "<Start Date> to <End Date>"
-#: ../src/view/week/week-controller.vala:172
-#, c-format
-msgid "%s to %s"
-msgstr "%s až %s"
-
-#: ../src/rc/activator-list.ui.h:1 ../src/rc/calendar-manager-list.ui.h:1
-#: ../src/rc/show-event.ui.h:10
-msgid "_Close"
-msgstr "_Zavřít"
-
 #: ../src/rc/activator-list.ui.h:2
 msgid "_Add"
 msgstr "Přid_at"
 
 #: ../src/rc/app-menu.interface.h:1
-msgid "_Add Calendar…"
-msgstr "Přid_at kalendář…"
-
-#: ../src/rc/app-menu.interface.h:2
 msgid "_Calendars"
 msgstr "Kalen_dáře"
 
-#: ../src/rc/app-menu.interface.h:3
+#: ../src/rc/app-menu.interface.h:2
 msgid "_About"
 msgstr "O _aplikaci"
 
-#: ../src/rc/app-menu.interface.h:4
+#: ../src/rc/app-menu.interface.h:3
 msgid "_Quit"
 msgstr "U_končit"
-
-#: ../src/rc/calendar-import.ui.h:1 ../src/rc/create-update-event.ui.h:9
-#: ../src/rc/google-authenticating.ui.h:1
-#: ../src/rc/google-calendar-list.ui.h:2 ../src/rc/google-login.ui.h:1
-#: ../src/rc/show-event.ui.h:7 ../src/rc/webcal-subscribe.ui.h:4
-msgid "_Cancel"
-msgstr "_Zrušit"
 
 #: ../src/rc/calendar-import.ui.h:2
 msgid "_Import"
 msgstr "_Importovat"
 
 #: ../src/rc/calendar-manager-list-item.ui.h:1
+#: ../src/rc/generic-subscribe.ui.h:3
 msgid "Calendar color"
 msgstr "Barva kalendáře"
+
+#: ../src/rc/calendar-manager-list-item.ui.h:2
+msgid "Calendar visibility"
+msgstr "Viditelnost kalendáře"
+
+#: ../src/rc/calendar-manager-list.ui.h:2
+msgid "Add calendar"
+msgstr "Přidat kalendář"
+
+#: ../src/rc/calendar-manager-list.ui.h:3
+msgid "Rename calendar"
+msgstr "Přejmenovat kalendář"
+
+#: ../src/rc/calendar-manager-list.ui.h:4
+msgid "Delete calendar"
+msgstr "Odstranit kalendář"
 
 #: ../src/rc/create-update-event.ui.h:1
 msgid "Untitled event"
 msgstr "Nepojmenovaná událost"
 
-#. As in "From <date> <time> to <date> <time>"
-#: ../src/rc/create-update-event.ui.h:3
-msgid "From"
-msgstr "Od"
+#: ../src/rc/create-update-event.ui.h:2
+msgid "Summary"
+msgstr "Souhrn"
 
-#. As in "From <date> <time> to <date> <time>"
+#: ../src/rc/create-update-event.ui.h:3
+msgid "Time"
+msgstr "Čas"
+
+#: ../src/rc/create-update-event.ui.h:4
+msgid "Re_peats…"
+msgstr "O_pakovat…"
+
 #: ../src/rc/create-update-event.ui.h:5
-msgid "to"
-msgstr "do"
+msgid "Set the start and end time"
+msgstr "Nastavit čas začátku a konce"
 
 #: ../src/rc/create-update-event.ui.h:6
-msgid "_All-day"
-msgstr "_Celodenní"
-
-#: ../src/rc/create-update-event.ui.h:7
 msgid "_Location"
 msgstr "_Místo"
 
-#: ../src/rc/create-update-event.ui.h:8
+#: ../src/rc/create-update-event.ui.h:7
 msgid "_Description"
 msgstr "_Popis"
+
+#: ../src/rc/create-update-event.ui.h:8 ../src/rc/quick-create-event.ui.h:4
+#: ../src/rc/show-event.ui.h:3
+msgid "Calendar"
+msgstr "Kalendář"
+
+#: ../src/rc/create-update-recurring.ui.h:1
+msgid "_Repeating event"
+msgstr "Opa_kující se událost"
+
+#: ../src/rc/create-update-recurring.ui.h:2
+msgid "Re_peats"
+msgstr "Opaku_je se"
+
+#: ../src/rc/create-update-recurring.ui.h:3
+msgid "_Every"
+msgstr "Kaž_dý"
+
+#: ../src/rc/create-update-recurring.ui.h:4
+msgid "En_ds"
+msgstr "Sk_ončit"
+
+#: ../src/rc/create-update-recurring.ui.h:5
+msgid "_Starts"
+msgstr "Z_ačít"
+
+#: ../src/rc/create-update-recurring.ui.h:6
+msgid "_On days"
+msgstr "V dn_y"
+
+#: ../src/rc/create-update-recurring.ui.h:7
+msgid "Daily"
+msgstr "denně"
+
+#: ../src/rc/create-update-recurring.ui.h:8
+msgid "Weekly"
+msgstr "týdně"
+
+#: ../src/rc/create-update-recurring.ui.h:9
+msgid "Day of the week"
+msgstr "v dny týdne"
+
+#: ../src/rc/create-update-recurring.ui.h:10
+msgid "Day of the month"
+msgstr "v dny měsíce"
+
+#: ../src/rc/create-update-recurring.ui.h:11
+msgid "Yearly"
+msgstr "ročně"
+
+#: ../src/rc/create-update-recurring.ui.h:12
+msgid "_Sun"
+msgstr "N_e"
+
+#: ../src/rc/create-update-recurring.ui.h:13
+msgid "_Mon"
+msgstr "P_o"
+
+#: ../src/rc/create-update-recurring.ui.h:14
+msgid "_Tues"
+msgstr "Ú_t"
+
+#: ../src/rc/create-update-recurring.ui.h:15
+msgid "_Wed"
+msgstr "_St"
+
+#: ../src/rc/create-update-recurring.ui.h:16
+msgid "T_hu"
+msgstr "Č_t"
+
+#: ../src/rc/create-update-recurring.ui.h:17
+msgid "_Fri"
+msgstr "_Pá"
+
+#: ../src/rc/create-update-recurring.ui.h:18
+msgid "S_at"
+msgstr "_So"
+
+#: ../src/rc/create-update-recurring.ui.h:19
+msgid "_Never"
+msgstr "N_ikdy"
+
+#. As in, an event "ends on" a date
+#: ../src/rc/create-update-recurring.ui.h:21
+msgid "_On"
+msgstr "_Dne"
+
+#. As in, "After n events"
+#: ../src/rc/create-update-recurring.ui.h:23
+msgid "Aft_er"
+msgstr "_Po"
+
+#: ../src/rc/create-update-recurring.ui.h:25
+#: ../src/rc/event-time-settings.ui.h:5
+msgid "_OK"
+msgstr "_Budiž"
+
+#: ../src/rc/create-update-recurring.ui.h:26
+msgid ""
+"WARNING: California cannot edit this event's recurring criteria.\n"
+"• Press Cancel to keep the current criteria.\n"
+"• Press OK to overwrite the existing criteria with your changes."
+msgstr ""
+"VAROVÁNÍ: California nemůže upravit kritéria opakování této události.\n"
+"• Zmáčknutím Zrušit zachováte současná kritéria.\n"
+"• Zmáčknutím Budiž přepíšete stávající kritéria svými změnami."
+
+#: ../src/rc/date-time-widget.ui.h:1
+msgid ":"
+msgstr "∶"
+
+#. As in "From 9pm to 10pm"
+#: ../src/rc/event-time-settings.ui.h:2
+msgid "to"
+msgstr "do"
+
+#: ../src/rc/event-time-settings.ui.h:3
+msgid "_All-day event"
+msgstr "K_aždodenní událost"
+
+#: ../src/rc/generic-subscribe.ui.h:1
+msgid "Calendar _name"
+msgstr "_Název kalendáře"
+
+#: ../src/rc/generic-subscribe.ui.h:2
+msgid "_URL"
+msgstr "Adresa _URL"
+
+#: ../src/rc/generic-subscribe.ui.h:4
+msgid "Select a color for the calendar"
+msgstr "Výběr barvy pro kalendář"
+
+#: ../src/rc/generic-subscribe.ui.h:6 ../src/rc/google-calendar-list.ui.h:3
+msgid "_Subscribe"
+msgstr "Přihlá_sit se"
+
+#: ../src/rc/generic-subscribe.ui.h:7
+msgid "User name"
+msgstr "Uživatelské jméno"
+
+#: ../src/rc/generic-subscribe.ui.h:8
+msgid ""
+"If supplied, your password will be requested when calendar is first accessed"
+msgstr ""
+"Pokud je potřeba, budete při prvním přístupu ke kalendáři dotázáni na heslo"
+
+#: ../src/rc/generic-subscribe.ui.h:9
+msgid "optional"
+msgstr "nepovinné"
 
 #: ../src/rc/google-authenticating.ui.h:2
 msgid "_Try again"
 msgstr "Zkusi_t znovu"
 
-#: ../src/rc/google-authenticating.ui.h:3
-msgid "Authenticating…"
-msgstr "Ověřuje se…"
-
 #: ../src/rc/google-calendar-list.ui.h:1
-msgid "My calendars:"
-msgstr "Moje kalendáře:"
-
-#: ../src/rc/google-calendar-list.ui.h:3 ../src/rc/webcal-subscribe.ui.h:5
-msgid "_Subscribe"
-msgstr "Přihlá_sit se"
+msgid "My calendars"
+msgstr "Moje kalendáře"
 
 #: ../src/rc/google-calendar-list.ui.h:4
-msgid "Other available calendars:"
-msgstr "Ostatní dostupné kalendáře:"
+msgid "Other available calendars"
+msgstr "Ostatní dostupné kalendáře"
 
 #: ../src/rc/google-login.ui.h:2
 msgid "_Login"
 msgstr "Přih_lásit"
 
 #: ../src/rc/google-login.ui.h:3
-msgid "Google _account name:"
-msgstr "Název účt_u Google:"
+msgid "Google _account name"
+msgstr "Název účt_u Google"
 
 #: ../src/rc/google-login.ui.h:4
-msgid "Google _password:"
-msgstr "_Heslo ke Googlu:"
+msgid "Google _password"
+msgstr "_Heslo ke Googlu"
+
+#: ../src/rc/main-window-title.ui.h:1
+msgid "Previous (Alt+Left)"
+msgstr "Předchozí (alt+←)"
+
+#: ../src/rc/main-window-title.ui.h:2
+msgid "Next (Alt+Right)"
+msgstr "Následující (Alt+→)"
 
 #: ../src/rc/quick-create-event.ui.h:1
-msgid "_Quick add event"
+msgid "_Quick Add Event"
 msgstr "_Rychle přidat událost"
 
-#: ../src/rc/quick-create-event.ui.h:2
+#: ../src/rc/quick-create-event.ui.h:2 ../src/rc/show-event.ui.h:1
+msgid "When"
+msgstr "Kdy:"
+
+#: ../src/rc/quick-create-event.ui.h:3
+msgid "What"
+msgstr "Co"
+
+#: ../src/rc/quick-create-event.ui.h:5
+msgid "_Help"
+msgstr "Nápo_věda"
+
+#: ../src/rc/quick-create-event.ui.h:6
 msgid "C_ancel"
 msgstr "_Zrušit"
 
-#: ../src/rc/quick-create-event.ui.h:3
+#: ../src/rc/quick-create-event.ui.h:8
 msgid "_Create"
 msgstr "_Vytvořit"
-
-#: ../src/rc/quick-create-event.ui.h:4 ../src/rc/show-event.ui.h:1
-msgid "When"
-msgstr "Kdy:"
 
 #: ../src/rc/show-event.ui.h:2
 msgid "Where"
 msgstr "Kde:"
-
-#: ../src/rc/show-event.ui.h:3
-msgid "Remove in this series:"
-msgstr "Odstranit z této řady:"
-
-#: ../src/rc/show-event.ui.h:4
-msgid "_This Event"
-msgstr "_Tuto událost"
-
-#: ../src/rc/show-event.ui.h:5
-msgid "This and _Future Events"
-msgstr "Tuto a bu_doucí události"
-
-#: ../src/rc/show-event.ui.h:6
-msgid "_All Events"
-msgstr "_Všechny události"
-
-#: ../src/rc/show-event.ui.h:8
-msgid "_Remove"
-msgstr "_Smazat"
-
-#: ../src/rc/webcal-subscribe.ui.h:1
-msgid "_Name:"
-msgstr "_Název:"
-
-#: ../src/rc/webcal-subscribe.ui.h:2
-msgid "_URL:"
-msgstr "Adresa _URL:"
-
-#: ../src/rc/webcal-subscribe.ui.h:3
-msgid "Select a color for the Web calendar"
-msgstr "Vybrat barvu pro webový kalendář"
 
 #: ../src/rc/window-menu.interface.h:1
 msgid "Zoom _In"
