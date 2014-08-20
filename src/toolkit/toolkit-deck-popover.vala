@@ -11,6 +11,10 @@ namespace California.Toolkit {
  */
 
 public class DeckPopover : Gtk.Popover {
+    // Set either to -1 for "natural" size of that dimension
+    private const int MIN_WIDTH = 400;
+    private const int MIN_HEIGHT = 175;
+    
     public Deck deck { get; private set; }
     
     /**
@@ -25,6 +29,7 @@ public class DeckPopover : Gtk.Popover {
         Object (relative_to: rel_to);
         
         preserve_mode = modal;
+        set_size_request(MIN_WIDTH, MIN_HEIGHT);
         
         // treat "closed" signal as dismissal by user request
         closed.connect(() => {
@@ -55,7 +60,7 @@ public class DeckPopover : Gtk.Popover {
         
         // store Deck in box so margin can be applied
         Gtk.Box box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-        box.margin = 4;
+        box.margin = 8;
         box.add(deck);
         
         add(box);
