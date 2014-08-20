@@ -24,7 +24,6 @@ public class RotatingButtonBox : Gtk.Stack {
     public const string PROP_FAMILY = "family";
     
     public Gtk.Orientation ORIENTATION = Gtk.Orientation.HORIZONTAL;
-    public Gtk.ButtonBoxStyle LAYOUT_STYLE = Gtk.ButtonBoxStyle.END;
     public int SPACING = 8;
     
     /**
@@ -32,7 +31,7 @@ public class RotatingButtonBox : Gtk.Stack {
      */
     public string? family { get; set; }
     
-    private Gee.HashMap<string, Gtk.ButtonBox> button_boxes = new Gee.HashMap<string, Gtk.ButtonBox>();
+    private Gee.HashMap<string, Gtk.Box> boxes = new Gee.HashMap<string, Gtk.Box>();
     private Gtk.Popover? parent_popover = null;
     private bool parent_popover_modal = false;
     
@@ -70,44 +69,51 @@ public class RotatingButtonBox : Gtk.Stack {
     }
     
     /**
-     * Pack a Gtk.Button at the start of a particular family, creating the family if necessary.
+     * Pack a Gtk.Widget at the start of a particular family, creating the family if necessary.
      *
      * See Gtk.Box.pack_start().
      */
-    public void pack_start(string family, Gtk.Widget widget) {
-        get_family_container(family).pack_start(widget);
+    public void pack_start(string family, Gtk.Widget widget, bool expand = true, bool fill = true,
+        int padding = 0) {
+        get_family_container(family).pack_start(widget, expand, fill, padding);
     }
     
     /**
-     * Pack a Gtk.Button at the end of a particular family, creating the family if necessary.
+     * Pack a Gtk.Widget at the end of a particular family, creating the family if necessary.
      *
      * See Gtk.Box.pack_end().
      */
-    public void pack_end(string family, Gtk.Widget widget) {
-        get_family_container(family).pack_end(widget);
+    public void pack_end(string family, Gtk.Widget widget, bool expand = true, bool fill = true,
+        int padding = 0) {
+        get_family_container(family).pack_end(widget, expand, fill, padding);
     }
     
     /**
-     * Direct access to the Gtk.ButtonBox holding the named family.
+     * Direct access to the Gtk.Box holding the named family.
      *
      * If the family doesn't exist, it will be created.
      */
-    public Gtk.ButtonBox get_family_container(string family) {
-        if (button_boxes.has_key(family))
-            return button_boxes.get(family);
+    public Gtk.Box get_family_container(string family) {
+        if (boxes.has_key(family))
+            return boxes.get(family);
         
-        // create new family of buttons
-        Gtk.ButtonBox button_box = new Gtk.ButtonBox(ORIENTATION);
-        button_box.layout_style = LAYOUT_STYLE;
-        button_box.spacing = SPACING;
+        // create new family ... this widget is currently hardcoded for boxes grouping
+        // their children at the horizontal end, more work would need to be done to make
+        // this a general purpose widget
+        Gtk.Box box = new Gtk.ButtonBox(ORIENTATION);
+        box.expand = true;
+        box.halign = Gtk.Align.END;
+        box.valign = Gtk.Align.END;
+        box.spacing = SPACING;
+        box.homogeneous = false;
         
         // add to internal lookup
-        button_boxes.set(family, button_box);
+        boxes.set(family, box);
         
         // add to Gtk.Stack using the family name
-        add_named(button_box, family);
+        add_named(box, family);
         
-        return button_box;
+        return box;
     }
     
     /**
@@ -117,14 +123,14 @@ public class RotatingButtonBox : Gtk.Stack {
      * widget heirarchy.  This is useful for sizing purposes.
      */
     public void show_hide_family(string family, bool show) {
-        if (!button_boxes.has_key(family))
+        if (!boxes.has_key(family))
             return;
         
-        Gtk.ButtonBox button_box = button_boxes.get(family);
+        Gtk.Box box = boxes.get(family);
         
         bool shown = false;
-        foreach (Gtk.Widget widget in  get_children()) {
-            if (widget == button_box) {
+        foreach (Gtk.Widget widget in get_children()) {
+            if (widget == box) {
                 shown = true;
                 
                 break;
@@ -132,9 +138,9 @@ public class RotatingButtonBox : Gtk.Stack {
         }
         
         if (show && !shown)
-            add_named(button_box, family);
+            add_named(box, family);
         else if (!show && shown)
-            remove(button_box);
+            remove(box);
     }
 }
 

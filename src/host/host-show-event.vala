@@ -61,8 +61,12 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     
     private Toolkit.RotatingButtonBox rotating_button_box = new Toolkit.RotatingButtonBox();
     
-    private Gtk.Button update_button = new Gtk.Button.with_mnemonic(_("_Edit"));
-    private Gtk.Button remove_button = new Gtk.Button.with_mnemonic(_("_Delete"));
+    private Gtk.Box action_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+    private Gtk.Button update_button = new Gtk.Button.from_icon_name("accessories-text-editor-symbolic",
+        Gtk.IconSize.BUTTON);
+    private Gtk.Button remove_button = new Gtk.Button.from_icon_name("list-remove-symbolic",
+        Gtk.IconSize.BUTTON);
+    
     private Gtk.Label delete_label = new Gtk.Label(_("Delete"));
     private Gtk.Button remove_all_button = new Gtk.Button.with_mnemonic(_("A_ll Events"));
     private Gtk.Button remove_this_button = new Gtk.Button.with_mnemonic(_("_This Event"));
@@ -73,6 +77,14 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     public ShowEvent() {
         Calendar.System.instance.is_24hr_changed.connect(build_display);
         Calendar.System.instance.today_changed.connect(build_display);
+        
+        update_button.tooltip_text = _("Edit event");
+        remove_button.tooltip_text = _("Delete event");
+        
+        action_box.pack_end(update_button, false, false);
+        action_box.pack_end(remove_button, false, false);
+        action_box.get_style_context().add_class(Gtk.STYLE_CLASS_LINKED);
+        action_box.get_style_context().add_class(Gtk.STYLE_CLASS_RAISED);
         
         remove_button.get_style_context().add_class("destructive-action");
         remove_this_button.get_style_context().add_class("destructive-action");
@@ -86,8 +98,7 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         remove_this_future_button.clicked.connect(on_remove_future_button_clicked);
         cancel_remove_button.clicked.connect(on_cancel_remove_recurring_button_clicked);
         
-        rotating_button_box.pack_end(FAMILY_NORMAL, remove_button);
-        rotating_button_box.pack_end(FAMILY_NORMAL, update_button);
+        rotating_button_box.pack_end(FAMILY_NORMAL, action_box, false, true);
         
         delete_label.xalign = 1.0f;
         delete_label.get_style_context().add_class(Gtk.STYLE_CLASS_DIM_LABEL);
@@ -99,8 +110,7 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         
         rotating_button_box.get_family_container(FAMILY_REMOVING).homogeneous = false;
         
-        rotating_button_box.expand = true;
-        rotating_button_box.halign = Gtk.Align.FILL;
+        rotating_button_box.vexpand = true;
         rotating_button_box.valign = Gtk.Align.END;
         rotating_button_box_container.add(rotating_button_box);
     }
