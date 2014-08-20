@@ -25,6 +25,8 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     
     public Gtk.Widget? initial_focus { get { return close_button; } }
     
+    public bool edit_requested { get; private set; default = false; }
+    
     [GtkChild]
     private Gtk.Label summary_text;
     
@@ -47,6 +49,9 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     private Gtk.Label calendar_text;
     
     [GtkChild]
+    private Gtk.ScrolledWindow description_text_window;
+    
+    [GtkChild]
     private Gtk.Label description_text;
     
     [GtkChild]
@@ -59,10 +64,11 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     private Gtk.Button close_button = new Gtk.Button.with_mnemonic(_("_Close"));
     private Gtk.Button update_button = new Gtk.Button.with_mnemonic(_("_Edit"));
     private Gtk.Button remove_button = new Gtk.Button.with_mnemonic(_("_Delete"));
-    private Gtk.Button remove_all_button = new Gtk.Button.with_mnemonic(_("Delete A_ll Events"));
-    private Gtk.Button remove_this_button = new Gtk.Button.with_mnemonic(_("Delete _This Event"));
+    private Gtk.Label delete_label = new Gtk.Label(_("Delete"));
+    private Gtk.Button remove_all_button = new Gtk.Button.with_mnemonic(_("A_ll Events"));
+    private Gtk.Button remove_this_button = new Gtk.Button.with_mnemonic(_("_This Event"));
     private Gtk.Button remove_this_future_button = new Gtk.Button.with_mnemonic(
-        _("Delete This and _Future Events"));
+        _("This & _Future Events"));
     private Gtk.Button cancel_remove_button = new Gtk.Button.with_mnemonic(_("_Cancel"));
     
     public ShowEvent() {
@@ -89,10 +95,15 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         rotating_button_box.pack_end(FAMILY_NORMAL, update_button);
         rotating_button_box.pack_end(FAMILY_NORMAL, close_button);
         
+        delete_label.xalign = 1.0f;
+        delete_label.get_style_context().add_class(Gtk.STYLE_CLASS_DIM_LABEL);
+        rotating_button_box.pack_start(FAMILY_REMOVING, delete_label);
         rotating_button_box.pack_end(FAMILY_REMOVING, remove_this_button);
         rotating_button_box.pack_end(FAMILY_REMOVING, remove_this_future_button);
         rotating_button_box.pack_end(FAMILY_REMOVING, remove_all_button);
         rotating_button_box.pack_end(FAMILY_REMOVING, cancel_remove_button);
+        
+        rotating_button_box.get_family_container(FAMILY_REMOVING).homogeneous = false;
         
         rotating_button_box.expand = true;
         rotating_button_box.halign = Gtk.Align.FILL;
@@ -112,6 +123,13 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         
         event = message as Component.Event;
         assert(event != null);
+        
+        description_text.bind_property("visible", description_text_window, "visible",
+            BindingFlags.SYNC_CREATE);
+        description_text.bind_property("no-show-all", description_text_window, "no-show-all",
+            BindingFlags.SYNC_CREATE);
+        
+        rotating_button_box.show_hide_family(FAMILY_REMOVING, event.is_generated_instance);
         
         build_display();
     }
@@ -182,9 +200,6 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     private void on_remove_button_clicked() {
         // If recurring (and so this is a generated instance of the VEVENT, not the VEVENT itself),
         // reveal additional remove buttons
-        //
-        // TODO: Gtk.Stack would be a better widget for this animation, but it's unavailable in
-        // Glade as of GTK+ 3.12.
         if (event.is_generated_instance) {
             rotating_button_box.family = FAMILY_REMOVING;
             
@@ -211,12 +226,9 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     }
     
     private void on_update_button_clicked() {
-        // pass a clone of the existing event for editing
-        try {
-            jump_to_card_by_name(CreateUpdateEvent.ID, event.clone() as Component.Event);
-        } catch (Error err) {
-            notify_failure(_("Unable to update event: %s").printf(err.message));
-        }
+        edit_requested = true;
+        
+        notify_user_closed();
     }
     
     private void on_close_button_clicked() {

@@ -83,6 +83,8 @@ public class MainWindow : Gtk.ApplicationWindow {
         { ACTION_RESET_FONT, on_reset_font }
     };
     
+    public Gtk.Button calendar_button { get; private set; }
+    
     private Gtk.Button quick_add_button;
     private View.Palette palette;
     private View.Controllable month_view;
@@ -171,7 +173,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         view_switcher.get_style_context().add_class(Gtk.STYLE_CLASS_LINKED);
         view_switcher.get_style_context().add_class(Gtk.STYLE_CLASS_RAISED);
         
-        // pack left-side of window
+        // pack left-side of header bar
         headerbar.pack_start(today);
         headerbar.pack_start(view_switcher);
         
@@ -180,11 +182,11 @@ public class MainWindow : Gtk.ApplicationWindow {
         quick_add_button.tooltip_text = _("Quick add event (Ctrl+N)");
         quick_add_button.set_action_name(DETAILED_ACTION_QUICK_CREATE_EVENT);
         
-        Gtk.Button calendars = new Gtk.Button.from_icon_name("x-office-calendar-symbolic",
+        calendar_button = new Gtk.Button.from_icon_name("x-office-calendar-symbolic",
             Gtk.IconSize.MENU);
-        calendars.valign = Gtk.Align.CENTER;
-        calendars.tooltip_text = _("Calendars (Ctrl+L)");
-        calendars.set_action_name(Application.DETAILED_ACTION_CALENDAR_MANAGER);
+        calendar_button.valign = Gtk.Align.CENTER;
+        calendar_button.tooltip_text = _("Calendars (Ctrl+L)");
+        calendar_button.set_action_name(Application.DETAILED_ACTION_CALENDAR_MANAGER);
         
         Gtk.MenuButton window_menu = new Gtk.MenuButton();
         window_menu.valign = Gtk.Align.CENTER;
@@ -199,20 +201,13 @@ public class MainWindow : Gtk.ApplicationWindow {
         size.add_widget(custom_title.next_button);
         size.add_widget(custom_title.prev_button);
         size.add_widget(quick_add_button);
-        size.add_widget(calendars);
+        size.add_widget(calendar_button);
         size.add_widget(window_menu);
         
-        // pack right-side of window ... note that this was fixed in 3.12, reversing the order of
-        // how widgets need to be packed at the end
-#if GTK_312
+        // pack right-side of header bar
         headerbar.pack_end(window_menu);
-        headerbar.pack_end(calendars);
+        headerbar.pack_end(calendar_button);
         headerbar.pack_end(quick_add_button);
-#else
-        headerbar.pack_end(quick_add_button);
-        headerbar.pack_end(calendars);
-        headerbar.pack_end(window_menu);
-#endif
         
         Gtk.Box layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         // if on Unity, since headerbar is not the titlebar, need to pack it like any other widget
@@ -323,7 +318,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         }
     }
     
-    private void show_deck(Gtk.Widget relative_to, Gdk.Point? for_location, Toolkit.Deck deck) {
+    private void show_deck_window(Toolkit.Deck deck) {
         Toolkit.DeckWindow deck_window = new Toolkit.DeckWindow(this, deck);
         
         // when the dialog closes, reset View.Controllable state (selection is maintained while
@@ -345,8 +340,34 @@ public class MainWindow : Gtk.ApplicationWindow {
         deck_window.destroy();
     }
     
+    private void show_deck_popover(Gtk.Widget relative_to, Gdk.Point? for_location, Toolkit.Deck deck) {
+        Toolkit.DeckPopover deck_popover = new Toolkit.DeckPopover(relative_to, for_location, deck);
+        
+        // when the popover closes, reset View.Controllable state (selection is maintained while
+        // use is viewing/editing interaction) and destroy widgets
+        deck_popover.dismiss.connect(() => {
+            current_controller.unselect_all();
+            Toolkit.destroy_later(deck_popover);
+        });
+        
+        deck_popover.deck.failure.connect((msg) => {
+            Application.instance.error_message(msg);
+        });
+        
+        deck_popover.show_all();
+    }
+    
     private void on_quick_create_event() {
-        quick_create_event(null, quick_add_button, null);
+        // switch to Today and execute Quick Add when transition is complete
+        current_controller.today();
+        current_controller.execute_when_not_transitioning(do_quick_create_event);
+    }
+    
+    private void do_quick_create_event(View.Controllable controller) {
+        Gtk.Widget? today_widget = controller.get_widget_for_date(Calendar.System.today);
+        assert(today_widget != null);
+        
+        on_request_create_all_day_event(Calendar.System.today.to_date_span(), today_widget, null);
     }
     
     private void on_jump_to_today() {
@@ -415,29 +436,58 @@ public class MainWindow : Gtk.ApplicationWindow {
     private void quick_create_event(Component.Event? initial, Gtk.Widget relative_to, Gdk.Point? for_location) {
         QuickCreateEvent quick_create = new QuickCreateEvent();
         
-        CreateUpdateEvent create_update = new CreateUpdateEvent();
-        create_update.is_update = false;
-        
-        CreateUpdateRecurring create_update_recurring = new CreateUpdateRecurring();
-        
-        EventTimeSettings event_time_settings = new EventTimeSettings();
-        
         Toolkit.Deck deck = new Toolkit.Deck();
-        deck.add_cards(
-            iterate<Toolkit.Card>(quick_create, create_update, create_update_recurring, event_time_settings)
-            .to_array_list()
-        );
+        deck.add_cards(iterate<Toolkit.Card>(quick_create).to_array_list());
         
-        // initialize the Deck with the initial event (if any)
         deck.go_home(initial);
         
-        show_deck(relative_to, for_location, deck);
+        deck.dismiss.connect(() => {
+            if (quick_create.edit_required)
+                edit_event(quick_create.event);
+        });
+        
+        show_deck_popover(relative_to, for_location, deck);
     }
     
     private void on_request_display_event(Component.Event event, Gtk.Widget relative_to,
         Gdk.Point? for_location) {
         ShowEvent show_event = new ShowEvent();
         
+        Toolkit.Deck deck = new Toolkit.Deck();
+        deck.add_cards(iterate<Toolkit.Card>(show_event).to_array_list());
+        
+        deck.go_home(event);
+        
+        deck.dismiss.connect(() => {
+            if (!show_event.edit_requested)
+                return;
+                
+            // pass a clone of the existing event for editing
+            Component.Event clone;
+            try {
+                clone = event.clone() as Component.Event;
+            } catch (Error err) {
+                Application.instance.error_message(_("Unable to edit event: %s").printf(err.message));
+                
+                return;
+            }
+            
+            edit_event(clone);
+        });
+        
+        show_deck_popover(relative_to, for_location, deck);
+    }
+    
+    private void edit_event(Component.Event event) {
+        // use Idle loop so popovers have a chance to hide before bringing up DeckWindow
+        Idle.add(() => {
+            on_edit_event(event);
+            
+            return false;
+        }, Priority.LOW + 100);
+    }
+    
+    private void on_edit_event(Component.Event event) {
         CreateUpdateEvent create_update = new CreateUpdateEvent();
         create_update.is_update = true;
         
@@ -447,14 +497,14 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         Toolkit.Deck deck = new Toolkit.Deck();
         deck.add_cards(
-            iterate<Toolkit.Card>(show_event, create_update, create_update_recurring, event_time_settings)
+            iterate<Toolkit.Card>(create_update, create_update_recurring, event_time_settings)
             .to_array_list()
         );
         
-        // "initialize" the Deck with the requested Event (because ShowEvent is first, it's home)
+        // "initialize" the Deck with the requested Event
         deck.go_home(event);
         
-        show_deck(relative_to, for_location, deck);
+        show_deck_window(deck);
     }
 }
 

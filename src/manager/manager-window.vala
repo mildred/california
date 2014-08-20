@@ -11,31 +11,21 @@ namespace California.Manager {
  */
 
 public class Window : Toolkit.DeckWindow {
-    private static Manager.Window? instance = null;
-    
     private CalendarList calendar_list = new CalendarList();
     
-    private Window(Gtk.Window? parent) {
-        base (parent, null);
+    private Window(Gtk.Window? window) {
+        base (window, null);
         
         deck.add_cards(iterate<Toolkit.Card>(calendar_list).to_array_list());
         Activator.prepare_deck(deck, null);
     }
     
-    public static void display(Gtk.Window? parent) {
-        // only allow one instance at a time
-        if (instance != null) {
-            instance.present_with_time(Gdk.CURRENT_TIME);
-            
-            return;
-        }
+    public static void display(Gtk.Window? window) {
+        Manager.Window instance = new Manager.Window(window);
         
-        instance = new Manager.Window(parent);
         instance.show_all();
         instance.run();
         instance.destroy();
-        
-        instance = null;
     }
     
     public override bool key_release_event(Gdk.EventKey event) {

@@ -7,13 +7,11 @@
 namespace California.Toolkit {
 
 /**
- * A GtkDialog with no visible action area.
+ * A GtkDialog with no visible action area that holds {@link Deck}s.
  *
  * This is designed for UI panes that want to control their own interaction with the user (in
  * particular, button placement) but need all the benefits interaction-wise of GtkDialog.
  *
- * It's expected this will go away when we move to GTK+ 3.12 and can use GtkPopovers for these
- * interactions.
  */
 
 public class DeckWindow : Gtk.Dialog {

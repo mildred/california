@@ -16,6 +16,8 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
     
     public new Component.Event? event { get; private set; default = null; }
     
+    public bool edit_required { get; private set; default = false; }
+    
     public Gtk.Widget? default_widget { get { return create_button; } }
     
     public Gtk.Widget? initial_focus { get { return details_entry; } }
@@ -143,11 +145,9 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
         if (!event.is_valid(false))
             event.set_event_date_span(Calendar.System.today.to_date_span());
         
-        // jump to Create/Update dialog and remove this Card from the Deck ... this ensures
-        // that if the user presses Cancel in the Create/Update dialog the Deck exits rather
-        // than returns here (via jump_home_or_user_closed())
-        jump_to_card_by_name(CreateUpdateEvent.ID, event);
-        deck.remove_cards(iterate<Toolkit.Card>(this).to_array_list());
+        edit_required = true;
+        
+        notify_user_closed();
     }
     
     private async void create_event_async(Cancellable? cancellable) {

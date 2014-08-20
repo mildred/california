@@ -118,11 +118,7 @@ public class DateTimeWidget : Gtk.Box {
         Calendar.System.instance.is_24hr_changed.connect(system_24hr_changed);
         system_24hr_changed();
         
-        // GTK 3.12 requires this in order to constrain GtkEntry width, older versions were happy
-        // with width_chars alone
-#if GTK_312
         hour_entry.max_width_chars = minutes_entry.max_width_chars = 2;
-#endif
     }
     
     ~DateTimeWidget() {

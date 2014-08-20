@@ -66,6 +66,11 @@ public class Controller : BaseObject, View.Controllable {
     public Calendar.Date default_date { get; protected set; }
     
     /**
+     * @inheritDoc
+     */
+    public bool in_transition { get; protected set; }
+    
+    /**
      * {@link View.Palette} for the entire view.
      */
     public View.Palette palette { get; private set; }
@@ -91,6 +96,8 @@ public class Controller : BaseObject, View.Controllable {
         stack_model = new Toolkit.StackModel<Calendar.MonthOfYear>(stack,
             Toolkit.StackModel.OrderedTransitionType.SLIDE_LEFT_RIGHT, model_presentation,
             trim_presentation_from_cache, ensure_presentation_in_cache);
+        
+        stack.bind_property("transition-running", this, PROP_IN_TRANSITION, BindingFlags.SYNC_CREATE);
         
         // insert labels for days of the week across top of master grid
         for (int col = 0; col < Grid.COLS; col++) {
@@ -184,6 +191,15 @@ public class Controller : BaseObject, View.Controllable {
         Grid? current_grid = get_current_month_grid();
         if (current_grid != null)
             current_grid.unselect_all();
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public Gtk.Widget? get_widget_for_date(Calendar.Date date) {
+        Grid? current_grid = get_current_month_grid();
+        
+        return current_grid != null ? current_grid.get_cell_for_date(date) : null;
     }
     
     /**

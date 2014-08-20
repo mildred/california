@@ -33,14 +33,40 @@ public class RotatingButtonBox : Gtk.Stack {
     public string? family { get; set; }
     
     private Gee.HashMap<string, Gtk.ButtonBox> button_boxes = new Gee.HashMap<string, Gtk.ButtonBox>();
+    private Gtk.Popover? parent_popover = null;
+    private bool parent_popover_modal = false;
     
     public RotatingButtonBox() {
         homogeneous = true;
         transition_duration = SLOW_STACK_TRANSITION_DURATION_MSEC;
         transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
         
+        notify["transition-running"].connect(on_transition_running);
+        
         bind_property("visible-child-name", this, PROP_FAMILY,
             BindingFlags.SYNC_CREATE | BindingFlags.BIDIRECTIONAL);
+    }
+    
+    // unfortunately, RotatingButtonBox can cause modal Popovers to close because the focus
+    // changes from one button box to another, triggering a situation in GtkWidget where the
+    // Popover thinks it has lost focus ... this hacks around the problem by setting the popover
+    // to modeless until the transition is complete
+    //
+    // TODO: This is fixed in GTK+ 3.13.6.  When 3.14 is baseline requirement, this code can
+    // be removed.
+    private void on_transition_running() {
+        if (transition_running && parent_popover == null) {
+            // set to modeless to hack around problem
+            parent_popover = get_ancestor(typeof (Gtk.Popover)) as Gtk.Popover;
+            if (parent_popover != null) {
+                parent_popover_modal = parent_popover.modal;
+                parent_popover.modal = false;
+            }
+        } else if (!transition_running && parent_popover != null) {
+            // reset to original mode
+            parent_popover.modal = parent_popover_modal;
+            parent_popover = null;
+        }
     }
     
     /**
@@ -48,8 +74,8 @@ public class RotatingButtonBox : Gtk.Stack {
      *
      * See Gtk.Box.pack_start().
      */
-    public void pack_start(string family, Gtk.Button button) {
-        get_family_container(family).pack_start(button);
+    public void pack_start(string family, Gtk.Widget widget) {
+        get_family_container(family).pack_start(widget);
     }
     
     /**
@@ -57,8 +83,8 @@ public class RotatingButtonBox : Gtk.Stack {
      *
      * See Gtk.Box.pack_end().
      */
-    public void pack_end(string family, Gtk.Button button) {
-        get_family_container(family).pack_end(button);
+    public void pack_end(string family, Gtk.Widget widget) {
+        get_family_container(family).pack_end(widget);
     }
     
     /**
@@ -82,6 +108,33 @@ public class RotatingButtonBox : Gtk.Stack {
         add_named(button_box, family);
         
         return button_box;
+    }
+    
+    /**
+     * Removes (or adds back) a family from the {@link RotatingButtonBox}.
+     *
+     * The family remains under the RotatingButtonBox's control, it's simply removed from the
+     * widget heirarchy.  This is useful for sizing purposes.
+     */
+    public void show_hide_family(string family, bool show) {
+        if (!button_boxes.has_key(family))
+            return;
+        
+        Gtk.ButtonBox button_box = button_boxes.get(family);
+        
+        bool shown = false;
+        foreach (Gtk.Widget widget in  get_children()) {
+            if (widget == button_box) {
+                shown = true;
+                
+                break;
+            }
+        }
+        
+        if (show && !shown)
+            add_named(button_box, family);
+        else if (!show && shown)
+            remove(button_box);
     }
 }
 

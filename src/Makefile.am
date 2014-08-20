@@ -133,6 +133,7 @@ california_VALASOURCES = \
 	toolkit/toolkit-card.vala \
 	toolkit/toolkit-combo-box-text-model.vala \
 	toolkit/toolkit-deck.vala \
+	toolkit/toolkit-deck-popover.vala \
 	toolkit/toolkit-deck-window.vala \
 	toolkit/toolkit-editable-label.vala \
 	toolkit/toolkit-entry-clear-text-connector.vala \
@@ -211,10 +212,6 @@ california_OPTIONAL_VALAFLAGS =
 
 if ENABLE_UNITY
 california_OPTIONAL_VALAFLAGS += --define ENABLE_UNITY
-endif
-
-if IS_GTK_312
-california_OPTIONAL_VALAFLAGS += --define GTK_312
 endif
 
 if HAVE__NL_TIME_FIRST_WEEKDAY
