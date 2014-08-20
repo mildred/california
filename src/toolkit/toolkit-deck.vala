@@ -312,6 +312,13 @@ public class Deck : Gtk.Stack {
             else
                 message("Card %s specifies default widget that cannot be default", card.card_id);
         }
+        
+        if (card.initial_focus != null) {
+            if (card.initial_focus.can_focus)
+                card.initial_focus.grab_focus();
+            else
+                message("Card %s specifies initial focus that cannot focus", card.card_id);
+        }
     }
 }
 
