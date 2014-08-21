@@ -52,6 +52,11 @@ public interface Controllable : Object {
     public abstract bool is_viewing_today { get; protected set; }
     
     /**
+     * The "logical" chronology motion when moving between views of time.
+     */
+    public abstract ChronologyMotion motion { get; }
+    
+    /**
      * Indicates when a transition is running (such as when moving between dates).
      */
     public abstract bool in_transition { get; protected set; }

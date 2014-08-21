@@ -20,7 +20,7 @@
         <property name="vexpand">False</property>
         <property name="action_name">win.previous</property>
         <child>
-          <object class="GtkImage" id="next_image">
+          <object class="GtkImage" id="prev_image">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="icon_name">go-previous-symbolic</property>
@@ -46,7 +46,7 @@
         <property name="vexpand">False</property>
         <property name="action_name">win.next</property>
         <child>
-          <object class="GtkImage" id="prev_image">
+          <object class="GtkImage" id="next_image">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="icon_name">go-next-symbolic</property>

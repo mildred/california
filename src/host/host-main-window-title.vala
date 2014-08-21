@@ -8,6 +8,10 @@ namespace California.Host {
 
 [GtkTemplate (ui = "/org/yorba/california/rc/main-window-title.ui")]
 internal class MainWindowTitle : Gtk.Grid {
+    public const string PROP_MOTION = "motion";
+    
+    public View.ChronologyMotion motion { get; set; default = View.ChronologyMotion.HORIZONTAL; }
+    
     [GtkChild]
     public Gtk.Button next_button;
     
@@ -24,9 +28,26 @@ internal class MainWindowTitle : Gtk.Grid {
     public Gtk.Label title_label;
     
     public MainWindowTitle() {
-        if (get_direction() == Gtk.TextDirection.RTL) {
-            prev_image.icon_name = "go-previous-rtl-symbolic";
-            next_image.icon_name = "go-next-rtl-symbolic";
+        notify[PROP_MOTION].connect(on_motion_changed);
+        on_motion_changed();
+    }
+    
+    private void on_motion_changed() {
+        switch (motion) {
+            case View.ChronologyMotion.HORIZONTAL:
+                bool rtl = (get_direction() == Gtk.TextDirection.RTL);
+                
+                prev_image.icon_name = rtl ? "go-previous-rtl-symbolic" : "go-previous-symbolic";
+                next_image.icon_name = rtl ? "go-next-rtl-symbolic" : "go-next-symbolic";
+            break;
+            
+            case View.ChronologyMotion.VERTICAL:
+                prev_image.icon_name = "go-up-symbolic";
+                next_image.icon_name = "go-down-symbolic";
+            break;
+            
+            default:
+                assert_not_reached();
         }
     }
 }

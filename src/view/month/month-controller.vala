@@ -63,6 +63,11 @@ public class Controller : BaseObject, View.Controllable {
     /**
      * @inheritDoc
      */
+    public ChronologyMotion motion { get { return ChronologyMotion.VERTICAL; } }
+    
+    /**
+     * @inheritDoc
+     */
     public Calendar.Date default_date { get; protected set; }
     
     /**
@@ -94,7 +99,7 @@ public class Controller : BaseObject, View.Controllable {
         stack.transition_duration = Toolkit.SLOW_STACK_TRANSITION_DURATION_MSEC;
         
         stack_model = new Toolkit.StackModel<Calendar.MonthOfYear>(stack,
-            Toolkit.StackModel.OrderedTransitionType.SLIDE_LEFT_RIGHT, model_presentation,
+            Toolkit.StackModel.OrderedTransitionType.SLIDE_UP_DOWN, model_presentation,
             trim_presentation_from_cache, ensure_presentation_in_cache);
         
         stack.bind_property("transition-running", this, PROP_IN_TRANSITION, BindingFlags.SYNC_CREATE);

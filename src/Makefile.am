@@ -159,6 +159,7 @@ california_VALASOURCES = \
 	unit-test/unit-test-harness.vala \
 	\
 	view/view.vala \
+	view/view-chronology-motion.vala \
 	view/view-container.vala \
 	view/view-controllable.vala \
 	view/view-palette.vala \

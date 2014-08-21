@@ -54,6 +54,11 @@ public class Controller : BaseObject, View.Controllable {
     /**
      * @inheritDoc
      */
+    public ChronologyMotion motion { get { return ChronologyMotion.HORIZONTAL; } }
+    
+    /**
+     * @inheritDoc
+     */
     public bool in_transition { get; protected set; }
     
     /**

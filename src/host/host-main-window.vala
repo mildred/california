@@ -131,7 +131,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         // view stack settings
         view_stack.homogeneous = true;
         view_stack.transition_duration = Toolkit.DEFAULT_STACK_TRANSITION_DURATION_MSEC;
-        view_stack.transition_type = Gtk.StackTransitionType.SLIDE_UP_DOWN;
+        view_stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
         
         // subscribe before adding so first add to initialize UI
         view_stack.notify["visible-child"].connect(on_view_changed);
@@ -306,6 +306,8 @@ public class MainWindow : Gtk.ApplicationWindow {
             current_controller.request_create_timed_event.connect(on_request_create_timed_event);
             current_controller.request_create_all_day_event.connect(on_request_create_all_day_event);
             current_controller.request_display_event.connect(on_request_display_event);
+            
+            custom_title.motion = current_controller.motion;
             
             // bindings
             Binding binding = current_controller.bind_property(View.Controllable.PROP_CURRENT_LABEL,
