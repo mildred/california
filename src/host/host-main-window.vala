@@ -226,7 +226,10 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         // to prevent storing the different children's names as the widget is destroyed (cleared,
         // i.e. remove each one by one), unbind before that occurs
-        view_stack.destroy.connect(() => { BaseObject.unbind_property(ref view_stack_binding); });
+        view_stack.destroy.connect(() => {
+            BaseObject.unbind_property(ref view_stack_binding);
+            view_stack.notify["visible-child"].disconnect(on_view_changed);
+        });
         
         // monitor Settings to adjust actions and such
         Settings.instance.notify[Settings.PROP_SMALL_FONT_PTS].connect(on_font_size_changed);
@@ -294,6 +297,8 @@ public class MainWindow : Gtk.ApplicationWindow {
             current_controller.request_create_timed_event.disconnect(on_request_create_timed_event);
             current_controller.request_create_all_day_event.disconnect(on_request_create_all_day_event);
             current_controller.request_display_event.disconnect(on_request_display_event);
+            current_controller.notify[View.Controllable.PROP_IS_VIEWING_TODAY].disconnect(
+                on_is_viewing_today_changed);
             
             // clear bindings to unbind all of them
             current_bindings.clear();
@@ -306,6 +311,9 @@ public class MainWindow : Gtk.ApplicationWindow {
             current_controller.request_create_timed_event.connect(on_request_create_timed_event);
             current_controller.request_create_all_day_event.connect(on_request_create_all_day_event);
             current_controller.request_display_event.connect(on_request_display_event);
+            current_controller.notify[View.Controllable.PROP_IS_VIEWING_TODAY].connect(
+                on_is_viewing_today_changed);
+            on_is_viewing_today_changed();
             
             custom_title.motion = current_controller.motion;
             
@@ -313,11 +321,11 @@ public class MainWindow : Gtk.ApplicationWindow {
             Binding binding = current_controller.bind_property(View.Controllable.PROP_CURRENT_LABEL,
                 custom_title.title_label, "label", BindingFlags.SYNC_CREATE);
             current_bindings.add(binding);
-            
-            binding = current_controller.bind_property(View.Controllable.PROP_IS_VIEWING_TODAY, today,
-                "sensitive", BindingFlags.SYNC_CREATE | BindingFlags.INVERT_BOOLEAN);
-            current_bindings.add(binding);
         }
+    }
+    
+    private void on_is_viewing_today_changed() {
+        action_for(ACTION_JUMP_TO_TODAY).set_enabled(!current_controller.is_viewing_today);
     }
     
     private void show_deck_window(Toolkit.Deck deck) {
@@ -407,14 +415,18 @@ public class MainWindow : Gtk.ApplicationWindow {
         Settings.instance.normal_font_pts = View.Palette.DEFAULT_NORMAL_FONT_PTS;
     }
     
+    private SimpleAction action_for(string action_name) {
+        return (SimpleAction) lookup_action(action_name);
+    }
+    
     private void on_font_size_changed() {
-        ((SimpleAction) lookup_action(ACTION_INCREASE_FONT)).set_enabled(
+        action_for(ACTION_INCREASE_FONT).set_enabled(
             Settings.instance.small_font_pts < View.Palette.MAX_SMALL_FONT_PTS
             && Settings.instance.normal_font_pts < View.Palette.MAX_NORMAL_FONT_PTS);
-        ((SimpleAction) lookup_action(ACTION_DECREASE_FONT)).set_enabled(
+        action_for(ACTION_DECREASE_FONT).set_enabled(
             Settings.instance.small_font_pts > View.Palette.MIN_SMALL_FONT_PTS
             && Settings.instance.normal_font_pts > View.Palette.MIN_NORMAL_FONT_PTS);
-        ((SimpleAction) lookup_action(ACTION_RESET_FONT)).set_enabled(
+        action_for(ACTION_RESET_FONT).set_enabled(
             Settings.instance.small_font_pts != View.Palette.DEFAULT_SMALL_FONT_PTS
             && Settings.instance.normal_font_pts != View.Palette.DEFAULT_NORMAL_FONT_PTS);
     }
