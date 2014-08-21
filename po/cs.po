@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-08-19 19:38+0000\n"
-"PO-Revision-Date: 2014-08-20 17:36+0200\n"
+"POT-Creation-Date: 2014-08-21 01:03+0000\n"
+"PO-Revision-Date: 2014-08-21 08:46+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -188,7 +188,7 @@ msgstr "Neznámé volby: %s\n"
 #. date formatting: "<Start Date> to <End Date>"
 #: ../src/calendar/calendar-date-span.vala:95
 #: ../src/calendar/calendar-exact-time-span.vala:127
-#: ../src/view/week/week-controller.vala:172
+#: ../src/view/week/week-controller.vala:192
 #, c-format
 msgid "%s to %s"
 msgstr "%s až %s"
@@ -558,7 +558,7 @@ msgstr ".;"
 
 #: ../src/host/host-create-update-event.vala:64
 #: ../src/host/host-create-update-event.vala:67
-#: ../src/host/host-show-event.vala:66 ../src/rc/activator-list.ui.h:1
+#: ../src/host/host-show-event.vala:75 ../src/rc/activator-list.ui.h:1
 #: ../src/rc/calendar-import.ui.h:1 ../src/rc/create-update-recurring.ui.h:24
 #: ../src/rc/event-time-settings.ui.h:4 ../src/rc/generic-subscribe.ui.h:5
 #: ../src/rc/google-authenticating.ui.h:1
@@ -583,12 +583,12 @@ msgid "C_reate"
 msgstr "_Vytvořit"
 
 #: ../src/host/host-create-update-event.vala:280
-#: ../src/host/host-quick-create-event.vala:155
+#: ../src/host/host-quick-create-event.vala:156
 msgid "Unable to create event: calendar must be specified"
 msgstr "Nelze vytvořit událost: musí být určen kalendář"
 
 #: ../src/host/host-create-update-event.vala:299
-#: ../src/host/host-quick-create-event.vala:174
+#: ../src/host/host-quick-create-event.vala:175
 #, c-format
 msgid "Unable to create event: %s"
 msgstr "Nelze vytvořit událost: %s"
@@ -598,7 +598,6 @@ msgid "Unable to update event: calendar must be specified"
 msgstr "Nelze aktualizovat událost: musí být určen kalendář"
 
 #: ../src/host/host-create-update-event.vala:349
-#: ../src/host/host-show-event.vala:218
 #, c-format
 msgid "Unable to update event: %s"
 msgstr "Nelze aktualizovat událost: %s"
@@ -645,61 +644,66 @@ msgstr[0] "Vyberte kalednář pro import události:"
 msgstr[1] "Vyberte kalednář pro import událostí:"
 msgstr[2] "Vyberte kalednář pro import událostí:"
 
-#: ../src/host/host-main-window.vala:95
+#: ../src/host/host-main-window.vala:97
 msgid "_Today"
 msgstr "_Dnes"
 
-#: ../src/host/host-main-window.vala:162
+#: ../src/host/host-main-window.vala:164
 msgid "Jump to today's date (Ctrl+T)"
 msgstr "Přejít na dnešní datum (Ctrl+T)"
 
-#: ../src/host/host-main-window.vala:180
+#: ../src/host/host-main-window.vala:182
 msgid "Quick add event (Ctrl+N)"
 msgstr "Rychle přidat událost (Ctrl+N)"
 
-#: ../src/host/host-main-window.vala:186
+#: ../src/host/host-main-window.vala:188
 msgid "Calendars (Ctrl+L)"
 msgstr "Kalendáře (Ctrl+L)"
 
-#: ../src/host/host-quick-create-event.vala:76
+#: ../src/host/host-main-window.vala:472
+#, c-format
+msgid "Unable to edit event: %s"
+msgstr "Nelze upravit událost: %s"
+
+#: ../src/host/host-quick-create-event.vala:84
 msgid "Example: Dinner at Tadich Grill 7:30pm"
 msgstr "Příklad: Večeře U mlsné kozy v 19:30"
 
-#: ../src/host/host-quick-create-event.vala:78
+#: ../src/host/host-quick-create-event.vala:86
 msgid "Example: Dinner at Tadich Grill"
 msgstr "Příklad: Večeře U mlsné kozy"
 
-#: ../src/host/host-quick-create-event.vala:82
+#: ../src/host/host-quick-create-event.vala:90
 msgid "Example: Dinner at Tadich Grill 7:30pm tomorrow"
 msgstr "Příklad: Večeře U mlsné kozy zítra v 19:30"
 
-#: ../src/host/host-show-event.vala:59 ../src/rc/calendar-manager-list.ui.h:1
-msgid "_Close"
-msgstr "_Zavřít"
+#: ../src/host/host-show-event.vala:70
+msgid "Delete"
+msgstr "Odstranit"
 
-#: ../src/host/host-show-event.vala:60 ../src/rc/quick-create-event.ui.h:7
-msgid "_Edit"
-msgstr "_Upravit"
+#: ../src/host/host-show-event.vala:71
+msgid "A_ll Events"
+msgstr "_Všechny události"
 
-#: ../src/host/host-show-event.vala:61
-msgid "_Delete"
-msgstr "O_dstranit"
+#: ../src/host/host-show-event.vala:72
+msgid "_This Event"
+msgstr "_Tuto událost"
 
-#: ../src/host/host-show-event.vala:62
-msgid "Delete A_ll Events"
-msgstr "Odstranit _všechny události"
+#: ../src/host/host-show-event.vala:74
+msgid "This & _Future Events"
+msgstr "Tuto a bu_doucí události"
 
-#: ../src/host/host-show-event.vala:63
-msgid "Delete _This Event"
-msgstr "Odstranit _tuto událost"
+#: ../src/host/host-show-event.vala:81
+msgid "Edit event"
+msgstr "Upravit událost"
 
-#: ../src/host/host-show-event.vala:65
-msgid "Delete This and _Future Events"
-msgstr "Odstranit tuto a bu_doucí události"
+#: ../src/host/host-show-event.vala:82
+msgid "Delete event"
+msgstr "Odstranit událost"
 
 #. No number is supplied because the number of events removed is indefinite in certain
 #. situations ... plural text should simply be for "more than one"
-#: ../src/host/host-show-event.vala:249
+#: ../src/host/host-show-event.vala:259
 #, c-format
 msgid "Unable to remove event: %s"
 msgid_plural "Unable to remove events: %s"
@@ -749,6 +753,10 @@ msgstr "Barva kalendáře"
 #: ../src/rc/calendar-manager-list-item.ui.h:2
 msgid "Calendar visibility"
 msgstr "Viditelnost kalendáře"
+
+#: ../src/rc/calendar-manager-list.ui.h:1
+msgid "_Close"
+msgstr "_Zavřít"
 
 #: ../src/rc/calendar-manager-list.ui.h:2
 msgid "Add calendar"
@@ -984,16 +992,16 @@ msgid "What"
 msgstr "Co"
 
 #: ../src/rc/quick-create-event.ui.h:5
-msgid "_Help"
-msgstr "Nápo_věda"
+msgid "Quick Add help"
+msgstr "Nápověda k rychlému přidávání"
 
 #: ../src/rc/quick-create-event.ui.h:6
-msgid "C_ancel"
-msgstr "_Zrušit"
+msgid "Edit event details"
+msgstr "Upravit podrobnosti události"
 
-#: ../src/rc/quick-create-event.ui.h:8
-msgid "_Create"
-msgstr "_Vytvořit"
+#: ../src/rc/quick-create-event.ui.h:7
+msgid "Create event"
+msgstr "Vytvořit událost"
 
 #: ../src/rc/show-event.ui.h:2
 msgid "Where"
