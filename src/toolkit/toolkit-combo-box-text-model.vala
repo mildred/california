@@ -12,6 +12,7 @@ namespace California.Toolkit {
 
 public class ComboBoxTextModel<G> : BaseObject {
     public const string PROP_ACTIVE = "active";
+    public const string PROP_IS_MARKUP = "is-markup";
     
     /**
      * Returns a string that is the representation of the item in the Gtk.ComboBoxText.
@@ -24,6 +25,11 @@ public class ComboBoxTextModel<G> : BaseObject {
      * Synchronized to the active property of {@link combo_box}.
      */
     public G? active { get; private set; }
+    
+    /**
+     * Set to true if the {@link ModelPresentation} returns Pango markup instead of plain text.
+     */
+    public bool is_markup { get; set; default = false; }
     
     private unowned ModelPresentation<G> model_presentation;
     private unowned CompareDataFunc<G>? comparator;
@@ -43,6 +49,8 @@ public class ComboBoxTextModel<G> : BaseObject {
         
         items = new Gee.ArrayList<G>(item_equal_func);
         indices = new Gee.HashMap<G, int>(item_hash_func, item_equal_func);
+        
+        notify[PROP_IS_MARKUP].connect(on_is_markup_changed);
         
         combo_box.notify["active"].connect(on_combo_box_active);
     }
@@ -70,6 +78,16 @@ public class ComboBoxTextModel<G> : BaseObject {
             return hash_func(item);
         
         return Gee.Functions.get_hash_func_for(typeof(G))(item);
+    }
+    
+    private void on_is_markup_changed() {
+        // this relies pretty heavily on the implementation of GtkComboBoxText and could break
+        // if their cell renderer/tree model changes
+        List<weak Gtk.CellRenderer> list = combo_box.get_cells();
+        if (list.data != null)
+            combo_box.set_attributes(list.data, is_markup ? "markup" : "text", 0);
+        else
+            message("Unable to use Pango markup in GtkComboBoxText");
     }
     
     /**

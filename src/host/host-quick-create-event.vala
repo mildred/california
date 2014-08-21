@@ -47,14 +47,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
     private Toolkit.EntryClearTextConnector clear_text_connector = new Toolkit.EntryClearTextConnector();
     
     public QuickCreateEvent() {
-        // create and initialize combo box model
-        model = new Toolkit.ComboBoxTextModel<Backing.CalendarSource>(calendar_combo_box,
-            (cal) => cal.title);
-        foreach (Backing.CalendarSource calendar_source in
-            Backing.Manager.instance.get_sources_of_type<Backing.CalendarSource>()) {
-            if (calendar_source.visible && !calendar_source.read_only)
-                model.add(calendar_source);
-        }
+        model = build_calendar_source_combo_model(calendar_combo_box);
         
         clear_text_connector.connect_to(details_entry);
         details_entry.bind_property("text", create_button, "sensitive", BindingFlags.SYNC_CREATE,

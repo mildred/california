@@ -76,15 +76,7 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         clear_text_connector.connect_to(location_entry);
         
         // use model to control calendars combo box
-        calendar_model = new Toolkit.ComboBoxTextModel<Backing.CalendarSource>(calendar_combo,
-            (cal) => cal.title);
-        foreach (Backing.CalendarSource calendar_source in
-            Backing.Manager.instance.get_sources_of_type<Backing.CalendarSource>()) {
-            if (!calendar_source.visible || calendar_source.read_only)
-                continue;
-            
-            calendar_model.add(calendar_source);
-        }
+        calendar_model = build_calendar_source_combo_model(calendar_combo);
         
         accept_button.can_default = true;
         accept_button.has_default = true;

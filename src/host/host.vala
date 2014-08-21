@@ -35,5 +35,32 @@ public void terminate() {
     Toolkit.terminate();
 }
 
+private Toolkit.ComboBoxTextModel<Backing.CalendarSource> build_calendar_source_combo_model(
+    Gtk.ComboBoxText combo, bool include_invisible = false, bool include_read_only = false) {
+    Toolkit.ComboBoxTextModel<Backing.CalendarSource> model = new Toolkit.ComboBoxTextModel<Backing.CalendarSource>(
+        combo, (calendar) => {
+        // Use Pango to display a colored circle next to the calendar title
+        return "<span color='%s'>&#x25CF;</span> %s".printf(calendar.color, calendar.title);
+    });
+    
+    // returning Pango markup in model presentation
+    model.is_markup = true;
+    
+    // initialize with current list of calendars ... this control does not auto-update as
+    // calendars are added/removed/modified
+    foreach (Backing.CalendarSource calendar_source in
+        Backing.Manager.instance.get_sources_of_type<Backing.CalendarSource>()) {
+        if (!include_invisible && !calendar_source.visible)
+            continue;
+        
+        if (!include_read_only && calendar_source.read_only)
+            continue;
+        
+        model.add(calendar_source);
+    }
+    
+    return model;
+}
+
 }
 
