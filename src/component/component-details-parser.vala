@@ -886,9 +886,9 @@ public class DetailsParser : BaseObject {
                     m = b;
                     y = a;
                 } else {
-                    // MD
-                    d = b;
-                    m = a;
+                    // DM; see https://bugzilla.gnome.org/show_bug.cgi?id=735096
+                    d = a;
+                    m = b;
                     y = -1;
                 }
             break;

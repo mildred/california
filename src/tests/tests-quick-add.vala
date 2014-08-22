@@ -58,6 +58,7 @@ private class QuickAdd : UnitTest.Harness {
         add_case("quoted", quoted);
         add_case("open-quoted", open_quoted);
         add_case("quoted-atsign", quoted_atsign);
+        add_case("ymd-dm", ymd_dm);
     }
     
     protected override void setup() throws Error {
@@ -676,6 +677,25 @@ private class QuickAdd : UnitTest.Harness {
             && parser.event.exact_time_span.end_exact_time.hour == 20
             && parser.event.exact_time_span.end_exact_time.minute == 0
             && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span());
+    }
+    
+    // See https://bugzilla.gnome.org/show_bug.cgi?id=735096
+    private bool ymd_dm(out string? dump) throws Error {
+        Calendar.DateOrdering saved = Calendar.System.date_ordering;
+        Calendar.System.date_ordering = Calendar.DateOrdering.YMD;
+        
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "Meeting at 9/6", null);
+        
+        Calendar.System.date_ordering = saved;
+        
+        dump = parser.event.source;
+        
+        return parser.event.summary == "Meeting"
+            && California.String.is_empty(parser.event.location)
+            && parser.event.is_all_day
+            && parser.event.date_span.start_date.day_of_month.value == 9
+            && parser.event.date_span.start_date.month.value == 6;
     }
 }
 
