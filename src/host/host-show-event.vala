@@ -61,10 +61,10 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     
     private Toolkit.RotatingButtonBox rotating_button_box = new Toolkit.RotatingButtonBox();
     
-    private Gtk.Box action_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-    private Gtk.Button update_button = new Gtk.Button.from_icon_name("accessories-text-editor-symbolic",
+    private Gtk.Box action_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
+    private Gtk.Button update_button = new Gtk.Button.from_icon_name("edit-symbolic",
         Gtk.IconSize.BUTTON);
-    private Gtk.Button remove_button = new Gtk.Button.from_icon_name("list-remove-symbolic",
+    private Gtk.Button remove_button = new Gtk.Button.from_icon_name("user-trash-symbolic",
         Gtk.IconSize.BUTTON);
     
     private Gtk.Label delete_label = new Gtk.Label(_("Delete"));
@@ -80,13 +80,11 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         
         update_button.tooltip_text = _("Edit event");
         remove_button.tooltip_text = _("Delete event");
+        update_button.relief = remove_button.relief = Gtk.ReliefStyle.NONE;
         
         action_box.pack_end(update_button, false, false);
         action_box.pack_end(remove_button, false, false);
-        action_box.get_style_context().add_class(Gtk.STYLE_CLASS_LINKED);
-        action_box.get_style_context().add_class(Gtk.STYLE_CLASS_RAISED);
         
-        remove_button.get_style_context().add_class("destructive-action");
         remove_this_button.get_style_context().add_class("destructive-action");
         remove_this_future_button.get_style_context().add_class("destructive-action");
         remove_all_button.get_style_context().add_class("destructive-action");

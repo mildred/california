@@ -179,6 +179,7 @@
           <object class="GtkBox" id="action_button_box">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="spacing">2</property>
             <child>
               <object class="GtkButton" id="edit_button">
                 <property name="visible">True</property>
@@ -186,6 +187,7 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes">Edit event details</property>
                 <property name="halign">end</property>
+                <property name="relief">none</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_edit_button_clicked" object="CaliforniaHostQuickCreateEvent" swapped="no"/>
                 <child>
@@ -194,7 +196,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="icon_name">accessories-text-editor-symbolic</property>
+                    <property name="icon_name">edit-symbolic</property>
                   </object>
                 </child>
               </object>
@@ -213,7 +215,7 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes">Create event</property>
                 <property name="halign">end</property>
-                <property name="hexpand">False</property>
+                <property name="relief">none</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_create_button_clicked" object="CaliforniaHostQuickCreateEvent" swapped="no"/>
                 <child>
@@ -225,9 +227,6 @@
                     <property name="icon_name">list-add-symbolic</property>
                   </object>
                 </child>
-                <style>
-                  <class name="suggested-action"/>
-                </style>
               </object>
               <packing>
                 <property name="expand">False</property>

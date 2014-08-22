@@ -38,9 +38,6 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
     private Gtk.ComboBoxText calendar_combo_box;
     
     [GtkChild]
-    private Gtk.Box action_button_box;
-    
-    [GtkChild]
     private Gtk.Button create_button;
     
     private Toolkit.ComboBoxTextModel<Backing.CalendarSource> model;
@@ -52,9 +49,6 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
         clear_text_connector.connect_to(details_entry);
         details_entry.bind_property("text", create_button, "sensitive", BindingFlags.SYNC_CREATE,
             transform_text_to_sensitivity);
-        
-        action_button_box.get_style_context().add_class(Gtk.STYLE_CLASS_LINKED);
-        action_button_box.get_style_context().add_class(Gtk.STYLE_CLASS_RAISED);
     }
     
     private bool transform_text_to_sensitivity(Binding binding, Value source_value, ref Value target_value) {

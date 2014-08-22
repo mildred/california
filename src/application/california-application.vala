@@ -105,6 +105,18 @@ public class Application : Gtk.Application {
         }
     }
     
+    /**
+     * Returns the path to the icon directory.
+     */
+    public File icon_dir {
+        owned get {
+            return !is_installed
+                ? build_root_dir.get_child("data").get_child("icons")
+                : prefix_dir.get_child("share").get_child("california").get_child("icons")
+                    .get_child("Adwaita").get_child("scalable").get_child("actions");
+        }
+    }
+    
     private Host.MainWindow? main_window = null;
     
     private Application() {
@@ -155,6 +167,9 @@ public class Application : Gtk.Application {
     public override void startup() {
         base.startup();
         
+        // Sub-unit initialization
+        Resource.init();
+        
         // unit initialization
         try {
             Util.init();
@@ -180,6 +195,9 @@ public class Application : Gtk.Application {
         Manager.terminate();
         Host.terminate();
         Util.terminate();
+        
+        // sub-unit termination
+        Resource.terminate();
         
         base.shutdown();
     }

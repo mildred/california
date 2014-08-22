@@ -20,9 +20,17 @@ data/gschemas.compiled: data/org.yorba.california.gschema.xml
 
 BUILT_SOURCES += data/gschemas.compiled
 
+ICON_FILES = \
+	data/icons/edit-symbolic.svg \
+	$(NULL)
+
+data_iconsdir = $(datadir)/california/icons/Adwaita/scalable/actions
+data_icons_DATA = $(ICON_FILES)
+
 EXTRA_DIST += \
 	$(data_desktop_in_files) \
 	$(appdata_in_files) \
+	$(ICON_FILES) \
 	data/org.yorba.california.gschema.xml \
 	$(NULL)
 

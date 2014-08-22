@@ -107,7 +107,7 @@
             <property name="valign">center</property>
             <property name="hexpand">False</property>
             <property name="vexpand">False</property>
-            <property name="icon_name">accessories-text-editor-symbolic</property>
+            <property name="icon_name">edit-symbolic</property>
             <signal name="clicked" handler="on_edit_button_clicked" object="CaliforniaManagerCalendarList" swapped="no"/>
           </object>
           <packing>
