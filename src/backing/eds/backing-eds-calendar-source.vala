@@ -17,6 +17,8 @@ internal class EdsCalendarSource : CalendarSource {
     private E.SourceCalendar eds_calendar;
     private E.CalClient? client = null;
     private Scheduled? scheduled_source_write = null;
+    private Scheduled? scheduled_source_read = null;
+    private Gee.HashSet<string> dirty_read_properties = new Gee.HashSet<string>();
     private Cancellable? source_write_cancellable = null;
     
     public EdsCalendarSource(E.Source eds_source, E.SourceCalendar eds_calendar) {
@@ -28,11 +30,17 @@ internal class EdsCalendarSource : CalendarSource {
         // read-only until opened, when state can be determined from client
         read_only = true;
         
-        // use unidirectional bindings so source updates (writing) only occurs when changed from
-        // within the app
-        eds_source.bind_property("display-name", this, PROP_TITLE, BindingFlags.SYNC_CREATE);
-        eds_calendar.bind_property("selected", this, PROP_VISIBLE, BindingFlags.SYNC_CREATE);
-        eds_calendar.bind_property("color", this, PROP_COLOR, BindingFlags.SYNC_CREATE);
+        // can't bind directly because EDS sometimes updates its properties in background threads
+        // and our code expects change notifications to only occur in main thread, so schedule
+        // those notifications in the main loop
+        eds_source.notify["display-name"].connect(on_schedule_source_property_read);
+        eds_calendar.notify["selected"].connect(on_schedule_source_property_read);
+        eds_calendar.notify["color"].connect(on_schedule_source_property_read);
+        
+        // ...and initialize
+        title = eds_source.display_name;
+        visible = eds_calendar.selected;
+        color = eds_calendar.color;
         
         // when changed within the app, need to write it back out
         notify[PROP_TITLE].connect(on_title_changed);
@@ -41,8 +49,59 @@ internal class EdsCalendarSource : CalendarSource {
     }
     
     ~EdsCalendarSource() {
+        // wait for writes to be flushed out, but don't bother doing the same for reads
         if (scheduled_source_write != null)
             scheduled_source_write.wait();
+        
+        // TODO: May need to have these connections happen under open/close to protect against
+        // race conditions, i.e. disconnecting while the property notification is occurring,
+        // meaning the scheduled callback may still occur after dtor exits
+        eds_source.notify["display-name"].disconnect(on_schedule_source_property_read);
+        eds_calendar.notify["selected"].disconnect(on_schedule_source_property_read);
+        eds_calendar.notify["color"].disconnect(on_schedule_source_property_read);
+        
+        // although disconnected, for safety cancel under lock
+        lock (dirty_read_properties) {
+            scheduled_source_read = null;
+        }
+    }
+    
+    private void on_schedule_source_property_read(Object object, ParamSpec pspec) {
+        // schedule the property read in the main (UI) loop so notifications of this object's
+        // properties happen there and not in a background thread ... note that lock for
+        // dirty_read_properties is used for both hash set and Scheduled
+        lock (dirty_read_properties) {
+            dirty_read_properties.add(pspec.name);
+            scheduled_source_read = new Scheduled.once_at_idle(on_read_properties);
+        }
+    }
+    
+    private void on_read_properties() {
+        // make copy under lock and key
+        Gee.HashSet<string> copy = new Gee.HashSet<string>();
+        lock (dirty_read_properties) {
+            copy.add_all(dirty_read_properties);
+            dirty_read_properties.clear();
+        }
+        
+        // update locally outside of lock
+        foreach (string name in copy) {
+            debug("EDS updated %s property %s", to_string(), name);
+            
+            switch (name) {
+                case "display-name":
+                    title = eds_source.display_name;
+                break;
+                
+                case "selected":
+                    visible = eds_calendar.selected;
+                break;
+                
+                case "color":
+                    color = eds_calendar.color;
+                break;
+            }
+        }
     }
     
     private void on_title_changed() {
