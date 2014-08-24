@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-11 18:44+0200\n"
-"PO-Revision-Date: 2014-08-11 18:48+0200\n"
+"POT-Creation-Date: 2014-08-24 17:59+0200\n"
+"PO-Revision-Date: 2014-08-24 18:00+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -154,19 +154,19 @@ msgstr "Copyright 2014 Fundacja Yorba"
 msgid "Visit California's home page"
 msgstr "Witryna programu California"
 
-#: ../src/application/california-application.vala:165
+#: ../src/application/california-application.vala:180
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "Nie można otworzyć programu California: %s"
 
-#: ../src/application/california-application.vala:264
+#: ../src/application/california-application.vala:282
 #, c-format
 msgid "About %s"
 msgstr "O programie %s"
 
 #. Translators: add your name and email address to receive credit in the About dialog
 #. For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:270
+#: ../src/application/california-application.vala:288
 msgid "translator-credits"
 msgstr ""
 "Piotr Drąg <piotrdrag@gmail.com>, 2014\n"
@@ -189,85 +189,126 @@ msgstr "Prosimy zgłaszać problemy na adres (w języku angielskim):"
 msgid "Unknown options: %s\n"
 msgstr "Nieznane opcje: %s\n"
 
+#. Prints a span of dates, i.e. "Monday, January 3 to Thursday, January 6"
+#. A span of time, i.e. "3:30pm to 4:30pm"
+#. date formatting: "<Start Date> to <End Date>"
+#: ../src/calendar/calendar-date-span.vala:95
+#: ../src/calendar/calendar-exact-time-span.vala:127
+#: ../src/view/week/week-controller.vala:192
+#, c-format
+msgid "%s to %s"
+msgstr "%s do %s"
+
 #: ../src/calendar/calendar-date.vala:352
 msgid "Today"
 msgstr "Dzisiaj"
 
+#. Multi-day timed event, print "<full time>, <full date>" on both lines,
+#. including year if either not current year
+#. Prints two full time and date strings on separate lines, i.e.:
+#. 12 January 2012, 3:30pm
+#. 13 January 2013, 6:30am
+#: ../src/calendar/calendar-exact-time-span.vala:142
+#, c-format
+msgid ""
+"%s, %s\n"
+"%s, %s"
+msgstr ""
+"%s, %s\n"
+"%s, %s"
+
+#. Prints full time and date strings on a single line, i.e.:
+#. 12 January 2012, 3:30pm to 13 January 2013, 6:30am
+#: ../src/calendar/calendar-exact-time-span.vala:151
+#, c-format
+msgid "%s, %s to %s, %s"
+msgstr "%s, %s do %s, %s"
+
 #. The month and year according to locale preferences, i.e. "March 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:113
+#: ../src/calendar/calendar.vala:114
+#, no-c-format
 msgid "%B %Y"
 msgstr "%B %Y"
 
 #. The abbreviated month and year according to locale preferences, i.e. "Mar 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:117
+#: ../src/calendar/calendar.vala:119
+#, no-c-format
 msgid "%b %Y"
 msgstr "%b %Y"
 
 #. A "pretty" date according to locale preferences, i.e. "Monday, March 10, 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:121
+#: ../src/calendar/calendar.vala:124
+#, no-c-format
 msgid "%A, %B %e, %Y"
 msgstr "%A, %e %B %Y"
 
 #. A "pretty" date with no year according to locale preferences, i.e. "Monday, March 10"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:125
+#: ../src/calendar/calendar.vala:129
+#, no-c-format
 msgid "%A, %B %e"
 msgstr "%A, %e %B"
 
 #. A "pretty" date abbreviated according to locale preferences, i.e. "Mon, Mar 10, 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:129
+#: ../src/calendar/calendar.vala:134
+#, no-c-format
 msgid "%a, %b %e, %Y"
 msgstr "%a, %e %b %Y"
 
 #. A "pretty" date abbreviated and no year according to locale preferences, i.e.
 #. "Mon, Mar 10"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:134
+#: ../src/calendar/calendar.vala:140
+#, no-c-format
 msgid "%a, %b %e"
 msgstr "%a, %e %b"
 
 #. A "pretty" date with no day of week according to locale preferences, i.e. "March 10, 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:138
+#: ../src/calendar/calendar.vala:145
+#, no-c-format
 msgid "%B %e, %Y"
 msgstr "%e %B %Y"
 
 #. A "pretty" date abbreviated with no day of week according to locale preferences,
 #. i.e. "Mar 10, 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:143
+#: ../src/calendar/calendar.vala:151
+#, no-c-format
 msgid "%b %e, %Y"
 msgstr "%e %b %Y"
 
 #. A "pretty" date with no day of week or year according to locale preferences, i.e. "March 10"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:147
+#: ../src/calendar/calendar.vala:156
+#, no-c-format
 msgid "%B %e"
 msgstr "%e %B"
 
 #. A "pretty" date abbreviated with no day of week or year according to locale preferences,
 #. i.e. "Mar 10"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:152
+#: ../src/calendar/calendar.vala:162
+#, no-c-format
 msgid "%b %e"
 msgstr "%e %b"
 
 #. A "pretty" date compacted according to locale preferences, i.e. "Mon 3/10/2014"
 #. Leading zeroes will be stripped.
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:157
-#, c-format
+#: ../src/calendar/calendar.vala:168
+#, no-c-format
 msgid "%a %x"
 msgstr "%a, %x"
 
 #. A "pretty" date abbreviated and no year according to locale preferences, i.e. "Mon 3/10"
 #. Leading zeroes will be stripped.
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:163
+#: ../src/calendar/calendar.vala:174
 #, no-c-format
 msgid "%a %m/%d"
 msgstr "%a, %d.%m"
@@ -276,7 +317,7 @@ msgstr "%a, %d.%m"
 #. i.e. "3/10"
 #. Leading zeroes will be stripped.
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:170
+#: ../src/calendar/calendar.vala:181
 #, no-c-format
 msgid "%m/%d"
 msgstr "%d.%m"
@@ -284,35 +325,35 @@ msgstr "%d.%m"
 #. Ante meridiem
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
-#: ../src/calendar/calendar.vala:175
+#: ../src/calendar/calendar.vala:186
 msgid "am"
 msgstr "AM"
 
 #. Brief ante meridiem, i.e. "am" -> "a"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
-#: ../src/calendar/calendar.vala:180
+#: ../src/calendar/calendar.vala:191
 msgid "a"
 msgstr "A"
 
 #. Post meridiem
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
-#: ../src/calendar/calendar.vala:185
+#: ../src/calendar/calendar.vala:196
 msgid "pm"
 msgstr "PM"
 
 #. Brief post meridiem, i.e. "pm" -> "p"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
-#: ../src/calendar/calendar.vala:190
+#: ../src/calendar/calendar.vala:201
 msgid "p"
 msgstr "P"
 
 #. The 12-hour time with minute and meridiem ("am" or "pm"), i.e. "5:06pm"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
-#: ../src/calendar/calendar.vala:195
+#: ../src/calendar/calendar.vala:206
 #, c-format
 msgid "%d:%02d%s"
 msgstr "%d∶%02d %s"
@@ -320,32 +361,32 @@ msgstr "%d∶%02d %s"
 #. The 12-hour time with minute, seconds, and meridiem ("am" or "pm"), i.e. "5:06:31pm"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
-#: ../src/calendar/calendar.vala:200
+#: ../src/calendar/calendar.vala:211
 #, c-format
 msgid "%d:%02d:%02d%s"
 msgstr "%d∶%02d∶%02d %s"
 
 #. The 24-hour time with minutes, i.e. "17:06"
-#: ../src/calendar/calendar.vala:203
+#: ../src/calendar/calendar.vala:214
 #, c-format
 msgid "%02d:%02d"
 msgstr "%02d∶%02d"
 
 #. The 24-hour time with minutes and seconds, i.e. "17:06:31"
-#: ../src/calendar/calendar.vala:206
+#: ../src/calendar/calendar.vala:217
 #, c-format
 msgid "%02d:%02d:%02d"
 msgstr "%02d∶%02d∶%02d"
 
 #. Used by quick-add to indicate the user wants to create an event at midnight.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/calendar/calendar.vala:216
+#: ../src/calendar/calendar.vala:227
 msgid "midnight"
 msgstr "północ"
 
 #. Used by quick-add to indicate the user wants to create an event at noon.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/calendar/calendar.vala:220
+#: ../src/calendar/calendar.vala:231
 msgid "noon"
 msgstr "południe"
 
@@ -522,7 +563,7 @@ msgstr "st;nd;rd;th"
 
 #: ../src/host/host-create-update-event.vala:64
 #: ../src/host/host-create-update-event.vala:67
-#: ../src/host/host-show-event.vala:60 ../src/rc/activator-list.ui.h:1
+#: ../src/host/host-show-event.vala:75 ../src/rc/activator-list.ui.h:1
 #: ../src/rc/calendar-import.ui.h:1 ../src/rc/create-update-recurring.ui.h:24
 #: ../src/rc/event-time-settings.ui.h:4 ../src/rc/generic-subscribe.ui.h:5
 #: ../src/rc/google-authenticating.ui.h:1
@@ -538,29 +579,30 @@ msgstr "Zapisz _wszystkie wydarzenia"
 msgid "Save _This Event"
 msgstr "Zapisz _to wydarzenie"
 
-#: ../src/host/host-create-update-event.vala:166
+#: ../src/host/host-create-update-event.vala:158
 msgid "_Save"
 msgstr "_Zapisz"
 
-#: ../src/host/host-create-update-event.vala:166
+#: ../src/host/host-create-update-event.vala:158
 msgid "C_reate"
 msgstr "U_twórz"
 
-#: ../src/host/host-create-update-event.vala:280
+#: ../src/host/host-create-update-event.vala:272
+#: ../src/host/host-quick-create-event.vala:143
 msgid "Unable to create event: calendar must be specified"
 msgstr "Nie można utworzyć wydarzenia: należy podać kalendarz"
 
-#: ../src/host/host-create-update-event.vala:299
+#: ../src/host/host-create-update-event.vala:291
+#: ../src/host/host-quick-create-event.vala:162
 #, c-format
 msgid "Unable to create event: %s"
 msgstr "Nie można utworzyć wydarzenia: %s"
 
-#: ../src/host/host-create-update-event.vala:304
+#: ../src/host/host-create-update-event.vala:296
 msgid "Unable to update event: calendar must be specified"
 msgstr "Nie można zaktualizować wydarzenia: należy podać kalendarz"
 
-#: ../src/host/host-create-update-event.vala:349
-#: ../src/host/host-show-event.vala:209
+#: ../src/host/host-create-update-event.vala:341
 #, c-format
 msgid "Unable to update event: %s"
 msgstr "Nie można zaktualizować wydarzenia: %s"
@@ -607,57 +649,66 @@ msgstr[0] "Proszę wybrać kalendarz, do którego zaimportować wydarzenie:"
 msgstr[1] "Proszę wybrać kalendarz, do którego zaimportować wydarzenia:"
 msgstr[2] "Proszę wybrać kalendarz, do którego zaimportować wydarzenia:"
 
-#: ../src/host/host-main-window.vala:94
+#: ../src/host/host-main-window.vala:97
 msgid "_Today"
 msgstr "_Dzisiaj"
 
-#: ../src/host/host-main-window.vala:158
+#: ../src/host/host-main-window.vala:164
 msgid "Jump to today's date (Ctrl+T)"
 msgstr "Przechodzi do dzisiejszej daty (Ctrl+T)"
 
-#: ../src/host/host-main-window.vala:164
-msgid "Previous (Alt+Left)"
-msgstr "Poprzednie (Alt+Lewa strzałka)"
-
-#: ../src/host/host-main-window.vala:170
-msgid "Next (Alt+Right)"
-msgstr "Następne (Alt+Prawa strzałka)"
-
-#: ../src/host/host-main-window.vala:195
+#: ../src/host/host-main-window.vala:182
 msgid "Quick add event (Ctrl+N)"
 msgstr "Szybko tworzy nowe wydarzenie (Ctrl+N)"
 
-#: ../src/host/host-main-window.vala:201
+#: ../src/host/host-main-window.vala:188
 msgid "Calendars (Ctrl+L)"
 msgstr "Kalendarze (Ctrl+L)"
 
-#: ../src/host/host-show-event.vala:53 ../src/rc/calendar-manager-list.ui.h:1
-msgid "_Close"
-msgstr "Za_mknij"
+#: ../src/host/host-main-window.vala:484
+#, c-format
+msgid "Unable to edit event: %s"
+msgstr "Nie można zmodyfikować wydarzenia: %s"
 
-#: ../src/host/host-show-event.vala:54 ../src/rc/quick-create-event.ui.h:4
-msgid "_Edit"
-msgstr "_Edycja"
+#: ../src/host/host-quick-create-event.vala:71
+msgid "Example: Dinner at Tadich Grill 7:30pm"
+msgstr "Przykład: kolacja w Barze Mlecznym 19:30"
 
-#: ../src/host/host-show-event.vala:55
-msgid "_Delete"
-msgstr "_Usuń"
+#: ../src/host/host-quick-create-event.vala:73
+msgid "Example: Dinner at Tadich Grill"
+msgstr "Przykład: kolacja w Barze Mlecznym"
 
-#: ../src/host/host-show-event.vala:56
-msgid "Delete A_ll Events"
-msgstr "U_suń wszystkie wydarzenia"
+#: ../src/host/host-quick-create-event.vala:77
+msgid "Example: Dinner at Tadich Grill 7:30pm tomorrow"
+msgstr "Przykład: kolacja w Barze Mlecznym 19:30 jutro"
 
-#: ../src/host/host-show-event.vala:57
-msgid "Delete _This Event"
-msgstr "Usuń _to wydarzenie"
+#: ../src/host/host-show-event.vala:70
+msgid "Delete"
+msgstr "Usuń"
 
-#: ../src/host/host-show-event.vala:59
-msgid "Delete This and _Future Events"
-msgstr "Usuń to i p_rzyszłe wydarzenia"
+#: ../src/host/host-show-event.vala:71
+msgid "A_ll Events"
+msgstr "_Wszystkie wydarzenia"
+
+#: ../src/host/host-show-event.vala:72
+msgid "_This Event"
+msgstr "_To wydarzenie"
+
+#: ../src/host/host-show-event.vala:74
+msgid "This & _Future Events"
+msgstr "To i p_rzyszłe wydarzenia"
+
+#: ../src/host/host-show-event.vala:81
+msgid "Edit event"
+msgstr "Modyfikuj wydarzenie"
+
+#: ../src/host/host-show-event.vala:82
+msgid "Delete event"
+msgstr "Usuń wydarzenie"
 
 #. No number is supplied because the number of events removed is indefinite in certain
 #. situations ... plural text should simply be for "more than one"
-#: ../src/host/host-show-event.vala:240
+#: ../src/host/host-show-event.vala:257
 #, c-format
 msgid "Unable to remove event: %s"
 msgid_plural "Unable to remove events: %s"
@@ -678,12 +729,6 @@ msgstr "Miesiąc"
 #: ../src/view/week/week-controller.vala:42
 msgid "Week"
 msgstr "Tydzień"
-
-#. date formatting: "<Start Date> to <End Date>"
-#: ../src/view/week/week-controller.vala:172
-#, c-format
-msgid "%s to %s"
-msgstr "%s do %s"
 
 #: ../src/rc/activator-list.ui.h:2
 msgid "_Add"
@@ -713,6 +758,10 @@ msgstr "Kolor kalendarza"
 #: ../src/rc/calendar-manager-list-item.ui.h:2
 msgid "Calendar visibility"
 msgstr "Widoczność kalendarza"
+
+#: ../src/rc/calendar-manager-list.ui.h:1
+msgid "_Close"
+msgstr "Za_mknij"
 
 #: ../src/rc/calendar-manager-list.ui.h:2
 msgid "Add calendar"
@@ -754,7 +803,8 @@ msgstr "_Położenie"
 msgid "_Description"
 msgstr "_Opis"
 
-#: ../src/rc/create-update-event.ui.h:8
+#: ../src/rc/create-update-event.ui.h:8 ../src/rc/quick-create-event.ui.h:4
+#: ../src/rc/show-event.ui.h:3
 msgid "Calendar"
 msgstr "Kalendarz"
 
@@ -929,25 +979,37 @@ msgstr "Nazwa konta _Google"
 msgid "Google _password"
 msgstr "_Hasło Google"
 
+#: ../src/rc/main-window-title.ui.h:1
+msgid "Previous (Alt+Left)"
+msgstr "Poprzednie (Alt+Lewa strzałka)"
+
+#: ../src/rc/main-window-title.ui.h:2
+msgid "Next (Alt+Right)"
+msgstr "Następne (Alt+Prawa strzałka)"
+
 #: ../src/rc/quick-create-event.ui.h:1
-msgid "_Quick add event"
+msgid "_Quick Add Event"
 msgstr "_Szybkie dodanie wydarzenia"
 
-#: ../src/rc/quick-create-event.ui.h:2
-msgid "_Help"
-msgstr "Pomo_c"
-
-#: ../src/rc/quick-create-event.ui.h:3
-msgid "C_ancel"
-msgstr "_Anuluj"
-
-#: ../src/rc/quick-create-event.ui.h:5
-msgid "_Create"
-msgstr "U_twórz"
-
-#: ../src/rc/quick-create-event.ui.h:6 ../src/rc/show-event.ui.h:1
+#: ../src/rc/quick-create-event.ui.h:2 ../src/rc/show-event.ui.h:1
 msgid "When"
 msgstr "Kiedy"
+
+#: ../src/rc/quick-create-event.ui.h:3
+msgid "What"
+msgstr "Co"
+
+#: ../src/rc/quick-create-event.ui.h:5
+msgid "Quick Add help"
+msgstr "Pomoc szybkiego dodawania wydarzenia"
+
+#: ../src/rc/quick-create-event.ui.h:6
+msgid "Edit event details"
+msgstr "Modyfikuj szczegóły wydarzenia"
+
+#: ../src/rc/quick-create-event.ui.h:7
+msgid "Create event"
+msgstr "Utwórz wydarzenie"
 
 #: ../src/rc/show-event.ui.h:2
 msgid "Where"
