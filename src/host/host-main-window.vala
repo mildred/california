@@ -368,16 +368,13 @@ public class MainWindow : Gtk.ApplicationWindow {
     }
     
     private void on_quick_create_event() {
-        // switch to Today and execute Quick Add when transition is complete
-        current_controller.today();
-        current_controller.execute_when_not_transitioning(do_quick_create_event);
-    }
-    
-    private void do_quick_create_event(View.Controllable controller) {
-        Gtk.Widget? today_widget = controller.get_widget_for_date(Calendar.System.today);
-        assert(today_widget != null);
-        
-        on_request_create_all_day_event(Calendar.System.today.to_date_span(), today_widget, null);
+#if ENABLE_UNITY
+        // Unity/Ambiance has display problems with GtkPopovers attached to GtkHeaderBars, so use
+        // a DeckWindow
+        quick_create_event(null, null, null);
+#else
+        quick_create_event(null, quick_add_button, null);
+#endif
     }
     
     private void on_jump_to_today() {
@@ -447,8 +444,10 @@ public class MainWindow : Gtk.ApplicationWindow {
         quick_create_event(event, relative_to, for_location);
     }
     
-    private void quick_create_event(Component.Event? initial, Gtk.Widget relative_to, Gdk.Point? for_location) {
-        QuickCreateEvent quick_create = new QuickCreateEvent();
+    private void quick_create_event(Component.Event? initial, Gtk.Widget? relative_to, Gdk.Point? for_location) {
+        bool use_deck_window = relative_to == null && for_location == null;
+        
+        QuickCreateEvent quick_create = new QuickCreateEvent(use_deck_window);
         
         Toolkit.Deck deck = new Toolkit.Deck();
         deck.add_cards(iterate<Toolkit.Card>(quick_create).to_array_list());
@@ -460,7 +459,10 @@ public class MainWindow : Gtk.ApplicationWindow {
                 edit_event(quick_create.event);
         });
         
-        show_deck_popover(relative_to, for_location, deck);
+        if (use_deck_window)
+            show_deck_window(deck);
+        else
+            show_deck_popover(relative_to, for_location, deck);
     }
     
     private void on_request_display_event(Component.Event event, Gtk.Widget relative_to,

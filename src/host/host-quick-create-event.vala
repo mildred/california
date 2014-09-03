@@ -40,15 +40,23 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
     [GtkChild]
     private Gtk.Button create_button;
     
+    [GtkChild]
+    private Gtk.Button cancel_button;
+    
     private Toolkit.ComboBoxTextModel<Backing.CalendarSource> model;
     private Toolkit.EntryClearTextConnector clear_text_connector = new Toolkit.EntryClearTextConnector();
     
-    public QuickCreateEvent() {
+    public QuickCreateEvent(bool in_deck_window) {
         model = build_calendar_source_combo_model(calendar_combo_box);
         
         clear_text_connector.connect_to(details_entry);
         details_entry.bind_property("text", create_button, "sensitive", BindingFlags.SYNC_CREATE,
             transform_text_to_sensitivity);
+        
+        // Only show Cancel button if in a DeckWindow; if in popover, dismissal is easy and doesn't
+        // require one
+        cancel_button.visible = in_deck_window;
+        cancel_button.no_show_all = !in_deck_window;
     }
     
     private bool transform_text_to_sensitivity(Binding binding, Value source_value, ref Value target_value) {
@@ -122,6 +130,11 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
         
         // always edit
         edit_event();
+    }
+    
+    [GtkCallback]
+    private void on_cancel_button_clicked() {
+        notify_user_closed();
     }
     
     private void edit_event() {
