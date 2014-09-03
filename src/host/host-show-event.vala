@@ -118,6 +118,19 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         Calendar.System.instance.today_changed.disconnect(build_display);
     }
     
+#if ENABLE_UNITY
+    // When description_text_window is visible, the entire GtkGrid's background color goes black
+    // in the GtkPopover; this overrides the color and uses GtkPopover's background color for the
+    // GtkGrid.  See:
+    // https://bugzilla.gnome.org/show_bug.cgi?id=735421
+    public override void realize() {
+        base.realize();
+        
+        Gdk.RGBA bg = get_toplevel().get_style_context().get_background_color(Gtk.StateFlags.NORMAL);
+        override_background_color(Gtk.StateFlags.NORMAL, bg);
+    }
+#endif
+    
     public void jumped_to(Toolkit.Card? from, Toolkit.Card.Jump reason, Value? message) {
         // no message, don't update display
         if (message == null)
