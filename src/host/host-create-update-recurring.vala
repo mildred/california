@@ -243,9 +243,17 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
         start_date = event_span.start_date;
         end_date = event_span.end_date;
         
-        // Clear all "On days" checkboxes for sanity's sake
-        foreach (Gtk.CheckButton checkbutton in on_day_checkbuttons.values)
-            checkbutton.active = false;
+        // Clear all "On days" checkboxes for sanity's sake except for the start day of this event
+        // (iff it is a single-day event -- multiday events get hairy -- and this is a new RRULE,
+        // not an existing one)
+        foreach (Calendar.DayOfWeek dow in on_day_checkbuttons.keys) {
+            Gtk.CheckButton checkbutton = on_day_checkbuttons[dow];
+            
+            if (master.rrule == null && event_span.is_same_day && start_date.day_of_week.equal_to(dow))
+                checkbutton.active = true;
+            else
+                checkbutton.active = false;
+        }
         
         // set remaining defaults if not a recurring event
         if (master.rrule == null) {
