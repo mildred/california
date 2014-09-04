@@ -456,7 +456,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         deck.dismiss.connect(() => {
             if (quick_create.edit_required)
-                edit_event(quick_create.event);
+                edit_event(quick_create.event, false);
         });
         
         if (use_deck_window)
@@ -488,24 +488,24 @@ public class MainWindow : Gtk.ApplicationWindow {
                 return;
             }
             
-            edit_event(clone);
+            edit_event(clone, true);
         });
         
         show_deck_popover(relative_to, for_location, deck);
     }
     
-    private void edit_event(Component.Event event) {
+    private void edit_event(Component.Event event, bool is_update) {
         // use Idle loop so popovers have a chance to hide before bringing up DeckWindow
         Idle.add(() => {
-            on_edit_event(event);
+            on_edit_event(event, is_update);
             
             return false;
         }, Priority.LOW + 100);
     }
     
-    private void on_edit_event(Component.Event event) {
+    private void on_edit_event(Component.Event event, bool is_update) {
         CreateUpdateEvent create_update = new CreateUpdateEvent();
-        create_update.is_update = true;
+        create_update.is_update = is_update;
         
         CreateUpdateRecurring create_update_recurring = new CreateUpdateRecurring();
         
