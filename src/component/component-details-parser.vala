@@ -143,7 +143,12 @@ public class DetailsParser : BaseObject {
             
             if (event.is_all_day) {
                 start_date = event.date_span.start_date;
-                end_date = event.date_span.end_date;
+                
+                // don't set end date if only for one day; this is too greedy, since it's possible
+                // the user merely wanted to set a start date (and the Event object doesn't allow
+                // for that alone)
+                if (!event.date_span.is_same_day)
+                    end_date = event.date_span.end_date;
             } else if (event.exact_time_span != null) {
                 start_date = event.exact_time_span.start_date;
                 start_time = event.exact_time_span.start_exact_time.to_wall_time();
@@ -666,6 +671,11 @@ public class DetailsParser : BaseObject {
         // a day of the week
         Calendar.DayOfWeek? dow = Calendar.DayOfWeek.parse(unit.casefolded);
         if (dow != null) {
+            // if the start date does not match the recurring start date, then clear it (but can't
+            // do this if an end date was set; them's the breaks)
+            if (start_date != null && end_date == null && !start_date.day_of_week.equal_to(dow))
+                start_date = null;
+            
             Calendar.DayOfWeek[] by_days = iterate<Calendar.DayOfWeek>(dow).to_array();
             
             // if interval is an ordinal, the rule is for "nth day of the month", so it's a position
