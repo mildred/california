@@ -5,7 +5,8 @@
 
   <info>
     <link type="guide" xref="index#cal-manage-calendars"/>
-    <revision pkgversion="3.14" date="2014-07-20" status="stub"/>
+    <desc>Simplify your calendar's interface.</desc>
+    <revision pkgversion="3.14" date="2014-08-31" status="draft"/>
 
     <credit type="author copyright">
       <name>Jim Campbell</name>
@@ -17,5 +18,14 @@
   </info>
 
   <title>Hide a Calendar From View</title>
+  
+  <p>If you keep track of multiple calendars (e.g., a calendar to keep track of
+  your weekly course schedule, another to keep track of your work schedule, and
+  yet another to keep track of social events), your calendar may get cluttered
+  with events. This can make it hard to read your calendar.</p>
+  
+  <p>If you want to make it easier to see only certain types of events,
+  you can <em>hide a calendar</em>. This will temporarily remove the calendar
+  from view, but will not delete the calendar altogether.</p>
 
 </page>

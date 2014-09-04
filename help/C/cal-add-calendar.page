@@ -5,10 +5,12 @@
       id="cal-add-calendar">
 
   <info>
+    <desc>Sync or display web-based calendar feeds.</desc>
     <link type="guide" xref="index#cal-manage-calendars"/>
+    <link type="seealso" xref="cal-rename-calendar"/>
     <link type="seealso" xref="cal-hide-a-calendar"/>
     <link type="seealso" xref="cal-remove-calendar"/>
-    <revision pkgversion="3.14" date="2014-07-20" status="incomplete"/>
+    <revision pkgversion="3.14" date="2014-09-02" status="draft"/>
 
     <credit type="author copyright">
       <name>Jim Campbell</name>
@@ -23,21 +25,85 @@
     
   <p>By default, <app>California</app> includes two calendars: a
   <em>Personal</em> calendar and a <em>Birthdays &amp; Anniversaries</em>
-  calendar. You can add or sync other calendars, as well. Select the type of
-  calendar that you want to add from the list below:</p>
+  calendar. You can add or sync other calendars, as well:</p>
 
   <section id="cal-sync-gcal" ui:expanded="false">
-    <title>Sync with a Google Calendar</title>
-    <p>Instructions here . . .</p>
+    <title>Add a Google calendar</title>
+    
+    <p>Adding a Google calendar to <app>California</app> will both add and
+    <em>sync</em> the calendar. If you add an event in <app>California</app>,
+    the event will appear in your Google calendar. Likewise, if you add or edit
+    an event in your Google calendar, those changes will also be updated in
+    <app>California</app>.</p>
+    
+    <steps>
+      <title>Follow these steps to syncronize your Google calendar with
+      <app>California</app>:</title>
+      <item><p>Click the <gui>Calendar</gui> icon in the menu bar. A list of
+      your current calendars will appear.</p></item>
+      <item><p>Click the <gui>Plus</gui> icon at the bottom of the window.</p>
+      </item>
+      <item><p>Select <gui>Google Calendar</gui> and click <gui>Add</gui>.</p>
+      </item>
+      <item><p>Enter your Google account name and Google password. Click
+      <gui>Login</gui>.</p>
+      <p>If you have entered the proper credentials, <app>California</app> will
+      indicate that your account has been authenticated. If you have mis-typed
+      your Google password, you will need to enter your password again.</p>
+      </item>
+      <item><p>Your default Google account calendar will appear in a window of
+      <gui>My Calendars</gui>. If you also subscribe to other calendars through
+      your Google account, those calendars will also appear in a list of
+      <gui>Other available calendars</gui>.</p></item>
+      <item><p>Select all of the calendars that you wish to sync, and select
+      <gui>Subscribe</gui>.</p></item>
+    </steps>
+    <note><p>You may also be prompted to enter your Google password one
+    additional time. This will save your password into your computer so that
+    you don't have to enter it again.</p></note>
+    <note><p>Your primary Google calendar will fully sync between
+    <app>California</app> and your Google calendar. However, you may or may
+    not have the proper permissions for any <gui>Other available
+    calendars</gui> to fully sync between <app>California</app> and your
+    Google calendars. Consult the
+    <link href="https://support.google.com/calendar/">Google Calendar Help
+    Center</link> if you encounter any problems with syncing any of the
+    calendars in your list of <gui>Other available calendars</gui>.</p></note>
   </section>
   
-  <section id="cal-sync-owncloud" ui:expanded="false">
-    <title>Sync with an OwnCloud Calendar</title>
-    <p>Instructions here . . .</p>
+  <section id="cal-sync-caldav" ui:expanded="false">
+    <title>Add a CalDAV calendar</title>
+    <p><code>CalDAV</code> is an open standard for transmitting and storing
+    calendar information. It is used by many popular services including the
+    <app>ownCloud</app> calendar and Apple's <app>iCloud</app> service.</p>
+    
+    <steps>
+      <title>Follow these steps to syncronize a <code>CalDAV</code> calendar
+      with <app>California</app>:</title>
+      
+      <item><p>Click the <gui>Calendar</gui> icon in the menu bar. A list of
+      your current calendars will appear.</p></item>
+      <item><p>Click the <gui>plus</gui> icon at the bottom of the
+      window.</p></item>
+      <item><p>Select <gui>CalDAV</gui> and click <gui>Add</gui>.</p></item>
+      <item><p>Enter a calendar name. This can be any name of your
+      choosing.</p></item>
+      <item><p>Enter the calendar URL. You will need to get this information
+      from your online calendar application or from your system administrator.
+      </p></item>
+      <item><p>Enter your the username for your online calendar into the
+      <gui>Username</gui> field.</p></item>
+      <item><p>Click <gui>Subscribe</gui>.</p>
+      <p>If you have entered a username.</p></item>
+    </steps>
+    <note><p>Although the <gui>Username</gui> field is listed as
+    <gui>Optional</gui>, it is strongly recommended that you enter a username
+    if you have one available. <app>California</app> may not be able to display
+    your calendar if you don't enter the appropriate username.</p></note>
   </section>
 
   <section id="cal-display-ics" ui:expanded="false">
-    <title>Display an ICS Calendar Feed</title>
+    <title>Display an ICS calendar feed</title>
     <p>Instructions here . . .</p>
   </section>   
 </page>

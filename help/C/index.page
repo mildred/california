@@ -5,6 +5,7 @@
       id="index">
 
   <info>
+    <desc>The California Help Guide.</desc>
     <title type="link">California</title>
     <title type="text">California</title>
 
@@ -27,8 +28,8 @@
   <p>Welcome to the <app>California</app> help guide. For a
   quick introduction into both <app>California's</app> most basic features,
   as well as some advanced keyboard shortcuts, visit the
-  <link xref="cal-quickstart">Get started with California</link> and
-  <link xref="cal-shortcut-keys">Shortcut keys</link> pages.</p>
+  <link xref="cal-quickstart">Introduction</link> and
+  <link xref="cal-shortcut-keys">Shortcut Keys</link> pages.</p>
 
   <p>Other help topics are grouped together into sections below.  Enjoy using
   <app>California</app>!</p>
@@ -39,7 +40,7 @@
     calendars.</p>
   </section>
 
-  <section id="cal-manage-events">
+  <section id="cal-manage-events" style="2column">
     <title>Manage Calendar Events</title>
   </section>
 

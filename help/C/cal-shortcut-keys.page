@@ -5,6 +5,7 @@
       id="cal-shortcut-keys">
 
   <info>
+    <desc>Learn California's keyboard shortcuts.</desc>
     <link type="guide" xref="index"/>
     <revision pkgversion="3.14" date="2014-07-06" status="incomplete"/>
 
@@ -17,7 +18,7 @@
     <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
   </info>
 
-  <title>Shortcut keys</title>
+  <title>Shortcut Keys</title>
 
   <p>Use <gui>shortcut keys</gui> to perform common tasks more quickly than with
   the mouse and menus. The following table lists all of <app>California's</app>

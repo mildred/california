@@ -1,0 +1,1 @@
+https://example.com/remote.php/caldav/calendars/bcampbell/defaultcalendar
