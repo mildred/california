@@ -216,18 +216,38 @@ public abstract class CalendarSourceSubscription : BaseObject {
     }
     
     /**
-     * Remove an {@link Component.Instance} from the subscription and notify subscribers.
+     * Remove a master {@link Component.Instance} from the subscription as well as its generated
+     * instances and notify subscribers.
      *
-     * @see notify_instance_discovered
+     * @see notify_generated_instance_removed
      * @see instance_removed
      */
-    protected virtual void notify_instance_removed(Component.UID uid) {
+    protected virtual void notify_master_removed(Component.UID uid) {
         Gee.Collection<Component.Instance> removed_instances;
         if (remove_instance(uid, out removed_instances)) {
             foreach (Component.Instance instance in removed_instances)
                 instance_removed(instance);
         } else {
             debug("Cannot remove UID %s from %s: not known", uid.to_string(), to_string());
+        }
+    }
+    
+    /**
+     * Removes a generated {@link Component.Instance} from the subscription and notify subscribers.
+     *
+     * @see notify_master_removed
+     * @see instance_removed
+     */
+    protected virtual void notify_generated_instance_removed(Component.UID uid, Component.DateTime rid) {
+        Component.Instance? found = traverse<Component.Instance>(instances.get(uid))
+            .first_matching(inst => inst.rid != null && inst.rid.equal_to(rid));
+        
+        if (found != null) {
+            instances.remove(uid, found);
+            instance_removed(found);
+        } else {
+            debug("Cannot remove UID %s RID %s from %s: not known", uid.to_string(), rid.to_string(),
+                to_string());
         }
     }
     
@@ -334,7 +354,9 @@ public abstract class CalendarSourceSubscription : BaseObject {
      * @returns null if the UID has not been seen.
      */
     public Gee.Collection<Component.Instance>? for_uid(Component.UID uid) {
-        return instances.contains(uid) ? instances.get(uid) : null;
+        return instances.contains(uid)
+            ? traverse<Component.Instance>(instances.get(uid)).to_array_list()
+            : null;
     }
     
     public override string to_string() {

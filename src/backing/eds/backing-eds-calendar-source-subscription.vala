@@ -123,7 +123,7 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
             
             // remove all existing components with this UID
             if (has_uid(uid))
-                notify_instance_removed(uid);
+                notify_master_removed(uid);
             
             // add all instances, master and generated
             Component.Instance? master = add_instance(null, ical_component, notifier);
@@ -172,8 +172,8 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
     private void on_objects_modified(SList<unowned iCal.icalcomponent> ical_components) {
         SList<unowned iCal.icalcomponent> add_list = new SList<unowned iCal.icalcomponent>();
         foreach (unowned iCal.icalcomponent ical_component in ical_components) {
-            // if not an instance and has recurring, treat as an add (which removes and adds generated
-            // instances)
+            // if not a generated instance and has recurring, treat as an add (which removes and
+            // adds generated instances)
             if (!E.Util.component_is_instance(ical_component) && E.Util.component_has_recurrences(ical_component)) {
                 add_list.append(ical_component);
                 
@@ -183,11 +183,15 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
             if (String.is_empty(ical_component.get_uid()))
                 continue;
             
-            // if none present, skip
             Component.UID uid = new Component.UID(ical_component.get_uid());
-            if (!has_uid(uid))
+            
+            // if no known instances (master or generated) of this UID, then signalled for something
+            // never seen before
+            Gee.Collection<Component.Instance>? instances = for_uid(uid);
+            if (Collection.size(instances) == 0)
                 continue;
             
+            // if a generated instance has been updated, get its RID (fall through if unavailable)
             Component.DateTime? rid = null;
             try {
                 rid = new Component.DateTime(ical_component, iCal.icalproperty_kind.RECURRENCEID_PROPERTY);
@@ -199,33 +203,44 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
                 }
             }
             
-            // get all instances known for this UID to find original to alter
-            Gee.Collection<Component.Instance>? instances = for_uid(uid);
-            
-            // if no RID, then only one should be returned
             Component.Instance? instance = null;
             if (rid == null) {
-                instance = traverse<Component.Instance>(instances).one();
-                if (instance == null) {
-                    debug("%d instances found for modified instance, expected 1", Collection.size(instances));
-                    
-                    continue;
-                }
-            } else {
-                // if RID != null, then find the matching instance
+                // no RID, then this is the master instance; test above looks for an RRULE, so that's
+                // not present any more (if it ever was); drop all generated instances, as this
+                // master no longer has any
+                traverse<Component.Instance>(instances)
+                    .filter(inst => inst.is_generated_instance)
+                    .iterate(inst => notify_generated_instance_removed(inst.uid, inst.rid));
+            
+                // the master instance of the bunch is what's been modified
                 instance = traverse<Component.Instance>(instances)
-                    .first_matching(inst => inst.rid != null && inst.rid.equal_to(rid));
+                    .filter(inst => inst.is_master_instance)
+                    .one();
                 if (instance == null) {
-                    debug("Cannot find instance with UID %s RID %s, skipping", uid.to_string(), rid.to_string());
-                    
-                    continue;
+                    debug("Cannot find master instance for UID %s (%d generated), skipping",
+                        uid.to_string(), Collection.size(instances));
+                }
+                
+            } else {
+                // RID found, so a generated instance has been modified; only update that one
+                instance = traverse<Component.Instance>(instances)
+                    .filter(inst => inst.rid != null && inst.rid.equal_to(rid))
+                    .one();
+                if (instance == null) {
+                    debug("Cannot find generated instance for UID %s RID %s (%d generated), skipping",
+                        uid.to_string(), rid.to_string(), Collection.size(instances));
                 }
             }
             
+            if (instance == null)
+                continue;
+            
+            // only deal with Events at this moment
             Component.Event? modified_event = instance as Component.Event;
             if (modified_event == null)
                 continue;
             
+            // update event details
             try {
                 modified_event.full_update(ical_component, null);
             } catch (Error err) {
@@ -243,7 +258,7 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
     
     private void on_objects_removed(SList<unowned E.CalComponentId?> ids) {
         foreach (unowned E.CalComponentId id in ids)
-            notify_instance_removed(new Component.UID(id.uid));
+            notify_master_removed(new Component.UID(id.uid));
     }
 }
 
