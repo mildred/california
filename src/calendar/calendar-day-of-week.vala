@@ -277,6 +277,27 @@ public class DayOfWeek : BaseObject, Gee.Hashable<DayOfWeek> {
         return new DayOfWeekIterator(first_of_week);
     }
     
+    public static CompareDataFunc<DayOfWeek> get_comparator_for_first_of_week(FirstOfWeek fow) {
+        switch (fow) {
+            case FirstOfWeek.MONDAY:
+                return monday_comparator;
+            
+            case FirstOfWeek.SUNDAY:
+                return sunday_comparator;
+            
+            default:
+                assert_not_reached();
+        }
+    }
+    
+    private static int monday_comparator(DayOfWeek a, DayOfWeek b) {
+        return a.value_monday - b.value_monday;
+    }
+    
+    private static int sunday_comparator(DayOfWeek a, DayOfWeek b) {
+        return a.value_sunday - b.value_sunday;
+    }
+    
     public bool equal_to(DayOfWeek other) {
         return this == other;
     }

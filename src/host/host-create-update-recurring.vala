@@ -95,6 +95,9 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
     private Gtk.RadioButton ends_on_radiobutton;
     
     [GtkChild]
+    private Gtk.Label recurring_explanation_label;
+    
+    [GtkChild]
     private Gtk.Label warning_label;
     
     [GtkChild]
@@ -132,6 +135,10 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
         bind_property(PROP_END_DATE, end_date_button, "label", BindingFlags.SYNC_CREATE,
             transform_date_to_string);
         
+        // update recurring explanation when start/end date changes
+        notify[PROP_START_DATE].connect(on_update_explanation);
+        notify[PROP_END_DATE].connect(on_update_explanation);
+        
         // map on-day checkboxes to days of week
         on_day_checkbuttons[Calendar.DayOfWeek.SUN] = sunday_checkbutton;
         on_day_checkbuttons[Calendar.DayOfWeek.MON] = monday_checkbutton;
@@ -140,6 +147,10 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
         on_day_checkbuttons[Calendar.DayOfWeek.THU] = thursday_checkbutton;
         on_day_checkbuttons[Calendar.DayOfWeek.FRI] = friday_checkbutton;
         on_day_checkbuttons[Calendar.DayOfWeek.SAT] = saturday_checkbutton;
+        
+        // updating any of them updates the recurring explanation
+        foreach (Gtk.CheckButton checkbutton in on_day_checkbuttons.values)
+            checkbutton.toggled.connect(on_update_explanation);
         
         numeric_filter.connect_to(every_entry);
         numeric_filter.connect_to(after_entry);
@@ -255,6 +266,8 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
                 checkbutton.active = false;
         }
         
+        update_explanation(master.rrule, master.get_event_date_span(Calendar.Timezone.local).start_date);
+        
         // set remaining defaults if not a recurring event
         if (master.rrule == null) {
             repeats_combobox.active = Repeats.DAILY;
@@ -332,6 +345,13 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
         warning_label.visible = supported != null;
     }
     
+    private void update_explanation(Component.RecurrenceRule? rrule, Calendar.Date? start_date) {
+        string? explanation = (rrule != null && start_date != null) ? rrule.explain(start_date) : null;
+        recurring_explanation_label.label = explanation;
+        recurring_explanation_label.visible = !String.is_empty(explanation);
+        recurring_explanation_label.no_show_all = String.is_empty(explanation);
+    }
+    
     // Returns a logging string for why not reported, null if supported
     private string? is_supported_rrule() {
         // only some frequencies support, and in some of those, certain requirements
@@ -386,6 +406,11 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
             return "rdates";
         
         return null;
+    }
+    
+    [GtkCallback]
+    private void on_update_explanation() {
+        update_explanation(make_recurring_checkbutton.active ? make_rrule() : null, start_date);
     }
     
     [GtkCallback]
@@ -466,13 +491,7 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
         jump_to_card_by_name(CreateUpdateEvent.ID, event);
     }
     
-    private void update_master() {
-        if (!make_recurring_checkbutton.active) {
-            master.make_recurring(null);
-            
-            return;
-        }
-        
+    private Component.RecurrenceRule make_rrule() {
         iCal.icalrecurrencetype_frequency freq;
         switch (repeats_combobox.active) {
             case Repeats.DAILY:
@@ -527,7 +546,9 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
                 });
             }
             
-            start_date = new_start_date;
+            // avoid property change notification, as this can start a signal storm
+            if (!start_date.equal_to(new_start_date))
+                start_date = new_start_date;
         }
         
         // set start and end dates (which may actually be date-times, so use adjust)
@@ -547,8 +568,14 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
         
         if (rrule.is_monthly) {
             if (repeats_combobox.active == Repeats.DAY_OF_THE_WEEK) {
+                // if > 4th week of month, use last week position indicator, since many months don't
+                // have more than 4 weeks
+                int position = start_date.week_of(Calendar.System.first_of_week).week_of_month;
+                if (position > 4)
+                    position = -1;
+                
                 Gee.HashMap<Calendar.DayOfWeek?, int> by_day = new Gee.HashMap<Calendar.DayOfWeek?, int>();
-                by_day[start_date.day_of_week] = start_date.week_of(Calendar.System.first_of_week).week_of_month;
+                by_day[start_date.day_of_week] = position;
                 rrule.set_by_rule(Component.RecurrenceRule.ByRule.DAY,
                     Component.RecurrenceRule.encode_days(by_day));
             } else {
@@ -558,11 +585,18 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
             }
         }
         
+        return rrule;
+    }
+    
+    private void update_master() {
         // remove EXDATEs and RDATEs, those are not currently supported
         master.exdates = null;
         master.rdates = null;
         
-        master.make_recurring(rrule);
+        if (!make_recurring_checkbutton.active)
+            master.make_recurring(null);
+        else
+            master.make_recurring(make_rrule());
     }
 }
 

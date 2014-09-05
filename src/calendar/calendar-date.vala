@@ -41,9 +41,16 @@ public class Date : Unit<Date>, Gee.Comparable<Date>, Gee.Hashable<Date> {
          */
         COMPACT,
         /**
-         * Indicates that the year should be included in the return date string.
+         * Indicates that the year should be included in the returned date string.
          */
         INCLUDE_YEAR,
+        /**
+         * Indicates that the year should be included in the returned string if it's not the current
+         * year.
+         *
+         * {@link INCLUDE_YEAR} overrides this flag to always return the year in the string.
+         */
+        INCLUDE_OTHER_YEAR,
         /**
          * Indicates that the localized string for "Today" should not be used if the date matches
          * {@link System.today}.
@@ -345,11 +352,15 @@ public class Date : Unit<Date>, Gee.Comparable<Date>, Gee.Hashable<Date> {
         bool compact = (flags & PrettyFlag.COMPACT) != 0;
         bool abbrev = (flags & PrettyFlag.ABBREV) != 0;
         bool with_year = (flags & PrettyFlag.INCLUDE_YEAR) != 0;
+        bool with_other_year = (flags & PrettyFlag.INCLUDE_OTHER_YEAR) != 0;
         bool no_today = (flags & PrettyFlag.NO_TODAY) != 0;
         bool no_dow = (flags & PrettyFlag.NO_DAY_OF_WEEK) != 0;
         
         if (!no_today && !with_year && equal_to(System.today))
             return _("Today");
+        
+        if (!with_year && with_other_year && !year.equal_to(System.today.year))
+            with_year = true;
         
         unowned string fmt;
         if (abbrev) {

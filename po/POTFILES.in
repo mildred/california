@@ -13,6 +13,7 @@ src/calendar/calendar-date.vala
 src/calendar/calendar-exact-time-span.vala
 src/calendar/calendar.vala
 src/component/component.vala
+src/component/component-recurrence-rule.vala
 src/host/host-create-update-event.vala
 src/host/host-create-update-recurring.vala
 src/host/host-import-calendar.vala

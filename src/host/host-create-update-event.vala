@@ -48,6 +48,9 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     private Gtk.ComboBoxText calendar_combo;
     
     [GtkChild]
+    private Gtk.Label recurring_explanation_label;
+    
+    [GtkChild]
     private Gtk.Box rotating_button_box_container;
     
     public bool is_update { get; set; default = false; }
@@ -154,6 +157,17 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         
         location_entry.text = event.location ?? "";
         description_textview.buffer.text = event.description ?? "";
+        
+        // if RecurrenceRule.explain() returns null, means it cannot express the RRULE, which
+        // should be made clear here
+        string? explanation = null;
+        if (event.rrule != null) {
+            explanation = event.rrule.explain(event.get_event_date_span(Calendar.Timezone.local).start_date);
+            if (explanation == null)
+                explanation = _("It's complicated…");
+        }
+        
+        recurring_explanation_label.label = explanation ?? _("Never");
         
         accept_button.label = is_update ? _("_Save") : _("C_reate");
         accept_button.use_underline = true;

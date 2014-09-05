@@ -19,6 +19,7 @@
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
+        <signal name="toggled" handler="on_update_explanation" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -137,6 +138,7 @@
               <item id="4" translatable="yes">Yearly</item>
             </items>
             <signal name="changed" handler="on_repeats_combobox_changed" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
+            <signal name="changed" handler="on_update_explanation" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -285,6 +287,7 @@
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
+                <signal name="toggled" handler="on_update_explanation" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -307,6 +310,7 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">never_radiobutton</property>
+                    <signal name="toggled" handler="on_update_explanation" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -351,6 +355,7 @@
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">never_radiobutton</property>
+                    <signal name="toggled" handler="on_update_explanation" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -367,6 +372,7 @@
                     <property name="width_chars">5</property>
                     <property name="input_purpose">number</property>
                     <signal name="changed" handler="on_after_entry_changed" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
+                    <signal name="changed" handler="on_update_explanation" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -431,6 +437,7 @@
                 <property name="width_chars">5</property>
                 <property name="input_purpose">number</property>
                 <signal name="changed" handler="on_every_entry_changed" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
+                <signal name="changed" handler="on_update_explanation" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -516,7 +523,7 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">3</property>
+        <property name="top_attach">4</property>
         <property name="width">2</property>
         <property name="height">1</property>
       </packing>
@@ -532,6 +539,24 @@
         <property name="label" translatable="yes">WARNING: California cannot edit this event's recurring criteria.
 • Press Cancel to keep the current criteria.
 • Press OK to overwrite the existing criteria with your changes.</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+        </attributes>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">3</property>
+        <property name="width">2</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="recurring_explanation_label">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label">(empty)</property>
+        <property name="wrap">True</property>
+        <property name="max_width_chars">64</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>

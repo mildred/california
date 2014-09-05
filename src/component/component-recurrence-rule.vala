@@ -20,6 +20,14 @@ public class RecurrenceRule : BaseObject {
     public const string PROP_INTERVAL = "interval";
     public const string PROP_FIRST_OF_WEEK = "first-of-week";
     
+    private const Calendar.Date.PrettyFlag UNTIL_DATE_PRETTY_FLAGS =
+        Calendar.Date.PrettyFlag.ABBREV
+        | Calendar.Date.PrettyFlag.NO_DAY_OF_WEEK
+        | Calendar.Date.PrettyFlag.INCLUDE_OTHER_YEAR;
+    
+    private const Calendar.WallTime.PrettyFlag UNTIL_TIME_PRETTY_FLAGS =
+        Calendar.WallTime.PrettyFlag.NONE;
+    
     /**
      * Enumeration of various BY rules (BYSECOND, BYMINUTE, etc.)
      */
@@ -354,9 +362,7 @@ public class RecurrenceRule : BaseObject {
      * Encode a Gee.Map of {@link Calendar.DayOfWeek} and its position into a value for
      * {@link set_by_rule} when using {@link ByRule.DAY}.
      *
-     * Use null for DayOfWeek and zero for position to mean "any" or "every".
-     *
-     * @see encode_day
+     * See {@link encode_day} for more information about how encoding works.
      */
     public static Gee.Collection<int> encode_days(Gee.Map<Calendar.DayOfWeek?, int>? day_values) {
         if (day_values == null || day_values.size == 0)
@@ -431,6 +437,9 @@ public class RecurrenceRule : BaseObject {
     
     /**
      * Returns a read-only sorted set of BY rule settings for the specified {@link ByRule}.
+     *
+     * Note that because BYDAY rules are bit-encoded, their sorting has no relationship to their
+     * decoded values.  Callers should decode each value and sort them according to their needs.
      *
      * See [[https://tools.ietf.org/html/rfc5545#section-3.3.10]] for information how these values
      * operate according to their associated ByRule and this RRULE's {@link freq}.
@@ -575,6 +584,312 @@ public class RecurrenceRule : BaseObject {
         
         if (index < ar_length)
             ical_by_ar[index] = (short) iCal.RECURRENCE_ARRAY_MAX;
+    }
+    
+    /**
+     * Returns a natural-language string explaining the {@link RecurrenceRule} for the user.
+     *
+     * Returns null if the RRULE is beyond the comprehension of this parser.
+     */
+    public string? explain(Calendar.Date start_date) {
+        switch (freq) {
+            case iCal.icalrecurrencetype_frequency.DAILY_RECURRENCE:
+                return explain_daily(ngettext("day", "%d days", interval).printf(interval));
+            
+            case iCal.icalrecurrencetype_frequency.WEEKLY_RECURRENCE:
+                return explain_weekly(ngettext("week", "%d weeks", interval).printf(interval));
+            
+            case iCal.icalrecurrencetype_frequency.MONTHLY_RECURRENCE:
+                Gee.Set<ByRule> byrules = get_active_by_rules();
+                bool has_byday = byrules.contains(ByRule.DAY);
+                bool has_bymonthday = byrules.contains(ByRule.MONTH_DAY);
+                
+                // requires one and only one
+                if (has_byday == has_bymonthday || byrules.size != 1)
+                    return null;
+                
+                string unit = ngettext("month", "%d months", interval).printf(interval);
+                
+                if (has_byday)
+                    return explain_monthly_byday(unit);
+                else
+                    return explain_monthly_bymonthday(unit);
+            
+            case iCal.icalrecurrencetype_frequency.YEARLY_RECURRENCE:
+                return explain_yearly(ngettext("year", "%d years", interval).printf(interval), start_date);
+            
+            default:
+                return null;
+        }
+        
+    }
+    
+    private string? explain_daily(string units) {
+        // only explain basic DAILY RRULEs
+        if (get_active_by_rules().size != 0)
+            return null;
+        
+        if (count > 0) {
+            // As in, "Repeats every day, 2 times"
+            return _("Repeats every %s, %s").printf(units,
+                ngettext("%d time", "%d times", count).printf(count)
+            );
+        }
+        
+        if (until_date != null) {
+            // As in, "Repeats every week until Sept. 2, 2014"
+            return _("Repeats every %s until %s").printf(units,
+                until_date.to_pretty_string(UNTIL_DATE_PRETTY_FLAGS)
+            );
+        }
+        
+        if (until_exact_time != null) {
+            // As in, "Repeats every month until Sept. 2, 2014, 8:00pm"
+            return _("Repeats every %s until %s, %s").printf(units,
+                until_exact_time.to_pretty_date_string(UNTIL_DATE_PRETTY_FLAGS),
+                until_exact_time.to_pretty_time_string(UNTIL_TIME_PRETTY_FLAGS)
+            );
+        }
+        
+        // As in, "Repeats every day"
+        return _("Repeats every %s").printf(units);
+    }
+    
+    // Use only with WEEKLY RRULEs
+    private string? explain_days_of_the_week() {
+        // Gather all the DayOfWeeks amd sort by start of week
+        Gee.TreeSet<Calendar.DayOfWeek> dows = new Gee.TreeSet<Calendar.DayOfWeek>(
+            Calendar.DayOfWeek.get_comparator_for_first_of_week(Calendar.System.first_of_week));
+        foreach (int day in get_by_rule(ByRule.DAY)) {
+            Calendar.DayOfWeek dow;
+            if (!decode_day(day, out dow, null))
+                return null;
+            
+            dows.add(dow);
+        }
+        
+        // must be at least one to work
+        if (dows.size == 0)
+            return null;
+        
+        // look for expressible patterns
+        if (dows.size == Calendar.DayOfWeek.COUNT)
+            return _("every day");
+        
+        Gee.Collection<Calendar.DayOfWeek> weekend_days =
+            from_array<Calendar.DayOfWeek>(Calendar.DayOfWeek.weekend_days).to_array_list();
+        if (Collection.equal<Calendar.DayOfWeek>(weekend_days, dows))
+            return _("the weekend");
+        
+        Gee.Collection<Calendar.DayOfWeek> weekdays =
+            from_array<Calendar.DayOfWeek>(Calendar.DayOfWeek.weekdays).to_array_list();
+        if (Collection.equal<Calendar.DayOfWeek>(weekdays, dows))
+            return _("weekdays");
+        
+        // assemble a text list of days
+        StringBuilder days_of_the_week = new StringBuilder();
+        bool first = true;
+        foreach (Calendar.DayOfWeek dow in dows) {
+            if (!first) {
+                // Separator between days of the week, i.e. "Monday, Tuesday, Wednesday"
+                days_of_the_week.append(_(", "));
+            }
+            
+            days_of_the_week.append(dow.abbrev_name);
+            first = false;
+        }
+        
+        return days_of_the_week.str;
+    }
+    
+    private string? explain_weekly(string units) {
+        // can only explain WEEKLY BYDAY rules
+        Gee.Set<ByRule> byrules = get_active_by_rules();
+        if (byrules.size != 1 || !byrules.contains(ByRule.DAY))
+            return null;
+        
+        string? days_of_the_week = explain_days_of_the_week();
+        if (String.is_empty(days_of_the_week))
+            return null;
+        
+        if (count > 0) {
+            // As in, "Repeats every week on Monday, Tuesday, 3 times"
+            return _("Repeats every %s on %s, %s").printf(units, days_of_the_week,
+                ngettext("%d time", "%d times", count).printf(count)
+            );
+        }
+        
+        if (until_date != null) {
+            // As in, "Repeats every week on Thursday until Sept. 2, 2014"
+            return _("Repeats every %s on %s until %s").printf(units, days_of_the_week,
+                until_date.to_pretty_string(UNTIL_DATE_PRETTY_FLAGS)
+            );
+        }
+        
+        if (until_exact_time != null) {
+            // As in, "Repeats every week on Friday, Saturday until Sept. 2, 2014, 8:00pm"
+            return _("Repeats every %s on %s until %s, %s").printf(units, days_of_the_week,
+                until_exact_time.to_pretty_date_string(UNTIL_DATE_PRETTY_FLAGS),
+                until_exact_time.to_pretty_time_string(UNTIL_TIME_PRETTY_FLAGS)
+            );
+        }
+        
+        // As in, "Repeats every week on Monday, Wednesday, Friday"
+        return _("Repeats every %s on %s").printf(units, days_of_the_week);
+    }
+    
+    private string? explain_monthly_byday(string units) {
+        // only support one day of the week for BYMONTHDAT RRULEs
+        Gee.Set<int> byday = get_by_rule(ByRule.DAY);
+        if (byday.size != 1)
+            return null;
+        
+        Calendar.DayOfWeek? dow;
+        int position;
+        if (!decode_day(traverse<int>(byday).first(), out dow, out position))
+            return null;
+        
+        // only support a small set of possibilites here
+        if (dow == null)
+            return null;
+        
+        string day;
+        switch (position) {
+            case 1:
+                // As in, "first Thursday of the month"
+                day = _("first %s").printf(dow.full_name);
+            break;
+            
+            case 2:
+                // As in, "second Thursday of the month"
+                day = _("second %s").printf(dow.full_name);
+            break;
+            
+            case 3:
+                // As in, "third Thursday of the month"
+                day = _("third %s").printf(dow.full_name);
+            break;
+            
+            case 4:
+                // As in, "fourth Thursday of the month"
+                day = _("fourth %s").printf(dow.full_name);
+            break;
+            
+            case 5:
+                // As in, "fifth Thursday of the month"
+                day = _("fifth %s").printf(dow.full_name);
+            break;
+            
+            case -1:
+                // As in, "last Thursday of the month"
+                day = _("last %s").printf(dow.full_name);
+            break;
+            
+            default:
+                return null;
+        }
+        
+        if (count > 0) {
+            // As in, "Repeats every month on the first Tuesday, 3 times"
+            return _("Repeats every %s on the %s, %s").printf(units, day,
+                ngettext("%d time", "%d times", count).printf(count)
+            );
+        }
+        
+        if (until_date != null) {
+            // As in, "Repeats every month on the second Monday until Sept. 2, 2014"
+            return _("Repeats every %s on the %s until %s").printf(units, day,
+                until_date.to_pretty_string(UNTIL_DATE_PRETTY_FLAGS)
+            );
+        }
+        
+        if (until_exact_time != null) {
+            // As in, "Repeats every month on the last Friday until Sept. 2, 2014, 8:00pm"
+            return _("Repeats every %s on the %s until %s, %s").printf(units, day,
+                until_exact_time.to_pretty_date_string(UNTIL_DATE_PRETTY_FLAGS),
+                until_exact_time.to_pretty_time_string(UNTIL_TIME_PRETTY_FLAGS)
+            );
+        }
+        
+        // As in, "Repeats every month on the third Tuesday"
+        return _("Repeats every %s on the %s").printf(units, day);
+    }
+    
+    private string? explain_monthly_bymonthday(string units) {
+        // only MONTHLY BYDAY RRULEs
+        Gee.Set<int> byrules = get_active_by_rules();
+        if (byrules.size != 1 || !byrules.contains(ByRule.MONTH_DAY))
+            return null;
+        
+        // currently only support one monthday (generally, the same as DTSTART)
+        Gee.Set<int> monthdays = get_by_rule(ByRule.MONTH_DAY);
+        if (monthdays.size != 1)
+            return null;
+        
+        // As in, "Repeats on day 4 of the month"
+        string day = "day %d".printf(traverse<int>(monthdays).first());
+        
+        if (count > 0) {
+            // As in, "Repeats every month on day 4, 3 times"
+            return _("Repeats every %s on %s, %s").printf(units, day,
+                ngettext("%d time", "%d times", count).printf(count)
+            );
+        }
+        
+        if (until_date != null) {
+            // As in, "Repeats every month on day 21 until Sept. 2, 2014"
+            return _("Repeats every %s on %s until %s").printf(units, day,
+                until_date.to_pretty_string(UNTIL_DATE_PRETTY_FLAGS)
+            );
+        }
+        
+        if (until_exact_time != null) {
+            // As in, "Repeats every month on day 20 until Sept. 2, 2014, 8:00pm"
+            return _("Repeats every %s on %s until %s, %s").printf(units, day,
+                until_exact_time.to_pretty_date_string(UNTIL_DATE_PRETTY_FLAGS),
+                until_exact_time.to_pretty_time_string(UNTIL_TIME_PRETTY_FLAGS)
+            );
+        }
+        
+        // As in, "Repeats every month on day 5"
+        return _("Repeats every %s on %s").printf(units, day);
+    }
+    
+    private string? explain_yearly(string units, Calendar.Date start_date) {
+        // only explain basic YEARLY RRULEs
+        if (get_active_by_rules().size != 0)
+            return null;
+        
+        string date = start_date.to_pretty_string(
+            Calendar.Date.PrettyFlag.NO_DAY_OF_WEEK
+            | Calendar.Date.PrettyFlag.NO_TODAY
+            | Calendar.Date.PrettyFlag.ABBREV
+        );
+        
+        if (count > 0) {
+            // As in, "Repeats every year on 3 March 2014, 2 times"
+            return _("Repeats every %s on %s, %s").printf(units, date,
+                ngettext("%d time", "%d times", count).printf(count)
+            );
+        }
+        
+        if (until_date != null) {
+            // As in, "Repeats every year on 3 March 2014 until Sept. 2, 2014"
+            return _("Repeats every %s on %s until %s").printf(units, date,
+                until_date.to_pretty_string(UNTIL_DATE_PRETTY_FLAGS)
+            );
+        }
+        
+        if (until_exact_time != null) {
+            // As in, "Repeats every year on 3 March 2014 until Sept. 2, 2014, 8:00pm"
+            return _("Repeats every %s on %s until %s, %s").printf(units, date,
+                until_exact_time.to_pretty_date_string(UNTIL_DATE_PRETTY_FLAGS),
+                until_exact_time.to_pretty_time_string(UNTIL_TIME_PRETTY_FLAGS)
+            );
+        }
+        
+        // As in, "Repeats every year on 3 March 2014"
+        return _("Repeats every %s on %s").printf(units, date);
     }
     
     public override string to_string() {

@@ -55,6 +55,9 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     private Gtk.Label description_text;
     
     [GtkChild]
+    private Gtk.Label recurring_explanation_label;
+    
+    [GtkChild]
     private Gtk.Box rotating_button_box_container;
     
     private new Component.Event event;
@@ -165,6 +168,14 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         
         // description
         set_label(null, description_text, Markup.linkify(escape(event.description), linkify_delegate));
+        
+        // recurring explanation (if appropriate)
+        string? explanation = (event.rrule != null)
+            ? event.rrule.explain(event.get_event_date_span(Calendar.Timezone.local).start_date)
+            : null;
+        recurring_explanation_label.label = explanation ?? "";
+        recurring_explanation_label.visible = !String.is_empty(explanation);
+        recurring_explanation_label.no_show_all = String.is_empty(explanation);
         
         // if read-only, don't show Delete or Edit buttons; since they're the only two, don't show
         // the entire button box
