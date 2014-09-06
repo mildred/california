@@ -35,7 +35,7 @@
         <property name="margin_top">6</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <property name="min_content_width">350</property>
+        <property name="min_content_width">400</property>
         <property name="min_content_height">200</property>
         <child>
           <object class="GtkViewport" id="viewport1">
@@ -55,9 +55,10 @@
                 <property name="label">Event...</property>
                 <property name="use_markup">True</property>
                 <property name="wrap">True</property>
+                <property name="wrap_mode">word-char</property>
                 <property name="selectable">True</property>
-                <property name="width_chars">32</property>
-                <property name="max_width_chars">64</property>
+                <property name="width_chars">40</property>
+                <property name="max_width_chars">128</property>
               </object>
             </child>
           </object>
