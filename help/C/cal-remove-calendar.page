@@ -7,7 +7,7 @@
     <desc>Delete a calendar and its related event details.</desc>
     <link type="guide" xref="index#cal-manage-calendars"/>
     <link type="seealso" xref="cal-hide-a-calendar"/>
-    <revision pkgversion="3.14" date="2014-07-20" status="stub"/>
+    <revision pkgversion="0.2" date="2014-07-20" status="stub"/>
 
     <credit type="author copyright">
       <name>Jim Campbell</name>

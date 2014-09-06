@@ -6,7 +6,7 @@
   <info>
     <desc>Get started with California.</desc>
     <link type="guide" xref="index"/>
-    <revision pkgversion="3.14" date="2014-07-05" status="draft"/>
+    <revision pkgversion="0.2" date="2014-07-05" status="draft"/>
     
     <credit type="author copyright">
       <name>Jim Campbell</name>

@@ -1,7 +1,7 @@
 <page xmlns="http://projectmallard.org/1.0/"
       xmlns:its="http://www.w3.org/2005/11/its"
       xmlns:ui="http://projectmallard.org/ui/1.0/"
-      type="guide" style="tip" version="1.0 ui/1.0"
+      type="guide" style="task" version="1.0 ui/1.0"
       id="cal-add-calendar">
 
   <info>
@@ -10,7 +10,7 @@
     <link type="seealso" xref="cal-rename-calendar"/>
     <link type="seealso" xref="cal-hide-a-calendar"/>
     <link type="seealso" xref="cal-remove-calendar"/>
-    <revision pkgversion="3.14" date="2014-09-02" status="draft"/>
+    <revision pkgversion="0.2" date="2014-09-02" status="candidate"/>
 
     <credit type="author copyright">
       <name>Jim Campbell</name>
@@ -39,9 +39,10 @@
     <steps>
       <title>Follow these steps to syncronize your Google calendar with
       <app>California</app>:</title>
-      <item><p>Click the <gui>Calendar</gui> icon in the menu bar. A list of
-      your current calendars will appear.</p></item>
-      <item><p>Click the <gui>Plus</gui> icon at the bottom of the window.</p>
+      <item><p>Click the <gui>Calendar</gui> icon in the upper-right portion of
+      <app>California's</app> menu bar. A list of your current calendars will
+      appear in a new window.</p></item>
+      <item><p>Click the <gui>Plus</gui> icon at the bottom of that window.</p>
       </item>
       <item><p>Select <gui>Google Calendar</gui> and click <gui>Add</gui>.</p>
       </item>
@@ -80,30 +81,64 @@
     <steps>
       <title>Follow these steps to syncronize a <code>CalDAV</code> calendar
       with <app>California</app>:</title>
-      
-      <item><p>Click the <gui>Calendar</gui> icon in the menu bar. A list of
-      your current calendars will appear.</p></item>
-      <item><p>Click the <gui>plus</gui> icon at the bottom of the
-      window.</p></item>
+
+      <item><p>Obtain the URL address of the calendar that you wish to add to
+      <app>California</app>. You will need to get this address from your
+      calendar provider or from your system administrator.</p></item>      
+      <item><p>Click the <gui>Calendar</gui> icon in the upper-right portion of
+      <app>California's</app> menu bar. A list of your current calendars will
+      appear in a new window.</p></item>
+      <item><p>Click the <gui>Plus</gui> icon at the bottom of that window.</p>
+      </item>
       <item><p>Select <gui>CalDAV</gui> and click <gui>Add</gui>.</p></item>
       <item><p>Enter a calendar name. This can be any name of your
       choosing.</p></item>
-      <item><p>Enter the calendar URL. You will need to get this information
-      from your online calendar application or from your system administrator.
-      </p></item>
+      <item><p>Enter the calendar URL address.</p></item>
       <item><p>Enter your the username for your online calendar into the
       <gui>Username</gui> field.</p></item>
-      <item><p>Click <gui>Subscribe</gui>.</p>
-      <p>If you have entered a username.</p></item>
+      <item><p>Click <gui>Subscribe</gui>.</p></item>
+      <item><p>If you have entered a username, you may also be prompted to
+      enter a password.</p></item>
     </steps>
     <note><p>Although the <gui>Username</gui> field is listed as
-    <gui>Optional</gui>, it is strongly recommended that you enter a username
-    if you have one available. <app>California</app> may not be able to display
-    your calendar if you don't enter the appropriate username.</p></note>
+    <gui>Optional</gui>, most <app>CalDAV</app> calendars require a username. 
+    <app>California</app> may not be able to display your <app>CalDAV</app>
+    calendar if you do not enter a valid username.</p></note>
   </section>
 
   <section id="cal-display-ics" ui:expanded="false">
-    <title>Display an ICS calendar feed</title>
-    <p>Instructions here . . .</p>
+    <title>Display a Web Calendar (.ics) Feed</title>
+
+    <p>Adding a Web Calendar (.ics) feed to <app>California</app> will allow
+    you to view an online calendar from within <app>California</app>. Although
+    <app>California</app> will display events from a <app>Web Calendar</app>
+    feed, you will not be able to change or delete these events.</p>
+    
+    <steps>
+      <title>Follow these steps to add a <app>Web Calendar (.ics)</app> feed to
+      <app>California</app>:</title>
+      <item><p>Obtain the URL address of the calendar feed that you wish to
+      add to <app>California</app>. The address will end with a ".ics"
+      extension.</p></item>
+      <item><p>Click the <gui>Calendar</gui> icon in the upper-right portion of
+      <app>California's</app> menu bar. A list of your current calendars will
+      appear in a new window.</p></item>
+      <item><p>Click the <gui>Plus</gui> icon at the bottom of that window.</p>
+      </item>
+      <item><p>Select <gui>Web Calendar (.ics)</gui> and click <gui>Add</gui>.
+      </p></item>
+      <item><p>Enter a calendar name. This can be any name of your
+      choosing.</p></item>
+      <item><p>Enter the calendar URL address.</p></item>
+      <item><p>If required, enter your the username for your web calendar into
+      the <gui>Username</gui> field.</p></item>
+      <item><p>Click <gui>Subscribe</gui>.</p></item>
+      <item><p>If you have entered a username, you may also be prompted to
+      enter a password.</p></item>
+    </steps>
+    
+    <note style="tip"><p>Most <app>Web Calendar (.ics)</app> feeds do not
+    require a password.</p></note>
+
   </section>   
 </page>

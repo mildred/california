@@ -6,7 +6,7 @@
   <info>
     <desc>Change an event's details.</desc>
     <link type="guide" xref="index#cal-manage-events"/>
-    <revision pkgversion="3.14" date="2014-09-01" status="draft"/>
+    <revision pkgversion="0.2" date="2014-09-01" status="draft"/>
 
     <credit type="author copyright">
       <name>Jim Campbell</name>

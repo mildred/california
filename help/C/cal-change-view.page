@@ -6,7 +6,7 @@
   <info>
     <link type="guide" xref="index#cal-manage-calendars"/>
     <desc>Switch between monthly and weekly views of your calendar.</desc>
-    <revision pkgversion="3.14" date="2014-09-01" status="stub"/>
+    <revision pkgversion="0.2" date="2014-09-01" status="stub"/>
 
     <credit type="author copyright">
       <name>Jim Campbell</name>

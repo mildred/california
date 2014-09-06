@@ -6,7 +6,7 @@
   <info>
     <desc>Change the name of a calendar.</desc>
     <link type="guide" xref="index#cal-manage-calendars"/>
-    <revision pkgversion="3.14" date="2014-08-31" status="draft"/>
+    <revision pkgversion="0.2" date="2014-08-31" status="draft"/>
 
     <credit type="author copyright">
       <name>Jim Campbell</name>

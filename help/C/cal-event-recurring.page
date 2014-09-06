@@ -7,7 +7,7 @@
     <desc>Schedule an event to reoccur on a regular basis.</desc>
     <link type="guide" xref="index#cal-manage-events"/>
     <link type="seealso" xref="cal-event-edit"/>
-    <revision pkgversion="3.14" date="2014-09-01" status="stub"/>
+    <revision pkgversion="0.2" date="2014-09-01" status="stub"/>
 
     <credit type="author copyright">
       <name>Jim Campbell</name>
