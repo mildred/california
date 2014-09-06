@@ -7,7 +7,7 @@
   <info>
     <desc>Learn California's keyboard shortcuts.</desc>
     <link type="guide" xref="index"/>
-    <revision pkgversion="0.2" date="2014-07-06" status="incomplete"/>
+    <revision pkgversion="0.2" date="2014-09-06" status="draft"/>
 
     <credit type="author copyright">
       <name>Jim Campbell</name>
@@ -40,6 +40,19 @@
         </tr>
       </thead>
       <tbody>
+        <tr>
+          <td><p>View events for the current day</p></td>
+          <td><p><keyseq><key>Ctrl</key><key>T</key></keyseq></p></td>
+        </tr>
+        <tr>
+          <td><p>View events for the current week</p></td>
+          <td><p><keyseq><key>Ctrl</key><key>W</key></keyseq></p></td>
+        </tr>
+        <tr>
+          <td><p>View events for the current month</p></td>
+          <td><p><keyseq><key>Ctrl</key><key>M</key></keyseq></p></td>
+        </tr>
+
         <tr>
           <td><p>View the next month / week</p></td>
           <td><p><keyseq><key>Alt</key><key>Right Arrow</key></keyseq></p></td>

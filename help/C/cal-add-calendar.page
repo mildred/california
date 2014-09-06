@@ -10,7 +10,7 @@
     <link type="seealso" xref="cal-rename-calendar"/>
     <link type="seealso" xref="cal-hide-a-calendar"/>
     <link type="seealso" xref="cal-remove-calendar"/>
-    <revision pkgversion="0.2" date="2014-09-02" status="candidate"/>
+    <revision pkgversion="0.2" date="2014-09-06" status="candidate"/>
 
     <credit type="author copyright">
       <name>Jim Campbell</name>
