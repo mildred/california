@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-24 17:59+0200\n"
-"PO-Revision-Date: 2014-08-24 18:00+0200\n"
+"POT-Creation-Date: 2014-09-07 02:31+0200\n"
+"PO-Revision-Date: 2014-09-07 02:32+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -88,8 +88,8 @@ msgid "Event;Events;Schedule;"
 msgstr "Wydarzenie;Wydarzenia;Zdarzenie;Zdarzenia;Plan;Terminarz;Harmonogram;"
 
 #: ../src/activator/activator.vala:36
-msgid "Web calendar (.ics)"
-msgstr "Kalendarz WWW (.ics)"
+msgid "Web calendar (.ics or webcal:)"
+msgstr "Kalendarz WWW (.ics lub webcal:)"
 
 #: ../src/activator/activator.vala:37
 msgid "Google Calendar"
@@ -199,7 +199,7 @@ msgstr "Nieznane opcje: %s\n"
 msgid "%s to %s"
 msgstr "%s do %s"
 
-#: ../src/calendar/calendar-date.vala:352
+#: ../src/calendar/calendar-date.vala:360
 msgid "Today"
 msgstr "Dzisiaj"
 
@@ -561,9 +561,199 @@ msgstr "w;na;"
 msgid "st;nd;rd;th"
 msgstr "st;nd;rd;th"
 
-#: ../src/host/host-create-update-event.vala:64
+#: ../src/component/component-recurrence-rule.vala:597
+#: ../src/host/host-create-update-recurring.vala:447
+#, c-format
+msgid "day"
+msgid_plural "%d days"
+msgstr[0] "dzień"
+msgstr[1] "%d dni"
+msgstr[2] "%d dni"
+
+#: ../src/component/component-recurrence-rule.vala:600
+#: ../src/host/host-create-update-recurring.vala:438
+#, c-format
+msgid "week"
+msgid_plural "%d weeks"
+msgstr[0] "tydzień"
+msgstr[1] "%d tygodnie"
+msgstr[2] "%d tygodni"
+
+#: ../src/component/component-recurrence-rule.vala:611
+#: ../src/host/host-create-update-recurring.vala:434
+#, c-format
+msgid "month"
+msgid_plural "%d months"
+msgstr[0] "miesiąc"
+msgstr[1] "%d miesiące"
+msgstr[2] "%d miesięcy"
+
+#: ../src/component/component-recurrence-rule.vala:619
+#: ../src/host/host-create-update-recurring.vala:442
+#, c-format
+msgid "year"
+msgid_plural "%d years"
+msgstr[0] "rok"
+msgstr[1] "%d lata"
+msgstr[2] "%d lat"
+
+#. As in, "Repeats every day, 2 times"
+#: ../src/component/component-recurrence-rule.vala:634
+#, c-format
+msgid "Repeats every %s, %s"
+msgstr "Powtarzanie co %s, %s"
+
+#: ../src/component/component-recurrence-rule.vala:635
+#: ../src/component/component-recurrence-rule.vala:718
+#: ../src/component/component-recurrence-rule.vala:795
+#: ../src/component/component-recurrence-rule.vala:835
+#: ../src/component/component-recurrence-rule.vala:872
+#, c-format
+msgid "%d time"
+msgid_plural "%d times"
+msgstr[0] "%d raz"
+msgstr[1] "%d razy"
+msgstr[2] "%d razy"
+
+#. As in, "Repeats every week until Sept. 2, 2014"
+#: ../src/component/component-recurrence-rule.vala:641
+#, c-format
+msgid "Repeats every %s until %s"
+msgstr "Powtarzanie co %s do %s"
+
+#. As in, "Repeats every month until Sept. 2, 2014, 8:00pm"
+#: ../src/component/component-recurrence-rule.vala:648
+#, c-format
+msgid "Repeats every %s until %s, %s"
+msgstr "Powtarzanie co %s do %s, %s"
+
+#. As in, "Repeats every day"
+#: ../src/component/component-recurrence-rule.vala:655
+#, c-format
+msgid "Repeats every %s"
+msgstr "Powtarzanie co %s"
+
+#. look for expressible patterns
+#: ../src/component/component-recurrence-rule.vala:677
+msgid "every day"
+msgstr "każdego dnia"
+
+#: ../src/component/component-recurrence-rule.vala:682
+msgid "the weekend"
+msgstr "weekend"
+
+#: ../src/component/component-recurrence-rule.vala:687
+msgid "weekdays"
+msgstr "dni robocze"
+
+#. Separator between days of the week, i.e. "Monday, Tuesday, Wednesday"
+#: ../src/component/component-recurrence-rule.vala:695
+msgid ", "
+msgstr ", "
+
+#. As in, "Repeats every week on Monday, Tuesday, 3 times"
+#. As in, "Repeats every month on day 4, 3 times"
+#. As in, "Repeats every year on 3 March 2014, 2 times"
+#: ../src/component/component-recurrence-rule.vala:717
+#: ../src/component/component-recurrence-rule.vala:834
+#: ../src/component/component-recurrence-rule.vala:871
+#, c-format
+msgid "Repeats every %s on %s, %s"
+msgstr "Powtarzanie co %s w %s, %s"
+
+#. As in, "Repeats every week on Thursday until Sept. 2, 2014"
+#. As in, "Repeats every month on day 21 until Sept. 2, 2014"
+#. As in, "Repeats every year on 3 March 2014 until Sept. 2, 2014"
+#: ../src/component/component-recurrence-rule.vala:724
+#: ../src/component/component-recurrence-rule.vala:841
+#: ../src/component/component-recurrence-rule.vala:878
+#, c-format
+msgid "Repeats every %s on %s until %s"
+msgstr "Powtarzanie co %s w %s do %s"
+
+#. As in, "Repeats every week on Friday, Saturday until Sept. 2, 2014, 8:00pm"
+#. As in, "Repeats every month on day 20 until Sept. 2, 2014, 8:00pm"
+#. As in, "Repeats every year on 3 March 2014 until Sept. 2, 2014, 8:00pm"
+#: ../src/component/component-recurrence-rule.vala:731
+#: ../src/component/component-recurrence-rule.vala:848
+#: ../src/component/component-recurrence-rule.vala:885
+#, c-format
+msgid "Repeats every %s on %s until %s, %s"
+msgstr "Powtarzanie co %s w %s do %s, %s"
+
+#. As in, "Repeats every week on Monday, Wednesday, Friday"
+#. As in, "Repeats every month on day 5"
+#. As in, "Repeats every year on 3 March 2014"
+#: ../src/component/component-recurrence-rule.vala:738
+#: ../src/component/component-recurrence-rule.vala:855
+#: ../src/component/component-recurrence-rule.vala:892
+#, c-format
+msgid "Repeats every %s on %s"
+msgstr "Powtarzanie co %s w %s"
+
+#. As in, "first Thursday of the month"
+#: ../src/component/component-recurrence-rule.vala:760
+#, c-format
+msgid "first %s"
+msgstr "pierwszy %s"
+
+#. As in, "second Thursday of the month"
+#: ../src/component/component-recurrence-rule.vala:765
+#, c-format
+msgid "second %s"
+msgstr "drugi %s"
+
+#. As in, "third Thursday of the month"
+#: ../src/component/component-recurrence-rule.vala:770
+#, c-format
+msgid "third %s"
+msgstr "trzeci %s"
+
+#. As in, "fourth Thursday of the month"
+#: ../src/component/component-recurrence-rule.vala:775
+#, c-format
+msgid "fourth %s"
+msgstr "czwarty %s"
+
+#. As in, "fifth Thursday of the month"
+#: ../src/component/component-recurrence-rule.vala:780
+#, c-format
+msgid "fifth %s"
+msgstr "piąty %s"
+
+#. As in, "last Thursday of the month"
+#: ../src/component/component-recurrence-rule.vala:785
+#, c-format
+msgid "last %s"
+msgstr "ostatni %s"
+
+#. As in, "Repeats every month on the first Tuesday, 3 times"
+#: ../src/component/component-recurrence-rule.vala:794
+#, c-format
+msgid "Repeats every %s on the %s, %s"
+msgstr "Powtarzanie co %s w %s, %s"
+
+#. As in, "Repeats every month on the second Monday until Sept. 2, 2014"
+#: ../src/component/component-recurrence-rule.vala:801
+#, c-format
+msgid "Repeats every %s on the %s until %s"
+msgstr "Powtarzanie co %s w %s do %s"
+
+#. As in, "Repeats every month on the last Friday until Sept. 2, 2014, 8:00pm"
+#: ../src/component/component-recurrence-rule.vala:808
+#, c-format
+msgid "Repeats every %s on the %s until %s, %s"
+msgstr "Powtarzanie co %s w %s do %s, %s"
+
+#. As in, "Repeats every month on the third Tuesday"
+#: ../src/component/component-recurrence-rule.vala:815
+#, c-format
+msgid "Repeats every %s on the %s"
+msgstr "Powtarzanie co %s w %s"
+
 #: ../src/host/host-create-update-event.vala:67
-#: ../src/host/host-show-event.vala:75 ../src/rc/activator-list.ui.h:1
+#: ../src/host/host-create-update-event.vala:70
+#: ../src/host/host-show-event.vala:78 ../src/rc/activator-list.ui.h:1
 #: ../src/rc/calendar-import.ui.h:1 ../src/rc/create-update-recurring.ui.h:24
 #: ../src/rc/event-time-settings.ui.h:4 ../src/rc/generic-subscribe.ui.h:5
 #: ../src/rc/google-authenticating.ui.h:1
@@ -571,71 +761,51 @@ msgstr "st;nd;rd;th"
 msgid "_Cancel"
 msgstr "_Anuluj"
 
-#: ../src/host/host-create-update-event.vala:65
+#: ../src/host/host-create-update-event.vala:68
 msgid "Save A_ll Events"
 msgstr "Zapisz _wszystkie wydarzenia"
 
-#: ../src/host/host-create-update-event.vala:66
+#: ../src/host/host-create-update-event.vala:69
 msgid "Save _This Event"
 msgstr "Zapisz _to wydarzenie"
 
-#: ../src/host/host-create-update-event.vala:158
+#: ../src/host/host-create-update-event.vala:167
+msgid "It's complicated…"
+msgstr "To skomplikowane…"
+
+#: ../src/host/host-create-update-event.vala:170
+msgid "Never"
+msgstr "Nigdy"
+
+#: ../src/host/host-create-update-event.vala:172
 msgid "_Save"
 msgstr "_Zapisz"
 
-#: ../src/host/host-create-update-event.vala:158
+#: ../src/host/host-create-update-event.vala:172
 msgid "C_reate"
 msgstr "U_twórz"
 
-#: ../src/host/host-create-update-event.vala:272
-#: ../src/host/host-quick-create-event.vala:143
+#: ../src/host/host-create-update-event.vala:286
+#: ../src/host/host-quick-create-event.vala:156
 msgid "Unable to create event: calendar must be specified"
 msgstr "Nie można utworzyć wydarzenia: należy podać kalendarz"
 
-#: ../src/host/host-create-update-event.vala:291
-#: ../src/host/host-quick-create-event.vala:162
+#: ../src/host/host-create-update-event.vala:305
+#: ../src/host/host-quick-create-event.vala:175
 #, c-format
 msgid "Unable to create event: %s"
 msgstr "Nie można utworzyć wydarzenia: %s"
 
-#: ../src/host/host-create-update-event.vala:296
+#: ../src/host/host-create-update-event.vala:310
 msgid "Unable to update event: calendar must be specified"
 msgstr "Nie można zaktualizować wydarzenia: należy podać kalendarz"
 
-#: ../src/host/host-create-update-event.vala:341
+#: ../src/host/host-create-update-event.vala:355
 #, c-format
 msgid "Unable to update event: %s"
 msgstr "Nie można zaktualizować wydarzenia: %s"
 
-#: ../src/host/host-create-update-recurring.vala:401
-msgid "month"
-msgid_plural "months"
-msgstr[0] "miesiąc"
-msgstr[1] "miesiące"
-msgstr[2] "miesięcy"
-
-#: ../src/host/host-create-update-recurring.vala:405
-msgid "week"
-msgid_plural "weeks"
-msgstr[0] "tydzień"
-msgstr[1] "tygodnie"
-msgstr[2] "tygodni"
-
-#: ../src/host/host-create-update-recurring.vala:409
-msgid "year"
-msgid_plural "years"
-msgstr[0] "rok"
-msgstr[1] "lata"
-msgstr[2] "lat"
-
-#: ../src/host/host-create-update-recurring.vala:414
-msgid "day"
-msgid_plural "days"
-msgstr[0] "dzień"
-msgstr[1] "dni"
-msgstr[2] "dni"
-
-#: ../src/host/host-create-update-recurring.vala:426
+#: ../src/host/host-create-update-recurring.vala:459
 msgid "event"
 msgid_plural "events"
 msgstr[0] "wydarzenie"
@@ -665,50 +835,50 @@ msgstr "Szybko tworzy nowe wydarzenie (Ctrl+N)"
 msgid "Calendars (Ctrl+L)"
 msgstr "Kalendarze (Ctrl+L)"
 
-#: ../src/host/host-main-window.vala:484
+#: ../src/host/host-main-window.vala:486
 #, c-format
 msgid "Unable to edit event: %s"
 msgstr "Nie można zmodyfikować wydarzenia: %s"
 
-#: ../src/host/host-quick-create-event.vala:71
+#: ../src/host/host-quick-create-event.vala:79
 msgid "Example: Dinner at Tadich Grill 7:30pm"
 msgstr "Przykład: kolacja w Barze Mlecznym 19:30"
 
-#: ../src/host/host-quick-create-event.vala:73
+#: ../src/host/host-quick-create-event.vala:81
 msgid "Example: Dinner at Tadich Grill"
 msgstr "Przykład: kolacja w Barze Mlecznym"
 
-#: ../src/host/host-quick-create-event.vala:77
+#: ../src/host/host-quick-create-event.vala:85
 msgid "Example: Dinner at Tadich Grill 7:30pm tomorrow"
 msgstr "Przykład: kolacja w Barze Mlecznym 19:30 jutro"
 
-#: ../src/host/host-show-event.vala:70
+#: ../src/host/host-show-event.vala:73
 msgid "Delete"
 msgstr "Usuń"
 
-#: ../src/host/host-show-event.vala:71
+#: ../src/host/host-show-event.vala:74
 msgid "A_ll Events"
 msgstr "_Wszystkie wydarzenia"
 
-#: ../src/host/host-show-event.vala:72
+#: ../src/host/host-show-event.vala:75
 msgid "_This Event"
 msgstr "_To wydarzenie"
 
-#: ../src/host/host-show-event.vala:74
+#: ../src/host/host-show-event.vala:77
 msgid "This & _Future Events"
 msgstr "To i p_rzyszłe wydarzenia"
 
-#: ../src/host/host-show-event.vala:81
+#: ../src/host/host-show-event.vala:84
 msgid "Edit event"
 msgstr "Modyfikuj wydarzenie"
 
-#: ../src/host/host-show-event.vala:82
+#: ../src/host/host-show-event.vala:85
 msgid "Delete event"
 msgstr "Usuń wydarzenie"
 
 #. No number is supplied because the number of events removed is indefinite in certain
 #. situations ... plural text should simply be for "more than one"
-#: ../src/host/host-show-event.vala:257
+#: ../src/host/host-show-event.vala:281
 #, c-format
 msgid "Unable to remove event: %s"
 msgid_plural "Unable to remove events: %s"
@@ -788,25 +958,29 @@ msgid "Time"
 msgstr "Czas"
 
 #: ../src/rc/create-update-event.ui.h:4
-msgid "Re_peats…"
-msgstr "_Powtarzanie…"
-
-#: ../src/rc/create-update-event.ui.h:5
 msgid "Set the start and end time"
 msgstr "Ustawia czas rozpoczęcia i ukończenia"
 
-#: ../src/rc/create-update-event.ui.h:6
+#: ../src/rc/create-update-event.ui.h:5
 msgid "_Location"
 msgstr "_Położenie"
 
-#: ../src/rc/create-update-event.ui.h:7
+#: ../src/rc/create-update-event.ui.h:6
 msgid "_Description"
 msgstr "_Opis"
 
-#: ../src/rc/create-update-event.ui.h:8 ../src/rc/quick-create-event.ui.h:4
+#: ../src/rc/create-update-event.ui.h:7 ../src/rc/quick-create-event.ui.h:4
 #: ../src/rc/show-event.ui.h:3
 msgid "Calendar"
 msgstr "Kalendarz"
+
+#: ../src/rc/create-update-event.ui.h:8
+msgid "Recurrence"
+msgstr "Powtarzanie"
+
+#: ../src/rc/create-update-event.ui.h:9
+msgid "Add or remove recurrences of the event"
+msgstr "Dodaje lub usuwa powtórzenia wydarzenia"
 
 #: ../src/rc/create-update-recurring.ui.h:1
 msgid "_Repeating event"
@@ -1004,10 +1178,14 @@ msgid "Quick Add help"
 msgstr "Pomoc szybkiego dodawania wydarzenia"
 
 #: ../src/rc/quick-create-event.ui.h:6
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: ../src/rc/quick-create-event.ui.h:7
 msgid "Edit event details"
 msgstr "Modyfikuj szczegóły wydarzenia"
 
-#: ../src/rc/quick-create-event.ui.h:7
+#: ../src/rc/quick-create-event.ui.h:8
 msgid "Create event"
 msgstr "Utwórz wydarzenie"
 
