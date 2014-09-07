@@ -39,11 +39,9 @@
     <steps>
       <title>Follow these steps to syncronize your Google calendar with
       <app>California</app>:</title>
-      <item><p>Click the <gui>Calendar</gui> icon in the upper-right portion of
-      <app>California's</app> menu bar. A list of your current calendars will
-      appear in a new window.</p></item>
-      <item><p>Click the <gui>Plus</gui> icon at the bottom of that window.</p>
-      </item>
+      <include href="cal-open-calendar-list.xml" 
+      xpointer="xmlns(mal=http://projectmallard.org/1.0/)xpointer(/mal:steps/mal:item)"
+      xmlns="http://www.w3.org/2001/XInclude"/>
       <item><p>Select <gui>Google Calendar</gui> and click <gui>Add</gui>.</p>
       </item>
       <item><p>Enter your Google account name and Google password. Click
@@ -85,11 +83,9 @@
       <item><p>Obtain the URL address of the calendar that you wish to add to
       <app>California</app>. You will need to get this address from your
       calendar provider or from your system administrator.</p></item>      
-      <item><p>Click the <gui>Calendar</gui> icon in the upper-right portion of
-      <app>California's</app> menu bar. A list of your current calendars will
-      appear in a new window.</p></item>
-      <item><p>Click the <gui>Plus</gui> icon at the bottom of that window.</p>
-      </item>
+      <include href="cal-open-calendar-list.xml" 
+      xpointer="xmlns(mal=http://projectmallard.org/1.0/)xpointer(/mal:steps/mal:item)"
+      xmlns="http://www.w3.org/2001/XInclude"/>
       <item><p>Select <gui>CalDAV</gui> and click <gui>Add</gui>.</p></item>
       <item><p>Enter a calendar name. This can be any name of your
       choosing.</p></item>
@@ -120,11 +116,9 @@
       <item><p>Obtain the URL address of the calendar feed that you wish to
       add to <app>California</app>. The address will end with a ".ics"
       extension.</p></item>
-      <item><p>Click the <gui>Calendar</gui> icon in the upper-right portion of
-      <app>California's</app> menu bar. A list of your current calendars will
-      appear in a new window.</p></item>
-      <item><p>Click the <gui>Plus</gui> icon at the bottom of that window.</p>
-      </item>
+      <include href="cal-open-calendar-list.xml" 
+      xpointer="xmlns(mal=http://projectmallard.org/1.0/)xpointer(/mal:steps/mal:item)"
+      xmlns="http://www.w3.org/2001/XInclude"/>
       <item><p>Select <gui>Web Calendar (.ics)</gui> and click <gui>Add</gui>.
       </p></item>
       <item><p>Enter a calendar name. This can be any name of your
