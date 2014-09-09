@@ -59,7 +59,7 @@ public class ImportCalendar : Gtk.Dialog {
     }
     
     [GtkCallback]
-    private void on_import_button_clicked() {
+    private void on_activated() {
         chosen = model.selected;
         
         response(Gtk.ResponseType.OK);
