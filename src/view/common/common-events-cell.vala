@@ -85,7 +85,7 @@ internal abstract class EventsCell : Gtk.EventBox, InstanceContainer {
     /**
      * @inheritDoc
      */
-    public int event_count { get { return sorted_events.size; } }
+    public int event_count { get { return days_events.size; } }
     
     /**
      * @inheritDoc
@@ -99,7 +99,7 @@ internal abstract class EventsCell : Gtk.EventBox, InstanceContainer {
      */
     public View.Palette palette { get; private set; }
     
-    private Gee.TreeSet<Component.Event> sorted_events = new Gee.TreeSet<Component.Event>(all_day_comparator);
+    private Gee.HashSet<Component.Event> days_events = new Gee.HashSet<Component.Event>();
     private Gee.HashMap<int, Component.Event> line_to_event = new Gee.HashMap<int, Component.Event>();
     private Gtk.DrawingArea canvas = new Gtk.DrawingArea();
     
@@ -216,15 +216,19 @@ internal abstract class EventsCell : Gtk.EventBox, InstanceContainer {
     public void clear_events() {
         line_to_event.clear();
         
-        foreach (Component.Event event in sorted_events.to_array())
+        foreach (Component.Event event in days_events.to_array())
             internal_remove_event(event);
         
         queue_draw();
     }
     
     public void add_event(Component.Event event) {
-        if (!sorted_events.add(event))
+        if (!days_events.add(event)) {
+            debug("Unable to add event %s to cell for %s: already present", event.to_string(),
+                date.to_string());
+            
             return;
+        }
         
         // subscribe to interesting mutable properties
         event.notify[Component.Event.PROP_SUMMARY].connect(queue_draw);
@@ -237,8 +241,12 @@ internal abstract class EventsCell : Gtk.EventBox, InstanceContainer {
     }
     
     private bool internal_remove_event(Component.Event event) {
-        if (!sorted_events.remove(event))
+        if (!days_events.remove(event)) {
+            debug("Unable to remove event %s from cell for %s: not present in sorted_events",
+                event.to_string(), date.to_string());
+            
             return false;
+        }
         
         event.notify[Component.Event.PROP_SUMMARY].disconnect(queue_draw);
         event.notify[Component.Event.PROP_DATE_SPAN].disconnect(on_span_updated);
@@ -263,7 +271,7 @@ internal abstract class EventsCell : Gtk.EventBox, InstanceContainer {
      * calendar in question has any events in this date.
      */
     public void notify_calendar_visibility_changed(Backing.CalendarSource calendar_source) {
-        if (!traverse<Component.Event>(sorted_events).any((event) => event.calendar_source == calendar_source))
+        if (!traverse<Component.Event>(days_events).any((event) => event.calendar_source == calendar_source))
             return;
         
         // found one
@@ -274,7 +282,7 @@ internal abstract class EventsCell : Gtk.EventBox, InstanceContainer {
     // Called internally by other Cells when (a) they're in charge of assigning a multi-day event
     // its line number for the week and (b) that line number has changed.
     private void notify_assigned_line_number_changed(Gee.Collection<Component.Event> events) {
-        if (!traverse<Component.Event>(sorted_events).contains_any(events))
+        if (!traverse<Component.Event>(days_events).contains_any(events))
             return;
         
         assign_line_numbers();
@@ -294,10 +302,12 @@ internal abstract class EventsCell : Gtk.EventBox, InstanceContainer {
         // reassigned because of this
         Gee.ArrayList<Component.Event> reassigned = new Gee.ArrayList<Component.Event>();
         
+        // Can't persist events in TreeSet because mutation is not handled well, see
+        // https://bugzilla.gnome.org/show_bug.cgi?id=736444
+        Gee.TreeSet<Component.Event> sorted_events = traverse<Component.Event>(days_events)
+            .filter(event => event.calendar_source.visible)
+            .to_tree_set(all_day_comparator);
         foreach (Component.Event event in sorted_events) {
-            if (!event.calendar_source.visible)
-                continue;
-            
             bool notify_reassigned = false;
             if (event.is_day_spanning) {
                 // get the first day of this week the event exists in ... if not the current cell's
@@ -382,14 +392,12 @@ internal abstract class EventsCell : Gtk.EventBox, InstanceContainer {
     private void on_span_updated(Object object, ParamSpec param) {
         Component.Event event = (Component.Event) object;
         
-        // remove from cell if no longer in this day, otherwise remove and add again to sorted_events
-        // to re-sort
-        if (!(date in event.get_event_date_span(Calendar.Timezone.local))) {
+        // remove from cell if no longer in this day, otherwise re-assign line numbers
+        // due to date/time change
+        if (!(date in event.get_event_date_span(Calendar.Timezone.local)))
             remove_event(event);
-        } else if (sorted_events.remove(event)) {
-            sorted_events.add(event);
+        else
             assign_line_numbers();
-        }
         
         queue_draw();
     }

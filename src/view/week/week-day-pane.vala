@@ -52,7 +52,7 @@ internal class DayPane : Pane, Common.InstanceContainer {
      */
     public Calendar.Span contained_span { get { return date; } }
     
-    private Gee.TreeSet<Component.Event> days_events = new Gee.TreeSet<Component.Event>();
+    private Gee.HashSet<Component.Event> days_events = new Gee.HashSet<Component.Event>();
     private Scheduled? scheduled_monitor = null;
     
     public DayPane(Grid owner, Calendar.Date date) {
@@ -107,8 +107,12 @@ internal class DayPane : Pane, Common.InstanceContainer {
     }
     
     public void add_event(Component.Event event) {
-        if (!days_events.add(event))
+        if (!days_events.add(event)) {
+            debug("Unable to add event %s to day pane for %s: already present", event.to_string(),
+                date.to_string());
+            
             return;
+        }
         
         event.notify[Component.Event.PROP_SUMMARY].connect(queue_draw);
         event.notify[Component.Event.PROP_DATE_SPAN].connect(on_update_date_time);
@@ -118,8 +122,12 @@ internal class DayPane : Pane, Common.InstanceContainer {
     }
     
     public void remove_event(Component.Event event) {
-        if (!days_events.remove(event))
+        if (!days_events.remove(event)) {
+            debug("Unable to remove event %s from day pane for %s: not present in sorted_events",
+                event.to_string(), date.to_string());
+            
             return;
+        }
         
         event.notify[Component.Event.PROP_SUMMARY].disconnect(queue_draw);
         event.notify[Component.Event.PROP_DATE_SPAN].disconnect(on_update_date_time);
@@ -137,11 +145,9 @@ internal class DayPane : Pane, Common.InstanceContainer {
     private void on_update_date_time(Object object, ParamSpec param) {
         Component.Event event = (Component.Event) object;
         
-        // remove entirely if not in this date any more, otherwise remove and re-add to re-sort
+        // remove entirely if not in this date any more
         if (!(date in event.get_event_date_span(Calendar.System.timezone)))
             remove_event(event);
-        else if (days_events.remove(event))
-            days_events.add(event);
         
         queue_draw();
     }
@@ -223,6 +229,20 @@ internal class DayPane : Pane, Common.InstanceContainer {
         return true;
     }
     
+    private bool filter_date_spanning_events(Component.Event event) {
+        // All-day events are handled in separate container ...
+        if (event.is_all_day)
+            return false;
+        
+        // ... as are events that span days (or outside this date, although that technically
+        // shouldn't happen)
+        Calendar.DateSpan date_span = event.get_event_date_span(Calendar.Timezone.local);
+        if (!date_span.is_same_day || !(date in date_span))
+            return false;
+        
+        return true;
+    }
+    
     // note that a painter's algorithm should be used here: background should be painted before
     // calling base method, and foreground afterward
     protected override bool on_draw(Cairo.Context ctx) {
@@ -237,17 +257,12 @@ internal class DayPane : Pane, Common.InstanceContainer {
         // each event is drawn with a slightly-transparent rectangle with a solid hairline bounding
         Palette.prepare_hairline(ctx, palette.border);
         
-        foreach (Component.Event event in days_events) {
-            // All-day events are handled in separate container ...
-            if (event.is_all_day)
-                continue;
-            
-            // ... as are events that span days (or outside this date, although that technically
-            // shouldn't happen)
-            Calendar.DateSpan date_span = event.get_event_date_span(Calendar.Timezone.local);
-            if (!date_span.is_same_day || !(date in date_span))
-                continue;
-            
+        // Can't persist events in TreeSet because mutation is not handled well, see
+        // https://bugzilla.gnome.org/show_bug.cgi?id=736444
+        Gee.TreeSet<Component.Event> sorted_events = traverse<Component.Event>(days_events)
+            .filter(filter_date_spanning_events)
+            .to_tree_set();
+        foreach (Component.Event event in sorted_events) {
             Calendar.WallTime start_time =
                 event.exact_time_span.start_exact_time.to_timezone(Calendar.Timezone.local).to_wall_time();
             Calendar.WallTime end_time =
