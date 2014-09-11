@@ -16,8 +16,6 @@ private class Grid : Gtk.Grid {
     
     // days of the week
     public const int COLS = Calendar.DayOfWeek.COUNT;
-    // calendar weeks to be displayed at any one time
-    public const int ROWS = 6;
     
     // Delegate for walking only Cells in the Grid.  Return true to keep iterating.
     private delegate bool CellCallback(Cell cell);
@@ -46,6 +44,11 @@ private class Grid : Gtk.Grid {
      */
     public string id { get { return month_of_year.full_name; } }
     
+    /**
+     * The number of rows (weeks) being displayed.
+     */
+    public int rows { get; private set; }
+    
     private Gee.HashMap<Calendar.Date, Cell> date_to_cell = new Gee.HashMap<Calendar.Date, Cell>();
     private Backing.CalendarSubscriptionManager? subscriptions = null;
     private Toolkit.ButtonConnector cell_button_connector = new Toolkit.ButtonConnector();
@@ -63,46 +66,49 @@ private class Grid : Gtk.Grid {
         cell_button_connector.clicked.connect(on_cell_single_click);
         cell_button_connector.double_clicked.connect(on_cell_double_click);
         
-        // prep the grid with a fixed number of rows and columns
-        for (int row = 0; row < ROWS; row++)
+        // create a WeekSpan for the first week of the month to the last week of the month
+        Calendar.WeekSpan span = new Calendar.WeekSpan.from_span(month_of_year, Calendar.System.first_of_week);
+        
+        // prep the grid with a fixed number of rows (for visible weeks of the month) and columns
+        // (for each day of the week) ... this needs to be done before attaching the Cells
+        traverse<Calendar.Week>(span.as_list()).iterate(() => {
             insert_row(0);
+        });
         
         for (int col = 0; col < COLS; col++)
             insert_column(0);
         
-        // pre-add grid elements for every cell, which are updated when the MonthYear changes
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLS; col++) {
-                // use today's date as placeholder until update_cells() is called
-                // TODO: try to avoid this on first pass
-                Cell cell = new Cell(this, Calendar.System.today, row, col);
+        // fill in weeks of days of the displayed month
+        rows = 0;
+        foreach (Calendar.Week week in span) {
+            foreach (Calendar.Date date in week) {
+                int col = date.day_of_week.ordinal(Calendar.System.first_of_week) - 1;
+                
+                Cell cell = new Cell(this, date, rows, col);
                 cell.expand = true;
                 cell_button_connector.connect_to(cell);
                 cell.motion_notify_event.connect(on_cell_motion_event);
                 
-                attach(cell, col, row, 1, 1);
+                attach(cell, col, rows, 1, 1);
+                
+                // add to map for quick lookups
+                date_to_cell.set(date, cell);
             }
+            
+            rows++;
         }
         
-        // update all the Cells by assigning them Dates ... this also updates the window, which
-        // is necessary for subscriptions
-        update_cells();
+        // update the window being displayed
+        window = span.to_date_span();
+        
+        // update subscriptions if this month is in view
         update_subscriptions();
         
         owner.notify[Controller.PROP_MONTH_OF_YEAR].connect(on_controller_month_of_year_changed);
-        Calendar.System.instance.first_of_week_changed.connect(update_first_of_week);
     }
     
     ~Grid() {
         owner.notify[Controller.PROP_MONTH_OF_YEAR].disconnect(on_controller_month_of_year_changed);
-        Calendar.System.instance.first_of_week_changed.disconnect(update_first_of_week);
-    }
-    
-    private Cell get_cell(int row, int col) {
-        assert(row >= 0 && row < ROWS);
-        assert(col >= 0 && col < COLS);
-        
-        return (Cell) get_child_at(col, row);
     }
     
     /**
@@ -146,37 +152,6 @@ private class Grid : Gtk.Grid {
         });
         
         return hit;
-    }
-    
-    private void update_week(int row, Calendar.Week week) {
-        Calendar.DateSpan week_as_date_span = week.to_date_span();
-        foreach (Calendar.Date date in week) {
-            int col = date.day_of_week.ordinal(Calendar.System.first_of_week) - 1;
-            
-            Cell cell = get_cell(row, col);
-            cell.change_date_and_neighbors(date, week_as_date_span);
-            
-            // add to map for quick lookups
-            date_to_cell.set(date, cell);
-        }
-    }
-    
-    private void update_cells() {
-        // clear mapping
-        date_to_cell.clear();
-        
-        // create a WeekSpan for the first week of the month to the last displayed week (not all
-        // months will fill all displayed weeks, but some will)
-        Calendar.WeekSpan span = new Calendar.WeekSpan.count(
-            month_of_year.to_week_span(Calendar.System.first_of_week).first, ROWS - 1);
-        
-        // fill in weeks of the displayed month
-        int row = 0;
-        foreach (Calendar.Week week in span)
-            update_week(row++, week);
-        
-        // update the window being displayed
-        window = span.to_date_span();
     }
     
     private void update_subscriptions() {
@@ -223,12 +198,6 @@ private class Grid : Gtk.Grid {
             update_subscriptions();
         else if (!subscriptions.is_started)
             subscriptions.start_async.begin();
-    }
-    
-    private void update_first_of_week() {
-        // requires updating all the cells as well, since all dates have to be shifted
-        update_cells();
-        update_subscriptions();
     }
     
     private void on_calendar_added(Backing.CalendarSource calendar) {

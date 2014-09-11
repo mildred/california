@@ -26,21 +26,11 @@ internal class Cell : Common.EventsCell {
         
         notify[PROP_DATE].connect(update_top_line);
         
-        Calendar.System.instance.first_of_week_changed.connect(on_first_of_week_changed);
-        
         update_top_line();
-    }
-    
-    ~Cell() {
-        Calendar.System.instance.first_of_week_changed.disconnect(on_first_of_week_changed);
     }
     
     protected override Common.EventsCell? get_cell_for_date(Calendar.Date cell_date) {
         return owner.get_cell_for_date(cell_date);
-    }
-    
-    private void on_first_of_week_changed() {
-        change_date_and_neighbors(date, date.week_of(Calendar.System.first_of_week).to_date_span());
     }
     
     protected override void draw_borders(Cairo.Context ctx) {
@@ -57,7 +47,7 @@ internal class Cell : Common.EventsCell {
         }
         
         // only draw bottom line if not on the bottom row
-        if (row < Grid.ROWS - 1) {
+        if (row < owner.rows - 1) {
             ctx.move_to(0, height);
             ctx.line_to(width, height);
         }

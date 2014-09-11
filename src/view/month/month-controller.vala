@@ -230,6 +230,10 @@ public class Controller : BaseObject, View.Controllable {
                 Calendar.System.first_of_week);
             iter.get_value().label = dow.abbrev_name;
         }
+        
+        // Grids can't be reconfigured, so wipe 'em all and rebuild
+        stack_model.clear();
+        stack_model.show(month_of_year);
     }
     
     private void on_month_of_year_changed() {
