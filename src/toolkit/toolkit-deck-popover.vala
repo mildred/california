@@ -18,9 +18,10 @@ public class DeckPopover : Gtk.Popover {
     public Deck deck { get; private set; }
     
     /**
-     * See {@link Card.dismiss}
+     * Fired when the {@link DeckPopover} is dismissed, either by a {@link Card} or the user
+     * clicking off of it.
      */
-    public signal void dismiss(bool user_request, bool final);
+    public signal void dismiss();
     
     private bool preserve_mode;
     private bool forcing_mode = false;
@@ -33,7 +34,7 @@ public class DeckPopover : Gtk.Popover {
         
         // treat "closed" signal as dismissal by user request
         closed.connect(() => {
-            dismiss(true, true);
+            dismiss();
         });
         
         notify["modal"].connect(on_modal_changed);
@@ -98,8 +99,8 @@ public class DeckPopover : Gtk.Popover {
         force_mode(preserve_mode);
     }
     
-    private void on_deck_dismissed(bool user_request, bool final) {
-        dismiss(user_request, final);
+    private void on_deck_dismissed(Card.DismissReason reason) {
+        dismiss();
     }
 }
 

@@ -39,6 +39,28 @@ public interface Card : Gtk.Widget {
     }
     
     /**
+     * Reason for dismissing the {@link Deck}.
+     */
+    public enum DismissReason {
+        /**
+         * The {@link Deck}'s operation has completed successfully.
+         */
+        SUCCESS,
+        /**
+         * The {@link Deck}'s operation has failed to complete and cannot go forward.
+         */
+        FAILED,
+        /**
+         * The user has closed or cancelled the {@link Deck}.
+         */
+        USER_CLOSED,
+        /**
+         * The {@link Deck} programmatically aborted itself.
+         */
+        ABORTED
+    }
+    
+    /**
      * Each {@link Card} has its own identifier that should be unique within the {@link Deck}.
      *
      * In the Gtk.Stack, this is its name.
@@ -110,38 +132,21 @@ public interface Card : Gtk.Widget {
      * Fired when the {@link Deck}'s work is cancelled, closed, failure, or a success, whether due
      * to programmatic reasons or by user request.
      *
-     * user_request indicates if the dismissal is due to a user request or programmatic reasons.
-     * closed indicates that there is no qualitative signal (i.e. {@link success}, {@link failure})
-     * to follow.
-     *
      * Implementing classes should use one of the notify_ methods to ensure that proper signal
-     * order is maintained.
+     * order and values are issued.
      */
-    public signal void dismiss(bool user_request, bool final);
+    public signal void dismiss(DismissReason reason);
     
     /**
-     * Fired when the {@link Deck}'s work has completed successfully.
+     * Fired when the {@link Card} needs to report an important error message to the user.
      *
-     * This should only be fired if the Deck requires valid input from the user to perform
-     * some intensive operation.  Merely displaying information and closing the Deck
-     * should simply fire {@link dismiss}.
-     *
-     * Implementing classes should use one of the notify_ methods to ensure that proper signal
-     * order is maintained.
-     */
-    public signal void success();
-    
-    /**
-     * Fired when the {@link Deck}'s work has failed to complete.
-     *
-     * This should only be fired if the Deck requires valid input from the user to perform
-     * some intensive operation.  Merely displaying information and closing the Deck
-     * should simply fire {@link dismiss}.
+     * Signal subscribers should not use this signal to close the deck, but merely report the
+     * message.
      *
      * Implementing classes should use one of the notify_ methods to ensure that proper signal
      * order is maintained.
      */
-    public signal void failure(string? user_message);
+    public signal void error_message(string user_message);
     
     /**
      * Called by {@link Deck} when the {@link Card} has been activated, i.e. put to the "top" of
@@ -169,30 +174,38 @@ public interface Card : Gtk.Widget {
      * Dismiss the {@link Deck} due to the user requesting it be closed or cancelled.
      */
     protected void notify_user_closed() {
-        dismiss(true, true);
+        dismiss(DismissReason.USER_CLOSED);
     }
     
     /**
      * Dismiss the {@link Deck} due to programmatic reasons.
      */
     protected void notify_aborted() {
-        dismiss(false, true);
+        dismiss(DismissReason.ABORTED);
     }
     
     /**
      * Dismiss the {@link Deck} and notify that the user has successfully completed the task.
      */
     protected void notify_success() {
-        dismiss(true, false);
-        success();
+        dismiss(DismissReason.SUCCESS);
     }
     
     /**
      * Dismiss the {@link Deck} and notify that the operation has failed.
      */
     protected void notify_failure(string? user_message) {
-        dismiss(true, false);
-        failure(user_message);
+        if (!String.is_empty(user_message))
+            error_message(user_message);
+        
+        dismiss(DismissReason.FAILED);
+    }
+    
+    /**
+     * Report a failure message but do not dismiss the {@link Deck}.
+     */
+    protected void report_error(string user_message) {
+        error_message(user_message);
     }
     
     /**

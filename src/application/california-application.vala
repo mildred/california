@@ -181,7 +181,7 @@ public class Application : Gtk.Application {
             Manager.init();
             Activator.init();
         } catch (Error err) {
-            error_message(_("Unable to open California: %s").printf(err.message));
+            error_message(null, _("Unable to open California: %s").printf(err.message));
             quit();
         }
         
@@ -222,8 +222,8 @@ public class Application : Gtk.Application {
     /*
      * Presents a modal error dialog to the user.
      */
-    public void error_message(string msg) {
-        Gtk.MessageDialog dialog = new Gtk.MessageDialog(main_window, Gtk.DialogFlags.MODAL,
+    public void error_message(Gtk.Window? parent, string msg) {
+        Gtk.MessageDialog dialog = new Gtk.MessageDialog(parent ?? main_window, Gtk.DialogFlags.MODAL,
             Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "%s", msg);
         dialog.run();
         dialog.destroy();

@@ -96,7 +96,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
         try {
             Gtk.show_uri(null, Application.QUICK_ADD_HELP_URL, Gtk.get_current_event_time());
         } catch (Error err) {
-            Application.instance.error_message("Error opening help: %s".printf(err.message));
+            report_error(_("Error opening help: %s").printf(err.message));
         }
     }
     
@@ -153,7 +153,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
     
     private async void create_event_async(Cancellable? cancellable) {
         if (event.calendar_source == null) {
-            notify_failure(_("Unable to create event: calendar must be specified"));
+            report_error(_("Unable to create event: calendar must be specified"));
             
             return;
         }
@@ -172,7 +172,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
         if (create_err == null)
             notify_success();
         else
-            notify_failure(_("Unable to create event: %s").printf(create_err.message));
+            report_error(_("Unable to create event: %s").printf(create_err.message));
     }
 }
 

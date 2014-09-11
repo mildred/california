@@ -56,17 +56,12 @@ public class Deck : Gtk.Stack {
     /**
      * @see Card.dismiss
      */
-    public signal void dismiss(bool user_request, bool final);
-    
-    /**
-     * @see Card.success
-     */
-    public signal void success();
+    public signal void dismiss(Card.DismissReason reason);
     
     /**
      * @see Card.failure
      */
-    public signal void failure(string? user_message);
+    public signal void error_message(string user_message);
     
     /**
      * Create a new {@link Deck}.
@@ -97,8 +92,7 @@ public class Deck : Gtk.Stack {
             top.jump_back.disconnect(on_jump_back);
             top.jump_home.disconnect(on_jump_home);
             top.dismiss.disconnect(on_dismiss);
-            top.success.disconnect(on_success);
-            top.failure.disconnect(on_failure);
+            top.error_message.disconnect(on_error_message);
             
             navigation_stack.offer_head(top);
             top = null;
@@ -112,8 +106,7 @@ public class Deck : Gtk.Stack {
             top.jump_back.connect(on_jump_back);
             top.jump_home.connect(on_jump_home);
             top.dismiss.connect(on_dismiss);
-            top.success.connect(on_success);
-            top.failure.connect(on_failure);
+            top.error_message.connect(on_error_message);
         }
     }
     
@@ -297,16 +290,12 @@ public class Deck : Gtk.Stack {
             message("No home card in Deck");
     }
     
-    private void on_dismiss(bool user_request, bool final) {
-        dismiss(user_request, final);
+    private void on_dismiss(Card.DismissReason reason) {
+        dismiss(reason);
     }
     
-    private void on_success() {
-        success();
-    }
-    
-    private void on_failure(string? user_message) {
-        failure(user_message);
+    private void on_error_message(string user_message) {
+        error_message(user_message);
     }
     
     private void on_card_mapped(Gtk.Widget widget) {

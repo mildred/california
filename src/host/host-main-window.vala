@@ -341,8 +341,8 @@ public class MainWindow : Gtk.ApplicationWindow {
             Toolkit.spin_event_loop();
         });
         
-        deck_window.deck.failure.connect((msg) => {
-            Application.instance.error_message(msg);
+        deck_window.deck.error_message.connect((msg) => {
+            Application.instance.error_message(deck_window, msg);
         });
         
         deck_window.show_all();
@@ -360,8 +360,8 @@ public class MainWindow : Gtk.ApplicationWindow {
             Toolkit.destroy_later(deck_popover);
         });
         
-        deck_popover.deck.failure.connect((msg) => {
-            Application.instance.error_message(msg);
+        deck_popover.deck.error_message.connect((msg) => {
+            Application.instance.error_message(this, msg);
         });
         
         deck_popover.show_all();
@@ -483,7 +483,7 @@ public class MainWindow : Gtk.ApplicationWindow {
             try {
                 clone = event.clone() as Component.Event;
             } catch (Error err) {
-                Application.instance.error_message(_("Unable to edit event: %s").printf(err.message));
+                Application.instance.error_message(this, _("Unable to edit event: %s").printf(err.message));
                 
                 return;
             }

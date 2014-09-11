@@ -283,7 +283,7 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     
     private async void create_event_async(Component.Event target, Cancellable? cancellable) {
         if (target.calendar_source == null) {
-            notify_failure(_("Unable to create event: calendar must be specified"));
+            report_error(_("Unable to create event: calendar must be specified"));
             
             return;
         }
@@ -302,12 +302,12 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         if (create_err == null)
             notify_success();
         else
-            notify_failure(_("Unable to create event: %s").printf(create_err.message));
+            report_error(_("Unable to create event: %s").printf(create_err.message));
     }
     
     private async void update_event_async(Component.Event target, Cancellable? cancellable) {
         if (target.calendar_source == null) {
-            notify_failure(_("Unable to update event: calendar must be specified"));
+            report_error(_("Unable to update event: calendar must be specified"));
             
             return;
         }
@@ -352,7 +352,7 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         if (update_err == null)
             notify_success();
         else
-            notify_failure(_("Unable to update event: %s").printf(update_err.message));
+            report_error(_("Unable to update event: %s").printf(update_err.message));
     }
     
 }
