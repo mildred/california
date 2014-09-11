@@ -36,6 +36,9 @@ public class Application : Gtk.Application {
     public const string DETAILED_ACTION_CALENDAR_MANAGER = "app.calendar-manager";
     public const string ACTION_CALENDAR_MANAGER = "calendar-manager";
     
+    public const string DETAILED_ACTION_HELP = "app.help";
+    public const string ACTION_HELP = "help";
+    
     public const string DETAILED_ACTION_ABOUT = "app.about";
     public const string ACTION_ABOUT = "about";
     
@@ -55,6 +58,7 @@ public class Application : Gtk.Application {
     private static const ActionEntry[] action_entries = {
         // public actions
         { ACTION_CALENDAR_MANAGER, on_calendar_manager },
+        { ACTION_HELP, on_help },
         { ACTION_ABOUT, on_about },
         { ACTION_QUIT, on_quit },
         
@@ -268,6 +272,14 @@ public class Application : Gtk.Application {
             calendar_source.import_icalendar_async.end(result);
         } catch (Error err) {
             debug("Unable to import iCalendar: %s", err.message);
+        }
+    }
+    
+    private void on_help() {
+        try {
+            Gtk.show_uri(null, WEBSITE_URL, Gdk.CURRENT_TIME);
+        } catch (Error error) {
+            message("Error opening help URL: %s", error.message);
         }
     }
     
