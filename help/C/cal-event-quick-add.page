@@ -7,7 +7,7 @@
     <desc>Use the Quick Add feature to add calendar events.</desc>
     <link type="guide" xref="index#cal-manage-events"/>
     <link type="seealso" xref="cal-event-edit"/>
-    <revision pkgversion="0.2" date="2014-09-01" status="draft"/>
+    <revision pkgversion="0.2" date="2014-09-11" status="inconplete"/>
 
     <credit type="author copyright">
       <name>Jim Campbell</name>
@@ -20,6 +20,18 @@
 
   <title>Add an Event to Your Calendar</title>
   
-  <p></p>
+  <p>One of the best features of <app>California</app> is how it allows you to
+  add events to your calendar using everyday language. In <app>California</app>
+  this is called the <em>Quick Add</em> feature.</p>
+  
+  <p>To add an event using the <em>Quick Add</em> feature, you need to supply
+  three pieces of information:</p>
+    <list>
+      <item><p><em>What</em> the event is.</p></item>
+      <item><p>The <em>day</em> the event will occur.</p></item>
+      <item><p>The <em>time</em> the event will start.</p></item>
+    </list>
+  
+  <p>Let's look at a few examples:</p>
 
 </page>
