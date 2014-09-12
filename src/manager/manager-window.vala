@@ -16,7 +16,7 @@ public class Window : Toolkit.DeckWindow {
     private Window(Gtk.Window? window) {
         base (window, null);
         
-        deck.add_cards(iterate<Toolkit.Card>(calendar_list).to_array_list());
+        deck.add_cards(iterate<Toolkit.Card>(calendar_list, new RemoveCalendar()).to_array_list());
         Activator.prepare_deck(deck, null);
     }
     

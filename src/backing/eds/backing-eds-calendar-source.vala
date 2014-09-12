@@ -13,16 +13,17 @@ namespace California.Backing {
 internal class EdsCalendarSource : CalendarSource {
     private const int UPDATE_DELAY_MSEC = 500;
     
-    private E.Source eds_source;
-    private E.SourceCalendar eds_calendar;
+    internal E.Source eds_source;
+    internal E.SourceCalendar eds_calendar;
+    
     private E.CalClient? client = null;
     private Scheduled? scheduled_source_write = null;
     private Scheduled? scheduled_source_read = null;
     private Gee.HashSet<string> dirty_read_properties = new Gee.HashSet<string>();
     private Cancellable? source_write_cancellable = null;
     
-    public EdsCalendarSource(E.Source eds_source, E.SourceCalendar eds_calendar) {
-        base (eds_source.uid, eds_source.display_name);
+    public EdsCalendarSource(EdsStore store, E.Source eds_source, E.SourceCalendar eds_calendar) {
+        base (store, eds_source.uid, eds_source.display_name);
         
         this.eds_source = eds_source;
         this.eds_calendar = eds_calendar;
@@ -41,6 +42,8 @@ internal class EdsCalendarSource : CalendarSource {
         title = eds_source.display_name;
         visible = eds_calendar.selected;
         color = eds_calendar.color;
+        is_local = eds_calendar.backend_name == "local";
+        is_removable = eds_source.removable;
         
         // when changed within the app, need to write it back out
         notify[PROP_TITLE].connect(on_title_changed);

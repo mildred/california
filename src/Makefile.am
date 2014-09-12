@@ -113,6 +113,7 @@ california_VALASOURCES = \
 	manager/manager.vala \
 	manager/manager-calendar-list.vala \
 	manager/manager-calendar-list-item.vala \
+	manager/manager-remove-calendar.vala \
 	manager/manager-window.vala \
 	\
 	tests/tests.vala \
@@ -205,6 +206,7 @@ california_RC = \
 	rc/google-login.ui \
 	rc/main-window-title.ui \
 	rc/quick-create-event.ui \
+	rc/remove-calendar.ui \
 	rc/show-event.ui \
 	rc/window-menu.interface \
 	$(NULL)

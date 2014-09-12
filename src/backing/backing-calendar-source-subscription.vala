@@ -22,7 +22,7 @@ public abstract class CalendarSourceSubscription : BaseObject {
     /**
      * The {@link CalendarSource} providing this subscription's information.
      */
-    public CalendarSource calendar { get; private set; }
+    public unowned CalendarSource calendar { get; private set; }
     
     /**
      * The date-time window.

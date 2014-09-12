@@ -31,6 +31,11 @@ public abstract class Source : BaseObject, Gee.Comparable<Source> {
     public string id { get; private set; }
     
     /**
+     * The {@link Store} that owns the {@link Source}.
+     */
+    public unowned Store store { get; private set; }
+    
+    /**
      * True if the {@link Source} is unavailable for use due to being removed from it's
      * {@link Backing.Store}.
      *
@@ -64,8 +69,26 @@ public abstract class Source : BaseObject, Gee.Comparable<Source> {
      * If true, write operations (create, update, remove) should not be attempted.
      *
      * It's possible this can change at run-time by the backend.
+     *
+     * @see is_removable
      */
     public bool read_only { get; protected set; }
+    
+    /**
+     * Whether the {@link Source} can be removed.
+     *
+     * If true, do not attempt to remove this Source from the {@link Store}.
+     *
+     * It's possible this can change at run-time by the backend.
+     *
+     * @see read_only
+     */
+    public bool is_removable { get; protected set; }
+    
+    /**
+     * Whether the {@link Source} is local-only or has network backing.
+     */
+    public bool is_local { get; protected set; }
     
     /**
      * The suggested color to use when displaying the {@link Source} or information about or from
@@ -73,7 +96,8 @@ public abstract class Source : BaseObject, Gee.Comparable<Source> {
      */
     public string color { get; set; }
     
-    protected Source(string id, string title) {
+    protected Source(Store store, string id, string title) {
+        this.store = store;
         this.id = id;
         this.title = title;
     }
@@ -87,7 +111,8 @@ public abstract class Source : BaseObject, Gee.Comparable<Source> {
      * @see is_unavailable
      */
     internal void set_unavailable() {
-        is_available = false;
+        if (is_available)
+            is_available = false;
     }
     
     /**

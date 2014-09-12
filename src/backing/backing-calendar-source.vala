@@ -39,8 +39,8 @@ public abstract class CalendarSource : Source {
         ALL
     }
     
-    protected CalendarSource(string id, string title) {
-        base (id, title);
+    protected CalendarSource(Store store, string id, string title) {
+        base (store, id, title);
     }
     
     /**

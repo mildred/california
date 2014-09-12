@@ -52,13 +52,9 @@ internal class CalendarList : Gtk.Grid, Toolkit.Card {
         Backing.Manager.instance.notify[Backing.Manager.PROP_IS_OPEN].connect(on_manager_opened_closed);
         
         model.bind_property(Toolkit.ListBoxModel.PROP_SELECTED, edit_button, "sensitive",
-            BindingFlags.SYNC_CREATE, transform_selected_to_sensitive);
+            BindingFlags.SYNC_CREATE, transform_selected_to_edit_sensitive);
         model.bind_property(Toolkit.ListBoxModel.PROP_SELECTED, remove_button, "sensitive",
-            BindingFlags.SYNC_CREATE, transform_selected_to_sensitive);
-        
-        // TODO: Remove this when deleting a calendar is implemented
-        remove_button.visible = false;
-        remove_button.no_show_all = true;
+            BindingFlags.SYNC_CREATE, transform_selected_to_remove_sensitive);
     }
     
     ~CalendarList() {
@@ -68,8 +64,14 @@ internal class CalendarList : Gtk.Grid, Toolkit.Card {
         Backing.Manager.instance.notify[Backing.Manager.PROP_IS_OPEN].disconnect(on_manager_opened_closed);
     }
     
-    private bool transform_selected_to_sensitive(Binding binding, Value source_value, ref Value target_value) {
-        target_value = model.selected != null;
+    private bool transform_selected_to_edit_sensitive(Binding binding, Value source_value, ref Value target_value) {
+        target_value = model.selected != null && !model.selected.read_only;
+        
+        return true;
+    }
+    
+    private bool transform_selected_to_remove_sensitive(Binding binding, Value source_value, ref Value target_value) {
+        target_value = model.selected != null && model.selected.is_removable;
         
         return true;
     }
@@ -140,6 +142,8 @@ internal class CalendarList : Gtk.Grid, Toolkit.Card {
     
     [GtkCallback]
     private void on_remove_button_clicked() {
+        if (model.selected != null)
+            jump_to_card_by_name(RemoveCalendar.ID, model.selected);
     }
     
     [GtkCallback]

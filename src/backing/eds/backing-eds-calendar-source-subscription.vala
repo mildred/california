@@ -26,6 +26,8 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
         
         this.view = view;
         this.sexp = sexp;
+        
+        eds_calendar.notify[Source.PROP_IS_AVAILABLE].connect(() => { stop(eds_calendar); });
     }
     
     ~EdsCalendarSourceSubscription() {
@@ -70,6 +72,28 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
             
             start_failed(err);
         }
+    }
+    
+    private void stop(EdsCalendarSource calendar_source) {
+        if (!started || calendar_source.is_available)
+            return;
+        
+        try {
+            // wait for start to complete, for sanity's sake
+            wait_until_started();
+        } catch (Error err) {
+            // call it a day
+            return;
+        }
+        
+        try {
+            view.stop();
+        } catch (Error err) {
+            debug("Unable to stop E.CalClientView for %s: %s", to_string(), err.message);
+        }
+        
+        started = false;
+        active = false;
     }
     
     private void internal_start(Cancellable? cancellable) throws Error {

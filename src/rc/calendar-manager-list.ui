@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <template class="CaliforniaManagerCalendarList" parent="GtkGrid">
@@ -22,7 +22,8 @@
             <child>
               <object class="GtkListBox" id="calendar_list_box">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="has_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="activate_on_single_click">False</property>
@@ -120,7 +121,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="tooltip_text" translatable="yes">Delete calendar</property>
+            <property name="tooltip_text" translatable="yes">Remove calendar</property>
             <property name="halign">start</property>
             <property name="valign">center</property>
             <property name="hexpand">False</property>
