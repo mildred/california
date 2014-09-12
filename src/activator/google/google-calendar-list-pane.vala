@@ -183,7 +183,7 @@ public class CalendarListPane : Gtk.Grid, Toolkit.Card {
         Toolkit.set_unbusy(this, cursor);
         
         if (subscribe_err == null)
-            notify_success();
+            jump_home();
         else
             notify_failure(_("Unable to subscribe to %s: %s").printf(calendar.title, subscribe_err.message));
     }

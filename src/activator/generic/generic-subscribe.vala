@@ -92,7 +92,7 @@ internal abstract class Subscribe : Gtk.Grid, Toolkit.Card {
         Toolkit.set_unbusy(this, cursor);
         
         if (subscribe_err == null) {
-            notify_success();
+            jump_home();
         } else {
             notify_failure(_("Unable to subscribe to calendar at %s: %s").printf(url_entry.text,
                 subscribe_err.message));
