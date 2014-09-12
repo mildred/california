@@ -55,6 +55,17 @@ public class DayOfWeek : BaseObject, Gee.Hashable<DayOfWeek> {
     public static DayOfWeek[] weekdays;
     public static DayOfWeek[] weekend_days;
     
+    // See get_day_of_week_of_month().
+    private static string[,] dowom_ordinals = {
+        { _("last Monday"), _("first Monday"), _("second Monday"), _("third Monday"), _("fourth Monday"), _("fifth Monday") },
+        { _("last Tuesday"), _("first Tuesday"), _("second Tuesday"), _("third Tuesday"), _("fourth Tuesday"), _("fifth Tuesday") },
+        { _("last Wednesday"), _("first Wednesday"), _("second Wednesday"), _("third Wednesday"), _("fourth Wednesday"), _("fifth Wednesday") },
+        { _("last Thursday"), _("first Thursday"), _("second Thursday"), _("third Thursday"), _("fourth Thursday"), _("fifth Thursday") },
+        { _("last Friday"), _("first Friday"), _("second Friday"), _("third Friday"), _("fourth Friday"), _("fifth Friday") },
+        { _("last Saturday"), _("first Saturday"), _("second Saturday"), _("third Saturday"), _("fourth Saturday"), _("fifth Saturday") },
+        { _("last Sunday"), _("first Sunday"), _("second Sunday"), _("third Sunday"), _("fourth Sunday"), _("fifth Sunday") },
+    };
+    
     public const int MIN = 1;
     public const int MAX = 7;
     public const int COUNT = MAX - MIN + 1;
@@ -296,6 +307,32 @@ public class DayOfWeek : BaseObject, Gee.Hashable<DayOfWeek> {
     
     private static int sunday_comparator(DayOfWeek a, DayOfWeek b) {
         return a.value_sunday - b.value_sunday;
+    }
+    
+    /**
+     * Returns a user-visible string indicating the day of the week of the month, i.e. "first
+     * Monday", "third Thursday", "last Monday", etc.
+     *
+     * Appropriate values are -1 and 1 through 5.  -1 indicates the last day of the week of the
+     * month ("last Monday of the month"), while 1 to 5 are positive weeks ("second Tuesday of the
+     * month").  All other values will return null.
+     */
+    public string? get_day_of_week_of_month(int week_number) {
+        // Remember: value_monday is 1-based
+        switch (week_number) {
+            case -1:
+                return dowom_ordinals[value_monday - 1, 0];
+            
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                return dowom_ordinals[value_monday - 1, week_number];
+            
+            default:
+                return null;
+        }
     }
     
     public bool equal_to(DayOfWeek other) {

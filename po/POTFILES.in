@@ -10,6 +10,7 @@ src/application/california-application.vala
 src/application/california-commandline.vala
 src/calendar/calendar-date-span.vala
 src/calendar/calendar-date.vala
+src/calendar/calendar-day-of-week.vala
 src/calendar/calendar-exact-time-span.vala
 src/calendar/calendar.vala
 src/component/component.vala

@@ -753,41 +753,9 @@ public class RecurrenceRule : BaseObject {
         if (dow == null)
             return null;
         
-        string day;
-        switch (position) {
-            case 1:
-                // As in, "first Thursday of the month"
-                day = _("first %s").printf(dow.full_name);
-            break;
-            
-            case 2:
-                // As in, "second Thursday of the month"
-                day = _("second %s").printf(dow.full_name);
-            break;
-            
-            case 3:
-                // As in, "third Thursday of the month"
-                day = _("third %s").printf(dow.full_name);
-            break;
-            
-            case 4:
-                // As in, "fourth Thursday of the month"
-                day = _("fourth %s").printf(dow.full_name);
-            break;
-            
-            case 5:
-                // As in, "fifth Thursday of the month"
-                day = _("fifth %s").printf(dow.full_name);
-            break;
-            
-            case -1:
-                // As in, "last Thursday of the month"
-                day = _("last %s").printf(dow.full_name);
-            break;
-            
-            default:
-                return null;
-        }
+        string? day = dow.get_day_of_week_of_month(position);
+        if (String.is_empty(day))
+            return null;
         
         if (count > 0) {
             // As in, "Repeats every month on the first Tuesday, 3 times"
