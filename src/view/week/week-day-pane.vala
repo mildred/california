@@ -208,6 +208,11 @@ internal class DayPane : Pane, Common.InstanceContainer {
         queue_draw();
     }
     
+    public void notify_calendar_display_changed(Backing.CalendarSource calendar_source) {
+        if (traverse<Component.Event>(days_events).any(event => event.calendar_source == calendar_source))
+            queue_draw();
+    }
+    
     public override bool query_tooltip(int x, int y, bool keyboard_mode, Gtk.Tooltip tooltip) {
         // convery y into a time of day
         Calendar.WallTime wall_time = get_wall_time(y);
@@ -261,6 +266,7 @@ internal class DayPane : Pane, Common.InstanceContainer {
         // https://bugzilla.gnome.org/show_bug.cgi?id=736444
         Gee.TreeSet<Component.Event> sorted_events = traverse<Component.Event>(days_events)
             .filter(filter_date_spanning_events)
+            .filter(event => event.calendar_source != null && event.calendar_source.visible)
             .to_tree_set();
         foreach (Component.Event event in sorted_events) {
             Calendar.WallTime start_time =

@@ -265,12 +265,12 @@ internal abstract class EventsCell : Gtk.EventBox, InstanceContainer {
     }
     
     /**
-     * To be called by the owning widget when a calendar's visibility has changed.
+     * To be called by the owning widget when a calendar's display (visibility, color) has changed.
      *
      * This causes event line numbers to be reassigned and thie {@link Cell} redrawn, if the
      * calendar in question has any events in this date.
      */
-    public void notify_calendar_visibility_changed(Backing.CalendarSource calendar_source) {
+    public void notify_calendar_display_changed(Backing.CalendarSource calendar_source) {
         if (!traverse<Component.Event>(days_events).any((event) => event.calendar_source == calendar_source))
             return;
         

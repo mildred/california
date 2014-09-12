@@ -273,9 +273,23 @@ internal class Grid : Gtk.Box {
     }
     
     private void on_calendar_added(Backing.CalendarSource calendar) {
+        calendar.notify[Backing.Source.PROP_VISIBLE].connect(on_calendar_display_changed);
+        calendar.notify[Backing.Source.PROP_COLOR].connect(on_calendar_display_changed);
     }
     
     private void on_calendar_removed(Backing.CalendarSource calendar) {
+        calendar.notify[Backing.Source.PROP_VISIBLE].disconnect(on_calendar_display_changed);
+        calendar.notify[Backing.Source.PROP_COLOR].disconnect(on_calendar_display_changed);
+    }
+    
+    private void on_calendar_display_changed(Object o, ParamSpec pspec) {
+        Backing.CalendarSource calendar_source = (Backing.CalendarSource) o;
+        
+        foreach (AllDayCell cell in date_to_all_day.values)
+            cell.notify_calendar_display_changed(calendar_source);
+        
+        foreach (DayPane pane in date_to_panes.values)
+            pane.notify_calendar_display_changed(calendar_source);
     }
     
     private void on_calendar_instance_added_or_altered(Component.Instance instance) {
