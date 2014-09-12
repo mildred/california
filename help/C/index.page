@@ -9,7 +9,7 @@
     <title type="link">California</title>
     <title type="text">California</title>
 
-    <revision pkgversion="0.2" date="2014-07-05" status="incomplete"/>
+    <revision pkgversion="0.2" date="2014-09-06" status="candidate"/>
     <credit type="author copyright">
       <name>Jim Campbell</name>
       <email its:translate="no">jcampbell@gnome.org</email>
