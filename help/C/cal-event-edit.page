@@ -18,10 +18,11 @@
     <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
   </info>
 
-  <title>Edit an Existing Event</title>
+  <title>Edit an Event</title>
 
-  <p>Plans change. And when plans change, you need to update your calendar.
-  This page describes how to edit an event that you previously created.</p>
+  <p>This page describes how to add specific details to an event that you are
+  creating, or how to change the details of an event that you created in the
+  past.</p>
   
   <note><p>You will not be able to edit events that are part of certain
   web-based calendar feeds. For example, if you subscribe to a friend's
