@@ -21,12 +21,10 @@
 
   <title>Use the Quick Add Feature to Add Events</title>
   
-  <p>One of the best features of <app>California</app> is how it allows you to
-  add events to your calendar using everyday language. In <app>California</app>
-  this is called the <em>Quick Add</em> feature.</p>
-
-  <p>The best way to see how the <em>Quick Add</em> feature works is to look at
-  a few examples.</p>
+  <p>One of the best features of <app>California</app> is called the
+  <em>Quick Add</em> feature. It allows you to add events to your calendar
+  using everyday language. Let's look at a few examples to see how it works.
+  </p>
 
   <section id="quick-add-event">
     <title>Create Both One-Time and Recurring Events</title> 
@@ -35,7 +33,7 @@
   one time and events that occur more than once:</p>
   
   <steps>
-    <item><p>Start by Pressing the <gui>Plus</gui> button in the upper-right
+    <item><p>Start by pressing the <gui>Plus</gui> button in the upper-right
     portion of <app>California's</app> <gui>menu bar</gui>, or by pressing
     <keyseq><key>Ctrl</key><key>N</key></keyseq>.</p>
     <p>The <em>Quick Add</em> window will appear.</p></item>
