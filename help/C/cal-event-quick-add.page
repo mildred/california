@@ -66,7 +66,7 @@
 
   <note style="tip"><p>By default, the <em>Quick Add</em> feature will create
   events that last for one hour. You may wish to adjust the duration of your
-  events. See the <link href="cal-event-edit">Edit an Existing Event</link>
+  events. See the <link href="cal-event-edit.page">Edit an Existing Event</link>
   page for more information about editing events.</p></note>
   </section>
 </page>
