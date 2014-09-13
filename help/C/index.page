@@ -40,8 +40,9 @@
     calendars.</p>
   </section>
 
-  <section id="cal-manage-events" groups="first second" style="2column">
+  <section id="cal-manage-events">
     <title>Manage Calendar Events</title>
+    <links type="topic" groups="first" style="2column"/>
   </section>
 
 
