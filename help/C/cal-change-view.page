@@ -27,12 +27,13 @@
   menu bar:</p>
   
   <list>
-    <item><p>Selecting <gui>Today</gui> will display events for just the
-    current day.</p></item>
     <item><p>Selecting <gui>Week</gui> will display events for the current
     week.</p></item>
     <item><p>Selecting <gui>Month</gui> will display events for the entire
     month.</p></item>
+    <item><p>Selecting <gui>Today</gui> will highlight the current day. This
+    can be helpful if you've been looking at events in the future or in the
+    past and want to quickly return to see current events.</p></item>
   </list>
 
   <p>You can also change your calendar view by using keyboard shortcuts:</p>
@@ -47,10 +48,6 @@
       </thead>
       <tbody>
         <tr>
-          <td><p>View events for the current day</p></td>
-          <td><p><keyseq><key>Ctrl</key><key>T</key></keyseq></p></td>
-        </tr>
-        <tr>
           <td><p>View events for the current week</p></td>
           <td><p><keyseq><key>Ctrl</key><key>W</key></keyseq></p></td>
         </tr>
@@ -58,11 +55,11 @@
           <td><p>View events for the current month</p></td>
           <td><p><keyseq><key>Ctrl</key><key>M</key></keyseq></p></td>
         </tr>
+        <tr>
+          <td><p>Reset the view to highlight the current day</p></td>
+          <td><p><keyseq><key>Ctrl</key><key>T</key></keyseq></p></td>
+        </tr>
       </tbody>
     </table>
-  
-  <note><p>As of <app>California</app> <code>version 0.2</code>, the option to
-  display events for just today does not work. This feature will be implemented
-  at a later date.</p></note>
 
 </page>
