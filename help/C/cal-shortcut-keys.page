@@ -41,7 +41,7 @@
       </thead>
       <tbody>
         <tr>
-          <td><p>View events for the current day</p></td>
+          <td><p>Reset the view to highlight events for the current day</p></td>
           <td><p><keyseq><key>Ctrl</key><key>T</key></keyseq></p></td>
         </tr>
         <tr>

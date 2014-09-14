@@ -36,12 +36,12 @@
   
   <section id="cal-manage-calendars" style="2column">
     <title>Manage Calendars</title>
-    <p>The help topics below will show you how to add and manage your
-    calendars.</p>
+    <p>Learn how to add and manage your calendars.</p>
   </section>
 
   <section id="cal-manage-events">
     <title>Manage Calendar Events</title>
+    <p>Learn how to add and manage events on your calendar.</p>
     <links type="topic" groups="first" style="2column"/>
   </section>
 
