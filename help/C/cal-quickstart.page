@@ -19,8 +19,14 @@
   <title>Introduction</title>
   <p><app>California</app> is a modern calendar application for the GNOME
   desktop. Once <app>California</app> launches, you can start using it right
-  away. To add a new event, just click the <gui>Plus</gui> icon in the
-  <app>California</app> toolbar.</p>
+  away.</p>
+  
+  <media type="image" mime="image/png" src="media/california-screenshot.png"/>
+  
+  <p>To add a new event, just click the <gui>Plus</gui> icon in the
+  <app>California</app> toolbar. You may find it helpful to review the
+  <link xref="cal-event-quick-add">Quick Add</link> help page, as it will show
+  you how to add both one-time and recurring events to your calendar.</p>
 
   <p>To learn about additional <app>California</app> features, and to get
   assistance with performing additional tasks, explore <link xref="index">the
