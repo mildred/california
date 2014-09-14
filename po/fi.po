@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-09-05 23:10+0000\n"
-"PO-Revision-Date: 2014-09-11 21:49+0300\n"
+"POT-Creation-Date: 2014-09-12 23:41+0000\n"
+"PO-Revision-Date: 2014-09-14 18:13+0300\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: suomi <gnome-fi-laatu@lists.sourceforge.net>\n"
 "Language: fi\n"
@@ -75,7 +75,6 @@ msgstr "Kalifornia"
 
 #: ../data/california.desktop.in.in.h:2
 #: ../src/application/california-application.vala:19
-#| msgid "Calendar:"
 msgid "GNOME 3 Calendar"
 msgstr "Gnome 3:n kalenteri"
 
@@ -88,7 +87,6 @@ msgid "Web calendar (.ics or webcal:)"
 msgstr "Verkkokalenteri (.ics tai webcal:)"
 
 #: ../src/activator/activator.vala:37
-#| msgid "Calendar:"
 msgid "Google Calendar"
 msgstr "Google-kalenteri"
 
@@ -116,13 +114,11 @@ msgstr "Tunnistautuminen epäonnistui: virheellinen käyttäjätunnus tai salasa
 
 #: ../src/activator/google/google-authenticating-pane.vala:107
 #, c-format
-#| msgid "Unable to open California: %s"
 msgid "Unable to authenticate: %s"
 msgstr "Tunnistautuminen epäonnistui: %s"
 
 #: ../src/activator/google/google-authenticating-pane.vala:125
 #, c-format
-#| msgid "Unable to open California: %s"
 msgid "Unable to retrieve calendar list: %s"
 msgstr "Kalenteriluettelon hakeminen epäonnistui: %s"
 
@@ -153,19 +149,19 @@ msgstr "Tekijänoikeus 2014 Yorba Foundation"
 msgid "Visit California's home page"
 msgstr "Käy Kalifornian verkkosivustolla"
 
-#: ../src/application/california-application.vala:180
+#: ../src/application/california-application.vala:184
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "Kalifornian avaaminen epäonnistui: %s"
 
-#: ../src/application/california-application.vala:282
+#: ../src/application/california-application.vala:294
 #, c-format
 msgid "About %s"
 msgstr "Tietoja - %s"
 
 #. Translators: add your name and email address to receive credit in the About dialog
 #. For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:288
+#: ../src/application/california-application.vala:300
 msgid "translator-credits"
 msgstr "Jiri Grönroos <jiri.gronroos+l10n@iki.fi>"
 
@@ -200,6 +196,207 @@ msgstr "%s-%s"
 msgid "Today"
 msgstr "Tänään"
 
+#. See get_day_of_week_of_month().
+#: ../src/calendar/calendar-day-of-week.vala:60
+msgid "last Monday"
+msgstr "viimeinen maanantai"
+
+#: ../src/calendar/calendar-day-of-week.vala:60
+#| msgid "first %s"
+msgid "first Monday"
+msgstr "ensimmäinen maanantai"
+
+#: ../src/calendar/calendar-day-of-week.vala:60
+#| msgid "second %s"
+msgid "second Monday"
+msgstr "toinen maanantai"
+
+#: ../src/calendar/calendar-day-of-week.vala:60
+#| msgid "third %s"
+msgid "third Monday"
+msgstr "kolmas maanantai"
+
+#: ../src/calendar/calendar-day-of-week.vala:60
+#| msgid "fourth %s"
+msgid "fourth Monday"
+msgstr "neljäs maanantai"
+
+#: ../src/calendar/calendar-day-of-week.vala:60
+#| msgid "fifth %s"
+msgid "fifth Monday"
+msgstr "viides maanantai"
+
+#: ../src/calendar/calendar-day-of-week.vala:61
+#| msgid "last %s"
+msgid "last Tuesday"
+msgstr "viimeinen tiistai"
+
+#: ../src/calendar/calendar-day-of-week.vala:61
+#| msgid "first %s"
+msgid "first Tuesday"
+msgstr "ensimmäinen tiistai"
+
+#: ../src/calendar/calendar-day-of-week.vala:61
+#| msgid "second %s"
+msgid "second Tuesday"
+msgstr "toinen tiistai"
+
+#: ../src/calendar/calendar-day-of-week.vala:61
+#| msgid "third %s"
+msgid "third Tuesday"
+msgstr "kolmas tiistai"
+
+#: ../src/calendar/calendar-day-of-week.vala:61
+#| msgid "fourth %s"
+msgid "fourth Tuesday"
+msgstr "neljäs tiistai"
+
+#: ../src/calendar/calendar-day-of-week.vala:61
+#| msgid "fifth %s"
+msgid "fifth Tuesday"
+msgstr "viides tiistai"
+
+#: ../src/calendar/calendar-day-of-week.vala:62
+msgid "last Wednesday"
+msgstr "viimeinen keskiviikko"
+
+#: ../src/calendar/calendar-day-of-week.vala:62
+#| msgid "first %s"
+msgid "first Wednesday"
+msgstr "ensimmäinen keskiviikko"
+
+#: ../src/calendar/calendar-day-of-week.vala:62
+#| msgid "second %s"
+msgid "second Wednesday"
+msgstr "toinen keskiviikko"
+
+#: ../src/calendar/calendar-day-of-week.vala:62
+#| msgid "third %s"
+msgid "third Wednesday"
+msgstr "kolmas keskiviikko"
+
+#: ../src/calendar/calendar-day-of-week.vala:62
+#| msgid "fourth %s"
+msgid "fourth Wednesday"
+msgstr "neljäs keskiviikko"
+
+#: ../src/calendar/calendar-day-of-week.vala:62
+#| msgid "fifth %s"
+msgid "fifth Wednesday"
+msgstr "viides keskiviikko"
+
+#: ../src/calendar/calendar-day-of-week.vala:63
+#| msgid "last %s"
+msgid "last Thursday"
+msgstr "viimeinen torstai"
+
+#: ../src/calendar/calendar-day-of-week.vala:63
+#| msgid "first %s"
+msgid "first Thursday"
+msgstr "ensimmäinen torstai"
+
+#: ../src/calendar/calendar-day-of-week.vala:63
+#| msgid "second %s"
+msgid "second Thursday"
+msgstr "toinen torstai"
+
+#: ../src/calendar/calendar-day-of-week.vala:63
+#| msgid "third %s"
+msgid "third Thursday"
+msgstr "kolmas torstai"
+
+#: ../src/calendar/calendar-day-of-week.vala:63
+#| msgid "fourth %s"
+msgid "fourth Thursday"
+msgstr "neljäs torstai"
+
+#: ../src/calendar/calendar-day-of-week.vala:63
+#| msgid "fifth %s"
+msgid "fifth Thursday"
+msgstr "viides torstai"
+
+#: ../src/calendar/calendar-day-of-week.vala:64
+msgid "last Friday"
+msgstr "viimeinen perjantai"
+
+#: ../src/calendar/calendar-day-of-week.vala:64
+#| msgid "first %s"
+msgid "first Friday"
+msgstr "ensimmäinen perjantai"
+
+#: ../src/calendar/calendar-day-of-week.vala:64
+#| msgid "second %s"
+msgid "second Friday"
+msgstr "toinen perjantai"
+
+#: ../src/calendar/calendar-day-of-week.vala:64
+#| msgid "third %s"
+msgid "third Friday"
+msgstr "kolmas perjantai"
+
+#: ../src/calendar/calendar-day-of-week.vala:64
+#| msgid "fourth %s"
+msgid "fourth Friday"
+msgstr "neljäs perjantai"
+
+#: ../src/calendar/calendar-day-of-week.vala:64
+#| msgid "fifth %s"
+msgid "fifth Friday"
+msgstr "viides perjantai"
+
+#: ../src/calendar/calendar-day-of-week.vala:65
+msgid "last Saturday"
+msgstr "viimeinen lauantai"
+
+#: ../src/calendar/calendar-day-of-week.vala:65
+msgid "first Saturday"
+msgstr "ensimmäinen lauantai"
+
+#: ../src/calendar/calendar-day-of-week.vala:65
+msgid "second Saturday"
+msgstr "toinen lauantai"
+
+#: ../src/calendar/calendar-day-of-week.vala:65
+msgid "third Saturday"
+msgstr "kolmas lauantai"
+
+#: ../src/calendar/calendar-day-of-week.vala:65
+msgid "fourth Saturday"
+msgstr "neljäs lauantai"
+
+#: ../src/calendar/calendar-day-of-week.vala:65
+msgid "fifth Saturday"
+msgstr "viides lauantai"
+
+#: ../src/calendar/calendar-day-of-week.vala:66
+msgid "last Sunday"
+msgstr "viimeinen sunnuntai"
+
+#: ../src/calendar/calendar-day-of-week.vala:66
+#| msgid "first %s"
+msgid "first Sunday"
+msgstr "ensimmäinen sunnuntai"
+
+#: ../src/calendar/calendar-day-of-week.vala:66
+#| msgid "second %s"
+msgid "second Sunday"
+msgstr "toinen sunnuntai"
+
+#: ../src/calendar/calendar-day-of-week.vala:66
+#| msgid "third %s"
+msgid "third Sunday"
+msgstr "kolmas sunnuntai"
+
+#: ../src/calendar/calendar-day-of-week.vala:66
+#| msgid "fourth %s"
+msgid "fourth Sunday"
+msgstr "neljäs sunnuntai"
+
+#: ../src/calendar/calendar-day-of-week.vala:66
+#| msgid "fifth %s"
+msgid "fifth Sunday"
+msgstr "viides sunnuntai"
+
 #. Multi-day timed event, print "<full time>, <full date>" on both lines,
 #. including year if either not current year
 #. Prints two full time and date strings on separate lines, i.e.:
@@ -218,9 +415,6 @@ msgstr ""
 #. 12 January 2012, 3:30pm to 13 January 2013, 6:30am
 #: ../src/calendar/calendar-exact-time-span.vala:151
 #, c-format
-#| msgid ""
-#| "%s, %s\n"
-#| "%s, %s"
 msgid "%s, %s to %s, %s"
 msgstr "%s, %s - %s, %s"
 
@@ -271,7 +465,6 @@ msgstr "%a, %e. %b"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
 #: ../src/calendar/calendar.vala:145
 #, no-c-format
-#| msgid "%A, %B %e, %Y"
 msgid "%B %e, %Y"
 msgstr "%e. %Bta %Y"
 
@@ -280,7 +473,6 @@ msgstr "%e. %Bta %Y"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
 #: ../src/calendar/calendar.vala:151
 #, no-c-format
-#| msgid "%a, %b %e, %Y"
 msgid "%b %e, %Y"
 msgstr "%e. %b %Y"
 
@@ -288,7 +480,6 @@ msgstr "%e. %b %Y"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
 #: ../src/calendar/calendar.vala:156
 #, no-c-format
-#| msgid "%B %Y"
 msgid "%B %e"
 msgstr "%e. %B"
 
@@ -297,7 +488,6 @@ msgstr "%e. %B"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
 #: ../src/calendar/calendar.vala:162
 #, no-c-format
-#| msgid "%b %Y"
 msgid "%b %e"
 msgstr "%e. %b"
 
@@ -373,14 +563,12 @@ msgstr "%d:%02d:%02d%s"
 #. The 24-hour time with minutes, i.e. "17:06"
 #: ../src/calendar/calendar.vala:214
 #, c-format
-#| msgid "%d:%02d"
 msgid "%02d:%02d"
 msgstr "%02d:%02d"
 
 #. The 24-hour time with minutes and seconds, i.e. "17:06:31"
 #: ../src/calendar/calendar.vala:217
 #, c-format
-#| msgid "%d:%02d:%02d"
 msgid "%02d:%02d:%02d"
 msgstr "%02d:%02d:%02d"
 
@@ -399,7 +587,6 @@ msgstr "keskipäivällä"
 #. Used by quick-add to indicate the user wants to create an event for today.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:52
-#| msgid "Today"
 msgid "today"
 msgstr "tänään"
 
@@ -573,7 +760,6 @@ msgstr " "
 #: ../src/component/component-recurrence-rule.vala:597
 #: ../src/host/host-create-update-recurring.vala:447
 #, c-format
-#| msgid "Today"
 msgid "day"
 msgid_plural "%d days"
 msgstr[0] "päivä"
@@ -611,9 +797,9 @@ msgstr "Toistuu joka %s, %s"
 
 #: ../src/component/component-recurrence-rule.vala:635
 #: ../src/component/component-recurrence-rule.vala:718
-#: ../src/component/component-recurrence-rule.vala:795
-#: ../src/component/component-recurrence-rule.vala:835
-#: ../src/component/component-recurrence-rule.vala:872
+#: ../src/component/component-recurrence-rule.vala:763
+#: ../src/component/component-recurrence-rule.vala:803
+#: ../src/component/component-recurrence-rule.vala:840
 #, c-format
 msgid "%d time"
 msgid_plural "%d times"
@@ -660,8 +846,8 @@ msgstr ", "
 #. As in, "Repeats every month on day 4, 3 times"
 #. As in, "Repeats every year on 3 March 2014, 2 times"
 #: ../src/component/component-recurrence-rule.vala:717
-#: ../src/component/component-recurrence-rule.vala:834
-#: ../src/component/component-recurrence-rule.vala:871
+#: ../src/component/component-recurrence-rule.vala:802
+#: ../src/component/component-recurrence-rule.vala:839
 #, c-format
 msgid "Repeats every %s on %s, %s"
 msgstr "Toistuu joka %s, päivän ollessa %s, %s"
@@ -670,8 +856,8 @@ msgstr "Toistuu joka %s, päivän ollessa %s, %s"
 #. As in, "Repeats every month on day 21 until Sept. 2, 2014"
 #. As in, "Repeats every year on 3 March 2014 until Sept. 2, 2014"
 #: ../src/component/component-recurrence-rule.vala:724
-#: ../src/component/component-recurrence-rule.vala:841
-#: ../src/component/component-recurrence-rule.vala:878
+#: ../src/component/component-recurrence-rule.vala:809
+#: ../src/component/component-recurrence-rule.vala:846
 #, c-format
 msgid "Repeats every %s on %s until %s"
 msgstr "Toistuu joka %s, päivän ollessa %s, päättyen %s"
@@ -680,8 +866,8 @@ msgstr "Toistuu joka %s, päivän ollessa %s, päättyen %s"
 #. As in, "Repeats every month on day 20 until Sept. 2, 2014, 8:00pm"
 #. As in, "Repeats every year on 3 March 2014 until Sept. 2, 2014, 8:00pm"
 #: ../src/component/component-recurrence-rule.vala:731
-#: ../src/component/component-recurrence-rule.vala:848
-#: ../src/component/component-recurrence-rule.vala:885
+#: ../src/component/component-recurrence-rule.vala:816
+#: ../src/component/component-recurrence-rule.vala:853
 #, c-format
 msgid "Repeats every %s on %s until %s, %s"
 msgstr "Toistuu joka %s, päivän ollessa %s, päättyen %s, %s"
@@ -690,68 +876,32 @@ msgstr "Toistuu joka %s, päivän ollessa %s, päättyen %s, %s"
 #. As in, "Repeats every month on day 5"
 #. As in, "Repeats every year on 3 March 2014"
 #: ../src/component/component-recurrence-rule.vala:738
-#: ../src/component/component-recurrence-rule.vala:855
-#: ../src/component/component-recurrence-rule.vala:892
+#: ../src/component/component-recurrence-rule.vala:823
+#: ../src/component/component-recurrence-rule.vala:860
 #, c-format
 msgid "Repeats every %s on %s"
 msgstr "Toistuu joka %s päivän ollessa %s"
 
-#. As in, "first Thursday of the month"
-#: ../src/component/component-recurrence-rule.vala:760
-#, c-format
-msgid "first %s"
-msgstr "ensimmäinen %s"
-
-#. As in, "second Thursday of the month"
-#: ../src/component/component-recurrence-rule.vala:765
-#, c-format
-msgid "second %s"
-msgstr "toinen %s"
-
-#. As in, "third Thursday of the month"
-#: ../src/component/component-recurrence-rule.vala:770
-#, c-format
-msgid "third %s"
-msgstr "kolmas %s"
-
-#. As in, "fourth Thursday of the month"
-#: ../src/component/component-recurrence-rule.vala:775
-#, c-format
-msgid "fourth %s"
-msgstr "neljäs %s"
-
-#. As in, "fifth Thursday of the month"
-#: ../src/component/component-recurrence-rule.vala:780
-#, c-format
-msgid "fifth %s"
-msgstr "viides %s"
-
-#. As in, "last Thursday of the month"
-#: ../src/component/component-recurrence-rule.vala:785
-#, c-format
-msgid "last %s"
-msgstr "viimeinen %s"
-
 #. As in, "Repeats every month on the first Tuesday, 3 times"
-#: ../src/component/component-recurrence-rule.vala:794
+#: ../src/component/component-recurrence-rule.vala:762
 #, c-format
 msgid "Repeats every %s on the %s, %s"
 msgstr "Toistuu joka %s päivän ollessa %s, %s"
 
 #. As in, "Repeats every month on the second Monday until Sept. 2, 2014"
-#: ../src/component/component-recurrence-rule.vala:801
+#: ../src/component/component-recurrence-rule.vala:769
 #, c-format
 msgid "Repeats every %s on the %s until %s"
 msgstr "Toistuu joka %s päivän ollessa %s, päättyen %s"
 
 #. As in, "Repeats every month on the last Friday until Sept. 2, 2014, 8:00pm"
-#: ../src/component/component-recurrence-rule.vala:808
+#: ../src/component/component-recurrence-rule.vala:776
 #, c-format
 msgid "Repeats every %s on the %s until %s, %s"
 msgstr "Toistuu joka %s päivän ollessa %s, päättyen %s, %s"
 
 #. As in, "Repeats every month on the third Tuesday"
-#: ../src/component/component-recurrence-rule.vala:815
+#: ../src/component/component-recurrence-rule.vala:783
 #, c-format
 msgid "Repeats every %s on the %s"
 msgstr "Toistuu joka %s päivän ollessa  %s"
@@ -763,6 +913,7 @@ msgstr "Toistuu joka %s päivän ollessa  %s"
 #: ../src/rc/event-time-settings.ui.h:4 ../src/rc/generic-subscribe.ui.h:5
 #: ../src/rc/google-authenticating.ui.h:1
 #: ../src/rc/google-calendar-list.ui.h:2 ../src/rc/google-login.ui.h:1
+#: ../src/rc/remove-calendar.ui.h:1
 msgid "_Cancel"
 msgstr "_Peru"
 
@@ -798,7 +949,6 @@ msgstr "Tapahtuman luominen epäonnistui: kalenteri tulee olla määritetty"
 #: ../src/host/host-create-update-event.vala:305
 #: ../src/host/host-quick-create-event.vala:175
 #, c-format
-#| msgid "Unable to open California: %s"
 msgid "Unable to create event: %s"
 msgstr "Tapahtuman luominen epäonnistui: %s"
 
@@ -808,12 +958,10 @@ msgstr "Tapahtuman päivittäminen epäonnistui: kalenteri tulee olla määritet
 
 #: ../src/host/host-create-update-event.vala:355
 #, c-format
-#| msgid "Unable to open California: %s"
 msgid "Unable to update event: %s"
 msgstr "Tapahtuman päivittäminen epäonnistui: %s"
 
 #: ../src/host/host-create-update-recurring.vala:459
-#| msgid "New Event"
 msgid "event"
 msgid_plural "events"
 msgstr[0] "tapahtuman jälkeen"
@@ -826,7 +974,6 @@ msgstr[0] "Valitse kalenteri, johon tapahtuma tuodaan:"
 msgstr[1] "Valitse kalenteri, johon tapahtumat tuodaan:"
 
 #: ../src/host/host-main-window.vala:97
-#| msgid "Today"
 msgid "_Today"
 msgstr "T_änään"
 
@@ -844,7 +991,6 @@ msgstr "Kalenterit (Ctrl+L)"
 
 #: ../src/host/host-main-window.vala:486
 #, c-format
-#| msgid "Unable to open California: %s"
 msgid "Unable to edit event: %s"
 msgstr "Tapahtuman muokkaaminen epäonnistui: %s"
 
@@ -860,17 +1006,20 @@ msgstr "Esimerkki: Lounas paikassa Ravintola Kellohalli"
 msgid "Example: Dinner at Tadich Grill 7:30pm tomorrow"
 msgstr "Esimerkki: Lounas paikassa Ravintola Kellohalli huomenna kello 12:00"
 
+#: ../src/host/host-quick-create-event.vala:99
+#, c-format
+msgid "Error opening help: %s"
+msgstr "Virhe ohjetta avatessa: %s"
+
 #: ../src/host/host-show-event.vala:73
 msgid "Delete"
 msgstr "Poista"
 
 #: ../src/host/host-show-event.vala:74
-#| msgid "_All-day event"
 msgid "A_ll Events"
 msgstr "_Kaikki tapahtumat"
 
 #: ../src/host/host-show-event.vala:75
-#| msgid "New Event"
 msgid "_This Event"
 msgstr "Tä_mä tapahtuma"
 
@@ -879,24 +1028,51 @@ msgid "This & _Future Events"
 msgstr "Tämä ja tule_vat tapahtumat"
 
 #: ../src/host/host-show-event.vala:84
-#| msgid "Untitled event"
 msgid "Edit event"
 msgstr "Muokkaa tapahtumaa"
 
 #: ../src/host/host-show-event.vala:85
-#| msgid "Untitled event"
 msgid "Delete event"
 msgstr "Poista tapahtuma"
 
 #. No number is supplied because the number of events removed is indefinite in certain
 #. situations ... plural text should simply be for "more than one"
-#: ../src/host/host-show-event.vala:281
+#: ../src/host/host-show-event.vala:268
 #, c-format
-#| msgid "Unable to open California: %s"
 msgid "Unable to remove event: %s"
 msgid_plural "Unable to remove events: %s"
 msgstr[0] "Tapahtuman poistaminen epäonnistui: %s"
 msgstr[1] "Tapahtumien poistaminen epäonnistui: %s"
+
+#: ../src/manager/manager-calendar-list-item.vala:78
+#| msgid "Calendar visibility"
+msgid "Calendar is read-only"
+msgstr "Kalenterin on vain lukutilassa"
+
+#: ../src/manager/manager-remove-calendar.vala:39
+#, c-format
+msgid ""
+"This will remove the %s local calendar from your computer.  All associated "
+"information will be deleted permanently."
+msgstr ""
+"Paikallinen kalenteri %s poistetaan tietokoneelta. Kaikki siihen liittyvä "
+"tieto poistetaan pysyvästi."
+
+#: ../src/manager/manager-remove-calendar.vala:41
+#, c-format
+msgid ""
+"This will remove the %s network calendar from your computer.  This will not "
+"affect information stored on the server."
+msgstr ""
+"Verkkokalenteri %s poistetaan tietokoneelta. Tämä ei vaikuta palvelimelle "
+"tallennettuihin tietoihin."
+
+#: ../src/manager/manager-remove-calendar.vala:74
+#, c-format
+#| msgid "Unable to remove event: %s"
+#| msgid_plural "Unable to remove events: %s"
+msgid "Unable to remove calendar: %s"
+msgstr "Kalenterin poistaminen epäonnistui: %s"
 
 #. *
 #. * @inheritDoc
@@ -921,10 +1097,14 @@ msgid "_Calendars"
 msgstr "_Kalenterit"
 
 #: ../src/rc/app-menu.interface.h:2
+msgid "_Help"
+msgstr "_Ohje"
+
+#: ../src/rc/app-menu.interface.h:3
 msgid "_About"
 msgstr "_Tietoja"
 
-#: ../src/rc/app-menu.interface.h:3
+#: ../src/rc/app-menu.interface.h:4
 msgid "_Quit"
 msgstr "_Lopeta"
 
@@ -934,12 +1114,10 @@ msgstr "T_uo"
 
 #: ../src/rc/calendar-manager-list-item.ui.h:1
 #: ../src/rc/generic-subscribe.ui.h:3
-#| msgid "Calendar:"
 msgid "Calendar color"
 msgstr "Kalenterin väri"
 
 #: ../src/rc/calendar-manager-list-item.ui.h:2
-#| msgid "_Calendars"
 msgid "Calendar visibility"
 msgstr "Kalenterin näkyvyys"
 
@@ -948,7 +1126,6 @@ msgid "_Close"
 msgstr "_Sulje"
 
 #: ../src/rc/calendar-manager-list.ui.h:2
-#| msgid "Calendar:"
 msgid "Add calendar"
 msgstr "Lisää kalenteri"
 
@@ -957,8 +1134,8 @@ msgid "Rename calendar"
 msgstr "Nimeä kalenteri uudelleen"
 
 #: ../src/rc/calendar-manager-list.ui.h:4
-#| msgid "Desktop Calendar"
-msgid "Delete calendar"
+#| msgid "Rename calendar"
+msgid "Remove calendar"
 msgstr "Poista kalenteri"
 
 #: ../src/rc/create-update-event.ui.h:1
@@ -987,7 +1164,6 @@ msgstr "_Kuvaus"
 
 #: ../src/rc/create-update-event.ui.h:7 ../src/rc/quick-create-event.ui.h:4
 #: ../src/rc/show-event.ui.h:3
-#| msgid "Calendar:"
 msgid "Calendar"
 msgstr "Kalenteri"
 
@@ -1115,7 +1291,6 @@ msgid "_All-day event"
 msgstr "_Koko päivän tapahtuma"
 
 #: ../src/rc/generic-subscribe.ui.h:1
-#| msgid "Calendar:"
 msgid "Calendar _name"
 msgstr "Kalenterin _nimi"
 
@@ -1149,7 +1324,6 @@ msgid "_Try again"
 msgstr "_Yritä uudelleen"
 
 #: ../src/rc/google-calendar-list.ui.h:1
-#| msgid "_Calendars"
 msgid "My calendars"
 msgstr "Omat kalenterit"
 
@@ -1194,7 +1368,6 @@ msgid "Quick Add help"
 msgstr "Nopean lisäyksen ohje"
 
 #: ../src/rc/quick-create-event.ui.h:6
-#| msgid "_Cancel"
 msgid "Cancel"
 msgstr "Peru"
 
@@ -1203,9 +1376,16 @@ msgid "Edit event details"
 msgstr "Muokkaa tapahtuman tietoja"
 
 #: ../src/rc/quick-create-event.ui.h:8
-#| msgid "Update Event"
 msgid "Create event"
 msgstr "Luo tapahtuma"
+
+#: ../src/rc/remove-calendar.ui.h:2
+msgid "_Remove"
+msgstr "P_oista"
+
+#: ../src/rc/remove-calendar.ui.h:3
+msgid "Are you sure you want to remove this calendar?"
+msgstr "Haluatko varmasti poistaa tämän kalenterin?"
 
 #: ../src/rc/show-event.ui.h:2
 msgid "Where"
@@ -1223,6 +1403,10 @@ msgstr "Loi_tonna"
 msgid "_Normal Size"
 msgstr "Tavalline_n koko"
 
+#~| msgid "Desktop Calendar"
+#~ msgid "Delete calendar"
+#~ msgstr "Poista kalenteri"
+
 #~ msgid "_Update"
 #~ msgstr "_Päivitä"
 
@@ -1231,6 +1415,3 @@ msgstr "Tavalline_n koko"
 
 #~ msgid "From"
 #~ msgstr "Alkaa"
-
-#~ msgid "_Remove"
-#~ msgstr "P_oista"
