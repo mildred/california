@@ -103,15 +103,17 @@
   </section>
 
   <section id="cal-display-ics" ui:expanded="false">
-    <title>Display a Web Calendar (.ics) Feed</title>
+    <title>Display a Web Calendar (.ics or webcal) Feed</title>
 
-    <p>Adding a Web Calendar (.ics) feed to <app>California</app> will allow
-    you to view an online calendar from within <app>California</app>. Although
-    <app>California</app> will display events from a <app>Web Calendar</app>
-    feed, you will not be able to change or delete these events.</p>
+    <p>Adding a Web Calendar (.ics or webcal) feed to <app>California</app>
+    will allow you to view an online calendar from within
+    <app>California</app>. Although <app>California</app> will display events
+    from a <app>Web Calendar</app> feed, you will not be able to change or
+    delete these events.</p>
     
     <steps>
-      <title>Follow these steps to add a <app>Web Calendar (.ics)</app> feed to
+      <title>Follow these steps to add a
+      <app>Web Calendar (.ics or webcal)</app> feed to
       <app>California</app>:</title>
       <item><p>Obtain the URL address of the calendar feed that you wish to
       add to <app>California</app>. The address will end with a ".ics"
@@ -119,8 +121,8 @@
       <include href="cal-open-calendar-list.xml" 
       xpointer="xmlns(mal=http://projectmallard.org/1.0/)xpointer(/mal:steps/mal:item)"
       xmlns="http://www.w3.org/2001/XInclude"/>
-      <item><p>Select <gui>Web Calendar (.ics)</gui> and click <gui>Add</gui>.
-      </p></item>
+      <item><p>Select <gui>Web Calendar (.ics or webcal)</gui> and click
+      <gui>Add</gui>.</p></item>
       <item><p>Enter a calendar name. This can be any name of your
       choosing.</p></item>
       <item><p>Enter the calendar URL address.</p></item>
@@ -131,8 +133,8 @@
       enter a password.</p></item>
     </steps>
     
-    <note style="tip"><p>Most <app>Web Calendar (.ics)</app> feeds do not
-    require a password.</p></note>
+    <note style="tip"><p>Most <app>Web Calendar (.ics or webcal)</app> feeds do
+    not require a password.</p></note>
 
   </section>   
 </page>
