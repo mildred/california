@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: california 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-09-16 00:04+0300\n"
-"PO-Revision-Date: 2014-09-16 01:08+0300\n"
+"PO-Revision-Date: 2014-09-16 01:17+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n>2||n==0) ? 1 : 2;\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
 #: ../data/california.appdata.xml.in.h:1
@@ -726,6 +726,7 @@ msgid "day"
 msgid_plural "%d days"
 msgstr[0] "יום"
 msgstr[1] "%d ימים"
+msgstr[2] "יומיים"
 
 #: ../src/component/component-recurrence-rule.vala:600
 #: ../src/host/host-create-update-recurring.vala:438
@@ -734,6 +735,7 @@ msgid "week"
 msgid_plural "%d weeks"
 msgstr[0] "שבוע"
 msgstr[1] "%d שבועות"
+msgstr[2] "שבועיים"
 
 #: ../src/component/component-recurrence-rule.vala:611
 #: ../src/host/host-create-update-recurring.vala:434
@@ -742,6 +744,7 @@ msgid "month"
 msgid_plural "%d months"
 msgstr[0] "חודש"
 msgstr[1] "%d חודשים"
+msgstr[2] "חודשיים"
 
 #: ../src/component/component-recurrence-rule.vala:619
 #: ../src/host/host-create-update-recurring.vala:442
@@ -750,6 +753,7 @@ msgid "year"
 msgid_plural "%d years"
 msgstr[0] "שנה"
 msgstr[1] "%d שנים"
+msgstr[2] "שנתיים"
 
 #. As in, "Repeats every day, 2 times"
 #: ../src/component/component-recurrence-rule.vala:634
@@ -768,6 +772,7 @@ msgid "%d time"
 msgid_plural "%d times"
 msgstr[0] "פעם אחת"
 msgstr[1] "%d פעמים"
+msgstr[2] "פעמיים"
 
 #. As in, "Repeats every week until Sept. 2, 2014"
 #: ../src/component/component-recurrence-rule.vala:641
@@ -929,12 +934,14 @@ msgid "event"
 msgid_plural "events"
 msgstr[0] "אירוע"
 msgstr[1] "אירועים"
+msgstr[2] "אירועים"
 
 #: ../src/host/host-import-calendar.vala:33
 msgid "Select calendar to import event into:"
 msgid_plural "Select calendar to import events into:"
 msgstr[0] "בחירת לוח שנה ליבוא אירוע:"
 msgstr[1] "בחירת לוח שנה ליבוא אירועים:"
+msgstr[2] "בחירת לוח שנה ליבוא אירועים:"
 
 #: ../src/host/host-main-window.vala:97
 msgid "_Today"
@@ -1009,6 +1016,7 @@ msgid "Unable to remove event: %s"
 msgid_plural "Unable to remove events: %s"
 msgstr[0] "לא ניתן להסיר את האירוע: %s"
 msgstr[1] "לא ניתן להסיר את האירועים: %s"
+msgstr[2] "לא ניתן להסיר את האירועים: %s"
 
 #: ../src/manager/manager-calendar-list-item.vala:78
 msgid "Calendar is read-only"
