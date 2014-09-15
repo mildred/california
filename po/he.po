@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: california 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-09-16 00:04+0300\n"
-"PO-Revision-Date: 2014-09-16 01:05+0300\n"
+"PO-Revision-Date: 2014-09-16 01:08+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -1102,7 +1102,7 @@ msgstr "אירוע ללא כותרת"
 
 #: ../src/rc/create-update-event.ui.h:2
 msgid "Summary"
-msgstr "קיץ"
+msgstr "תמצית"
 
 #: ../src/rc/create-update-event.ui.h:3
 msgid "Time"
