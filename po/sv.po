@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-08-22 22:33+0000\n"
-"PO-Revision-Date: 2014-08-27 11:35+0100\n"
+"POT-Creation-Date: 2014-09-12 23:41+0000\n"
+"PO-Revision-Date: 2014-09-16 14:24+0100\n"
 "Last-Translator: Mattias Eriksson <snaggen@gmail.com>\n"
 "Language-Team: Swedish <gnome-se-list@gnome.org>\n"
 "Language: sv\n"
@@ -31,9 +31,9 @@ msgid ""
 "Quick Add feature which allows you to type the event details and have them "
 "added to your calendar without filling out a form."
 msgstr ""
-"California är en ny kalenderapplikation för GNOME 3 designad för att låta "
-"dig arbeta med dina kalendrar snabbt och enkelt. Den tillhandahåller månads- "
-"och veckovy av ditt schema och enkla sätt att lägga till och uppdatera "
+"California är ett ny kalenderprogram för GNOME 3 designad för att låta dig "
+"arbeta med dina kalendrar snabbt och enkelt. Den tillhandahåller månads- och "
+"veckovy av ditt schema och enkla sätt att lägga till och uppdatera "
 "händelser, inklusive en snabbfunktion som låter dig lägga till händelser och "
 "fylla i händelsedetaljer utan att fylla i ett formulär."
 
@@ -84,8 +84,8 @@ msgid "Event;Events;Schedule;"
 msgstr "Event;Events;Schedule;Händelse;Händelser;Schema"
 
 #: ../src/activator/activator.vala:36
-msgid "Web calendar (.ics)"
-msgstr "Webbkalendrar (.ics)"
+msgid "Web calendar (.ics or webcal:)"
+msgstr "Webbkalender (.ics eller webcal:)"
 
 #: ../src/activator/activator.vala:37
 msgid "Google Calendar"
@@ -150,21 +150,21 @@ msgstr "Copyright 2014 Yorba Foundation"
 
 #: ../src/application/california-application.vala:22
 msgid "Visit California's home page"
-msgstr "Besök Californias hemsida"
+msgstr "Besök Californias webbplats"
 
-#: ../src/application/california-application.vala:180
+#: ../src/application/california-application.vala:184
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "Kunde inte öppna California: %s"
 
-#: ../src/application/california-application.vala:282
+#: ../src/application/california-application.vala:294
 #, c-format
 msgid "About %s"
 msgstr "Om %s"
 
 #. Translators: add your name and email address to receive credit in the About dialog
 #. For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:288
+#: ../src/application/california-application.vala:300
 msgid "translator-credits"
 msgstr ""
 "Mattias Eriksson <snaggen@gmail.com>\n"
@@ -199,9 +199,242 @@ msgstr "Okända flaggor: %s\n"
 msgid "%s to %s"
 msgstr "%s till %s"
 
-#: ../src/calendar/calendar-date.vala:352
+#: ../src/calendar/calendar-date.vala:360
 msgid "Today"
 msgstr "Idag"
+
+#. See get_day_of_week_of_month().
+#: ../src/calendar/calendar-day-of-week.vala:60
+msgid "last Monday"
+msgstr ""
+
+#: ../src/calendar/calendar-day-of-week.vala:60
+#, fuzzy
+#| msgid "first %s"
+msgid "first Monday"
+msgstr "första %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:60
+#, fuzzy
+#| msgid "second %s"
+msgid "second Monday"
+msgstr "andra %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:60
+#, fuzzy
+#| msgid "third %s"
+msgid "third Monday"
+msgstr "tredje %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:60
+#, fuzzy
+#| msgid "fourth %s"
+msgid "fourth Monday"
+msgstr "fjärde %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:60
+#, fuzzy
+#| msgid "fifth %s"
+msgid "fifth Monday"
+msgstr "femte %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:61
+#, fuzzy
+#| msgid "last %s"
+msgid "last Tuesday"
+msgstr "sista %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:61
+#, fuzzy
+#| msgid "first %s"
+msgid "first Tuesday"
+msgstr "första %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:61
+#, fuzzy
+#| msgid "second %s"
+msgid "second Tuesday"
+msgstr "andra %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:61
+#, fuzzy
+#| msgid "third %s"
+msgid "third Tuesday"
+msgstr "tredje %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:61
+#, fuzzy
+#| msgid "fourth %s"
+msgid "fourth Tuesday"
+msgstr "fjärde %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:61
+#, fuzzy
+#| msgid "fifth %s"
+msgid "fifth Tuesday"
+msgstr "femte %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:62
+msgid "last Wednesday"
+msgstr ""
+
+#: ../src/calendar/calendar-day-of-week.vala:62
+#, fuzzy
+#| msgid "first %s"
+msgid "first Wednesday"
+msgstr "första %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:62
+#, fuzzy
+#| msgid "second %s"
+msgid "second Wednesday"
+msgstr "andra %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:62
+#, fuzzy
+#| msgid "third %s"
+msgid "third Wednesday"
+msgstr "tredje %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:62
+#, fuzzy
+#| msgid "fourth %s"
+msgid "fourth Wednesday"
+msgstr "fjärde %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:62
+#, fuzzy
+#| msgid "fifth %s"
+msgid "fifth Wednesday"
+msgstr "femte %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:63
+#, fuzzy
+#| msgid "last %s"
+msgid "last Thursday"
+msgstr "sista %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:63
+#, fuzzy
+#| msgid "first %s"
+msgid "first Thursday"
+msgstr "första %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:63
+#, fuzzy
+#| msgid "second %s"
+msgid "second Thursday"
+msgstr "andra %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:63
+#, fuzzy
+#| msgid "third %s"
+msgid "third Thursday"
+msgstr "tredje %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:63
+#, fuzzy
+#| msgid "fourth %s"
+msgid "fourth Thursday"
+msgstr "fjärde %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:63
+#, fuzzy
+#| msgid "fifth %s"
+msgid "fifth Thursday"
+msgstr "femte %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:64
+msgid "last Friday"
+msgstr ""
+
+#: ../src/calendar/calendar-day-of-week.vala:64
+#, fuzzy
+#| msgid "first %s"
+msgid "first Friday"
+msgstr "första %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:64
+#, fuzzy
+#| msgid "second %s"
+msgid "second Friday"
+msgstr "andra %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:64
+#, fuzzy
+#| msgid "third %s"
+msgid "third Friday"
+msgstr "tredje %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:64
+#, fuzzy
+#| msgid "fourth %s"
+msgid "fourth Friday"
+msgstr "fjärde %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:64
+#, fuzzy
+#| msgid "fifth %s"
+msgid "fifth Friday"
+msgstr "femte %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:65
+msgid "last Saturday"
+msgstr ""
+
+#: ../src/calendar/calendar-day-of-week.vala:65
+msgid "first Saturday"
+msgstr ""
+
+#: ../src/calendar/calendar-day-of-week.vala:65
+msgid "second Saturday"
+msgstr ""
+
+#: ../src/calendar/calendar-day-of-week.vala:65
+msgid "third Saturday"
+msgstr ""
+
+#: ../src/calendar/calendar-day-of-week.vala:65
+msgid "fourth Saturday"
+msgstr ""
+
+#: ../src/calendar/calendar-day-of-week.vala:65
+msgid "fifth Saturday"
+msgstr ""
+
+#: ../src/calendar/calendar-day-of-week.vala:66
+msgid "last Sunday"
+msgstr ""
+
+#: ../src/calendar/calendar-day-of-week.vala:66
+#, fuzzy
+#| msgid "first %s"
+msgid "first Sunday"
+msgstr "första %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:66
+#, fuzzy
+#| msgid "second %s"
+msgid "second Sunday"
+msgstr "andra %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:66
+#, fuzzy
+#| msgid "third %s"
+msgid "third Sunday"
+msgstr "tredje %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:66
+#, fuzzy
+#| msgid "fourth %s"
+msgid "fourth Sunday"
+msgstr "fjärde %s"
+
+#: ../src/calendar/calendar-day-of-week.vala:66
+#, fuzzy
+#| msgid "fifth %s"
+msgid "fifth Sunday"
+msgstr "femte %s"
 
 #. Multi-day timed event, print "<full time>, <full date>" on both lines,
 #. including year if either not current year
@@ -561,77 +794,211 @@ msgstr "på;i;vid;"
 msgid "st;nd;rd;th"
 msgstr ":a;:e"
 
-#: ../src/host/host-create-update-event.vala:64
+#: ../src/component/component-recurrence-rule.vala:597
+#: ../src/host/host-create-update-recurring.vala:447
+#, c-format
+msgid "day"
+msgid_plural "%d days"
+msgstr[0] "dag"
+msgstr[1] "%d dagar"
+
+#: ../src/component/component-recurrence-rule.vala:600
+#: ../src/host/host-create-update-recurring.vala:438
+#, c-format
+msgid "week"
+msgid_plural "%d weeks"
+msgstr[0] "vecka"
+msgstr[1] "%d veckor"
+
+#: ../src/component/component-recurrence-rule.vala:611
+#: ../src/host/host-create-update-recurring.vala:434
+#, c-format
+msgid "month"
+msgid_plural "%d months"
+msgstr[0] "månad"
+msgstr[1] "%d månader"
+
+#: ../src/component/component-recurrence-rule.vala:619
+#: ../src/host/host-create-update-recurring.vala:442
+#, c-format
+msgid "year"
+msgid_plural "%d years"
+msgstr[0] "år"
+msgstr[1] "%d år"
+
+#. As in, "Repeats every day, 2 times"
+#: ../src/component/component-recurrence-rule.vala:634
+#, c-format
+msgid "Repeats every %s, %s"
+msgstr "Återkommer varje %s, %s"
+
+#: ../src/component/component-recurrence-rule.vala:635
+#: ../src/component/component-recurrence-rule.vala:718
+#: ../src/component/component-recurrence-rule.vala:763
+#: ../src/component/component-recurrence-rule.vala:803
+#: ../src/component/component-recurrence-rule.vala:840
+#, c-format
+msgid "%d time"
+msgid_plural "%d times"
+msgstr[0] "%d gång"
+msgstr[1] "%d gånger"
+
+#. As in, "Repeats every week until Sept. 2, 2014"
+#: ../src/component/component-recurrence-rule.vala:641
+#, c-format
+msgid "Repeats every %s until %s"
+msgstr "Återkommer varje %s till %s"
+
+#. As in, "Repeats every month until Sept. 2, 2014, 8:00pm"
+#: ../src/component/component-recurrence-rule.vala:648
+#, c-format
+msgid "Repeats every %s until %s, %s"
+msgstr "Återkommer varje %s till %s, %s"
+
+#. As in, "Repeats every day"
+#: ../src/component/component-recurrence-rule.vala:655
+#, c-format
+msgid "Repeats every %s"
+msgstr "Återkommer varje %s"
+
+#. look for expressible patterns
+#: ../src/component/component-recurrence-rule.vala:677
+msgid "every day"
+msgstr "varje dag"
+
+#: ../src/component/component-recurrence-rule.vala:682
+msgid "the weekend"
+msgstr "helgen"
+
+#: ../src/component/component-recurrence-rule.vala:687
+msgid "weekdays"
+msgstr "veckodagar"
+
+#. Separator between days of the week, i.e. "Monday, Tuesday, Wednesday"
+#: ../src/component/component-recurrence-rule.vala:695
+msgid ", "
+msgstr ", "
+
+#. As in, "Repeats every week on Monday, Tuesday, 3 times"
+#. As in, "Repeats every month on day 4, 3 times"
+#. As in, "Repeats every year on 3 March 2014, 2 times"
+#: ../src/component/component-recurrence-rule.vala:717
+#: ../src/component/component-recurrence-rule.vala:802
+#: ../src/component/component-recurrence-rule.vala:839
+#, c-format
+msgid "Repeats every %s on %s, %s"
+msgstr "Återkommer varje %s på %s, %s"
+
+#. As in, "Repeats every week on Thursday until Sept. 2, 2014"
+#. As in, "Repeats every month on day 21 until Sept. 2, 2014"
+#. As in, "Repeats every year on 3 March 2014 until Sept. 2, 2014"
+#: ../src/component/component-recurrence-rule.vala:724
+#: ../src/component/component-recurrence-rule.vala:809
+#: ../src/component/component-recurrence-rule.vala:846
+#, c-format
+msgid "Repeats every %s on %s until %s"
+msgstr "Återkommer varje %s på %s till %s"
+
+#. As in, "Repeats every week on Friday, Saturday until Sept. 2, 2014, 8:00pm"
+#. As in, "Repeats every month on day 20 until Sept. 2, 2014, 8:00pm"
+#. As in, "Repeats every year on 3 March 2014 until Sept. 2, 2014, 8:00pm"
+#: ../src/component/component-recurrence-rule.vala:731
+#: ../src/component/component-recurrence-rule.vala:816
+#: ../src/component/component-recurrence-rule.vala:853
+#, c-format
+msgid "Repeats every %s on %s until %s, %s"
+msgstr "Återkommer varje %s på %s till %s, %s"
+
+#. As in, "Repeats every week on Monday, Wednesday, Friday"
+#. As in, "Repeats every month on day 5"
+#. As in, "Repeats every year on 3 March 2014"
+#: ../src/component/component-recurrence-rule.vala:738
+#: ../src/component/component-recurrence-rule.vala:823
+#: ../src/component/component-recurrence-rule.vala:860
+#, c-format
+msgid "Repeats every %s on %s"
+msgstr "Återkommer varje %s på %s"
+
+#. As in, "Repeats every month on the first Tuesday, 3 times"
+#: ../src/component/component-recurrence-rule.vala:762
+#, c-format
+msgid "Repeats every %s on the %s, %s"
+msgstr "Återkommer varje %s den %s, %s"
+
+#. As in, "Repeats every month on the second Monday until Sept. 2, 2014"
+#: ../src/component/component-recurrence-rule.vala:769
+#, c-format
+msgid "Repeats every %s on the %s until %s"
+msgstr "Återkommer varje %s den %s till %s"
+
+#. As in, "Repeats every month on the last Friday until Sept. 2, 2014, 8:00pm"
+#: ../src/component/component-recurrence-rule.vala:776
+#, c-format
+msgid "Repeats every %s on the %s until %s, %s"
+msgstr "Återkommer varje %s den %s till %s, %s"
+
+#. As in, "Repeats every month on the third Tuesday"
+#: ../src/component/component-recurrence-rule.vala:783
+#, c-format
+msgid "Repeats every %s on the %s"
+msgstr "Återkommer varje %s den %s"
+
 #: ../src/host/host-create-update-event.vala:67
-#: ../src/host/host-show-event.vala:75 ../src/rc/activator-list.ui.h:1
+#: ../src/host/host-create-update-event.vala:70
+#: ../src/host/host-show-event.vala:78 ../src/rc/activator-list.ui.h:1
 #: ../src/rc/calendar-import.ui.h:1 ../src/rc/create-update-recurring.ui.h:24
 #: ../src/rc/event-time-settings.ui.h:4 ../src/rc/generic-subscribe.ui.h:5
 #: ../src/rc/google-authenticating.ui.h:1
 #: ../src/rc/google-calendar-list.ui.h:2 ../src/rc/google-login.ui.h:1
+#: ../src/rc/remove-calendar.ui.h:1
 msgid "_Cancel"
 msgstr "_Avbryt"
 
-#: ../src/host/host-create-update-event.vala:65
+#: ../src/host/host-create-update-event.vala:68
 msgid "Save A_ll Events"
 msgstr "Spara a_lla händelser"
 
-#: ../src/host/host-create-update-event.vala:66
+#: ../src/host/host-create-update-event.vala:69
 msgid "Save _This Event"
 msgstr "Spara d_enna händelse"
 
-#: ../src/host/host-create-update-event.vala:158
+#: ../src/host/host-create-update-event.vala:167
+msgid "It's complicated…"
+msgstr "Det är komplicerat…"
+
+#: ../src/host/host-create-update-event.vala:170
+msgid "Never"
+msgstr "Aldrig"
+
+#: ../src/host/host-create-update-event.vala:172
 msgid "_Save"
 msgstr "_Spara"
 
-#: ../src/host/host-create-update-event.vala:158
+#: ../src/host/host-create-update-event.vala:172
 msgid "C_reate"
 msgstr "S_kapa"
 
-#: ../src/host/host-create-update-event.vala:272
-#: ../src/host/host-quick-create-event.vala:143
+#: ../src/host/host-create-update-event.vala:286
+#: ../src/host/host-quick-create-event.vala:156
 msgid "Unable to create event: calendar must be specified"
 msgstr "Kunde inte skapa händelse: kalender måste anges"
 
-#: ../src/host/host-create-update-event.vala:291
-#: ../src/host/host-quick-create-event.vala:162
+#: ../src/host/host-create-update-event.vala:305
+#: ../src/host/host-quick-create-event.vala:175
 #, c-format
 msgid "Unable to create event: %s"
 msgstr "Kunde inte skapa händelse: %s"
 
-#: ../src/host/host-create-update-event.vala:296
+#: ../src/host/host-create-update-event.vala:310
 msgid "Unable to update event: calendar must be specified"
 msgstr "Kunde inte uppdatera händelse: kalender måste anges"
 
-#: ../src/host/host-create-update-event.vala:341
+#: ../src/host/host-create-update-event.vala:355
 #, c-format
 msgid "Unable to update event: %s"
 msgstr "Kunde inte uppdatera händelse: %s"
 
-#: ../src/host/host-create-update-recurring.vala:401
-msgid "month"
-msgid_plural "months"
-msgstr[0] "månad"
-msgstr[1] "månader"
-
-#: ../src/host/host-create-update-recurring.vala:405
-msgid "week"
-msgid_plural "weeks"
-msgstr[0] "vecka"
-msgstr[1] "veckor"
-
-#: ../src/host/host-create-update-recurring.vala:409
-msgid "year"
-msgid_plural "years"
-msgstr[0] "år"
-msgstr[1] "år"
-
-#: ../src/host/host-create-update-recurring.vala:414
-msgid "day"
-msgid_plural "days"
-msgstr[0] "dag"
-msgstr[1] "dagar"
-
-#: ../src/host/host-create-update-recurring.vala:426
+#: ../src/host/host-create-update-recurring.vala:459
 msgid "event"
 msgid_plural "events"
 msgstr[0] "händelse"
@@ -659,62 +1026,87 @@ msgstr "Snabbskapa händelse (Ctrl+N)"
 msgid "Calendars (Ctrl+L)"
 msgstr "Kalendrar (Ctrl+L)"
 
-#: ../src/host/host-main-window.vala:484
+#: ../src/host/host-main-window.vala:486
 #, c-format
-#| msgid "Unable to create event: %s"
 msgid "Unable to edit event: %s"
 msgstr "Kunde inte redigera händelse: %s"
 
-#: ../src/host/host-quick-create-event.vala:71
+#: ../src/host/host-quick-create-event.vala:79
 msgid "Example: Dinner at Tadich Grill 7:30pm"
 msgstr "Exempel: Middag på Gyldene Freden kl 19:30"
 
-#: ../src/host/host-quick-create-event.vala:73
+#: ../src/host/host-quick-create-event.vala:81
 msgid "Example: Dinner at Tadich Grill"
 msgstr "Exempel: Middag på Gyldene Freden"
 
-#: ../src/host/host-quick-create-event.vala:77
+#: ../src/host/host-quick-create-event.vala:85
 msgid "Example: Dinner at Tadich Grill 7:30pm tomorrow"
 msgstr "Exempel: Middag på Gyldene Freden kl 19:30 imorgon"
 
-#: ../src/host/host-show-event.vala:70
-#| msgid "_Delete"
+#: ../src/host/host-quick-create-event.vala:99
+#, c-format
+msgid "Error opening help: %s"
+msgstr ""
+
+#: ../src/host/host-show-event.vala:73
 msgid "Delete"
 msgstr "Ta bort"
 
-#: ../src/host/host-show-event.vala:71
-#| msgid "Save A_ll Events"
+#: ../src/host/host-show-event.vala:74
 msgid "A_ll Events"
 msgstr "A_lla händelser"
 
-#: ../src/host/host-show-event.vala:72
-#| msgid "Save _This Event"
+#: ../src/host/host-show-event.vala:75
 msgid "_This Event"
 msgstr "_Denna händelse"
 
-#: ../src/host/host-show-event.vala:74
-#| msgid "Delete This and _Future Events"
+#: ../src/host/host-show-event.vala:77
 msgid "This & _Future Events"
 msgstr "Denna och _framtida händelser"
 
-#: ../src/host/host-show-event.vala:81
-#| msgid "Untitled event"
+#: ../src/host/host-show-event.vala:84
 msgid "Edit event"
 msgstr "Redigera händelse"
 
-#: ../src/host/host-show-event.vala:82
-#| msgid "Delete A_ll Events"
+#: ../src/host/host-show-event.vala:85
 msgid "Delete event"
 msgstr "Ta bort händelse"
 
 #. No number is supplied because the number of events removed is indefinite in certain
 #. situations ... plural text should simply be for "more than one"
-#: ../src/host/host-show-event.vala:257
+#: ../src/host/host-show-event.vala:268
 #, c-format
 msgid "Unable to remove event: %s"
 msgid_plural "Unable to remove events: %s"
 msgstr[0] "Kunde inte ta bort händelse: %s"
 msgstr[1] "Kunde inte ta bort händelser: %s"
+
+#: ../src/manager/manager-calendar-list-item.vala:78
+#, fuzzy
+#| msgid "Calendar visibility"
+msgid "Calendar is read-only"
+msgstr "Synlighet för kalender"
+
+#: ../src/manager/manager-remove-calendar.vala:39
+#, c-format
+msgid ""
+"This will remove the %s local calendar from your computer.  All associated "
+"information will be deleted permanently."
+msgstr ""
+
+#: ../src/manager/manager-remove-calendar.vala:41
+#, c-format
+msgid ""
+"This will remove the %s network calendar from your computer.  This will not "
+"affect information stored on the server."
+msgstr ""
+
+#: ../src/manager/manager-remove-calendar.vala:74
+#, fuzzy, c-format
+#| msgid "Unable to remove event: %s"
+#| msgid_plural "Unable to remove events: %s"
+msgid "Unable to remove calendar: %s"
+msgstr "Kunde inte ta bort händelse: %s"
 
 #. *
 #. * @inheritDoc
@@ -739,10 +1131,14 @@ msgid "_Calendars"
 msgstr "_Kalendrar"
 
 #: ../src/rc/app-menu.interface.h:2
+msgid "_Help"
+msgstr "_Hjälp"
+
+#: ../src/rc/app-menu.interface.h:3
 msgid "_About"
 msgstr "_Om"
 
-#: ../src/rc/app-menu.interface.h:3
+#: ../src/rc/app-menu.interface.h:4
 msgid "_Quit"
 msgstr "_Avsluta"
 
@@ -772,8 +1168,10 @@ msgid "Rename calendar"
 msgstr "Byt namn på kalender"
 
 #: ../src/rc/calendar-manager-list.ui.h:4
-msgid "Delete calendar"
-msgstr "Ta bort kalender"
+#, fuzzy
+#| msgid "Rename calendar"
+msgid "Remove calendar"
+msgstr "Byt namn på kalender"
 
 #: ../src/rc/create-update-event.ui.h:1
 msgid "Untitled event"
@@ -788,25 +1186,29 @@ msgid "Time"
 msgstr "Tid"
 
 #: ../src/rc/create-update-event.ui.h:4
-msgid "Re_peats…"
-msgstr "_Återkommer…"
-
-#: ../src/rc/create-update-event.ui.h:5
 msgid "Set the start and end time"
 msgstr "Ange start- och sluttid"
 
-#: ../src/rc/create-update-event.ui.h:6
+#: ../src/rc/create-update-event.ui.h:5
 msgid "_Location"
 msgstr "_Plats"
 
-#: ../src/rc/create-update-event.ui.h:7
+#: ../src/rc/create-update-event.ui.h:6
 msgid "_Description"
 msgstr "Bes_krivning"
 
-#: ../src/rc/create-update-event.ui.h:8 ../src/rc/quick-create-event.ui.h:4
+#: ../src/rc/create-update-event.ui.h:7 ../src/rc/quick-create-event.ui.h:4
 #: ../src/rc/show-event.ui.h:3
 msgid "Calendar"
 msgstr "Kalender"
+
+#: ../src/rc/create-update-event.ui.h:8
+msgid "Recurrence"
+msgstr "Upprepning"
+
+#: ../src/rc/create-update-event.ui.h:9
+msgid "Add or remove recurrences of the event"
+msgstr "Lägg till eller ta bort upprepning för händelsen"
 
 #: ../src/rc/create-update-recurring.ui.h:1
 msgid "_Repeating event"
@@ -947,12 +1349,12 @@ msgstr "Användarnamn"
 msgid ""
 "If supplied, your password will be requested when calendar is first accessed"
 msgstr ""
-"Om angivet, ditt lösenord kommer att efterfrågas vid kalenderns första "
+"Om angivet, kommer ditt lösenord att efterfrågas vid kalenderns första "
 "åtkomst"
 
 #: ../src/rc/generic-subscribe.ui.h:9
 msgid "optional"
-msgstr "frivilligt"
+msgstr "valfritt"
 
 #: ../src/rc/google-authenticating.ui.h:2
 msgid "_Try again"
@@ -999,18 +1401,28 @@ msgid "What"
 msgstr "Vad"
 
 #: ../src/rc/quick-create-event.ui.h:5
-#| msgid "_Quick Add Event"
 msgid "Quick Add help"
 msgstr "Hjälp för snabbskapning"
 
 #: ../src/rc/quick-create-event.ui.h:6
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: ../src/rc/quick-create-event.ui.h:7
 msgid "Edit event details"
 msgstr "Redigera händelsedetaljer"
 
-#: ../src/rc/quick-create-event.ui.h:7
-#| msgid "Update Event"
+#: ../src/rc/quick-create-event.ui.h:8
 msgid "Create event"
 msgstr "Skapa händelse"
+
+#: ../src/rc/remove-calendar.ui.h:2
+msgid "_Remove"
+msgstr "_Ta bort"
+
+#: ../src/rc/remove-calendar.ui.h:3
+msgid "Are you sure you want to remove this calendar?"
+msgstr ""
 
 #: ../src/rc/show-event.ui.h:2
 msgid "Where"
@@ -1028,14 +1440,17 @@ msgstr "Zooma _ut"
 msgid "_Normal Size"
 msgstr "_Normal Storlek"
 
+#~ msgid "Delete calendar"
+#~ msgstr "Ta bort kalender"
+
+#~ msgid "Re_peats…"
+#~ msgstr "_Återkommer…"
+
 #~ msgid "_Edit"
 #~ msgstr "R_edigera"
 
 #~ msgid "Delete _This Event"
 #~ msgstr "Ta bort d_enna händelse"
-
-#~ msgid "_Help"
-#~ msgstr "_Hjälp"
 
 #~ msgid "C_ancel"
 #~ msgstr "_Avbryt"
@@ -1048,6 +1463,3 @@ msgstr "_Normal Storlek"
 
 #~ msgid "From"
 #~ msgstr "Från"
-
-#~ msgid "_Remove"
-#~ msgstr "_Ta bort"
