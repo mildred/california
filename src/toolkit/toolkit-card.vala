@@ -15,6 +15,52 @@ namespace California.Toolkit {
 
 public interface Card : Gtk.Widget {
     /**
+     * Enumerates the various reasons a {@link Card} may be jumped to.
+     */
+    public enum Jump {
+        /**
+         * The {@link Card} was jumped to because it's home and {@link jump_home} was fired by
+         * another Card.
+         */
+        HOME,
+        /**
+         * The {@link Card} was jumped to because another Card fired {@link jump_back} and this is
+         * the previous Card in the {@link Deck}.
+         */
+        BACK,
+        /**
+         * The {@link Card} was jumped directly to by another Card, either by {@link card_id} or
+         * by an object instance.
+         *
+         * @see jump_to_card
+         * @see jump_to_card_by_name
+         */
+        DIRECT
+    }
+    
+    /**
+     * Reason for dismissing the {@link Deck}.
+     */
+    public enum DismissReason {
+        /**
+         * The {@link Deck}'s operation has completed successfully.
+         */
+        SUCCESS,
+        /**
+         * The {@link Deck}'s operation has failed to complete and cannot go forward.
+         */
+        FAILED,
+        /**
+         * The user has closed or cancelled the {@link Deck}.
+         */
+        USER_CLOSED,
+        /**
+         * The {@link Deck} programmatically aborted itself.
+         */
+        ABORTED
+    }
+    
+    /**
      * Each {@link Card} has its own identifier that should be unique within the {@link Deck}.
      *
      * In the Gtk.Stack, this is its name.
@@ -86,45 +132,30 @@ public interface Card : Gtk.Widget {
      * Fired when the {@link Deck}'s work is cancelled, closed, failure, or a success, whether due
      * to programmatic reasons or by user request.
      *
-     * user_request indicates if the dismissal is due to a user request or programmatic reasons.
-     * closed indicates that there is no qualitative signal (i.e. {@link success}, {@link failure})
-     * to follow.
-     *
      * Implementing classes should use one of the notify_ methods to ensure that proper signal
-     * order is maintained.
+     * order and values are issued.
      */
-    public signal void dismiss(bool user_request, bool final);
+    public signal void dismiss(DismissReason reason);
     
     /**
-     * Fired when the {@link Deck}'s work has completed successfully.
+     * Fired when the {@link Card} needs to report an important error message to the user.
      *
-     * This should only be fired if the Deck requires valid input from the user to perform
-     * some intensive operation.  Merely displaying information and closing the Deck
-     * should simply fire {@link dismiss}.
-     *
-     * Implementing classes should use one of the notify_ methods to ensure that proper signal
-     * order is maintained.
-     */
-    public signal void success();
-    
-    /**
-     * Fired when the {@link Deck}'s work has failed to complete.
-     *
-     * This should only be fired if the Deck requires valid input from the user to perform
-     * some intensive operation.  Merely displaying information and closing the Deck
-     * should simply fire {@link dismiss}.
+     * Signal subscribers should not use this signal to close the deck, but merely report the
+     * message.
      *
      * Implementing classes should use one of the notify_ methods to ensure that proper signal
      * order is maintained.
      */
-    public signal void failure(string? user_message);
+    public signal void error_message(string user_message);
     
     /**
      * Called by {@link Deck} when the {@link Card} has been activated, i.e. put to the "top" of
      * the Deck.
      *
      * message may be null even if the Card expects one; generally this means {@link jump_back}
-     * or {@link jump_home} was invoked, resulting in this Card being activated.
+     * or {@link jump_home} was invoked, resulting in this Card being activated.  The supplied
+     * {@link Jump} reason is useful for context.  There are code paths where {@link Jump.HOME}
+     * accepts a message; {@link Jump.BACK} will never supply a message.
      *
      * Due to some mechanism inside of GSignal or Vala, it's possible for a caller to pass null
      * that gets translated into a Value object holding a null pointer.  Deck will watch for this
@@ -137,36 +168,44 @@ public interface Card : Gtk.Widget {
      * This is called before dealing with {@link default_widget} and {@link initial_focus}, so
      * changes to those properties in this call, if need be.
      */
-    public abstract void jumped_to(Card? from, Value? message);
+    public abstract void jumped_to(Card? from, Jump reason, Value? message);
     
     /**
      * Dismiss the {@link Deck} due to the user requesting it be closed or cancelled.
      */
     protected void notify_user_closed() {
-        dismiss(true, true);
+        dismiss(DismissReason.USER_CLOSED);
     }
     
     /**
      * Dismiss the {@link Deck} due to programmatic reasons.
      */
     protected void notify_aborted() {
-        dismiss(false, true);
+        dismiss(DismissReason.ABORTED);
     }
     
     /**
      * Dismiss the {@link Deck} and notify that the user has successfully completed the task.
      */
     protected void notify_success() {
-        dismiss(true, false);
-        success();
+        dismiss(DismissReason.SUCCESS);
     }
     
     /**
      * Dismiss the {@link Deck} and notify that the operation has failed.
      */
     protected void notify_failure(string? user_message) {
-        dismiss(true, false);
-        failure(user_message);
+        if (!String.is_empty(user_message))
+            error_message(user_message);
+        
+        dismiss(DismissReason.FAILED);
+    }
+    
+    /**
+     * Report a failure message but do not dismiss the {@link Deck}.
+     */
+    protected void report_error(string user_message) {
+        error_message(user_message);
     }
     
     /**

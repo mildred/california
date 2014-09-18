@@ -1,18 +1,28 @@
 [encoding: UTF-8]
 # List of source files which contain translatable strings.
+data/california.appdata.xml.in
 data/california.desktop.in.in
 src/activator/activator.vala
-src/activator/google/activator-google-authenticating-pane.vala
-src/activator/google/activator-google-calendar-list-pane.vala
+src/activator/generic/generic-subscribe.vala
+src/activator/google/google-authenticating-pane.vala
+src/activator/google/google-calendar-list-pane.vala
 src/application/california-application.vala
 src/application/california-commandline.vala
+src/calendar/calendar-date-span.vala
 src/calendar/calendar-date.vala
+src/calendar/calendar-day-of-week.vala
+src/calendar/calendar-exact-time-span.vala
 src/calendar/calendar.vala
 src/component/component.vala
+src/component/component-recurrence-rule.vala
 src/host/host-create-update-event.vala
+src/host/host-create-update-recurring.vala
 src/host/host-import-calendar.vala
 src/host/host-main-window.vala
+src/host/host-quick-create-event.vala
 src/host/host-show-event.vala
+src/manager/manager-calendar-list-item.vala
+src/manager/manager-remove-calendar.vala
 src/view/month/month-controller.vala
 src/view/week/week-controller.vala
 [type: gettext/glade]src/rc/activator-list.ui
@@ -21,11 +31,15 @@ src/view/week/week-controller.vala
 [type: gettext/glade]src/rc/calendar-manager-list-item.ui
 [type: gettext/glade]src/rc/calendar-manager-list.ui
 [type: gettext/glade]src/rc/create-update-event.ui
+[type: gettext/glade]src/rc/create-update-recurring.ui
+[type: gettext/glade]src/rc/date-time-widget.ui
+[type: gettext/glade]src/rc/event-time-settings.ui
+[type: gettext/glade]src/rc/generic-subscribe.ui
 [type: gettext/glade]src/rc/google-authenticating.ui
 [type: gettext/glade]src/rc/google-calendar-list.ui
 [type: gettext/glade]src/rc/google-login.ui
+[type: gettext/glade]src/rc/main-window-title.ui
 [type: gettext/glade]src/rc/quick-create-event.ui
+[type: gettext/glade]src/rc/remove-calendar.ui
 [type: gettext/glade]src/rc/show-event.ui
-[type: gettext/glade]src/rc/webcal-subscribe.ui
 [type: gettext/glade]src/rc/window-menu.interface
-

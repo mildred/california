@@ -22,6 +22,18 @@
         <file compressed="false">rc/create-update-event.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
+        <file compressed="false">rc/create-update-recurring.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
+        <file compressed="false">rc/date-time-widget.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
+        <file compressed="false">rc/event-time-settings.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
+        <file compressed="true">rc/generic-subscribe.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
         <file compressed="true">rc/google-authenticating.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
@@ -31,13 +43,16 @@
         <file compressed="true">rc/google-login.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
+        <file compressed="true">rc/main-window-title.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
         <file compressed="true">rc/quick-create-event.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
-        <file compressed="false">rc/show-event.ui</file>
+        <file compressed="true">rc/remove-calendar.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
-        <file compressed="true">rc/webcal-subscribe.ui</file>
+        <file compressed="false">rc/show-event.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
         <file compressed="true">rc/window-menu.interface</file>

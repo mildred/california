@@ -33,8 +33,9 @@ public void init() throws Error {
     Backing.EdsStore? eds_store = Backing.Manager.instance.get_store_of_type<Backing.EdsStore>()
         as Backing.EdsStore;
     assert(eds_store != null);
-    activators.add(new WebCalActivator(_("Web calendar (.ics)"), eds_store));
-    activators.add(new GoogleActivator(_("Google Calendar"), eds_store));
+    activators.add(new WebCal.ActivatorInstance(_("Web calendar (.ics or webcal:)"), eds_store));
+    activators.add(new Google.ActivatorInstance(_("Google Calendar"), eds_store));
+    activators.add(new CalDAV.ActivatorInstance(_("CalDAV"), eds_store));
 }
 
 public void terminate() {
@@ -45,6 +46,20 @@ public void terminate() {
     
     Backing.terminate();
     Toolkit.terminate();
+}
+
+/**
+ * Adds all known {@link Instance}s to the supplied {@link Toolkit.Deck} (each having their own set
+ * of {@link Toolkit.Card}s) as well as an {@link InstanceList} Card.
+ */
+public Toolkit.Deck prepare_deck(Toolkit.Deck deck, Soup.URI? supplied_uri) {
+    deck.add_card(new InstanceList());
+    deck.add_cards(traverse<Instance>(activators)
+        .bloom<Toolkit.Card>(instance => instance.create_cards(supplied_uri))
+        .to_array_list()
+    );
+    
+    return deck;
 }
 
 }

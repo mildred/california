@@ -4,10 +4,10 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Activator {
+namespace California.Activator.Google {
 
 [GtkTemplate (ui = "/org/yorba/california/rc/google-authenticating.ui")]
-public class GoogleAuthenticatingPane : Gtk.Grid, Toolkit.Card {
+public class AuthenticatingPane : Gtk.Grid, Toolkit.Card {
     public const string ID = "GoogleAuthenticatingPane";
     
     private const int SUCCESS_DELAY_MSEC = 1500;
@@ -49,14 +49,13 @@ public class GoogleAuthenticatingPane : Gtk.Grid, Toolkit.Card {
     private Gtk.Button again_button;
     
     private Cancellable cancellable = new Cancellable();
-    private Scheduled? scheduled_jump = null;
     
-    public GoogleAuthenticatingPane() {
+    public AuthenticatingPane() {
         if (app_id == null)
             app_id = "yorba-california-%s".printf(Application.VERSION);
     }
     
-    public void jumped_to(Toolkit.Card? from, Value? message) {
+    public void jumped_to(Toolkit.Card? from, Toolkit.Card.Jump reason, Value? message) {
         Message? credentials = message as Message;
         assert(credentials != null);
         
@@ -87,6 +86,7 @@ public class GoogleAuthenticatingPane : Gtk.Grid, Toolkit.Card {
     
     private async void login_async(Message credentials) {
         spinner.active = true;
+        message_label.label = _("Authenticating…");
         
         GData.ClientLoginAuthorizer authorizer = new GData.ClientLoginAuthorizer(app_id,
             typeof(GData.CalendarService));
@@ -124,21 +124,18 @@ public class GoogleAuthenticatingPane : Gtk.Grid, Toolkit.Card {
             else
                 login_failed(_("Unable to retrieve calendar list: %s").printf(err.message));
             
-            spinner.active = false;
-            
             return;
         }
         
         spinner.active = false;
-        
         message_label.label = _("Authenticated");
         
         // depending on network conditions, this pane can come and go quite quickly; this brief
         // delay gives the user a chance to see what's transpired
-        scheduled_jump = new Scheduled.once_after_msec(SUCCESS_DELAY_MSEC, () => {
-            jump_to_card_by_name(GoogleCalendarListPane.ID, new GoogleCalendarListPane.Message(
-                credentials.username, own_calendars, all_calendars));
-        });
+        yield sleep_msec_async(SUCCESS_DELAY_MSEC);
+        
+        jump_to_card_by_name(CalendarListPane.ID, new CalendarListPane.Message(
+            credentials.username, own_calendars, all_calendars));
     }
     
     private void login_failed(string msg) {

@@ -2,6 +2,11 @@ data_desktopdir = $(datadir)/applications
 data_desktop_in_files = data/california.desktop.in
 data_desktop_DATA = $(data_desktop_in_files:.desktop.in=.desktop)
 
+appdata_in_files = data/california.appdata.xml.in
+appdata_files = $(appdata_in_files:.xml.in=.xml)
+
+@INTLTOOL_XML_RULE@
+
 data_appdatadir = $(datadir)/appdata
 data_appdata_DATA = data/california.appdata.xml
 
@@ -15,22 +20,33 @@ data/gschemas.compiled: data/org.yorba.california.gschema.xml
 
 BUILT_SOURCES += data/gschemas.compiled
 
+ICON_FILES = \
+	data/icons/edit-symbolic.svg \
+	$(NULL)
+
+data_iconsdir = $(datadir)/california/icons/Adwaita/scalable/actions
+data_icons_DATA = $(ICON_FILES)
+
 EXTRA_DIST += \
 	$(data_desktop_in_files) \
-	data/california.appdata.xml \
+	$(appdata_in_files) \
+	$(ICON_FILES) \
 	data/org.yorba.california.gschema.xml \
 	$(NULL)
 
 CLEANFILES += \
 	$(data_desktop_DATA) \
+	$(data_appdata_DATA) \
 	data/gschemas.compiled \
 	$(NULL)
 
 DISTCLEANFILES += \
 	$(data_desktop_DATA) \
+	$(data_appdata_DATA) \
 	$(NULL)
 
 GITIGNOREFILES += \
 	$(data_desktop_in_files) \
+	$(data_appdata_DATA) \
 	$(data_desktop_DATA) \
 	$(NULL)

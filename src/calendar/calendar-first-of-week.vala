@@ -16,8 +16,11 @@ public enum FirstOfWeek {
     
     /**
      * Default {@link FirstOfWeek}.
+     *
+     * Default in the sense that some value must be chosen if there's no available external
+     * reference.
      */
-    DEFAULT = SUNDAY;
+    DEFAULT = MONDAY;
     
     /**
      * Converts the {@link FirstOfWeek} into an actual {@link DayOfWeek}.
@@ -33,6 +36,10 @@ public enum FirstOfWeek {
             default:
                 assert_not_reached();
         }
+    }
+    
+    public string to_string() {
+        return as_day_of_week().to_string();
     }
 }
 

@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-06-12 23:15+0000\n"
-"PO-Revision-Date: 2014-06-13 12:55+0200\n"
+"POT-Creation-Date: 2014-08-08 23:06+0000\n"
+"PO-Revision-Date: 2014-08-11 11:39+0200\n"
 "Last-Translator: Tom Tryfonidis <tomtryf@gmail.com>\n"
 "Language-Team: Greek <team@lists.gnome.gr>\n"
 "Language: el\n"
@@ -17,7 +17,59 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 1.6.5\n"
+
+#: ../data/california.appdata.xml.in.h:1
+msgid "GNOME 3 calendar"
+msgstr "Ημερολόγιο του GNOME 3"
+
+#: ../data/california.appdata.xml.in.h:2
+msgid ""
+"California is a new calendar application for GNOME 3 designed to let you "
+"work with your calendars quickly and easily. It provides month and week "
+"views of your schedule and easy ways to add and update events, including a "
+"Quick Add feature which allows you to type the event details and have them "
+"added to your calendar without filling out a form."
+msgstr ""
+"Η εφαρμογή California είναι μια νέα εφαρμογή ημερολογίου για το GNOME 3 που "
+"σχεδιάστηκε για να σας επιτρέπει να χρησιμοποιείτε τα ημερολόγια γρήγορα και "
+"εύκολα. Παρέχει προβολές του προγράμματός σας ανά μήνα και εβδομάδα και "
+"εύκολους τρόπους να προσθέσετε και να ενημερώσετε συμβάντα, "
+"συμπεριλαμβανομένων της λειτουργίας γρήγορης προσθήκης που σας επιτρέπει να "
+"γράψετε τις λεπτομέρειες του συμβάντος και να τις προσθέσετε στο ημερολόγιο "
+"χωρίς να έχετε συμπληρώσει την φόρμα."
+
+#: ../data/california.appdata.xml.in.h:3
+msgid ""
+"California is currently in beta development and has a limited but growing "
+"set of features:"
+msgstr ""
+"Η εφαρμογή California είναι προς το παρόν υπό ανάπτυξη beta και έχει "
+"περιορισμένη αλλά αυξανόμενη συλλογή λειτουργιών:"
+
+#: ../data/california.appdata.xml.in.h:4
+msgid "Modern, clean interface"
+msgstr "Μοντέρνα, καθαρή διεπαφή"
+
+#: ../data/california.appdata.xml.in.h:5
+msgid "Month and week view of your schedule"
+msgstr "Προβολή μήνα και εβδομάδας του προγράμματός σας"
+
+#: ../data/california.appdata.xml.in.h:6
+msgid "Quick setup (if any is required at all)"
+msgstr "Γρήγορη ρύθμιση (εάν τυχόν απαιτείται)"
+
+#: ../data/california.appdata.xml.in.h:7
+msgid "Integrates with Evolution Data Server"
+msgstr "Ενσωματώνεται με τον διακομιστή δεδομένων Evolution"
+
+#: ../data/california.appdata.xml.in.h:8
+msgid "Quickly add events with a natural-language parser"
+msgstr "Γρήγορη προσθήκη συμβάντων με ανάλυση φυσικών γλωσσών"
+
+#: ../data/california.appdata.xml.in.h:9
+msgid "Works with Google, WebCal, and CalDAV servers"
+msgstr "Λειτουργεί με διακομιστές Google, WebCal και CalDAV"
 
 #: ../data/california.desktop.in.in.h:1
 #: ../src/application/california-application.vala:18
@@ -31,7 +83,7 @@ msgstr "Ημερολόγιο του GNOME 3"
 
 #: ../data/california.desktop.in.in.h:3
 msgid "Event;Events;Schedule;"
-msgstr "Event;Events;Schedule;Συμβάν;Συμβάντα;Εκδηλώσεις;Πρόγραμμα;"
+msgstr "Συμβάν;Συμβάντα;Πρόγραμμα;Event;Events;Schedule;"
 
 #: ../src/activator/activator.vala:36
 msgid "Web calendar (.ics)"
@@ -41,39 +93,54 @@ msgstr "Ημερολόγιο ιστού (.ics)"
 msgid "Google Calendar"
 msgstr "Ημερολόγιο του Google"
 
-#: ../src/activator/google/activator-google-authenticating-pane.vala:96
+#: ../src/activator/activator.vala:38
+msgid "CalDAV"
+msgstr "CalDAV"
+
+#: ../src/activator/generic/generic-subscribe.vala:97
+#, c-format
+#| msgid "Unable to subscribe to %s: %s"
+msgid "Unable to subscribe to calendar at %s: %s"
+msgstr "Αδυναμία εγγραφής στο ημερολόγιο στο %s: %s"
+
+#: ../src/activator/google/google-authenticating-pane.vala:89
+#: ../src/rc/google-authenticating.ui.h:3
+msgid "Authenticating…"
+msgstr "Πιστοποιείται…"
+
+#: ../src/activator/google/google-authenticating-pane.vala:97
 msgid "Unable to authenticate with Google Calendar service"
 msgstr "Αδυναμία πιστοποίησης με την υπηρεσία ημερολογίου του Google"
 
-#: ../src/activator/google/activator-google-authenticating-pane.vala:104
+#: ../src/activator/google/google-authenticating-pane.vala:105
 msgid "Unable to authenticate: Incorrect account name or password"
 msgstr "Αδυναμία πιστοποίησης: Μη έγκυρο όνομα λογαριασμού ή κωδικού πρόσβασης"
 
-#: ../src/activator/google/activator-google-authenticating-pane.vala:106
+#: ../src/activator/google/google-authenticating-pane.vala:107
 #, c-format
 msgid "Unable to authenticate: %s"
 msgstr "Αδυναμία πιστοποίησης: %s"
 
-#: ../src/activator/google/activator-google-authenticating-pane.vala:124
+#: ../src/activator/google/google-authenticating-pane.vala:125
 #, c-format
 msgid "Unable to retrieve calendar list: %s"
 msgstr "Αδυναμία ανάκτησης της λίστας ημερολογίου: %s"
 
-#: ../src/activator/google/activator-google-authenticating-pane.vala:133
+#: ../src/activator/google/google-authenticating-pane.vala:131
 msgid "Authenticated"
 msgstr "Πιστοποιήθηκε"
 
-#: ../src/activator/google/activator-google-calendar-list-pane.vala:65
+#: ../src/activator/google/google-calendar-list-pane.vala:65
 msgid "None"
 msgstr "Κανένα"
 
-#: ../src/activator/google/activator-google-calendar-list-pane.vala:158
+#: ../src/activator/google/google-calendar-list-pane.vala:158
 #, c-format
 msgid "Bad Google URI \"%s\""
 msgstr "Μη αποδεκτό URI Google \"%s\""
 
-#: ../src/activator/google/activator-google-calendar-list-pane.vala:166
-#: ../src/activator/google/activator-google-calendar-list-pane.vala:176
+#: ../src/activator/google/google-calendar-list-pane.vala:166
+#: ../src/activator/google/google-calendar-list-pane.vala:188
 #, c-format
 msgid "Unable to subscribe to %s: %s"
 msgstr "Αδύνατη η εγγραφή στο %s: %s"
@@ -86,24 +153,27 @@ msgstr "Πνευματικά δικαιώματα 2014 Yorba Foundation"
 msgid "Visit California's home page"
 msgstr "Επισκεφτείτε την αρχική σελίδα του California"
 
-#: ../src/application/california-application.vala:174
+#: ../src/application/california-application.vala:165
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "Αδύνατο το άνοιγμα του California: %s"
 
-#: ../src/application/california-application.vala:276
+#: ../src/application/california-application.vala:264
 #, c-format
 msgid "About %s"
 msgstr "Περί %s"
 
 #. Translators: add your name and email address to receive credit in the About dialog
 #. For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:282
+#: ../src/application/california-application.vala:270
 msgid "translator-credits"
 msgstr ""
 "Ελληνική μεταφραστική ομάδα του Gnome  \n"
 "Μαρία Θουκυδίδου <marablack3@gmail.com>\n"
-"Για περισσότερα δείτε: http://gnome.gr"
+"Μαρία Μαυρίδου <mavridou@gmail.com>\n"
+"\n"
+"Για περισσότερες πληροφορίες, επισκεφθείτε τη σελίδα\n"
+"http://gnome.gr/"
 
 #: ../src/application/california-commandline.vala:9
 msgid "[.ics FILE...]"
@@ -122,105 +192,130 @@ msgstr "Αναφορά σφαλμάτων και προτάσεων στο:"
 msgid "Unknown options: %s\n"
 msgstr "Άγνωστες επιλογές: %s\n"
 
-#: ../src/calendar/calendar-date.vala:347
+#: ../src/calendar/calendar-date.vala:352
 msgid "Today"
 msgstr "Σήμερα"
 
 #. The month and year according to locale preferences, i.e. "March 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:112
+#: ../src/calendar/calendar.vala:113
 msgid "%B %Y"
 msgstr "%B %Y"
 
 #. The abbreviated month and year according to locale preferences, i.e. "Mar 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:116
+#: ../src/calendar/calendar.vala:117
 msgid "%b %Y"
 msgstr "%b %Y"
 
 #. A "pretty" date according to locale preferences, i.e. "Monday, March 10, 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:120
+#: ../src/calendar/calendar.vala:121
 msgid "%A, %B %e, %Y"
 msgstr "%A, %e %B, %Y"
 
 #. A "pretty" date with no year according to locale preferences, i.e. "Monday, March 10"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:124
+#: ../src/calendar/calendar.vala:125
 msgid "%A, %B %e"
 msgstr "%A, %e %B"
 
 #. A "pretty" date abbreviated according to locale preferences, i.e. "Mon, Mar 10, 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:128
+#: ../src/calendar/calendar.vala:129
 msgid "%a, %b %e, %Y"
 msgstr "%a, %e %b, %Y"
 
 #. A "pretty" date abbreviated and no year according to locale preferences, i.e.
 #. "Mon, Mar 10"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:133
+#: ../src/calendar/calendar.vala:134
 msgid "%a, %b %e"
 msgstr "%a, %e %b"
 
 #. A "pretty" date with no day of week according to locale preferences, i.e. "March 10, 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:137
+#: ../src/calendar/calendar.vala:138
 msgid "%B %e, %Y"
 msgstr "%e %B, %Y"
 
 #. A "pretty" date abbreviated with no day of week according to locale preferences,
 #. i.e. "Mar 10, 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:142
+#: ../src/calendar/calendar.vala:143
 msgid "%b %e, %Y"
 msgstr "%e %b, %Y"
 
 #. A "pretty" date with no day of week or year according to locale preferences, i.e. "March 10"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:146
+#: ../src/calendar/calendar.vala:147
 msgid "%B %e"
 msgstr "%e %B"
 
 #. A "pretty" date abbreviated with no day of week or year according to locale preferences,
 #. i.e. "Mar 10"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
-#: ../src/calendar/calendar.vala:151
+#: ../src/calendar/calendar.vala:152
 msgid "%b %e"
 msgstr "%e %b"
+
+#. A "pretty" date compacted according to locale preferences, i.e. "Mon 3/10/2014"
+#. Leading zeroes will be stripped.
+#. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+#: ../src/calendar/calendar.vala:157
+#, c-format
+msgid "%a %x"
+msgstr "%a %x"
+
+#. A "pretty" date abbreviated and no year according to locale preferences, i.e. "Mon 3/10"
+#. Leading zeroes will be stripped.
+#. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+#: ../src/calendar/calendar.vala:163
+#, no-c-format
+msgid "%a %m/%d"
+msgstr "%a %m/%d"
+
+#. A "pretty" date abbreviated with no day of week or year according to locale preferences,
+#. i.e. "3/10"
+#. Leading zeroes will be stripped.
+#. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
+#: ../src/calendar/calendar.vala:170
+#, no-c-format
+msgid "%m/%d"
+msgstr "%m/%d"
 
 #. Ante meridiem
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
-#: ../src/calendar/calendar.vala:156
+#: ../src/calendar/calendar.vala:175
 msgid "am"
 msgstr "πμ"
 
 #. Brief ante meridiem, i.e. "am" -> "a"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
-#: ../src/calendar/calendar.vala:161
+#: ../src/calendar/calendar.vala:180
 msgid "a"
 msgstr "π"
 
 #. Post meridiem
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
-#: ../src/calendar/calendar.vala:166
+#: ../src/calendar/calendar.vala:185
 msgid "pm"
 msgstr "μμ"
 
 #. Brief post meridiem, i.e. "pm" -> "p"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
-#: ../src/calendar/calendar.vala:171
+#: ../src/calendar/calendar.vala:190
 msgid "p"
 msgstr "μ"
 
 #. The 12-hour time with minute and meridiem ("am" or "pm"), i.e. "5:06pm"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
-#: ../src/calendar/calendar.vala:176
+#: ../src/calendar/calendar.vala:195
 #, c-format
 msgid "%d:%02d%s"
 msgstr "%d:%02d%s"
@@ -228,84 +323,151 @@ msgstr "%d:%02d%s"
 #. The 12-hour time with minute, seconds, and meridiem ("am" or "pm"), i.e. "5:06:31pm"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
-#: ../src/calendar/calendar.vala:181
+#: ../src/calendar/calendar.vala:200
 #, c-format
 msgid "%d:%02d:%02d%s"
 msgstr "%d:%02d:%02d%s"
 
 #. The 24-hour time with minutes, i.e. "17:06"
-#: ../src/calendar/calendar.vala:184
+#: ../src/calendar/calendar.vala:203
 #, c-format
 msgid "%02d:%02d"
 msgstr "%02d:%02d"
 
 #. The 24-hour time with minutes and seconds, i.e. "17:06:31"
-#: ../src/calendar/calendar.vala:187
+#: ../src/calendar/calendar.vala:206
 #, c-format
 msgid "%02d:%02d:%02d"
 msgstr "%02d:%02d:%02d"
 
+#. Used by quick-add to indicate the user wants to create an event at midnight.
+#. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
+#: ../src/calendar/calendar.vala:216
+msgid "midnight"
+msgstr "μεσάνυχτα"
+
+#. Used by quick-add to indicate the user wants to create an event at noon.
+#. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
+#: ../src/calendar/calendar.vala:220
+msgid "noon"
+msgstr "μεσημέρι"
+
+#. Used by quick-add to indicate the user wants to create an event for today.
+#. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
+#: ../src/component/component.vala:52
+msgid "today"
+msgstr "σήμερα"
+
+#. Used by quick-add to indicate the user wants to create an event for tomorrow.
+#. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
+#: ../src/component/component.vala:56
+msgid "tomorrow"
+msgstr "αύριο"
+
+#. Used by quick-add to indicate the user wants to create an event for yesterday.
+#. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
+#: ../src/component/component.vala:60
+msgid "yesterday"
+msgstr "χθες"
+
+#. Used by quick-add to indicate the user wants to create a daily recurring event
+#. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
+#: ../src/component/component.vala:64
+msgid "daily"
+msgstr "ημερισίως"
+
+#. Used by quick-add to indicate the user wants to create a weekly recurring event
+#. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
+#: ../src/component/component.vala:68
+msgid "weekly"
+msgstr "εβδομαδιαίως"
+
+#. Used by quick-add to indicate the user wants to create a yearly recurring event
+#. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
+#: ../src/component/component.vala:72
+msgid "yearly"
+msgstr "ετησίως"
+
+#. Used by quick-add to indicate the user wants to create an event for every weekday
+#. (in most Western countries, this means Monday through Friday, i.e. the work week)
+#. Common abbreviations (without punctuation) should be included.  Each word must be separated
+#. by semi-colons.
+#. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
+#: ../src/component/component.vala:79
+msgid "weekday;weekdays;"
+msgstr "ημέρα;ημέρες;"
+
+#. Used by quick-add to indicate the user wants to create an event for every weekend
+#. (in most Western countries, this means Saturday and Sunday, i.e. non-work days)
+#. Common abbreviations (without punctuation) should be included.  Each word must be separated
+#. by semi-colons.
+#. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
+#: ../src/component/component.vala:86
+msgid "weekend;weekends;"
+msgstr "σαββατοκύριακο;σαββατοκύριακα;"
+
+#. Used by quick-add to convert a user's years unit into an internal value.  Common abbreviations
+#. (without punctuation) should be included.  Each word must be separated by semi-colons.
+#. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
+#: ../src/component/component.vala:91
+msgid "year;years;yr;yrs;"
+msgstr "έτος;έτη;έτος;έτη;"
+
+#. Used by quick-add to convert a user's month unit into an internal value.  Common abbreviations
+#. (without punctuation) should be included.  Each word must be separated by semi-colons.
+#. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
+#: ../src/component/component.vala:96
+msgid "month;months;mo;mos;"
+msgstr "μήνας;μήνες;μήν;μήνες;"
+
+#. Used by quick-add to convert a user's week unit into an internal value.  Common abbreviations
+#. (without punctuation) should be included.  Each word must be separated by semi-colons.
+#. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
+#: ../src/component/component.vala:101
+msgid "week;weeks;wk;weeks;"
+msgstr "εβδομάδα;εβδομάδες;εβδ;εβδομάδες"
+
 #. Used by quick-add to convert a user's day unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/calendar/calendar.vala:192
+#: ../src/component/component.vala:106
 msgid "day;days;"
 msgstr "ημέρα;ημέρες;"
 
 #. Used by quick-add to convert a user's hours unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/calendar/calendar.vala:197
+#: ../src/component/component.vala:111
 msgid "hour;hours;hr;hrs"
-msgstr "ώρα;ώρες"
+msgstr "ώρα;ώρες;ώρ;ώρες"
 
 #. Used by quick-add to convert a user's minute unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/calendar/calendar.vala:202
+#: ../src/component/component.vala:116
 msgid "minute;minutes;min;mins"
-msgstr "λεπτό;λεπτά"
+msgstr "λεπτό;λεπτά;λεπτ;λεπτά"
 
-#. Used by quick-add to indicate the user wants to create an event at midnight.
+#. Used by quick-add to determine if the word is a COMMON preposition (indicating linkage or a
+#. connection).  Each word must be separate by semi-colons.
+#. These words should not be duplicated in another other preposition list.
+#. This list can be empty but that will limit the parser or cause unexpected results.
+#. Examples: "wednesday and thursday", "monday or friday"
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/calendar/calendar.vala:212
-msgid "midnight"
-msgstr "μεσάνυχτα"
-
-#. Used by quick-add to indicate the user wants to create an event at noon.
-#. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/calendar/calendar.vala:216
-msgid "noon"
-msgstr "μεσημέρι"
-
-#. Used by quick-add to indicate the user wants to create an event for today.
-#. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:39
-msgid "today"
-msgstr "σήμερα"
-
-#. Used by quick-add to indicate the user wants to create an event for tomorrow.
-#. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:43
-msgid "tomorrow"
-msgstr "αύριο"
-
-#. Used by quick-add to indicate the user wants to create an event for yesterday.
-#. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:47
-msgid "yesterday"
-msgstr "χθες"
+#: ../src/component/component.vala:124
+msgid "and;or;"
+msgstr "και;ή;"
 
 #. Used by quick-add to determine if the word is a TIME preposition (indicating a
 #. specific time of day, not a duration).  Each word must be separated by semi-colons.
 #. It's allowable for some or all of these words to
 #. be duplicated in the location prepositions list (elsewhere) but not another time list.
 #. The list can be empty, but that will limit the parser.
-#. Examples: "at 9am", "from 10pm to 11:30pm", "on monday"
+#. Examples: "at 9am", "from 10pm to 11:30pm", "on monday", "until June 3rd", "this Friday"
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:56
-msgid "at;from;to;on;"
-msgstr "στις;από;μέχρι;τη;την;"
+#: ../src/component/component.vala:133
+msgid "at;from;to;on;until;this;"
+msgstr "στις;από;μέχρι;την;μέχρι;αυτό;"
 
 #. Used by quick-add to determine if the word is a DURATION preposition (indicating a
 #. a duration of time, not a specific time).  Each word must be separated by semi-colons.
@@ -314,7 +476,7 @@ msgstr "στις;από;μέχρι;τη;την;"
 #. The list can be empty, but that will limit the parser.
 #. Examples: "for 3 hours", "for 90 minutes"
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:65
+#: ../src/component/component.vala:142
 msgid "for;"
 msgstr "για;"
 
@@ -325,9 +487,20 @@ msgstr "για;"
 #. The list can be empty, but that will limit the parser.
 #. Example: "in 3 hours" (meaning 3 hours from now)
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:74
+#: ../src/component/component.vala:151
 msgid "in;"
 msgstr "σε;"
+
+#. Used by quick-add to determine if the word is a RECURRING preposition (indicating a
+#. regular occurrance in time).  Each word must be separated by semi-colons.
+#. It's allowable for some or all of these words to be duplicated in the location
+#. prepositions list (elsewhere) but not another time list.
+#. The list can be empty, but that will limit the parser.
+#. Example: "every 3 days", "every Friday"
+#. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
+#: ../src/component/component.vala:160
+msgid "every;"
+msgstr "κάθε;"
 
 #. Used by quick-add to determine if the word is a LOCATION preposition (indicating a
 #. specific place).  Each word must be separated by semi-colons.
@@ -336,7 +509,7 @@ msgstr "σε;"
 #. parser.
 #. Example: "at supermarket", "at Eiffel Tower"
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:83
+#: ../src/component/component.vala:169
 msgid "at;"
 msgstr "στο;στη;στον;στην;"
 
@@ -346,71 +519,161 @@ msgstr "στο;στη;στον;στην;"
 #. suffixes.
 #. Example: "1st", "2nd", "3rd", "4th"
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:91
+#: ../src/component/component.vala:177
 msgid "st;nd;rd;th"
 msgstr "ος;η"
 
-#: ../src/host/host-create-update-event.vala:192 ../src/rc/show-event.ui.h:2
-msgid "_Update"
-msgstr "_Ενημέρωση"
+#: ../src/host/host-create-update-event.vala:64
+#: ../src/host/host-create-update-event.vala:67
+#: ../src/host/host-show-event.vala:60 ../src/rc/activator-list.ui.h:1
+#: ../src/rc/calendar-import.ui.h:1 ../src/rc/create-update-recurring.ui.h:24
+#: ../src/rc/event-time-settings.ui.h:4 ../src/rc/generic-subscribe.ui.h:5
+#: ../src/rc/google-authenticating.ui.h:1
+#: ../src/rc/google-calendar-list.ui.h:2 ../src/rc/google-login.ui.h:1
+msgid "_Cancel"
+msgstr "_Ακύρωση"
 
-#: ../src/host/host-create-update-event.vala:192
-#: ../src/rc/create-update-event.ui.h:10
+#: ../src/host/host-create-update-event.vala:65
+#| msgid "_All Events"
+msgid "Save A_ll Events"
+msgstr "Αποθήκευση ό_λων των συμβάντων"
+
+#: ../src/host/host-create-update-event.vala:66
+#| msgid "_This Event"
+msgid "Save _This Event"
+msgstr "Αποθήκευση _αυτού του συμβάντος"
+
+#: ../src/host/host-create-update-event.vala:166
+msgid "_Save"
+msgstr "Αποθή_κευση"
+
+#: ../src/host/host-create-update-event.vala:166
 msgid "C_reate"
 msgstr "_Δημιουργία"
 
-#: ../src/host/host-create-update-event.vala:273
+#: ../src/host/host-create-update-event.vala:280
 msgid "Unable to create event: calendar must be specified"
-msgstr "Αδύνατη η δημιουργία συμβάντος: πρέπει να καθοριστεί ημερολόγιο"
+msgstr "Αδυναμία δημιουργίας συμβάντος: πρέπει να καθοριστεί ημερολόγιο"
 
-#: ../src/host/host-create-update-event.vala:282
+#: ../src/host/host-create-update-event.vala:299
 #, c-format
 msgid "Unable to create event: %s"
 msgstr "Αδυναμία δημιουργίας συμβάντος: %s"
 
-#: ../src/host/host-create-update-event.vala:289
+#: ../src/host/host-create-update-event.vala:304
 msgid "Unable to update event: calendar must be specified"
 msgstr "Αδυναμία ενημέρωσης συμβάντος: πρέπει να καθοριστεί ημερολόγιο"
 
-#: ../src/host/host-create-update-event.vala:298
+#: ../src/host/host-create-update-event.vala:349
+#: ../src/host/host-show-event.vala:209
 #, c-format
 msgid "Unable to update event: %s"
 msgstr "Αδυναμία ενημέρωσης συμβάντος: %s"
 
+#: ../src/host/host-create-update-recurring.vala:401
+#| msgid "Month"
+msgid "month"
+msgid_plural "months"
+msgstr[0] "μήνας"
+msgstr[1] "μήνες"
+
+#: ../src/host/host-create-update-recurring.vala:405
+#| msgid "weekly"
+msgid "week"
+msgid_plural "weeks"
+msgstr[0] "εβδομάδα"
+msgstr[1] "εβδομάδες"
+
+#: ../src/host/host-create-update-recurring.vala:409
+#| msgid "yearly"
+msgid "year"
+msgid_plural "years"
+msgstr[0] "έτος"
+msgstr[1] "έτη"
+
+#: ../src/host/host-create-update-recurring.vala:414
+#| msgid "Today"
+msgid "day"
+msgid_plural "days"
+msgstr[0] "ημέρα"
+msgstr[1] "ημέρες"
+
+#: ../src/host/host-create-update-recurring.vala:426
+msgid "event"
+msgid_plural "events"
+msgstr[0] "συμβάν"
+msgstr[1] "συμβάντα"
+
 #: ../src/host/host-import-calendar.vala:33
 msgid "Select calendar to import event into:"
 msgid_plural "Select calendar to import events into:"
-msgstr[0] "Επιλέξτε ημερολόγιο για την εισαγωγή συμβάντος:"
-msgstr[1] "Επιλέξτε ημερολόγια για την εισαγωγή συμβάντων:"
+msgstr[0] "Επιλογή ημερολογίου για την εισαγωγή συμβάντος:"
+msgstr[1] "Επιλογή ημερολογίου για την εισαγωγή συμβάντων:"
 
-#: ../src/host/host-main-window.vala:99
+#: ../src/host/host-main-window.vala:94
 msgid "_Today"
 msgstr "_Σήμερα"
 
-#: ../src/host/host-main-window.vala:163
+#: ../src/host/host-main-window.vala:158
 msgid "Jump to today's date (Ctrl+T)"
 msgstr "Μετάβαση στη σημερινή ημερομηνία (Ctrl+T)"
 
-#: ../src/host/host-main-window.vala:169
+#: ../src/host/host-main-window.vala:164
 msgid "Previous (Alt+Left)"
 msgstr "Προηγούμενο (Alt+Left)"
 
-#: ../src/host/host-main-window.vala:175
+#: ../src/host/host-main-window.vala:170
 msgid "Next (Alt+Right)"
 msgstr "Επόμενο (Alt+Right)"
 
-#: ../src/host/host-main-window.vala:200
+#: ../src/host/host-main-window.vala:195
 msgid "Quick add event (Ctrl+N)"
 msgstr "Γρήγορη προσθήκη συμβάντος (Ctrl+N)"
 
-#: ../src/host/host-main-window.vala:206
+#: ../src/host/host-main-window.vala:201
 msgid "Calendars (Ctrl+L)"
 msgstr "Ημερολόγια (Ctrl+L)"
+
+#: ../src/host/host-show-event.vala:53 ../src/rc/calendar-manager-list.ui.h:1
+msgid "_Close"
+msgstr "Κ_λείσιμο"
+
+#: ../src/host/host-show-event.vala:54 ../src/rc/quick-create-event.ui.h:4
+msgid "_Edit"
+msgstr "Επε_ξεργασία"
+
+#: ../src/host/host-show-event.vala:55
+msgid "_Delete"
+msgstr "Δια_γραφή"
+
+#: ../src/host/host-show-event.vala:56
+#| msgid "_All Events"
+msgid "Delete A_ll Events"
+msgstr "ιαγραφή όλων των συμβάντων"
+
+#: ../src/host/host-show-event.vala:57
+#| msgid "_This Event"
+msgid "Delete _This Event"
+msgstr "Διαγραφή _αυτού του συμβάντος"
+
+#: ../src/host/host-show-event.vala:59
+#| msgid "This and _Future Events"
+msgid "Delete This and _Future Events"
+msgstr "Διαγραφή αυτού και _μελλοντικών συμβάντων"
+
+#. No number is supplied because the number of events removed is indefinite in certain
+#. situations ... plural text should simply be for "more than one"
+#: ../src/host/host-show-event.vala:240
+#, c-format
+msgid "Unable to remove event: %s"
+msgid_plural "Unable to remove events: %s"
+msgstr[0] "Αδυναμία αφαίρεσης συμβάντος: %s"
+msgstr[1] "Αδυναμία αφαίρεσης συμβάντων: %s"
 
 #. *
 #. * @inheritDoc
 #.
-#: ../src/view/month/month-controller.vala:56
+#: ../src/view/month/month-controller.vala:51
 msgid "Month"
 msgstr "Μήνας"
 
@@ -422,144 +685,291 @@ msgid "Week"
 msgstr "Εβδομάδα"
 
 #. date formatting: "<Start Date> to <End Date>"
-#: ../src/view/week/week-controller.vala:178
+#: ../src/view/week/week-controller.vala:172
 #, c-format
 msgid "%s to %s"
 msgstr "%s ως %s"
-
-#: ../src/rc/activator-list.ui.h:1 ../src/rc/calendar-manager-list.ui.h:1
-#: ../src/rc/show-event.ui.h:3
-msgid "_Close"
-msgstr "Κ_λείσιμο"
 
 #: ../src/rc/activator-list.ui.h:2
 msgid "_Add"
 msgstr "Προσ_θήκη"
 
 #: ../src/rc/app-menu.interface.h:1
-msgid "_Add Calendar…"
-msgstr "Προσ_θήκη ημερολογίου…"
-
-#: ../src/rc/app-menu.interface.h:2
 msgid "_Calendars"
 msgstr "Ημε_ρολόγια"
 
-#: ../src/rc/app-menu.interface.h:3
+#: ../src/rc/app-menu.interface.h:2
 msgid "_About"
 msgstr "_Περί"
 
-#: ../src/rc/app-menu.interface.h:4
+#: ../src/rc/app-menu.interface.h:3
 msgid "_Quit"
 msgstr "Έ_ξοδος"
-
-#: ../src/rc/calendar-import.ui.h:1 ../src/rc/create-update-event.ui.h:9
-#: ../src/rc/google-authenticating.ui.h:1
-#: ../src/rc/google-calendar-list.ui.h:2 ../src/rc/google-login.ui.h:1
-#: ../src/rc/webcal-subscribe.ui.h:4
-msgid "_Cancel"
-msgstr "_Ακύρωση"
 
 #: ../src/rc/calendar-import.ui.h:2
 msgid "_Import"
 msgstr "Ει_σαγωγή"
 
 #: ../src/rc/calendar-manager-list-item.ui.h:1
+#: ../src/rc/generic-subscribe.ui.h:3
 msgid "Calendar color"
 msgstr "Χρώμα ημερολογίου"
+
+#: ../src/rc/calendar-manager-list-item.ui.h:2
+#| msgid "_Calendars"
+msgid "Calendar visibility"
+msgstr "Ορατότητα ημερολογίου"
+
+#: ../src/rc/calendar-manager-list.ui.h:2
+#| msgid "_Add Calendar…"
+msgid "Add calendar"
+msgstr "Προσθήκη ημερολογίου"
+
+#: ../src/rc/calendar-manager-list.ui.h:3
+#| msgid "My calendars:"
+msgid "Rename calendar"
+msgstr "Μετονομασία ημερολογίου"
+
+#: ../src/rc/calendar-manager-list.ui.h:4
+#| msgid "Desktop Calendar"
+msgid "Delete calendar"
+msgstr "Διαγραφή ημερολογίου"
 
 #: ../src/rc/create-update-event.ui.h:1
 msgid "Untitled event"
 msgstr "Συμβάν χωρίς τίτλο"
 
-#. As in "From <date> <time> to <date> <time>"
-#: ../src/rc/create-update-event.ui.h:3
-msgid "From"
-msgstr "Από"
+#: ../src/rc/create-update-event.ui.h:2
+msgid "Summary"
+msgstr "Σύνοψη"
 
-#. As in "From <date> <time> to <date> <time>"
+#: ../src/rc/create-update-event.ui.h:3
+msgid "Time"
+msgstr "Ώρα"
+
+#: ../src/rc/create-update-event.ui.h:4
+msgid "Re_peats…"
+msgstr "Επανα_λήψεις…"
+
 #: ../src/rc/create-update-event.ui.h:5
-msgid "to"
-msgstr "έως"
+msgid "Set the start and end time"
+msgstr "Ορισμός ώρας έναρξης και τερματισμού"
 
 #: ../src/rc/create-update-event.ui.h:6
-msgid "_All-day"
-msgstr "_Ολοήμερo συμβάν"
-
-#: ../src/rc/create-update-event.ui.h:7
 msgid "_Location"
 msgstr "_Τοποθεσία"
 
-#: ../src/rc/create-update-event.ui.h:8
+#: ../src/rc/create-update-event.ui.h:7
 msgid "_Description"
 msgstr "Περιγρα_φή"
+
+#: ../src/rc/create-update-event.ui.h:8
+#| msgid "Calendar:"
+msgid "Calendar"
+msgstr "Ημερολόγιο"
+
+#: ../src/rc/create-update-recurring.ui.h:1
+msgid "_Repeating event"
+msgstr "_Επαναλαμβανόμενο συμβάν"
+
+#: ../src/rc/create-update-recurring.ui.h:2
+msgid "Re_peats"
+msgstr "Επανα_λήψεις"
+
+#: ../src/rc/create-update-recurring.ui.h:3
+#| msgid "every;"
+msgid "_Every"
+msgstr "Κά_θε"
+
+#: ../src/rc/create-update-recurring.ui.h:4
+msgid "En_ds"
+msgstr "Τε_λειώνει"
+
+#: ../src/rc/create-update-recurring.ui.h:5
+msgid "_Starts"
+msgstr "_Ξεκινά"
+
+#: ../src/rc/create-update-recurring.ui.h:6
+msgid "_On days"
+msgstr "_Σε μέρες"
+
+#: ../src/rc/create-update-recurring.ui.h:7
+#| msgid "daily"
+msgid "Daily"
+msgstr "Ημερισίως"
+
+#: ../src/rc/create-update-recurring.ui.h:8
+#| msgid "weekly"
+msgid "Weekly"
+msgstr "Εβδομαδιαίως"
+
+#: ../src/rc/create-update-recurring.ui.h:9
+msgid "Day of the week"
+msgstr "Ημέρα της εβδομάδας"
+
+#: ../src/rc/create-update-recurring.ui.h:10
+msgid "Day of the month"
+msgstr "Ημέρα του μήνα"
+
+#: ../src/rc/create-update-recurring.ui.h:11
+#| msgid "yearly"
+msgid "Yearly"
+msgstr "Ετησίως"
+
+#: ../src/rc/create-update-recurring.ui.h:12
+msgid "_Sun"
+msgstr "_Κυρ"
+
+#: ../src/rc/create-update-recurring.ui.h:13
+msgid "_Mon"
+msgstr "_Δευ"
+
+#: ../src/rc/create-update-recurring.ui.h:14
+msgid "_Tues"
+msgstr "Τ_ρι"
+
+#: ../src/rc/create-update-recurring.ui.h:15
+msgid "_Wed"
+msgstr "_Τετ"
+
+#: ../src/rc/create-update-recurring.ui.h:16
+msgid "T_hu"
+msgstr "_Πέμ"
+
+#: ../src/rc/create-update-recurring.ui.h:17
+msgid "_Fri"
+msgstr "_Παρ"
+
+#: ../src/rc/create-update-recurring.ui.h:18
+msgid "S_at"
+msgstr "Σ_αβ"
+
+#: ../src/rc/create-update-recurring.ui.h:19
+#| msgid "every;"
+msgid "_Never"
+msgstr "Π_οτέ"
+
+#. As in, an event "ends on" a date
+#: ../src/rc/create-update-recurring.ui.h:21
+msgid "_On"
+msgstr "_Σε"
+
+#. As in, "After n events"
+#: ../src/rc/create-update-recurring.ui.h:23
+msgid "Aft_er"
+msgstr "Μ_ετά από"
+
+#: ../src/rc/create-update-recurring.ui.h:25
+#: ../src/rc/event-time-settings.ui.h:5
+msgid "_OK"
+msgstr "Εν_τάξει"
+
+#: ../src/rc/create-update-recurring.ui.h:26
+msgid ""
+"WARNING: California cannot edit this event's recurring criteria.\n"
+"• Press Cancel to keep the current criteria.\n"
+"• Press OK to overwrite the existing criteria with your changes."
+msgstr ""
+
+#: ../src/rc/date-time-widget.ui.h:1
+msgid ":"
+msgstr ":"
+
+#. As in "From 9pm to 10pm"
+#: ../src/rc/event-time-settings.ui.h:2
+msgid "to"
+msgstr "έως"
+
+#: ../src/rc/event-time-settings.ui.h:3
+#| msgid "_All-day"
+msgid "_All-day event"
+msgstr "_Ολοήμερo συμβάν"
+
+#: ../src/rc/generic-subscribe.ui.h:1
+#| msgid "Calendar:"
+msgid "Calendar _name"
+msgstr "Ό_νομα ημερολογίου"
+
+#: ../src/rc/generic-subscribe.ui.h:2
+#| msgid "_URL:"
+msgid "_URL"
+msgstr "Δ_ιεύθυνση"
+
+#: ../src/rc/generic-subscribe.ui.h:4
+#| msgid "Select a color for the Web calendar"
+msgid "Select a color for the calendar"
+msgstr "Επιλογή χρώματος για το ημερολόγιο"
+
+#: ../src/rc/generic-subscribe.ui.h:6 ../src/rc/google-calendar-list.ui.h:3
+msgid "_Subscribe"
+msgstr "_Εγγραφή"
+
+#: ../src/rc/generic-subscribe.ui.h:7
+msgid "User name"
+msgstr "Όνομα χρήστη"
+
+#: ../src/rc/generic-subscribe.ui.h:8
+msgid ""
+"If supplied, your password will be requested when calendar is first accessed"
+msgstr ""
+"Αν δοθεί, ο κωδικός πρόσβασης σας θα ζητηθεί όταν χρησιμοποιηθεί για πρώτη "
+"φορά το ημερολόγιο"
+
+#: ../src/rc/generic-subscribe.ui.h:9
+msgid "optional"
+msgstr "προαιρετικό"
 
 #: ../src/rc/google-authenticating.ui.h:2
 msgid "_Try again"
 msgstr "_Προσπαθήστε ξανά"
 
-#: ../src/rc/google-authenticating.ui.h:3
-msgid "Authenticating…"
-msgstr "Πιστοποιείται…"
-
 #: ../src/rc/google-calendar-list.ui.h:1
-msgid "My calendars:"
-msgstr "Τα ημερολόγια μου:"
-
-#: ../src/rc/google-calendar-list.ui.h:3 ../src/rc/webcal-subscribe.ui.h:5
-msgid "_Subscribe"
-msgstr "_Εγγραφή"
+#| msgid "My calendars:"
+msgid "My calendars"
+msgstr "Τα ημερολόγια μου"
 
 #: ../src/rc/google-calendar-list.ui.h:4
-msgid "Other available calendars:"
-msgstr "Άλλα διαθέσιμα ημερολόγια:"
+#| msgid "Other available calendars:"
+msgid "Other available calendars"
+msgstr "Άλλα διαθέσιμα ημερολόγια"
 
 #: ../src/rc/google-login.ui.h:2
 msgid "_Login"
 msgstr "Σύ_νδεση"
 
 #: ../src/rc/google-login.ui.h:3
-msgid "Google _account name:"
-msgstr "Όνομα λογ_αριασμού Google:"
+#| msgid "Google _account name:"
+msgid "Google _account name"
+msgstr "Όνομα λογ_αριασμού Google"
 
 #: ../src/rc/google-login.ui.h:4
-msgid "Google _password:"
-msgstr "Kωδικός _πρόσβασης Google:"
+#| msgid "Google _password:"
+msgid "Google _password"
+msgstr "Kωδικός _πρόσβασης Google"
 
 #: ../src/rc/quick-create-event.ui.h:1
 msgid "_Quick add event"
 msgstr "Γρήγορ_η προσθήκη συμβάντος:"
 
 #: ../src/rc/quick-create-event.ui.h:2
+msgid "_Help"
+msgstr "Βοή_θεια"
+
+#: ../src/rc/quick-create-event.ui.h:3
 msgid "C_ancel"
 msgstr "Α_κύρωση"
 
-#: ../src/rc/quick-create-event.ui.h:3
+#: ../src/rc/quick-create-event.ui.h:5
 msgid "_Create"
 msgstr "_Δημιουργία"
 
-#: ../src/rc/quick-create-event.ui.h:4 ../src/rc/show-event.ui.h:4
+#: ../src/rc/quick-create-event.ui.h:6 ../src/rc/show-event.ui.h:1
 msgid "When"
 msgstr "Πότε"
 
-#: ../src/rc/show-event.ui.h:1
-msgid "_Remove"
-msgstr "_Κατάργηση"
-
-#: ../src/rc/show-event.ui.h:5
+#: ../src/rc/show-event.ui.h:2
 msgid "Where"
 msgstr "Πού"
-
-#: ../src/rc/webcal-subscribe.ui.h:1
-msgid "_Name:"
-msgstr "Ό_νομα"
-
-#: ../src/rc/webcal-subscribe.ui.h:2
-msgid "_URL:"
-msgstr "_URL:"
-
-#: ../src/rc/webcal-subscribe.ui.h:3
-msgid "Select a color for the Web calendar"
-msgstr "Επιλογή χρώματος για το διαδικτυακό ημερολόγιο"
 
 #: ../src/rc/window-menu.interface.h:1
 msgid "Zoom _In"
@@ -573,15 +983,27 @@ msgstr "Σ_μίκρυνση"
 msgid "_Normal Size"
 msgstr "Κα_νονικό μέγεθος"
 
+#~ msgid "_Update"
+#~ msgstr "_Ενημέρωση"
+
+#~ msgid "From"
+#~ msgstr "Από"
+
+#~ msgid "Remove in this series:"
+#~ msgstr "Αφαίρεση σε αυτή τη σειρά:"
+
+#~ msgid "_Remove"
+#~ msgstr "_Κατάργηση"
+
+#~ msgid "_Name:"
+#~ msgstr "Ό_νομα"
+
 #~ msgid ""
 #~ "%s, %s\n"
 #~ "%s, %s"
 #~ msgstr ""
 #~ "%s, %s\n"
 #~ "%s, %s"
-
-#~ msgid "Calendar:"
-#~ msgstr "Ημερολόγιο:"
 
 #, fuzzy
 #~ msgid ""
@@ -593,14 +1015,8 @@ msgstr "Κα_νονικό μέγεθος"
 #~ msgid "Ca_lendar:"
 #~ msgstr "Ημερο_λόγιο:"
 
-#~ msgid "Desktop Calendar"
-#~ msgstr "Ημερολόγιο Επιφάνειας Εργασίας"
-
 #~ msgid "Update Event"
 #~ msgstr "Ενημέρωση Εκδήλωσης"
 
 #~ msgid "Create a new event for today"
 #~ msgstr "Δημιουργήστε μια νέα εκδήλωση για σήμερα"
-
-#~ msgid "New Event"
-#~ msgstr "Νέα Εκδήλωση"

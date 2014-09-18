@@ -18,6 +18,12 @@ public interface Controllable : Object {
     public const string PROP_CURRENT_LABEL = "current-label";
     public const string PROP_IS_VIEWING_TODAY = "is-viewing-today";
     public const string PROP_DEFAULT_DATE = "default-date";
+    public const string PROP_IN_TRANSITION = "in-transition";
+    
+    /**
+     * For {@link execute_when_not_in_transition}.
+     */
+    public delegate void Callback(View.Controllable controller);
     
     /**
      * A short string uniquely identifying this view.
@@ -44,6 +50,16 @@ public interface Controllable : Object {
      * requirement for the {@link Controllable} to change its view as the day changes, however.
      */
     public abstract bool is_viewing_today { get; protected set; }
+    
+    /**
+     * The "logical" chronology motion when moving between views of time.
+     */
+    public abstract ChronologyMotion motion { get; }
+    
+    /**
+     * Indicates when a transition is running (such as when moving between dates).
+     */
+    public abstract bool in_transition { get; protected set; }
     
     /**
      * Signal from the {@link Controllable} that a DATE-TIME {@link Component.Event} should be
@@ -96,6 +112,40 @@ public interface Controllable : Object {
      * when creating or displaying events).
      */
     public abstract void unselect_all();
+    
+    /**
+     * Return the GtkWidget that represents the specified {@link Calendar.Date}, if available.
+     */
+    public abstract Gtk.Widget? get_widget_for_date(Calendar.Date date);
+    
+    /**
+     * Execute a {@link Callback} only when the {@link Controllable} is not performing a transition.
+     *
+     * If the Controllable is not in transition when called, the Callback is executed immediately.
+     * Otherwise, execution is delayed until the transition completes.
+     */
+    public void execute_when_not_transitioning(Callback callback) {
+        if (!in_transition) {
+            callback(this);
+            
+            return;
+        }
+        
+        ulong handler_id = 0;
+        handler_id = notify[PROP_IN_TRANSITION].connect(() => {
+            // watch for spurious notifications
+            if (in_transition)
+                return;
+            
+            // disable this signal
+            if (handler_id > 0)
+                disconnect(handler_id);
+            else
+                debug("Unable to disconnect in-transition notify signal handler");
+            
+            callback(this);
+        });
+    }
 }
 
 }

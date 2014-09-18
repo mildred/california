@@ -62,13 +62,7 @@ public class DateTime : BaseObject, Gee.Hashable<DateTime>, Gee.Comparable<DateT
     public iCal.icalproperty_kind kind;
     
     /**
-     * Creates a new {@link DateTime} for the iCal component of the property kind.
-     *
-     * Note that the only properties currently supported are:
-     * * DTSTART_PROPERTY
-     * * DTEND_PROPERTY
-     * * DTSTAMP_PROPERTY
-     * * RECURRENCEID_PROPERTY
+     * Creates a new {@link DateTime} for the first iCal property of the kind.
      *
      * @throws ComponentError.UNAVAILABLE if not found
      * @throws ComponentError.INVALID if not a valid DATE or DATE-TIME
@@ -79,32 +73,34 @@ public class DateTime : BaseObject, Gee.Hashable<DateTime>, Gee.Comparable<DateT
         if (prop == null)
             throw new ComponentError.UNAVAILABLE("No property of kind %s", ical_prop_kind.to_string());
         
-        switch (ical_prop_kind) {
-            case iCal.icalproperty_kind.DTSTAMP_PROPERTY:
-                dt = prop.get_dtstamp();
+        init_from_property(prop);
+    }
+    
+    public DateTime.from_property(iCal.icalproperty prop) throws ComponentError {
+        init_from_property(prop);
+    }
+    
+    private void init_from_property(iCal.icalproperty prop) throws ComponentError {
+        unowned iCal.icalvalue prop_value = prop.get_value();
+        switch (prop_value.isa()) {
+            case iCal.icalvalue_kind.DATE_VALUE:
+                dt = prop_value.get_date();
             break;
             
-            case iCal.icalproperty_kind.DTSTART_PROPERTY:
-                dt = prop.get_dtstart();
-            break;
-            
-            case iCal.icalproperty_kind.DTEND_PROPERTY:
-                dt = prop.get_dtend();
-            break;
-            
-            case iCal.icalproperty_kind.RECURRENCEID_PROPERTY:
-                dt = prop.get_recurrenceid();
+            case iCal.icalvalue_kind.DATETIME_VALUE:
+                dt = prop_value.get_datetime();
             break;
             
             default:
-                assert_not_reached();
+                throw new ComponentError.INVALID("%s not a DATE/DATE-TIME value: %s",
+                    prop.isa().to_string(), prop_value.isa().to_string());
         }
         
         if (iCal.icaltime_is_null_time(dt) != 0)
-            throw new ComponentError.INVALID("DATE-TIME for %s is null time", ical_prop_kind.to_string());
+            throw new ComponentError.INVALID("DATE-TIME for %s is null time", prop.isa().to_string());
         
         if (iCal.icaltime_is_valid_time(dt) == 0)
-            throw new ComponentError.INVALID("DATE-TIME for %s is invalid", ical_prop_kind.to_string());
+            throw new ComponentError.INVALID("DATE-TIME for %s is invalid", prop.isa().to_string());
         
         unowned iCal.icalparameter? param = prop.get_first_parameter(iCal.icalparameter_kind.TZID_PARAMETER);
         if (param != null) {
@@ -120,44 +116,50 @@ public class DateTime : BaseObject, Gee.Hashable<DateTime>, Gee.Comparable<DateT
             zone = new Calendar.OlsonZone(dt.zone->get_location());
         }
         
-        kind = ical_prop_kind;
+        kind = prop.isa();
         value = prop.get_value_as_string();
     }
     
     /**
      * Creates a new {@link DateTime} for a component's RRULE UNTIL property.
+     *
+     * Strict will attempt to adhere to the MUSTs and SHALLs present in the iCal specification
+     * regarding RRULE's UNTIL property. See [[https://tools.ietf.org/html/rfc5545#section-3.3.10]]
      */
-    public DateTime.rrule_until(iCal.icalrecurrencetype rrule, DateTime dtstart) throws ComponentError {
+    public DateTime.rrule_until(iCal.icalrecurrencetype rrule, DateTime dtstart, bool strict)
+        throws ComponentError {
         if (iCal.icaltime_is_null_time(rrule.until) != 0)
-            throw new ComponentError.INVALID("DATE-TIME for RRULE UNTIL is null time");
+            throw new ComponentError.UNAVAILABLE("DATE-TIME for RRULE UNTIL is null time");
         
-        if (iCal.icaltime_is_valid_time(rrule.until) != 0)
-            throw new ComponentError.INVALID("DATE-TIME for RRULE UNTIL is invalid");
+        if (iCal.icaltime_is_valid_time(rrule.until) == 0)
+            throw new ComponentError.UNAVAILABLE("DATE-TIME for RRULE UNTIL is invalid");
         
         bool until_is_date = (iCal.icaltime_is_date(rrule.until) != 0);
         bool until_is_utc = (iCal.icaltime_is_utc(rrule.until) != 0);
         
-        // "The value of the UNTIL rule part MUST have the same value type as the 'DTSTART'
-        // property."
-        if (dtstart.is_date != until_is_date)
-            throw new ComponentError.INVALID("RRULE UNTIL and DTSTART must be of same type (DATE/DATE-TIME)");
-        
-        // "If the 'DTSTART' property is specified as a date with local time, then the UNTIL rule
-        // part MUST also be specified as a date with local time."
-        if (dtstart.is_utc != until_is_utc)
-            throw new ComponentError.INVALID("RRULE UNTIL and DTSTART must be of same time type (UTC/local)");
-        
-        // "if the 'DTSTART' property is specified as a date with UTC time or a date with local time
-        // and a time zone reference, then the UNTIL rule part MUST be specified as a date with
-        // UTC time."
-        if (dtstart.is_date || (!dtstart.is_utc && dtstart.zone != null)) {
-            if (!until_is_utc)
-                throw new ComponentError.INVALID("RRULE UNTIL must be UTC for DTSTART DATE or w/ time zone");
+        if (strict) {
+            // "The value of the UNTIL rule part MUST have the same value type as the 'DTSTART'
+            // property."
+            if (dtstart.is_date != until_is_date)
+                throw new ComponentError.INVALID("RRULE UNTIL and DTSTART must be of same type (DATE/DATE-TIME)");
+            
+            // "If the 'DTSTART' property is specified as a date with local time, then the UNTIL rule
+            // part MUST also be specified as a date with local time."
+            if (dtstart.is_utc != until_is_utc)
+                throw new ComponentError.INVALID("RRULE UNTIL and DTSTART must be of same time type (UTC/local)");
+            
+            // "if the 'DTSTART' property is specified as a date with UTC time or a date with local time
+            // and a time zone reference, then the UNTIL rule part MUST be specified as a date with
+            // UTC time."
+            if (dtstart.is_date || (!dtstart.is_utc && dtstart.zone != null)) {
+                if (!until_is_utc)
+                    throw new ComponentError.INVALID("RRULE UNTIL must be UTC for DTSTART DATE or w/ time zone");
+            }
+            
+            // "If specified as a DATE-TIME value, then it MUST be specified in a UTC time format."
+            if (!until_is_date && !until_is_utc)
+                throw new ComponentError.INVALID("RRULE DATE-TIME UNTIL must be UTC");
         }
-        
-        // "If specified as a DATE-TIME value, then it MUST be specified in a UTC time format."
-        if (!until_is_date && !until_is_utc)
-            throw new ComponentError.INVALID("RRULE DATE-TIME UNTIL must be UTC");
         
         kind = iCal.icalproperty_kind.RRULE_PROPERTY;
         dt = rrule.until;
@@ -207,6 +209,20 @@ public class DateTime : BaseObject, Gee.Hashable<DateTime>, Gee.Comparable<DateT
             return Calendar.Timezone.local;
         
         return new Calendar.Timezone(zone);
+    }
+    
+    /**
+     * Returns an iCal value for the {@link DateTime}.
+     */
+    internal iCal.icalvalue to_ical_value() {
+        iCal.icalvalue prop_value = new iCal.icalvalue(
+            is_date ? iCal.icalvalue_kind.DATE_VALUE : iCal.icalvalue_kind.DATE_VALUE);
+        if (is_date)
+            prop_value.set_date(dt);
+        else
+            prop_value.set_datetime(dt);
+        
+        return prop_value;
     }
     
     /**

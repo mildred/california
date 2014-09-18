@@ -19,13 +19,56 @@ namespace California.Component {
  */
 
 public class DetailsParser : BaseObject {
+    /**
+     * Recognized "special" symbols.
+     */
+    private enum Shorthand {
+        NONE,
+        /**
+         * {@link Shorthand} for TIME or LOCATION.
+         */
+        ATSIGN;
+        
+        /**
+         * Converts a string to a recognized {@link Shorthand}.
+         */
+        public static Shorthand parse(string str) {
+            switch (str) {
+                case "@":
+                    return ATSIGN;
+                
+                default:
+                    return NONE;
+            }
+        }
+    }
+    
     private class Token : BaseObject, Gee.Hashable<Token> {
+        /**
+         * Original token.
+         */
         public string original;
+        
+        /*
+         * Casefolded and punctuation removed.
+         */
         public string casefolded;
+        
+        /**
+         * {@link Shorthand} parsed from {@link original}.
+         */
+        public Shorthand shorthand;
         
         public Token(string token) {
             original = token;
-            casefolded = from_string(token).filter(c => !c.ispunct()).to_string(c => c.to_string()) ?? "";
+            casefolded = from_string(token.casefold())
+                .filter(c => !c.ispunct())
+                .to_string(c => c.to_string()) ?? "";
+            shorthand = Shorthand.parse(original);
+        }
+        
+        public bool is_empty() {
+            return String.is_empty(casefolded) && shorthand == Shorthand.NONE;
         }
         
         public bool equal_to(Token other) {
@@ -64,6 +107,7 @@ public class DetailsParser : BaseObject {
     private Calendar.Date? end_date = null;
     private Calendar.Duration? duration = null;
     private bool adding_location = false;
+    private bool adding_summary = true;
     private RecurrenceRule? rrule = null;
     
     /**
@@ -99,7 +143,12 @@ public class DetailsParser : BaseObject {
             
             if (event.is_all_day) {
                 start_date = event.date_span.start_date;
-                end_date = event.date_span.end_date;
+                
+                // don't set end date if only for one day; this is too greedy, since it's possible
+                // the user merely wanted to set a start date (and the Event object doesn't allow
+                // for that alone)
+                if (!event.date_span.is_same_day)
+                    end_date = event.date_span.end_date;
             } else if (event.exact_time_span != null) {
                 start_date = event.exact_time_span.start_date;
                 start_time = event.exact_time_span.start_exact_time.to_wall_time();
@@ -112,16 +161,34 @@ public class DetailsParser : BaseObject {
         }
         
         // tokenize the string and arrange as a stack for the parser
-        string[] tokenized = String.reduce_whitespace(this.details).split(" ");
-        Gee.LinkedList<Token> list = new Gee.LinkedList<Token>();
-        foreach (string token in tokenized) {
-            if (!String.is_empty(token))
-                list.add(new Token(token));
-        }
-        
-        stack = new Collection.LookaheadStack<Token>(list);
+        stack = new Collection.LookaheadStack<Token>(tokenize());
         
         parse();
+    }
+    
+    Gee.List<Token> tokenize() {
+        Gee.List<Token> tokens = new Gee.ArrayList<Token>();
+        
+        StringBuilder builder = new StringBuilder();
+        bool in_quotes = false;
+        from_string(details).iterate(ch => {
+            // switch state but include quotes in token
+            if (ch == '"')
+                in_quotes = !in_quotes;
+            
+            if (!ch.isspace() || in_quotes) {
+                builder.append_unichar(ch);
+            } else if (!String.is_empty(builder.str)) {
+                tokens.add(new Token(builder.str));
+                builder = new StringBuilder();
+            }
+        });
+        
+        // get any trailing text
+        if (!String.is_empty(builder.str))
+            tokens.add(new Token(builder.str));
+        
+        return tokens;
     }
     
     private void parse() {
@@ -131,8 +198,8 @@ public class DetailsParser : BaseObject {
                 break;
             
             // because whitespace and punctuation is stripped from the original token, it's possible
-            // for the casefolded token to be empty
-            if (String.is_empty(token.casefolded)) {
+            // for the casefolded token to be empty (and an unrecognized Shorthand)
+            if (token.is_empty()) {
                 add_text(token);
                 
                 continue;
@@ -152,6 +219,12 @@ public class DetailsParser : BaseObject {
             // preposition offers a clue that a time is being specified.
             stack.mark();
             if (token.casefolded in TIME_PREPOSITIONS && parse_time(stack.pop(), false))
+                continue;
+            stack.restore();
+            
+            // The ATSIGN is also recognized as a TIME preposition
+            stack.mark();
+            if (token.shorthand == Shorthand.ATSIGN && parse_time(stack.pop(), false))
                 continue;
             stack.restore();
             
@@ -176,15 +249,24 @@ public class DetailsParser : BaseObject {
                 continue;
             stack.restore();
             
-            // only look for location prepositions if not already adding text to the location field
-            if (!adding_location && token.casefolded in LOCATION_PREPOSITIONS) {
+            // only look for LOCATION prepositions if not already adding text to the location field
+            // (ATSIGN is considered a LOCATION preposition)
+            if (!adding_location
+                && (token.casefolded in LOCATION_PREPOSITIONS || token.shorthand == Shorthand.ATSIGN)) {
                 // add current token (the preposition) to summary but not location (because location
                 // tokens are added to summary, i.e. "dinner at John's" yields "John's" for location
-                // and "dinner at John's" for summary)
-                add_text(token);
+                // and "dinner at John's" for summary) ... note that ATSIGN does not add to summary
+                // to allow for more concise summaries
+                if (token.shorthand != Shorthand.ATSIGN)
+                    add_text(token);
                 
                 // now adding to both summary and location
                 adding_location = true;
+                
+                // ...unless at-sign used, which has the side-effect of not adding to summary
+                // (see above)
+                if (token.shorthand == Shorthand.ATSIGN)
+                    adding_summary = false;
                 
                 continue;
             }
@@ -220,7 +302,8 @@ public class DetailsParser : BaseObject {
                 continue;
             stack.restore();
             
-            // attempt to (strictly) parse into wall-clock time
+            // attempt to parse into wall-clock time, strictly if adding location (to prevent street
+            // numbers from being interpreted as 24-hour time)
             stack.mark();
             if (parse_time(token, true))
                 continue;
@@ -325,6 +408,25 @@ public class DetailsParser : BaseObject {
             return add_date(saturday) && add_date(sunday);
         }
         
+        // look for fully numeric date specifier (i.e. "7/2/14")
+        {
+            Calendar.Date? date = parse_numeric_date(specifier);
+            if (date != null && add_date(date))
+                return true;
+        }
+        
+        // look for time range (i.e. "6p-9p", "6-9p")
+        {
+            Calendar.WallTime start, end;
+            bool strictly_parsed;
+            if (parse_time_range(specifier, out start, out end, out strictly_parsed)) {
+                if (!strict || (strict && strictly_parsed)) {
+                    if (add_wall_time(start, strictly_parsed) && add_wall_time(end, strictly_parsed))
+                        return true;
+                }
+            }
+        }
+        
         // look for day/month specifiers, in any order
         stack.mark();
         {
@@ -362,8 +464,9 @@ public class DetailsParser : BaseObject {
         if (date != null && add_date(date))
             return true;
         
-        // store locally so it can be modified w/o risk (tokens may be reused)
-        string specifier_casefolded = specifier.casefolded;
+        // store locally so it can be modified w/o risk (tokens may be reused) ... don't use
+        // casefolded because important punctuation has been stripped
+        string specifier_string = specifier.original;
         
         // if meridiem found in next token, append to specifier for WallTime.parse()
         bool found_meridiem = false;
@@ -372,7 +475,7 @@ public class DetailsParser : BaseObject {
             Token? meridiem = stack.pop();
             if (meridiem != null
                 && (meridiem.casefolded == Calendar.FMT_AM.casefold() || meridiem.casefolded == Calendar.FMT_PM.casefold())) {
-                specifier_casefolded += meridiem.casefolded;
+                specifier_string += meridiem.casefolded;
                 found_meridiem = true;
             }
         }
@@ -382,8 +485,7 @@ public class DetailsParser : BaseObject {
             stack.restore();
         
         bool strictly_parsed;
-        Calendar.WallTime? wall_time = Calendar.WallTime.parse(specifier_casefolded,
-            out strictly_parsed);
+        Calendar.WallTime? wall_time = Calendar.WallTime.parse(specifier_string, out strictly_parsed);
         if (wall_time != null && !strictly_parsed && strict)
             return false;
         
@@ -569,6 +671,11 @@ public class DetailsParser : BaseObject {
         // a day of the week
         Calendar.DayOfWeek? dow = Calendar.DayOfWeek.parse(unit.casefolded);
         if (dow != null) {
+            // if the start date does not match the recurring start date, then clear it (but can't
+            // do this if an end date was set; them's the breaks)
+            if (start_date != null && end_date == null && !start_date.day_of_week.equal_to(dow))
+                start_date = null;
+            
             Calendar.DayOfWeek[] by_days = iterate<Calendar.DayOfWeek>(dow).to_array();
             
             // if interval is an ordinal, the rule is for "nth day of the month", so it's a position
@@ -707,12 +814,11 @@ public class DetailsParser : BaseObject {
         return true;
     }
     
-    // Adds the text to the summary and location field, if adding_location is set
+    // Adds the text to the summary and location field, if adding_location/summary is set
     private void add_text(Token token) {
-        // always add to summary
-        add_to_builder(summary, token);
+        if (adding_summary)
+            add_to_builder(summary, token);
         
-        // add to location if in that mode
         if (adding_location)
             add_to_builder(location, token);
     }
@@ -736,6 +842,143 @@ public class DetailsParser : BaseObject {
         } else {
             return false;
         }
+        
+        return true;
+    }
+    
+    private Calendar.Date? parse_numeric_date(Token token) {
+        // look for three-number then two-number dates ... use original because casefolded has
+        // punctuation removed
+        int a, b, c;
+        char[] separator = new char[token.original.length];
+        if (token.original.scanf("%d%[/.]%d%[/.]%d", out a, separator, out b, separator, out c) == 5) {
+            // good to go
+        } else if (token.original.scanf("%d%[/.]%d", out a, separator, out b) == 3) {
+            // -1 means two-number date was found, i.e. year must be determined manually
+            c = -1;
+        } else {
+            // nothing doing
+            return null;
+        }
+        
+        int d, m, y;
+        switch (Calendar.System.date_ordering) {
+            case Calendar.DateOrdering.DMY:
+                d = a;
+                m = b;
+                y = c;
+            break;
+            
+            case Calendar.DateOrdering.MDY:
+                d = b;
+                m = a;
+                y = c;
+            break;
+            
+            case Calendar.DateOrdering.YDM:
+                // watch out for two-number date
+                if (c != -1) {
+                    d = b;
+                    m = c;
+                    y = a;
+                } else {
+                    // DM
+                    d = a;
+                    m = b;
+                    y = -1;
+                }
+            break;
+            
+            case Calendar.DateOrdering.YMD:
+                // watch out for two-number date
+                if (c != -1) {
+                    d = c;
+                    m = b;
+                    y = a;
+                } else {
+                    // DM; see https://bugzilla.gnome.org/show_bug.cgi?id=735096
+                    d = a;
+                    m = b;
+                    y = -1;
+                }
+            break;
+            
+            default:
+                assert_not_reached();
+        }
+        
+        // Determine year
+        Calendar.Year year;
+        if (c != -1) {
+            // two-digit numbers get adjusted to this century
+            // TODO: Y3K problem!
+            year = new Calendar.Year(y < 100 ? y + 2000 : y);
+        } else {
+            // if year not specified, assume the nearest date in the future
+            try {
+                Calendar.Date test = new Calendar.Date(Calendar.DayOfMonth.for(d),
+                    Calendar.Month.for(m), Calendar.System.today.year);
+                if (test.compare_to(Calendar.System.today) >= 0)
+                    year = test.year;
+                else
+                    year = test.year.adjust(1);
+            } catch (Error err) {
+                // bogus date, bail out
+                debug("Unable to parse date %s: %s", token.to_string(), err.message);
+                
+                return null;
+            }
+        }
+        
+        // build final date and return it
+        try {
+            return new Calendar.Date(Calendar.DayOfMonth.for(d), Calendar.Month.for(m), year);
+        } catch (Error err) {
+            debug("Unable to parse date %s: %s", token.to_string(), err.message);
+            
+            return null;
+        }
+    }
+    
+    // strictly parsed means *both* were strictly parsed
+    private bool parse_time_range(Token token, out Calendar.WallTime start, out Calendar.WallTime end,
+        out bool strictly_parsed) {
+        start = null;
+        end = null;
+        strictly_parsed = false;
+        
+        string[] separated = token.original.split("-");
+        if (separated.length != 2)
+            return false;
+        
+        // fixup meridiems: if one has a specifier, assume for both
+        
+        string start_string = separated[0].casefold().strip();
+        bool start_meridiem_unknown, is_start_pm;
+        Calendar.parse_meridiem(start_string, out start_meridiem_unknown, out is_start_pm);
+        
+        string end_string = separated[1].casefold().strip();
+        bool end_meridiem_unknown, is_end_pm;
+        Calendar.parse_meridiem(end_string, out end_meridiem_unknown, out is_end_pm);
+        
+        if (!start_meridiem_unknown && end_meridiem_unknown)
+            end_string += is_start_pm ? Calendar.FMT_PM : Calendar.FMT_AM;
+        else if (start_meridiem_unknown && !end_meridiem_unknown)
+            start_string += is_end_pm ? Calendar.FMT_PM : Calendar.FMT_AM;
+        
+        // parse away
+        
+        bool start_strictly_parsed;
+        start = Calendar.WallTime.parse(start_string, out start_strictly_parsed);
+        if (start == null)
+            return false;
+        
+        bool end_strictly_parsed;
+        end = Calendar.WallTime.parse(end_string, out end_strictly_parsed);
+        if (end == null)
+            return false;
+        
+        strictly_parsed = start_strictly_parsed && end_strictly_parsed;
         
         return true;
     }

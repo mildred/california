@@ -4,10 +4,10 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Activator {
+namespace California.Activator.Google {
 
 [GtkTemplate (ui = "/org/yorba/california/rc/google-calendar-list.ui")]
-public class GoogleCalendarListPane : Gtk.Grid, Toolkit.Card {
+public class CalendarListPane : Gtk.Grid, Toolkit.Card {
     public const string ID = "GoogleCalendarListPane";
     
     public class Message : BaseObject {
@@ -48,7 +48,7 @@ public class GoogleCalendarListPane : Gtk.Grid, Toolkit.Card {
     private Toolkit.ListBoxModel<GData.CalendarCalendar> own_calendars_model;
     private Toolkit.ListBoxModel<GData.CalendarCalendar> unowned_calendars_model;
     
-    public GoogleCalendarListPane(Backing.CalDAVSubscribable store) {
+    public CalendarListPane(Backing.CalDAVSubscribable store) {
         this.store = store;
         
         own_calendars_listbox.set_placeholder(create_placeholder());
@@ -67,7 +67,7 @@ public class GoogleCalendarListPane : Gtk.Grid, Toolkit.Card {
         return label;
     }
     
-    public void jumped_to(Toolkit.Card? from, Value? message) {
+    public void jumped_to(Toolkit.Card? from, Toolkit.Card.Jump reason, Value? message) {
         Message? feeds = message as Message;
         assert(feeds != null);
         
@@ -183,7 +183,7 @@ public class GoogleCalendarListPane : Gtk.Grid, Toolkit.Card {
         Toolkit.set_unbusy(this, cursor);
         
         if (subscribe_err == null)
-            notify_success();
+            jump_home();
         else
             notify_failure(_("Unable to subscribe to %s: %s").printf(calendar.title, subscribe_err.message));
     }

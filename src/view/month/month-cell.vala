@@ -26,21 +26,11 @@ internal class Cell : Common.EventsCell {
         
         notify[PROP_DATE].connect(update_top_line);
         
-        Calendar.System.instance.first_of_week_changed.connect(on_first_of_week_changed);
-        
         update_top_line();
-    }
-    
-    ~Cell() {
-        Calendar.System.instance.first_of_week_changed.disconnect(on_first_of_week_changed);
     }
     
     protected override Common.EventsCell? get_cell_for_date(Calendar.Date cell_date) {
         return owner.get_cell_for_date(cell_date);
-    }
-    
-    private void on_first_of_week_changed() {
-        change_date_and_neighbors(date, date.week_of(Calendar.System.first_of_week).to_date_span());
     }
     
     protected override void draw_borders(Cairo.Context ctx) {
@@ -57,7 +47,7 @@ internal class Cell : Common.EventsCell {
         }
         
         // only draw bottom line if not on the bottom row
-        if (row < Grid.ROWS - 1) {
+        if (row < owner.rows - 1) {
             ctx.move_to(0, height);
             ctx.line_to(width, height);
         }
@@ -72,7 +62,10 @@ internal class Cell : Common.EventsCell {
     }
     
     private void update_top_line() {
-        top_line_text = date.day_of_month.informal_number;
+        // include abbreviate month name on first of the month
+        top_line_text = (date.day_of_month.value == 1)
+            ? "%s %s".printf(date.month.abbrev_name, date.day_of_month.informal_number)
+            : date.day_of_month.informal_number;
         top_line_rgba = (date in owner.month_of_year)
             ? palette.day_in_range
             : palette.day_outside_range;

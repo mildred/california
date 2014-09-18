@@ -11,17 +11,23 @@ namespace California.Backing {
  */
 
 internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
+    private delegate void InstanceNotifier(Component.Instance instance);
+    
     private E.CalClientView view;
+    private string sexp;
     // this is different than "active", which gets set when start completes
     private bool started = false;
     private Error? start_err = null;
     
     // Called from EdsCalendarSource.subscribe_async().  The CalClientView should not be started
     public EdsCalendarSourceSubscription(EdsCalendarSource eds_calendar, Calendar.ExactTimeSpan window,
-        E.CalClientView view) {
+        E.CalClientView view, string sexp) {
         base (eds_calendar, window);
         
         this.view = view;
+        this.sexp = sexp;
+        
+        eds_calendar.notify[Source.PROP_IS_AVAILABLE].connect(() => { stop(eds_calendar); });
     }
     
     ~EdsCalendarSourceSubscription() {
@@ -68,6 +74,28 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
         }
     }
     
+    private void stop(EdsCalendarSource calendar_source) {
+        if (!started || calendar_source.is_available)
+            return;
+        
+        try {
+            // wait for start to complete, for sanity's sake
+            wait_until_started();
+        } catch (Error err) {
+            // call it a day
+            return;
+        }
+        
+        try {
+            view.stop();
+        } catch (Error err) {
+            debug("Unable to stop E.CalClientView for %s: %s", to_string(), err.message);
+        }
+        
+        started = false;
+        active = false;
+    }
+    
     private void internal_start(Cancellable? cancellable) throws Error {
         // prepare flags and fields of interest .. don't want known events delivered via signals
         view.set_fields_of_interest(null);
@@ -82,36 +110,36 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
         // next
         view.start();
         
-        // prime with the list of known events
-        view.client.generate_instances(
-            window.start_exact_time.to_time_t(),
-            window.end_exact_time.to_time_t(),
-            cancellable,
-            on_instance_generated,
-            on_generate_finished);
+        discovery_async.begin(cancellable);
     }
     
-    private bool on_instance_generated(E.CalComponent eds_component, time_t instance_start,
-        time_t instance_end) {
+    private async void discovery_async(Cancellable? cancellable) {
+        SList<unowned iCal.icalcomponent> ical_components;
         try {
-            Component.Event? event = Component.Instance.convert(calendar, eds_component.get_icalcomponent())
-                as Component.Event;
-            if (event != null)
-                notify_instance_discovered(event);
+            yield view.client.get_object_list(sexp, cancellable, out ical_components);
         } catch (Error err) {
-            debug("Unable to generate discovered event for %s: %s", to_string(), err.message);
+            start_err = err;
+            
+            start_failed(err);
+            
+            return;
         }
         
-        return true;
-    }
-    
-    private void on_generate_finished() {
+        // process all known objects within the sexp range
+        on_objects_discovered_added(ical_components, notify_instance_discovered);
+        
         // only set when generation (start) is finished
         active = true;
     }
     
-    private void on_objects_added(SList<weak iCal.icalcomponent> objects) {
-        foreach (weak iCal.icalcomponent ical_component in objects) {
+    private void on_objects_added(SList<unowned iCal.icalcomponent> ical_components) {
+        // process all added objects
+        on_objects_discovered_added(ical_components, notify_instance_added);
+    }
+    
+    private void on_objects_discovered_added(SList<unowned iCal.icalcomponent> ical_components,
+        InstanceNotifier notifier) {
+        foreach (unowned iCal.icalcomponent ical_component in ical_components) {
             if (String.is_empty(ical_component.get_uid()))
                 continue;
             
@@ -119,51 +147,57 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
             
             // remove all existing components with this UID
             if (has_uid(uid))
-                notify_instance_removed(uid);
+                notify_master_removed(uid);
             
-            // if no recurrences, add this alone
-            if (!E.Util.component_has_recurrences(ical_component)) {
-                add_instance(ical_component);
-                
+            // add all instances, master and generated
+            Component.Instance? master = add_instance(null, ical_component, notifier);
+            if (master == null)
                 continue;
-            }
+            
+            // if no recurrences, done
+            if (!E.Util.component_has_recurrences(ical_component))
+                continue;
             
             // generate recurring instances
-            view.client.generate_instances_for_object(
+            view.client.generate_instances_for_object_sync(
                 ical_component,
                 window.start_exact_time.to_time_t(),
                 window.end_exact_time.to_time_t(),
-                null,
-                on_instance_added,
-                null);
+                (eds_component, start, end) => {
+                    add_instance(master, eds_component.get_icalcomponent(), notifier);
+                    
+                    return true;
+                }
+            );
         }
-    }
-    
-    private bool on_instance_added(E.CalComponent eds_component, time_t instance_start,
-        time_t instance_end) {
-        add_instance(eds_component.get_icalcomponent());
-        
-        return true;
     }
     
     // Assumes all existing events with UID/RID have been removed already
-    private void add_instance(iCal.icalcomponent ical_component) {
+    private Component.Instance? add_instance(Component.Instance? master, iCal.icalcomponent ical_component,
+        InstanceNotifier notifier) {
         // convert the added component into a new Event
-        Component.Event? added_event;
+        Component.Event? added_event = null;
         try {
             added_event = Component.Instance.convert(calendar, ical_component) as Component.Event;
-            if (added_event != null)
-                notify_instance_added(added_event);
+            if (added_event != null) {
+                // assign the master (if this isn't the master already)
+                added_event.master = master;
+                
+                // notify of didscovery/addition
+                notifier(added_event);
+            }
         } catch (Error err) {
             debug("Unable to process added event: %s", err.message);
         }
+        
+        return added_event;
     }
     
-    private void on_objects_modified(SList<weak iCal.icalcomponent> objects) {
-        SList<weak iCal.icalcomponent> add_list = new SList<weak iCal.icalcomponent>();
-        foreach (weak iCal.icalcomponent ical_component in objects) {
-            // if not an instance and has recurring, treat as an add (which removes and adds generated
-            // instances)
+    private void on_objects_modified(SList<unowned iCal.icalcomponent> ical_components) {
+        SList<unowned iCal.icalcomponent> add_list = new SList<unowned iCal.icalcomponent>();
+        foreach (unowned iCal.icalcomponent ical_component in ical_components) {
+            // if not a generated instance and has recurring, treat as an add (which removes and
+            // adds generated instances)
             if (!E.Util.component_is_instance(ical_component) && E.Util.component_has_recurrences(ical_component)) {
                 add_list.append(ical_component);
                 
@@ -173,43 +207,82 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
             if (String.is_empty(ical_component.get_uid()))
                 continue;
             
-            // if none present, skip
             Component.UID uid = new Component.UID(ical_component.get_uid());
-            if (!has_uid(uid))
-                continue;
             
-            // find original for this one
+            // if no known instances (master or generated) of this UID, then signalled for something
+            // never seen before
             Gee.Collection<Component.Instance>? instances = for_uid(uid);
-            if (instances == null || instances.size == 0)
+            if (Collection.size(instances) == 0)
                 continue;
             
-            foreach (Component.Instance instance in instances) {
-                Component.Event? known_event = instance as Component.Event;
-                if (known_event == null)
-                    continue;
-                
-                try {
-                    known_event.full_update(ical_component, null);
-                } catch (Error err) {
-                    debug("Unable to update event %s: %s", known_event.to_string(), err.message);
+            // if a generated instance has been updated, get its RID (fall through if unavailable)
+            Component.DateTime? rid = null;
+            try {
+                rid = new Component.DateTime(ical_component, iCal.icalproperty_kind.RECURRENCEID_PROPERTY);
+            } catch (ComponentError comperr) {
+                if (!(comperr is ComponentError.UNAVAILABLE)) {
+                    debug("Unable to get RID of modified component: %s", comperr.message);
                     
                     continue;
                 }
-                
-                notify_instance_altered(known_event);
             }
             
-            if (instances.size > 1)
-                debug("Warning: updated %d modified events, expecting only 1", instances.size);
+            Component.Instance? instance = null;
+            if (rid == null) {
+                // no RID, then this is the master instance; test above looks for an RRULE, so that's
+                // not present any more (if it ever was); drop all generated instances, as this
+                // master no longer has any
+                traverse<Component.Instance>(instances)
+                    .filter(inst => inst.is_generated_instance)
+                    .iterate(inst => notify_generated_instance_removed(inst.uid, inst.rid));
+            
+                // the master instance of the bunch is what's been modified
+                instance = traverse<Component.Instance>(instances)
+                    .filter(inst => inst.is_master_instance)
+                    .one();
+                if (instance == null) {
+                    debug("Cannot find master instance for UID %s (%d generated), skipping",
+                        uid.to_string(), Collection.size(instances));
+                }
+                
+            } else {
+                // RID found, so a generated instance has been modified; only update that one
+                instance = traverse<Component.Instance>(instances)
+                    .filter(inst => inst.rid != null && inst.rid.equal_to(rid))
+                    .one();
+                if (instance == null) {
+                    debug("Cannot find generated instance for UID %s RID %s (%d generated), skipping",
+                        uid.to_string(), rid.to_string(), Collection.size(instances));
+                }
+            }
+            
+            if (instance == null)
+                continue;
+            
+            // only deal with Events at this moment
+            Component.Event? modified_event = instance as Component.Event;
+            if (modified_event == null)
+                continue;
+            
+            // update event details
+            try {
+                modified_event.full_update(ical_component, null);
+            } catch (Error err) {
+                debug("Unable to update event %s: %s", modified_event.to_string(), err.message);
+                
+                continue;
+            }
+            
+            notify_instance_altered(modified_event);
         }
         
-        // add any recurring events
+        // remove and re-add any recurring events
         on_objects_added(add_list);
     }
     
-    private void on_objects_removed(SList<weak E.CalComponentId?> ids) {
-        foreach (weak E.CalComponentId id in ids)
-            notify_instance_removed(new Component.UID(id.uid));
+    private void on_objects_removed(SList<unowned E.CalComponentId?> ids) {
+        foreach (unowned E.CalComponentId id in ids)
+            notify_master_removed(new Component.UID(id.uid));
     }
 }
 

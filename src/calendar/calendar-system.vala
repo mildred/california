@@ -16,6 +16,8 @@ namespace California.Calendar {
  */
 
 public class System : BaseObject {
+    public const string PROP_SYSTEM_FIRST_OF_WEEK = "system-first-of-week";
+    
     private const string CLOCK_FORMAT_SCHEMA = "org.gnome.desktop.interface";
     private const string CLOCK_FORMAT_KEY = "clock-format";
     private const string CLOCK_FORMAT_24H = "24h";
@@ -48,6 +50,30 @@ public class System : BaseObject {
     public static bool is_24hr { get; private set; }
     
     /**
+     * The user's locale's {@link DateOrdering}.
+     *
+     * Date ordering may be set, but this is only for unit testing (hence there's no signal
+     * reporting its change).  The application shouldn't set this and let the value be determined
+     * at startup.
+     *
+     * @see date_separator
+     */
+    public static DateOrdering date_ordering { get; set; }
+    
+    /**
+     * The user's locale's date separator character.
+     *
+     * Generally this is expected to be a slash ("/"), a dot ("."), or a dash ("-').  Not all
+     * cultures use consistent separators (i.e. Chinese uses marks indicating year, day, and month).
+     * It's assumed this is merely a common (or common enough) character to be used when displaying
+     * or parsing dates.
+     *
+     * Like {@link date_ordering}, this may be set for unit testing, but the application should
+     * let this be determined at startup.
+     */
+    public static string date_separator { get; set; }
+    
+    /**
      * Returns the system's configured zone as an {@link OlsonZone}.
      */
     public static OlsonZone zone { get; private set; }
@@ -64,12 +90,18 @@ public class System : BaseObject {
      * The user's preferred start of the week.
      *
      * Unlike most of the other properties here (which are determined by examining and monitoring
-     * the system), this is strictly a user preference that should be configured by the outer
-     * application.  It's stored here because it's something that many components in {@link Calendar}
-     * need access to and passing it around is often inconvenient.  However, many of the "basic"
-     * classes (such as {@link Date} and {@link DayOfWeek}) still ask for it as a parameter to
-     * remain flexible.  In the case of {@link Week}, it ''must'' store it, as its span of days is
-     * strictly determined by the decision, which can change at runtime.
+     * the system), this is a combination of a user preference (configured by the outer application)
+     * and a system/locale setting.  It's stored here because it's something that many components
+     * in {@link Calendar} need access to and passing it around throughout the stack is
+     * inconvenient.  However, many of the "basic" classes (such as {@link Date} and
+     * {@link DayOfWeek}) still ask for it as a parameter to remain flexible.  In the case of
+     * {@link Week}, it ''must'' store it, as its span of days is strictly determined by the
+     * decision, which can change at runtime.
+     *
+     * When {@link Calendar.System} is first created, it's initialized to
+     * {@link system_first_of_week}.  The outer application may pull an overriding value from the
+     * configuration and override the original value.  (The outer application may want to have some
+     * way to store "use system default" as a possible value.)
      *
      * @see first_of_week_changed
      */
@@ -89,6 +121,13 @@ public class System : BaseObject {
             instance.first_of_week_changed(old_fow, _first_of_week);
         }
     }
+    
+    /**
+     * System-defined (or locale-defined) start of the week.
+     *
+     * @see first_of_week
+     */
+    public FirstOfWeek system_first_of_week { get; private set; }
     
     private static DBus.timedated timedated_service;
     private static DBus.Properties timedated_properties;
@@ -155,6 +194,111 @@ public class System : BaseObject {
         today = new Date.now(Timezone.local);
         scheduled_date_timer = new Scheduled.once_after_sec(next_check_today_interval_sec(),
             check_today_changed, CHECK_DATE_PRIORITY);
+        
+        // determine the date ordering and separator by using strftime's response
+        Calendar.Date unique_date;
+        try {
+            unique_date = new Calendar.Date(Calendar.DayOfMonth.for_checked(3),
+                Calendar.Month.for_checked(4), new Calendar.Year(2001));
+        } catch (Error err) {
+            error("Unable to generate test date 3/4/2001: %s", err.message);
+        }
+        
+        string formatted = unique_date.format("%x");
+        
+        int a, b, c;
+        char first_separator, second_separator;
+        if (formatted.scanf("%d%c%d%c%d", out a, out first_separator, out b, out second_separator, out c) == 5) {
+            // convert four-digit year to two-digit
+            a = (a == 2001) ? 1 : a;
+            b = (b == 2001) ? 1 : b;
+            c = (c == 2001) ? 1 : c;
+            
+            if (a == 3 && b == 4 && c == 1)
+                date_ordering = DateOrdering.DMY;
+            else if (a == 4 && b == 3 && c == 1)
+                date_ordering = DateOrdering.MDY;
+            else if (a == 1 && b == 3 && c == 4)
+                date_ordering = DateOrdering.YDM;
+            else if (a == 1 && b == 4 && c == 3)
+                date_ordering = DateOrdering.YMD;
+            else
+                date_ordering = DateOrdering.DEFAULT;
+        } else {
+            // couldn't determine
+            date_ordering = DateOrdering.DEFAULT;
+        }
+        
+        // use first separator as date separator ... do some sanity checking here
+        switch (first_separator) {
+            case '/':
+            case '.':
+            case '-':
+                date_separator = first_separator.to_string();
+            break;
+            
+            default:
+                date_separator = "/";
+            break;
+        }
+        
+        debug("Date ordering: %s, separator: %s (formatted=%s)", date_ordering.to_string(),
+            date_separator.to_string(), formatted);
+        
+        // Borrowed liberally (but not exactly) from GtkCalendar; see gtk_calendar_init
+#if HAVE__NL_TIME_FIRST_WEEKDAY
+        debug("Using _NL_TIME_FIRST_WEEKDAY for system first of week");
+        
+        // 1-based day (1 == Sunday)
+        int first_weekday = Langinfo.lookup_int(Langinfo.Item.INT_TIME_FIRST_WEEKDAY);
+        
+        // I haven't the foggiest what this is returning, but note that Nov 30 1997 is a Sunday and
+        // Dec 01 1997 is a Monday.
+        int week_origin = (int) Langinfo.lookup(Langinfo.Item.TIME_WEEK_1STDAY);
+        
+        // values are translated into 0-based day (as per gtkcalendar.c), 0 == Sunday
+        int week_1stday;
+        switch (week_origin) {
+            case 19971130:
+                week_1stday = 0;
+            break;
+            
+            case 19971201:
+                week_1stday = 1;
+            break;
+            
+            default:
+                warning("Unknown value of _NL_TIME_WEEK_1STDAY: %d (%Xh)", week_origin, week_origin);
+                week_1stday = 0;
+            break;
+        }
+        
+        // this yields a 0-based value, 0 == Sunday
+        int week_start = (week_1stday + first_weekday - 1) % 7;
+        
+        // convert into our first day of week value
+        switch (week_start) {
+            case 0:
+                system_first_of_week = FirstOfWeek.SUNDAY;
+            break;
+            
+            case 1:
+                system_first_of_week = FirstOfWeek.MONDAY;
+            break;
+            
+            default:
+                warning("Unknown week start value, using default: %d", week_start);
+                system_first_of_week = FirstOfWeek.DEFAULT;
+            break;
+        }
+#else
+        debug("_NL_TIME_FIRST_WEEKDAY unavailable for system first of week");
+        
+        // For now, just use the default.  Later, user will be able to configure this.
+        system_first_of_week = FirstOfWeek.DEFAULT;
+#endif
+        
+        debug("System first day of week: %s", system_first_of_week.to_string());
     }
     
     internal static void preinit() throws IOError {
@@ -166,6 +310,10 @@ public class System : BaseObject {
     
     internal static void init() {
         instance = new System();
+        
+        // initialize, application may override (can't do this in ctor due to how first_of_week
+        // setter is built)
+        first_of_week = instance.system_first_of_week;
     }
     
     internal static void terminate() {

@@ -16,8 +16,6 @@ private class Grid : Gtk.Grid {
     
     // days of the week
     public const int COLS = Calendar.DayOfWeek.COUNT;
-    // calendar weeks to be displayed at any one time
-    public const int ROWS = 6;
     
     // Delegate for walking only Cells in the Grid.  Return true to keep iterating.
     private delegate bool CellCallback(Cell cell);
@@ -46,10 +44,14 @@ private class Grid : Gtk.Grid {
      */
     public string id { get { return month_of_year.full_name; } }
     
+    /**
+     * The number of rows (weeks) being displayed.
+     */
+    public int rows { get; private set; }
+    
     private Gee.HashMap<Calendar.Date, Cell> date_to_cell = new Gee.HashMap<Calendar.Date, Cell>();
     private Backing.CalendarSubscriptionManager? subscriptions = null;
-    private Gdk.EventType button_press_type = Gdk.EventType.NOTHING;
-    private Gdk.Point button_press_point = Gdk.Point();
+    private Toolkit.ButtonConnector cell_button_connector = new Toolkit.ButtonConnector();
     private Scheduled? scheduled_subscription_update = null;
     
     public Grid(Controller owner, Calendar.MonthOfYear month_of_year) {
@@ -61,48 +63,52 @@ private class Grid : Gtk.Grid {
         row_homogeneous = true;
         row_spacing = 0;
         
-        // prep the grid with a fixed number of rows and columns
-        for (int row = 0; row < ROWS; row++)
+        cell_button_connector.clicked.connect(on_cell_single_click);
+        cell_button_connector.double_clicked.connect(on_cell_double_click);
+        
+        // create a WeekSpan for the first week of the month to the last week of the month
+        Calendar.WeekSpan span = new Calendar.WeekSpan.from_span(month_of_year, Calendar.System.first_of_week);
+        
+        // prep the grid with a fixed number of rows (for visible weeks of the month) and columns
+        // (for each day of the week) ... this needs to be done before attaching the Cells
+        traverse<Calendar.Week>(span.as_list()).iterate(() => {
             insert_row(0);
+        });
         
         for (int col = 0; col < COLS; col++)
             insert_column(0);
         
-        // pre-add grid elements for every cell, which are updated when the MonthYear changes
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLS; col++) {
-                // use today's date as placeholder until update_cells() is called
-                // TODO: try to avoid this on first pass
-                Cell cell = new Cell(this, Calendar.System.today, row, col);
+        // fill in weeks of days of the displayed month
+        rows = 0;
+        foreach (Calendar.Week week in span) {
+            foreach (Calendar.Date date in week) {
+                int col = date.day_of_week.ordinal(Calendar.System.first_of_week) - 1;
+                
+                Cell cell = new Cell(this, date, rows, col);
                 cell.expand = true;
-                cell.events |= Gdk.EventMask.BUTTON_PRESS_MASK & Gdk.EventMask.BUTTON1_MOTION_MASK;
-                cell.button_press_event.connect(on_cell_button_event);
-                cell.button_release_event.connect(on_cell_button_event);
+                cell_button_connector.connect_to(cell);
                 cell.motion_notify_event.connect(on_cell_motion_event);
                 
-                attach(cell, col, row, 1, 1);
+                attach(cell, col, rows, 1, 1);
+                
+                // add to map for quick lookups
+                date_to_cell.set(date, cell);
             }
+            
+            rows++;
         }
         
-        // update all the Cells by assigning them Dates ... this also updates the window, which
-        // is necessary for subscriptions
-        update_cells();
+        // update the window being displayed
+        window = span.to_date_span();
+        
+        // update subscriptions if this month is in view
         update_subscriptions();
         
         owner.notify[Controller.PROP_MONTH_OF_YEAR].connect(on_controller_month_of_year_changed);
-        Calendar.System.instance.first_of_week_changed.connect(update_first_of_week);
     }
     
     ~Grid() {
         owner.notify[Controller.PROP_MONTH_OF_YEAR].disconnect(on_controller_month_of_year_changed);
-        Calendar.System.instance.first_of_week_changed.disconnect(update_first_of_week);
-    }
-    
-    private Cell get_cell(int row, int col) {
-        assert(row >= 0 && row < ROWS);
-        assert(col >= 0 && col < COLS);
-        
-        return (Cell) get_child_at(col, row);
     }
     
     /**
@@ -146,37 +152,6 @@ private class Grid : Gtk.Grid {
         });
         
         return hit;
-    }
-    
-    private void update_week(int row, Calendar.Week week) {
-        Calendar.DateSpan week_as_date_span = week.to_date_span();
-        foreach (Calendar.Date date in week) {
-            int col = date.day_of_week.ordinal(Calendar.System.first_of_week) - 1;
-            
-            Cell cell = get_cell(row, col);
-            cell.change_date_and_neighbors(date, week_as_date_span);
-            
-            // add to map for quick lookups
-            date_to_cell.set(date, cell);
-        }
-    }
-    
-    private void update_cells() {
-        // clear mapping
-        date_to_cell.clear();
-        
-        // create a WeekSpan for the first week of the month to the last displayed week (not all
-        // months will fill all displayed weeks, but some will)
-        Calendar.WeekSpan span = new Calendar.WeekSpan.count(
-            month_of_year.to_week_span(Calendar.System.first_of_week).first, ROWS - 1);
-        
-        // fill in weeks of the displayed month
-        int row = 0;
-        foreach (Calendar.Week week in span)
-            update_week(row++, week);
-        
-        // update the window being displayed
-        window = span.to_date_span();
     }
     
     private void update_subscriptions() {
@@ -225,27 +200,21 @@ private class Grid : Gtk.Grid {
             subscriptions.start_async.begin();
     }
     
-    private void update_first_of_week() {
-        // requires updating all the cells as well, since all dates have to be shifted
-        update_cells();
-        update_subscriptions();
-    }
-    
     private void on_calendar_added(Backing.CalendarSource calendar) {
-        calendar.notify[Backing.Source.PROP_VISIBLE].connect(on_calendar_visibility_changed);
-        calendar.notify[Backing.Source.PROP_COLOR].connect(queue_draw);
+        calendar.notify[Backing.Source.PROP_VISIBLE].connect(on_calendar_display_changed);
+        calendar.notify[Backing.Source.PROP_COLOR].connect(on_calendar_display_changed);
     }
     
     private void on_calendar_removed(Backing.CalendarSource calendar) {
-        calendar.notify[Backing.Source.PROP_VISIBLE].disconnect(on_calendar_visibility_changed);
-        calendar.notify[Backing.Source.PROP_COLOR].disconnect(queue_draw);
+        calendar.notify[Backing.Source.PROP_VISIBLE].disconnect(on_calendar_display_changed);
+        calendar.notify[Backing.Source.PROP_COLOR].disconnect(on_calendar_display_changed);
     }
     
-    private void on_calendar_visibility_changed(Object o, ParamSpec pspec) {
+    private void on_calendar_display_changed(Object o, ParamSpec pspec) {
         Backing.CalendarSource calendar = (Backing.CalendarSource) o;
         
         foreach_cell((cell) => {
-            cell.notify_calendar_visibility_changed(calendar);
+            cell.notify_calendar_display_changed(calendar);
             
             return true;
         });
@@ -287,115 +256,97 @@ private class Grid : Gtk.Grid {
         });
     }
     
-    private bool on_cell_button_event(Gtk.Widget widget, Gdk.EventButton event) {
-        // only interested in left-clicks
-        if (event.button != 1)
-            return false;
-        
-        // NOTE: widget is the *pressed* widget, even for "release" events, no matter where the release
-        // occurs
-        Cell press_cell = (Cell) widget;
-        
-        switch (event.type) {
-            case Gdk.EventType.BUTTON_PRESS:
-            case Gdk.EventType.2BUTTON_PRESS:
-            case Gdk.EventType.3BUTTON_PRESS:
-                button_press_type = event.type;
-                button_press_point.x = (int) event.x;
-                button_press_point.y = (int) event.y;
-            break;
-            
-            case Gdk.EventType.BUTTON_RELEASE:
-                // The GDK coordinates are relative to the pressed Cell, so translate to the GtkGrid
-                int grid_x, grid_y;
-                if (!press_cell.translate_coordinates(this, (int) event.x, (int) event.y, out grid_x,
-                    out grid_y)) {
-                    return false;
-                }
-                
-                // Now translate the released coordinates back to the right Cell, if it is a Cell
-                Cell? release_cell = translate_to_cell(grid_x, grid_y);
-                
-                // if released on a non-Cell, reset state and exit
-                if (release_cell == null) {
-                    unselect_all();
-                    button_press_type = Gdk.EventType.NOTHING;
-                    button_press_point = {};
-                    
-                    return false;
-                }
-                
-                // translate release point coordinates into the coordinates of the released cell
-                Gdk.Point button_release_point = Gdk.Point();
-                if (!press_cell.translate_coordinates(release_cell, (int) event.x, (int) event.y,
-                    out button_release_point.x, out button_release_point.y)) {
-                    return false;
-                }
-                
-                bool stop_propagation = false;
-                switch (button_press_type) {
-                    case Gdk.EventType.BUTTON_PRESS:
-                        stop_propagation = on_cell_single_click((Cell) widget, button_press_point,
-                            release_cell, button_release_point);
-                    break;
-                    
-                    case Gdk.EventType.2BUTTON_PRESS:
-                        stop_propagation = on_cell_double_click((Cell) widget, button_press_point,
-                            release_cell, button_release_point);
-                    break;
-                }
-                
-                // reset, but don't de-select the view controller might be in charge of that
-                button_press_type = Gdk.EventType.NOTHING;
-                button_press_point = {};
-                
-                return stop_propagation;
+    // A button event returns all coordinates in the coordinate system of the pressed widget ...
+    // this determines which widget the button was released over and returns the point of release
+    // in that widget's coordinate system
+    private Cell? get_released_cell(Toolkit.ButtonEvent details, ref Gdk.Point release_cell_point) {
+        // The GDK coordinates are relative to the pressed Cell, so translate to the GtkGrid
+        int grid_x, grid_y;
+        if (!details.widget.translate_coordinates(this, details.release_point.x, details.release_point.y,
+            out grid_x, out grid_y)) {
+            return null;
         }
         
-        return false;
+        // Now translate the released coordinates back to the right Cell, if it is a Cell
+        Cell? release_cell = translate_to_cell(grid_x, grid_y);
+        if (release_cell == null)
+            return null;
+        
+        // translate release point coordinates into the coordinates of the released cell
+        if (!details.widget.translate_coordinates(release_cell, details.release_point.x, details.release_point.y,
+            out release_cell_point.x, out release_cell_point.y)) {
+            return null;
+        }
+        
+        return release_cell;
     }
     
-    private bool on_cell_single_click(Cell press_cell, Gdk.Point press_point,
-        Cell release_cell, Gdk.Point release_point) {
-        bool stop_propagation = false;
+    private bool on_cell_single_click(Toolkit.ButtonEvent details) {
+        // only want primary button clicks
+        if (details.button != Toolkit.Button.PRIMARY)
+            return Toolkit.PROPAGATE;
+        
+        // get the Cell the button was released on (if it's a Cell at all)
+        Gdk.Point release_cell_point = Gdk.Point();
+        Cell? release_cell = get_released_cell(details, ref release_cell_point);
+        if (release_cell == null) {
+            // reset state and exit
+            unselect_all();
+            
+            return Toolkit.STOP;
+        }
+        
+        bool stop_propagation = Toolkit.PROPAGATE;
+        
+        Cell press_cell = (Cell) details.widget;
         
         // if pressed and released on the same cell, display the event at the released location
         if (press_cell == release_cell) {
-            Component.Event? event = release_cell.get_event_at(release_point);
+            Component.Event? event = release_cell.get_event_at(details.release_point);
             if (event != null) {
-                owner.request_display_event(event, release_cell, release_point);
-                stop_propagation = true;
+                owner.request_display_event(event, release_cell, release_cell_point);
+                stop_propagation = Toolkit.STOP;
             }
         } else {
             // create multi-day event
             owner.request_create_all_day_event(new Calendar.DateSpan(press_cell.date, release_cell.date),
-                release_cell, release_point);
-            stop_propagation = true;
+                release_cell, release_cell_point);
+            stop_propagation = Toolkit.STOP;
         }
         
         return stop_propagation;
     }
     
-    private bool on_cell_double_click(Cell press_cell, Gdk.Point press_point, Cell release_cell,
-        Gdk.Point release_point) {
+    private bool on_cell_double_click(Toolkit.ButtonEvent details) {
+        // only interested in primary button clicks
+        if (details.button != Toolkit.Button.PRIMARY)
+            return Toolkit.PROPAGATE;
+        
+        // get the Cell the button was released on (if it's a Cell at all)
+        Gdk.Point release_cell_point = Gdk.Point();
+        Cell? release_cell = get_released_cell(details, ref release_cell_point);
+        if (release_cell == null) {
+            // reset state and exit
+            unselect_all();
+            
+            return Toolkit.PROPAGATE;
+        }
+        
+        Cell press_cell = (Cell) details.widget;
+        
         // only interested in double-clicking on the same cell
         if (press_cell != release_cell)
-            return false;
+            return Toolkit.PROPAGATE;
         
         // if an existing event is double-clicked, ignore, as the single click handler is displaying
         // it (but stop propagation)
-        if (release_cell.get_event_at(release_point) != null)
-            return true;
-        
-        // if no date, still avoid propagating event
-        if (release_cell.date == null)
-            return true;
+        if (release_cell.get_event_at(release_cell_point) != null)
+            return Toolkit.STOP;
         
         owner.request_create_all_day_event(new Calendar.DateSpan(press_cell.date, release_cell.date),
-            release_cell, release_point);
+            release_cell, release_cell_point);
         
-        // stop propagation
-        return true;
+        return Toolkit.STOP;
     }
     
     private bool on_cell_motion_event(Gtk.Widget widget, Gdk.EventMotion event) {

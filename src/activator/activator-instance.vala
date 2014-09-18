@@ -47,7 +47,7 @@ public abstract class Instance : BaseObject {
      * Return a collection of {@link Cards} that guides the user through the steps to create a
      * {@link Backing.Source}.
      *
-     * The first Card will be jumped to initially.
+     * The process can be started by jumping to the {@link first_card_id}.
      */
     public abstract Gee.List<Toolkit.Card> create_cards(Soup.URI? supplied_uri);
     

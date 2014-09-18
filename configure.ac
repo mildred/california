@@ -1,10 +1,10 @@
-AC_INIT([california], [0.1.1], [jim@yorba.org], [california])
+AC_INIT([california], [0.1.4], [jim@yorba.org], [california])
 AC_CONFIG_SRCDIR([Makefile.am])
 AC_CONFIG_HEADERS([config/config.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([config])
 
-AM_INIT_AUTOMAKE([dist-xz no-dist-gzip])
+AM_INIT_AUTOMAKE([dist-xz no-dist-gzip subdir-objects])
 AM_MAINTAINER_MODE
 
 AC_PROG_CC
@@ -25,7 +25,7 @@ AC_SUBST(CPPFLAGS)
 AC_SUBST(LDFLAGS)
 
 GLIB_REQUIRED=2.38.0
-GTK_REQUIRED=3.10.7
+GTK_REQUIRED=3.12.2
 GEE_REQUIRED=0.10.5
 ECAL_REQUIRED=3.8.5
 LIBSOUP_REQUIRED=2.44
@@ -45,13 +45,23 @@ PKG_CHECK_MODULES(CALIFORNIA, [
 	gobject-introspection-1.0 >= $GOBJECT_INTROSPECTION_REQUIRED
 ])
 
-# Look for GTK+ 3.12 or better
-AM_CONDITIONAL(IS_GTK_312, pkg-config --exists 'gtk+-3.0 >= 3.12')
-
 AC_SUBST(CALIFORNIA_CFLAGS)
 AC_SUBST(CALIFORNIA_LIBS)
 
 GLIB_GSETTINGS
+
+#
+# system capabilities
+#
+
+# _NL_TIME_FIRST_WEEKDAY is an enum and not a define
+AC_MSG_CHECKING([for _NL_TIME_FIRST_WEEKDAY])
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <langinfo.h>]],
+                                [[char c;
+                                  c = *((unsigned char *)  nl_langinfo(_NL_TIME_FIRST_WEEKDAY));]])],
+               [california_ok=yes], [california_ok=no])
+AC_MSG_RESULT($california_ok)
+AM_CONDITIONAL(HAVE__NL_TIME_FIRST_WEEKDAY, test "$california_ok" = "yes")
 
 #
 # configure switches

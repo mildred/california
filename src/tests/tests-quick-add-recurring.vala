@@ -33,6 +33,8 @@ private class QuickAddRecurring : UnitTest.Harness {
         
         // WEEKLY
         add_case("every-tuesday", every_tuesday);
+        add_case("every-tuesday-start-tuesday", every_tuesday_start_tuesday);
+        add_case("every-tuesday-start-wednesday", every_tuesday_start_wednesday);
         add_case("every-friday", every_friday);
         add_case("every-saturday-until", every_saturday_until);
         add_case("all-day-saturday-until", all_day_saturday_until);
@@ -178,8 +180,8 @@ private class QuickAddRecurring : UnitTest.Harness {
     // the summary is       meeting at work
     // the location is      work
     // the start time is    10am
-    private bool basic(string details, out Component.Event event, out string? dump) {
-        Component.DetailsParser parser = new Component.DetailsParser(details, null);
+    private bool basic(string details, out Component.Event event, out string? dump, Component.Event? initial = null) {
+        Component.DetailsParser parser = new Component.DetailsParser(details, null, initial);
         event = parser.event;
         
         dump = "%s\n%s".printf(details, event.source);
@@ -307,6 +309,44 @@ private class QuickAddRecurring : UnitTest.Harness {
         
         Component.Event event;
         return basic("meeting at work at 10am every tuesday", out event, out dump)
+            && event.rrule.is_weekly
+            && event.rrule.interval == 1
+            && !event.rrule.has_duration
+            && event.exact_time_span.start_date.day_of_week.equal_to(Calendar.DayOfWeek.TUE)
+            && check_byrule_day(event, by_days);
+    }
+    
+    private bool every_tuesday_start_tuesday(out string? dump) throws Error {
+        Gee.Map<Calendar.DayOfWeek?, int> by_days = iterate<Calendar.DayOfWeek?>(
+            Calendar.DayOfWeek.TUE).to_hash_map_as_keys<int>(dow => 0);
+        
+        // A Tuesday
+        Calendar.Date start = new Calendar.Date(Calendar.DayOfMonth.for(2), Calendar.Month.SEP,
+            new Calendar.Year(2014));
+        Component.Event initial = new Component.Event.blank();
+        initial.set_event_date_span(start.to_date_span());
+        
+        Component.Event event;
+        return basic("meeting at work at 10am every tuesday", out event, out dump, initial)
+            && event.rrule.is_weekly
+            && event.rrule.interval == 1
+            && !event.rrule.has_duration
+            && event.exact_time_span.start_date.day_of_week.equal_to(Calendar.DayOfWeek.TUE)
+            && check_byrule_day(event, by_days);
+    }
+    
+    private bool every_tuesday_start_wednesday(out string? dump) throws Error {
+        Gee.Map<Calendar.DayOfWeek?, int> by_days = iterate<Calendar.DayOfWeek?>(
+            Calendar.DayOfWeek.TUE).to_hash_map_as_keys<int>(dow => 0);
+        
+        // A Wednesday
+        Calendar.Date start = new Calendar.Date(Calendar.DayOfMonth.for(3), Calendar.Month.SEP,
+            new Calendar.Year(2014));
+        Component.Event initial = new Component.Event.blank();
+        initial.set_event_date_span(start.to_date_span());
+        
+        Component.Event event;
+        return basic("meeting at work at 10am every tuesday", out event, out dump, initial)
             && event.rrule.is_weekly
             && event.rrule.interval == 1
             && !event.rrule.has_duration

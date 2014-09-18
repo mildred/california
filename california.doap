@@ -7,10 +7,14 @@
 
   <name xml:lang="en">california</name>
   <shortdesc xml:lang="en">GNOME 3 Calendar</shortdesc>
+  <description>California is a calendar built for GNOME 3.  It allows you to view and
+    manage your online calendars with a simple and modern interface.</description>
+
   <homepage rdf:resource="https://wiki.gnome.org/Apps/California" />
   <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/california-list" />
   <bug-database rdf:resource="https://bugzilla.gnome.org/browse.cgi?product=california" />
-  <category rdf:resource="http://api.gnome.org/doap-extensions#desktop" />
+  <category rdf:resource="http://api.gnome.org/doap-extensions#apps" />
+  <programming-language>Vala</programming-language>
 
   <maintainer>
     <foaf:Person>

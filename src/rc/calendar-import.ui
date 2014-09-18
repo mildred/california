@@ -40,7 +40,7 @@
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
-                <signal name="clicked" handler="on_import_button_clicked" object="CaliforniaHostImportCalendar" swapped="no"/>
+                <signal name="clicked" handler="on_activated" object="CaliforniaHostImportCalendar" swapped="no"/>
                 <style>
                   <class name="suggested-action"/>
                 </style>
@@ -104,6 +104,7 @@
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <property name="activate_on_single_click">False</property>
+                        <signal name="row-activated" handler="on_activated" object="CaliforniaHostImportCalendar" swapped="no"/>
                       </object>
                     </child>
                   </object>

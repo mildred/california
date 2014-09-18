@@ -46,6 +46,46 @@ internal class EdsStore : Store, WebCalSubscribable, CalDAVSubscribable {
     /**
      * @inheritDoc
      */
+    public override async void remove_source_async(Source source, Cancellable? cancellable) throws Error {
+        if (!is_open)
+            throw new BackingError.UNAVAILABLE("EDS not open");
+        
+        if (source.store != this) {
+            throw new BackingError.INVALID("Attempted to remove source %s from wrong store %s",
+                source.to_string(), to_string());
+        }
+        
+        EdsCalendarSource? calendar_source = source as EdsCalendarSource;
+        if (calendar_source == null)
+            throw new BackingError.INVALID("Unknown EDS source %s", source.to_string());
+        
+        //
+        // don't use remove_eds_source because that closes the source in the background; need to
+        // shut it down then remove it from the backing
+        //
+        
+        // remove internally
+        if (!sources.unset(calendar_source.eds_source)) {
+            throw new BackingError.INVALID("EDS source %s not registered to store %s", source.to_string(),
+                to_string());
+        }
+        
+        // make unavailable; this removes events
+        calendar_source.set_unavailable();
+        
+        // report dropped
+        source_removed(calendar_source);
+        
+        // close source; this shuts down outstanding subscriptions
+        yield calendar_source.close_async(cancellable);
+        
+        // remove from EDS
+        yield calendar_source.eds_source.remove(cancellable);
+    }
+    
+    /**
+     * @inheritDoc
+     */
     public async void subscribe_webcal_async(string title, Soup.URI uri, string? username, string color,
         Cancellable? cancellable) throws Error {
         yield subscribe_eds_async(title, uri, username, color, "webcal", cancellable);
@@ -131,7 +171,7 @@ internal class EdsStore : Store, WebCalSubscribable, CalDAVSubscribable {
         if (eds_calendar == null)
             return;
         
-        EdsCalendarSource calendar = new EdsCalendarSource(eds_source, eds_calendar);
+        EdsCalendarSource calendar = new EdsCalendarSource(this, eds_source, eds_calendar);
         try {
             yield calendar.open_async(null);
         } catch (Error err) {

@@ -22,7 +22,9 @@ public California.Iterable<G> traverse<G>(Gee.Iterable<G>? gee_iterable) {
  * it.
  *
  * "Safe iteration" means later operations that remove elements while iterating do not cause an
- * assertion.
+ * assertion.  This involves creating a copy of the supplied Gee.Iterable, meaning that any changes
+ * made in subsequence operations (i.e. {@link California.Iterable.filter} are not reflected in
+ * the passed-in collection.
  *
  * An empty Gee.Iterable is created and used if null is passed in.
  */
@@ -109,6 +111,11 @@ public class Iterable<G> : Object {
     public delegate void Iterate<G>(G element);
     
     /**
+     * For mapping a single value of one type to multiple values of another.
+     */
+    public delegate Gee.Collection<A> Bloom<A, G>(G element);
+    
+    /**
      * A private class that lets us take a California.Iterable and convert it back
      * into a Gee.Iterable.
      */
@@ -163,6 +170,14 @@ public class Iterable<G> : Object {
         return new Iterable<A>(i.map<A>(f));
     }
     
+    public Iterable<A> bloom<A>(Bloom<A, G> bloom_cb) {
+        Gee.ArrayList<A> list = new Gee.ArrayList<A>();
+        foreach (G element in this)
+            list.add_all(bloom_cb(element));
+        
+        return new Iterable<A>(list.iterator());
+    }
+    
     public Iterable<A> scan<A>(Gee.FoldFunc<A, G> f, owned A seed) {
         return new Iterable<A>(i.scan<A>(f, seed));
     }
@@ -189,6 +204,19 @@ public class Iterable<G> : Object {
             // more obvious syntax for each of these delegates here.
             i.filter(g => ((Object) g).get_type().is_a(typeof(A)))
             .map<A>(g => { return (A) g; }));
+    }
+    
+    /**
+     * Returns the first element in the {@link Iterable} if and only if it is the only one,
+     * otherwise returns null.
+     */
+    public G? one() {
+        if (!i.next())
+            return null;
+        
+        G element = i.@get();
+        
+        return !i.next() ? element : null;
     }
     
     public G? first() {

@@ -1,10 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <template class="CaliforniaManagerCalendarList" parent="GtkGrid">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <child>
+      <object class="GtkScrolledWindow" id="calendar_list_scrolledwindow">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <property name="hscrollbar_policy">never</property>
+        <property name="shadow_type">in</property>
+        <property name="min_content_width">200</property>
+        <property name="min_content_height">300</property>
+        <child>
+          <object class="GtkViewport" id="calendar_list_viewport">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkListBox" id="calendar_list_box">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="has_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="activate_on_single_click">False</property>
+                <signal name="row-activated" handler="on_calendar_list_box_row_activated" object="CaliforniaManagerCalendarList" swapped="no"/>
+                <signal name="row-selected" handler="on_calendar_list_box_row_selected" object="CaliforniaManagerCalendarList" swapped="no"/>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
     <child>
       <object class="GtkButtonBox" id="calendar_list_button_box">
         <property name="visible">True</property>
@@ -34,42 +70,77 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">1</property>
+        <property name="top_attach">2</property>
         <property name="width">1</property>
         <property name="height">1</property>
       </packing>
     </child>
     <child>
-      <object class="GtkScrolledWindow" id="calendar_list_scrolledwindow">
+      <object class="GtkToolbar" id="inline-toolbar">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
-        <property name="hscrollbar_policy">never</property>
-        <property name="shadow_type">in</property>
-        <property name="min_content_width">200</property>
-        <property name="min_content_height">300</property>
+        <property name="can_focus">False</property>
+        <property name="icon_size">2</property>
         <child>
-          <object class="GtkViewport" id="calendar_list_viewport">
+          <object class="GtkToolButton" id="add_button">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkListBox" id="calendar_list_box">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="activate_on_single_click">False</property>
-                <signal name="row-activated" handler="on_calendar_list_box_row_activated" object="CaliforniaManagerCalendarList" swapped="no"/>
-                <signal name="row-selected" handler="on_calendar_list_box_row_selected" object="CaliforniaManagerCalendarList" swapped="no"/>
-              </object>
-            </child>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Add calendar</property>
+            <property name="halign">center</property>
+            <property name="valign">start</property>
+            <property name="hexpand">False</property>
+            <property name="vexpand">False</property>
+            <property name="icon_name">list-add-symbolic</property>
+            <signal name="clicked" handler="on_add_button_clicked" object="CaliforniaManagerCalendarList" swapped="no"/>
           </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="homogeneous">True</property>
+          </packing>
         </child>
+        <child>
+          <object class="GtkToolButton" id="edit_button">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Rename calendar</property>
+            <property name="halign">start</property>
+            <property name="valign">center</property>
+            <property name="hexpand">False</property>
+            <property name="vexpand">False</property>
+            <property name="icon_name">edit-symbolic</property>
+            <signal name="clicked" handler="on_edit_button_clicked" object="CaliforniaManagerCalendarList" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="homogeneous">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToolButton" id="remove_button">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Remove calendar</property>
+            <property name="halign">start</property>
+            <property name="valign">center</property>
+            <property name="hexpand">False</property>
+            <property name="vexpand">False</property>
+            <property name="icon_name">list-remove-symbolic</property>
+            <signal name="clicked" handler="on_remove_button_clicked" object="CaliforniaManagerCalendarList" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="homogeneous">True</property>
+          </packing>
+        </child>
+        <style>
+          <class name="inline-toolbar"/>
+        </style>
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
+        <property name="top_attach">1</property>
         <property name="width">1</property>
         <property name="height">1</property>
       </packing>

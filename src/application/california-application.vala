@@ -22,6 +22,7 @@ public class Application : Gtk.Application {
     public const string WEBSITE_NAME = _("Visit California's home page");
     public const string WEBSITE_URL = "https://wiki.gnome.org/Apps/California";
     public const string BUGREPORT_URL = "https://bugzilla.gnome.org/enter_bug.cgi?product=california";
+    public const string QUICK_ADD_HELP_URL = "https://wiki.gnome.org/Apps/California/HowToUseQuickAdd";
     public const string ID = "org.yorba.california";
     public const string ICON_NAME = "x-office-calendar";
     
@@ -32,11 +33,11 @@ public class Application : Gtk.Application {
     
     // public application menu actions; note their "app." prefix which does not
     // match the actions in the action_entries table
-    public const string DETAILED_ACTION_NEW_CALENDAR = "app.new-calendar";
-    public const string ACTION_NEW_CALENDAR = "new-calendar";
-    
     public const string DETAILED_ACTION_CALENDAR_MANAGER = "app.calendar-manager";
     public const string ACTION_CALENDAR_MANAGER = "calendar-manager";
+    
+    public const string DETAILED_ACTION_HELP = "app.help";
+    public const string ACTION_HELP = "help";
     
     public const string DETAILED_ACTION_ABOUT = "app.about";
     public const string ACTION_ABOUT = "about";
@@ -56,8 +57,8 @@ public class Application : Gtk.Application {
     
     private static const ActionEntry[] action_entries = {
         // public actions
-        { ACTION_NEW_CALENDAR, on_new_calendar },
         { ACTION_CALENDAR_MANAGER, on_calendar_manager },
+        { ACTION_HELP, on_help },
         { ACTION_ABOUT, on_about },
         { ACTION_QUIT, on_quit },
         
@@ -105,6 +106,18 @@ public class Application : Gtk.Application {
         owned get {
             // currently the build system stores the exec in the src/ directory
             return (!is_installed && exec_dir != null) ? exec_dir.get_parent() : null;
+        }
+    }
+    
+    /**
+     * Returns the path to the icon directory.
+     */
+    public File icon_dir {
+        owned get {
+            return !is_installed
+                ? build_root_dir.get_child("data").get_child("icons")
+                : prefix_dir.get_child("share").get_child("california").get_child("icons")
+                    .get_child("Adwaita").get_child("scalable").get_child("actions");
         }
     }
     
@@ -158,6 +171,9 @@ public class Application : Gtk.Application {
     public override void startup() {
         base.startup();
         
+        // Sub-unit initialization
+        Resource.init();
+        
         // unit initialization
         try {
             Util.init();
@@ -165,7 +181,7 @@ public class Application : Gtk.Application {
             Manager.init();
             Activator.init();
         } catch (Error err) {
-            error_message(_("Unable to open California: %s").printf(err.message));
+            error_message(null, _("Unable to open California: %s").printf(err.message));
             quit();
         }
         
@@ -183,6 +199,9 @@ public class Application : Gtk.Application {
         Manager.terminate();
         Host.terminate();
         Util.terminate();
+        
+        // sub-unit termination
+        Resource.terminate();
         
         base.shutdown();
     }
@@ -203,15 +222,11 @@ public class Application : Gtk.Application {
     /*
      * Presents a modal error dialog to the user.
      */
-    public void error_message(string msg) {
-        Gtk.MessageDialog dialog = new Gtk.MessageDialog(main_window, Gtk.DialogFlags.MODAL,
+    public void error_message(Gtk.Window? parent, string msg) {
+        Gtk.MessageDialog dialog = new Gtk.MessageDialog(parent ?? main_window, Gtk.DialogFlags.MODAL,
             Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "%s", msg);
         dialog.run();
         dialog.destroy();
-    }
-    
-    private void on_new_calendar() {
-        Activator.Window.display(main_window);
     }
     
     private void on_calendar_manager() {
@@ -257,6 +272,14 @@ public class Application : Gtk.Application {
             calendar_source.import_icalendar_async.end(result);
         } catch (Error err) {
             debug("Unable to import iCalendar: %s", err.message);
+        }
+    }
+    
+    private void on_help() {
+        try {
+            Gtk.show_uri(null, WEBSITE_URL, Gdk.CURRENT_TIME);
+        } catch (Error error) {
+            message("Error opening help URL: %s", error.message);
         }
     }
     

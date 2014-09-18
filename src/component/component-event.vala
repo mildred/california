@@ -20,7 +20,6 @@ public class Event : Instance, Gee.Comparable<Event> {
     public const string PROP_IS_ALL_DAY = "is-all-day";
     public const string PROP_LOCATION = "location";
     public const string PROP_STATUS = "status";
-    public const string PROP_RRULE = "rrule";
     
     public enum Status {
         TENTATIVE,
@@ -87,15 +86,6 @@ public class Event : Instance, Gee.Comparable<Event> {
     public Status status { get; set; default = Status.CONFIRMED; }
     
     /**
-     * {@link RecurrenceRule} (RRULE) for {@link Event}.
-     *
-     * If the RecurrenceRule is itself altered, that signal is reflected to {@link Instance.altered}.
-     *
-     * @see make_recurring
-     */
-    public RecurrenceRule? rrule { get; private set; default = null; }
-    
-    /**
      * Create an {@link Event} {@link Component} from an EDS CalComponent object.
      *
      * Throws a BackingError if the E.CalComponent's VTYPE is not VEVENT.
@@ -160,12 +150,6 @@ public class Event : Instance, Gee.Comparable<Event> {
             default:
                 status = Status.CONFIRMED;
             break;
-        }
-        
-        try {
-            make_recurring(new RecurrenceRule.from_ical(ical_component));
-        } catch (ComponentError comperr) {
-            // ignored; generally means no RRULE in component
         }
     }
     
@@ -235,15 +219,6 @@ public class Event : Instance, Gee.Comparable<Event> {
                 }
             break;
             
-            case PROP_RRULE:
-                // always remove existing RRULE
-                remove_all_properties(iCal.icalproperty_kind.RRULE_PROPERTY);
-                
-                // add new one, if added
-                if (rrule != null)
-                    rrule.add_to_ical(ical_component);
-            break;
-            
             default:
                 altered = false;
             break;
@@ -254,10 +229,22 @@ public class Event : Instance, Gee.Comparable<Event> {
     }
     
     /**
+     * @inheritDoc
+     */
+    public override Component.Instance clone() throws Error {
+        Component.Event cloned_event = new Component.Event(calendar_source, ical_component);
+        if (master != null)
+            cloned_event.master = new Component.Event(master.calendar_source, master.ical_component);
+        
+        return cloned_event;
+    }
+    
+    /**
      * Returns a {@link Calendar.DateSpan} for the {@link Event}.
      *
      * This will return a DateSpan whether the Event is a DATE or DATE-TIME VEVENT.
      */
+    // TODO: Make date_span/exact_time_span a separate object
     public Calendar.DateSpan get_event_date_span(Calendar.Timezone? tz) {
         if (date_span != null)
             return date_span;
@@ -274,8 +261,12 @@ public class Event : Instance, Gee.Comparable<Event> {
      * @see set_event_exact_time_span
      */
     public void set_event_date_span(Calendar.DateSpan date_span) {
+        freeze_notify();
+        
         this.date_span = date_span;
         exact_time_span = null;
+        
+        thaw_notify();
     }
     
     /**
@@ -286,8 +277,72 @@ public class Event : Instance, Gee.Comparable<Event> {
      * @see set_event_date_span
      */
     public void set_event_exact_time_span(Calendar.ExactTimeSpan exact_time_span) {
+        freeze_notify();
+        
         this.exact_time_span = exact_time_span;
         date_span = null;
+        
+        thaw_notify();
+    }
+    
+    /**
+     * Adjusts the dates of an {@link Event} while preserving {@link WallTime}, if present.
+     *
+     * This will preserve the DATE/DATE-TIME aspect of an Event while adjusting the start and
+     * end {@link Calendar.Date}s.  If a DATE Event, then this is functionally equivalent to
+     * {@link set_event_date_span}.  If a DATE-TIME event, then this is like
+     * {@link set_event_exact_time_span} but without the hassle of preserving start and end times
+     * while changing the dates.
+     */
+    public void adjust_event_date_span(Calendar.DateSpan date_span) {
+        if (is_all_day) {
+            set_event_date_span(date_span);
+            
+            return;
+        }
+        
+        Calendar.ExactTime new_start_time = new Calendar.ExactTime(
+            exact_time_span.start_exact_time.tz,
+            date_span.start_date,
+            exact_time_span.start_exact_time.to_wall_time()
+        );
+        
+        Calendar.ExactTime new_end_time = new Calendar.ExactTime(
+            exact_time_span.end_exact_time.tz,
+            date_span.end_date,
+            exact_time_span.end_exact_time.to_wall_time()
+        );
+        
+        set_event_exact_time_span(new Calendar.ExactTimeSpan(new_start_time, new_end_time));
+    }
+    
+    /**
+     * Convert an {@link Event} from an all-day to a timed event by only adding the time.
+     *
+     * Returns with no changes if {@link is_all_day} is false.
+     */
+    public void all_day_to_timed_event(Calendar.WallTime start_time, Calendar.WallTime end_time,
+        Calendar.Timezone timezone) {
+        if (!is_all_day)
+            return;
+        
+        // create exact time span using these parameters
+        set_event_exact_time_span(
+            new Calendar.ExactTimeSpan(
+                new Calendar.ExactTime(timezone, date_span.start_date, start_time),
+                new Calendar.ExactTime(timezone, date_span.end_date, end_time)
+            )
+        );
+    }
+    
+    /**
+     * Convert an {@link Event} from a timed event to an all-day event by removing the time.
+     *
+     * Returns with no changes if {@link is_all_day} is true.
+     */
+    public void timed_to_all_day_event() {
+        if (!is_all_day)
+            set_event_date_span(get_event_date_span(null));
     }
     
     /**
@@ -296,85 +351,23 @@ public class Event : Instance, Gee.Comparable<Event> {
      *
      * @return null if no time/date information is specified
      */
-    public string? get_event_time_pretty_string(Calendar.Timezone timezone) {
+    public string? get_event_time_pretty_string(Calendar.Date.PrettyFlag date_flags,
+        Calendar.ExactTimeSpan.PrettyFlag time_flags, Calendar.Timezone timezone) {
         if (date_span == null && exact_time_span == null)
             return null;
         
         // if any dates are not in current year, display year in all dates
-        Calendar.Date.PrettyFlag date_flags = Calendar.Date.PrettyFlag.NONE;
         Calendar.DateSpan date_span = get_event_date_span(timezone);
         if (!date_span.start_date.year.equal_to(Calendar.System.today.year)
             || !date_span.end_date.year.equal_to(Calendar.System.today.year)) {
             date_flags |= Calendar.Date.PrettyFlag.INCLUDE_YEAR;
         }
         
-        // span string is kinda tricky
-        string span;
-        if (is_all_day) {
-            if (date_span.is_same_day) {
-                // All-day one-day event, print that date's "<full date>", including year if not
-                // current year
-                span = date_span.start_date.to_pretty_string(date_flags);
-            } else {
-                // Prints a span of dates, i.e. "Monday, January 3 to Thursday, January 6"
-                span = _("%s to %s").printf(date_span.start_date.to_pretty_string(date_flags),
-                    date_span.end_date.to_pretty_string(date_flags));
-            }
-        } else {
-            Calendar.ExactTimeSpan exact_time_span = exact_time_span.to_timezone(timezone);
-            if (exact_time_span.is_same_day) {
-                // A span of time, i.e. "3:30pm to 4:30pm"
-                string timespan = _("%s to %s").printf(
-                    exact_time_span.start_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE),
-                    exact_time_span.end_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE));
-                
-                // Single-day timed event, print "<full date>, <full start time> to <full end time>",
-                // including year if not current year
-                span = "%s, %s".printf(exact_time_span.start_date.to_pretty_string(date_flags),
-                    timespan);
-            } else {
-                // Multi-day timed event, print "<full time>, <full date>" on both lines,
-                // including year if either not current year
-                // Prints two full time and date strings on separate lines, i.e.:
-                // 12 January 2012, 3:30pm
-                // 13 January 2013, 6:30am
-                span = _("%s, %s\n%s, %s").printf(
-                    exact_time_span.start_exact_time.to_pretty_date_string(date_flags),
-                    exact_time_span.start_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE),
-                    exact_time_span.end_exact_time.to_pretty_date_string(date_flags),
-                    exact_time_span.end_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE));
-            }
-        }
+        // if all day, just use the DateSpan's pretty string
+        if (is_all_day)
+            return date_span.to_pretty_string(date_flags);
         
-        return span;
-    }
-    
-    /**
-     * Add a {@link RecurrenceRule} to the {@link Event}.
-     *
-     * Pass null to make Event non-recurring.
-     */
-    public void make_recurring(RecurrenceRule? rrule) {
-        if (this.rrule != null) {
-            this.rrule.notify.disconnect(on_rrule_updated);
-            this.rrule.by_rule_updated.disconnect(on_rrule_updated);
-        }
-        
-        if (rrule != null) {
-            rrule.notify.connect(on_rrule_updated);
-            rrule.by_rule_updated.connect(on_rrule_updated);
-        }
-        
-        this.rrule = rrule;
-    }
-    
-    private void on_rrule_updated() {
-        // remove old property, replace with new one
-        remove_all_properties(iCal.icalproperty_kind.RRULE_PROPERTY);
-        rrule.add_to_ical(ical_component);
-        
-        // count this as an alteration
-        notify_altered(false);
+        return exact_time_span.to_timezone(timezone).to_pretty_string(date_flags, time_flags);
     }
     
     /**
@@ -428,6 +421,13 @@ public class Event : Instance, Gee.Comparable<Event> {
         if (compare != 0)
             return compare;
         
+        // rid
+        if (rid != null && other.rid != null) {
+            compare = rid.compare_to(other.rid);
+            if (compare != 0)
+                return compare;
+        }
+        
         // summary
         compare = strcmp(summary, other.summary);
         if (compare != 0)
@@ -438,39 +438,13 @@ public class Event : Instance, Gee.Comparable<Event> {
         if (compare != 0)
             return compare;
         
-        // if recurring, go by sequence number, as the UID and RID are the same for all instances
-        if (is_recurring) {
-            compare = sequence - other.sequence;
-            if (compare != 0)
-                return compare;
-        }
+        // use sequence number if available
+        compare = sequence - other.sequence;
+        if (compare != 0)
+            return compare;
         
         // stabilize with UIDs
         return uid.compare_to(other.uid);
-    }
-    
-    public override bool equal_to(Component.Instance other) {
-        Component.Event? other_event = other as Component.Event;
-        if (other_event == null)
-            return false;
-        
-        if (this == other_event)
-            return true;
-        
-        if (is_recurring != other_event.is_recurring)
-            return false;
-        
-        if (is_recurring && !rid.equal_to(other_event.rid))
-            return false;
-        
-        if (sequence != other_event.sequence)
-            return false;
-        
-        return base.equal_to(other);
-    }
-    
-    public override uint hash() {
-        return uid.hash() ^ ((rid != null) ? rid.hash() : 0) ^ sequence;
     }
     
     public override string to_string() {

@@ -4,14 +4,14 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Activator {
+namespace California.Activator.Google {
 
-internal class GoogleActivator : Instance {
-    public override string first_card_id { get { return GoogleLoginPane.ID; } }
+internal class ActivatorInstance : Instance {
+    public override string first_card_id { get { return LoginPane.ID; } }
     
     private Backing.CalDAVSubscribable caldav_store;
     
-    public GoogleActivator(string title, Backing.CalDAVSubscribable store) {
+    public ActivatorInstance(string title, Backing.CalDAVSubscribable store) {
         base (title, store);
         
         caldav_store = store;
@@ -19,9 +19,9 @@ internal class GoogleActivator : Instance {
     
     public override Gee.List<Toolkit.Card> create_cards(Soup.URI? supplied_uri) {
         Gee.List<Toolkit.Card> cards = new Gee.ArrayList<Toolkit.Card>();
-        cards.add(new GoogleLoginPane());
-        cards.add(new GoogleAuthenticatingPane());
-        cards.add(new GoogleCalendarListPane(caldav_store));
+        cards.add(new LoginPane());
+        cards.add(new AuthenticatingPane());
+        cards.add(new CalendarListPane(caldav_store));
         
         return cards;
     }

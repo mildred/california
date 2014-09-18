@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
-  <template class="CaliforniaActivatorWebCalActivatorPane" parent="GtkGrid">
+  <template class="CaliforniaActivatorGenericSubscribe" parent="GtkGrid">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="row_spacing">8</property>
@@ -11,9 +11,12 @@
       <object class="GtkLabel" id="name_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Name:</property>
+        <property name="halign">end</property>
+        <property name="label" translatable="yes">Calendar _name</property>
         <property name="use_underline">True</property>
-        <property name="ellipsize">start</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -26,13 +29,12 @@
       <object class="GtkLabel" id="url_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="halign">start</property>
-        <property name="margin_right">8</property>
-        <property name="hexpand">False</property>
-        <property name="vexpand">False</property>
-        <property name="label" translatable="yes">_URL:</property>
+        <property name="halign">end</property>
+        <property name="label" translatable="yes">_URL</property>
         <property name="use_underline">True</property>
-        <property name="ellipsize">end</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -51,7 +53,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="activates_default">True</property>
-            <property name="width_chars">40</property>
+            <property name="width_chars">24</property>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -65,9 +67,10 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Calendar color</property>
             <property name="halign">end</property>
             <property name="valign">end</property>
-            <property name="title" translatable="yes">Select a color for the Web calendar</property>
+            <property name="title" translatable="yes">Select a color for the calendar</property>
             <property name="rgba">rgb(32,32,204)</property>
             <style>
               <class name="image-button"/>
@@ -88,33 +91,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkBox" id="box3">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <child>
-          <object class="GtkEntry" id="url_entry">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="hexpand">True</property>
-            <property name="activates_default">True</property>
-            <property name="width_chars">40</property>
-            <property name="input_purpose">url</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">1</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkButtonBox" id="button_box">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -130,9 +106,9 @@
             <property name="label" translatable="yes">_Cancel</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="receives_default">False</property>
             <property name="use_underline">True</property>
-            <signal name="clicked" handler="on_cancel_button_clicked" object="CaliforniaActivatorWebCalActivatorPane" swapped="no"/>
+            <signal name="clicked" handler="on_cancel_button_clicked" object="CaliforniaActivatorGenericSubscribe" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -149,7 +125,7 @@
             <property name="has_default">True</property>
             <property name="receives_default">True</property>
             <property name="use_underline">True</property>
-            <signal name="clicked" handler="on_subscribe_button_clicked" object="CaliforniaActivatorWebCalActivatorPane" swapped="no"/>
+            <signal name="clicked" handler="on_subscribe_button_clicked" object="CaliforniaActivatorGenericSubscribe" swapped="no"/>
             <style>
               <class name="suggested-action"/>
             </style>
@@ -163,8 +139,58 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">2</property>
+        <property name="top_attach">3</property>
         <property name="width">2</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="username_label">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">end</property>
+        <property name="xalign">1</property>
+        <property name="label" translatable="yes">User name</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">2</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkEntry" id="username_entry">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="tooltip_text" translatable="yes">If supplied, your password will be requested when calendar is first accessed</property>
+        <property name="activates_default">True</property>
+        <property name="width_chars">24</property>
+        <property name="placeholder_text" translatable="yes">optional</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">2</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkEntry" id="url_entry">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="hexpand">True</property>
+        <property name="activates_default">True</property>
+        <property name="width_chars">24</property>
+        <property name="input_purpose">url</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">1</property>
+        <property name="width">1</property>
         <property name="height">1</property>
       </packing>
     </child>

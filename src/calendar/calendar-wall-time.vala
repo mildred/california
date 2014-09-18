@@ -150,24 +150,11 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
             return new WallTime(12, 0, 0);
         }
         
-        // look for meridiem tacked on to end
-        bool pm = false;
-        bool meridiem_unknown = false;
-        if (token.has_suffix(FMT_AM.casefold())) {
-            token = token.slice(0, token.length - FMT_AM.casefold().length);
-        } else if (token.has_suffix(FMT_BRIEF_AM.casefold())) {
-            token = token.slice(0, token.length - FMT_BRIEF_AM.casefold().length);
-        } else if (token.has_suffix(FMT_PM.casefold())) {
-            token = token.slice(0, token.length - FMT_PM.casefold().length);
-            pm = true;
-        } else if (token.has_suffix(FMT_BRIEF_PM.casefold())) {
-            token = token.slice(0, token.length - FMT_BRIEF_PM.casefold().length);
-            pm = true;
-        } else {
-            meridiem_unknown = true;
-        }
+        bool meridiem_unknown, pm;
+        token = parse_meridiem(token, out meridiem_unknown, out pm);
         
         // remove colon (can be present for 12- or 24-hour time)
+        bool has_colon = token.index_of(":") > 0;
         token = token.replace(":", "");
         int length = token.length;
         
@@ -177,6 +164,11 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
         
         // look for 24-hour time or a fully-detailed 12-hour time
         if ((length == 3 || length == 4)) {
+            // 3- and 4-digit time requires colon, otherwise it could be any 3- or 4-digit number
+            // (i.e. a street address)
+            if (!has_colon)
+                return null;
+            
             int h, m;
             if (length == 3) {
                 h = int.parse(token.slice(0, 1));
@@ -348,56 +340,133 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
     /**
      * Round a unit of the {@link WallTime} to a multiple of a supplied value.
      *
-     * By rounding wall-clock time, not only is the unit in question rounded down to a multiple of
+     * Supply a positive integer to round up, a negative integer to round down.
+     *
+     * By rounding wall-clock time, not only is the unit in question rounded to a multiple of
      * the supplied value, but the lesser units are truncated to zero.  Thus, 17:23:54 rounded down
      * to a multiple of 10 minutes returns 17:20:00.
+     *
+     * rollover is set to true if rounding by the multiple rolls the WallTime over to the next day.
+     * Rolling back to the previous day isn't possible with this interface; rounding down any value
+     * earlier than midnight results in midnight.  Rollover can occur when rounding up.
+     *
+     * It's important to note that zero is treated as a multiple of all values.  Hence rounding
+     * 11:56:00 up to a multiple of 17 minutes will result in 12:00:00.  (In other words, don't
+     * confuse this method with {@link adjust}.
      *
      * If the {@link TimeUnit} is already a multiple of the value, no change is made (although
      * there's no guarantee that the same WallTime instance will be returned, especially if the
      * lesser units are truncated).
      *
-     * A multiple of zero or a negative value is always rounded to the current WallTime.
-     *
-     * TODO: An interface to round up (which will need to deal with overflow).
+     * A multiple of zero is always rounded to the current WallTime.
      */
-    public WallTime round_down(int multiple, TimeUnit time_unit) {
-        if (multiple <= 0)
+    public WallTime round(int multiple, TimeUnit time_unit, out bool rollover) {
+        rollover = false;
+        
+        if (multiple == 0)
             return this;
         
-        // get value being manipulated
-        int current;
+        // get value being manipulated and its max value (min is always zero)
+        int current, max;
         switch (time_unit) {
             case TimeUnit.HOUR:
                 current = hour;
+                max = MAX_HOUR;
             break;
             
             case TimeUnit.MINUTE:
                 current = minute;
+                max = MAX_MINUTE;
             break;
             
             case TimeUnit.SECOND:
                 current = second;
+                max = MAX_SECOND;
             break;
             
             default:
                 assert_not_reached();
         }
         
-        // round down and watch for underflow (which shouldn't happen)
-        int rounded = current - (current % multiple.abs());
-        if (rounded < 0)
-            rounded = 0;
+        int rounded;
+        if (multiple < 0) {
+            // round down and watch for underflow (which shouldn't happen)
+            rounded = current - (current % multiple.abs());
+            assert(rounded >= 0);
+        } else {
+            assert(multiple > 0);
+            
+            // round up and watch for overflow (which can definitely happen)
+            int rem = current % multiple;
+            if (rem != 0) {
+                rounded = current + (multiple - rem);
+                if (rounded > max) {
+                    rounded = 0;
+                    rollover = true;
+                }
+            } else {
+                // no remainder then on the money
+                rounded = current;
+            }
+        }
         
-        // return new value
+        // construct new value and deal with rollover
+        Calendar.WallTime rounded_wall_time;
+        bool adjust_rollover = false;
         switch (time_unit) {
             case TimeUnit.HOUR:
-                return new WallTime(rounded, 0, 0);
+                // no adjust can be done, rollover is rollover here
+                rounded_wall_time = new WallTime(rounded, 0, 0);
+            break;
             
             case TimeUnit.MINUTE:
-                return new WallTime(hour, rounded, 0);
+                rounded_wall_time = new WallTime(hour, rounded, 0);
+                if (rollover)
+                    rounded_wall_time = rounded_wall_time.adjust(1, TimeUnit.HOUR, out adjust_rollover);
+            break;
             
             case TimeUnit.SECOND:
-                return new WallTime(hour, minute, rounded);
+                rounded_wall_time = new WallTime(hour, minute, rounded);
+                if (rollover)
+                    rounded_wall_time = rounded_wall_time.adjust(1, TimeUnit.MINUTE, out adjust_rollover);
+            break;
+            
+            default:
+                assert_not_reached();
+        }
+        
+        // handle adjustment causing rollover
+        rollover = rollover || adjust_rollover;
+        
+        return rounded_wall_time;
+    }
+    
+    /**
+     * Adjust the time by the specified amount without affecting other units.
+     *
+     * "Free adjust" is designed to work like adjusting a clock's time where each unit is disengaged
+     * from the others.  That is, if the minutes setting is adjusted from 59 to 0, the hour remains
+     * unchanged.
+     *
+     * An amount of zero returns the current {@link WallTime}.
+     *
+     * @see adjust
+     */
+    public WallTime free_adjust(int amount, TimeUnit time_unit) {
+        if (amount == 0)
+            return this;
+        
+        // piggyback on adjust() to do the heavy lifting, then rearrange its results
+        WallTime adjusted = adjust(amount, time_unit, null);
+        switch (time_unit) {
+            case TimeUnit.HOUR:
+                return new WallTime(adjusted.hour, minute, second);
+            
+            case TimeUnit.MINUTE:
+                return new WallTime(hour, adjusted.minute, second);
+            
+            case TimeUnit.SECOND:
+                return new WallTime(hour, minute, adjusted.second);
             
             default:
                 assert_not_reached();

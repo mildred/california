@@ -23,28 +23,18 @@ namespace California.URI {
  * If "supported_schemes" are specified, then the entire scheme (name and separator) should be
  * included, i.e. "http://", "mailto:", etc.
  */
-public bool is_valid(string? uri, string[]? supported_schemes) {
+public bool is_valid(string? uri, Gee.Set<string>? supported_schemes) {
     // strip leading and trailing whitespace
     string? stripped = (uri != null) ? uri.strip() : null;
     if (String.is_empty(stripped))
         return false;
     
-    if (supported_schemes == null || supported_schemes.length == 0) {
-        if (!stripped.contains(":"))
-            return false;
-    } else {
-        bool found = false;
-        foreach (string scheme in supported_schemes) {
-            if (stripped.has_prefix(scheme)) {
-                found = true;
-                
-                break;
-            }
-        }
-        
-        if (!found)
-            return false;
-    }
+    // gotta have this, at least
+    if (!stripped.contains(":"))
+        return false;
+    
+    if (!traverse<string>(supported_schemes).any(scheme => stripped.has_prefix(scheme)))
+        return false;
     
     // finally, let Soup.URI decide
     Soup.URI? parsed = new Soup.URI(uri);

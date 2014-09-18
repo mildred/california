@@ -63,7 +63,17 @@ public class Controller : BaseObject, View.Controllable {
     /**
      * @inheritDoc
      */
+    public ChronologyMotion motion { get { return ChronologyMotion.VERTICAL; } }
+    
+    /**
+     * @inheritDoc
+     */
     public Calendar.Date default_date { get; protected set; }
+    
+    /**
+     * @inheritDoc
+     */
+    public bool in_transition { get; protected set; }
     
     /**
      * {@link View.Palette} for the entire view.
@@ -89,8 +99,10 @@ public class Controller : BaseObject, View.Controllable {
         stack.transition_duration = Toolkit.SLOW_STACK_TRANSITION_DURATION_MSEC;
         
         stack_model = new Toolkit.StackModel<Calendar.MonthOfYear>(stack,
-            Toolkit.StackModel.OrderedTransitionType.SLIDE_LEFT_RIGHT, model_presentation,
+            Toolkit.StackModel.OrderedTransitionType.SLIDE_UP_DOWN, model_presentation,
             trim_presentation_from_cache, ensure_presentation_in_cache);
+        
+        stack.bind_property("transition-running", this, PROP_IN_TRANSITION, BindingFlags.SYNC_CREATE);
         
         // insert labels for days of the week across top of master grid
         for (int col = 0; col < Grid.COLS; col++) {
@@ -189,6 +201,15 @@ public class Controller : BaseObject, View.Controllable {
     /**
      * @inheritDoc
      */
+    public Gtk.Widget? get_widget_for_date(Calendar.Date date) {
+        Grid? current_grid = get_current_month_grid();
+        
+        return current_grid != null ? current_grid.get_cell_for_date(date) : null;
+    }
+    
+    /**
+     * @inheritDoc
+     */
     public View.Container get_container() {
         return master_grid;
     }
@@ -209,6 +230,10 @@ public class Controller : BaseObject, View.Controllable {
                 Calendar.System.first_of_week);
             iter.get_value().label = dow.abbrev_name;
         }
+        
+        // Grids can't be reconfigured, so wipe 'em all and rebuild
+        stack_model.clear();
+        stack_model.show(month_of_year);
     }
     
     private void on_month_of_year_changed() {

@@ -20,46 +20,12 @@ namespace California.Toolkit {
  */
 
 public class ButtonConnector : EventConnector {
-    // GDK reports 250ms is used to determine if a click is a double-click (and another 250ms for
-    // triple-click), so pause just a little more than that to determine if all the clicking is
-    // done
-    private const int CLICK_DETERMINATION_DELAY_MSEC = 255;
-    
-    // The actual ButtonEvent, with some useful functionality for release timeouts
-    private class InternalButtonEvent : ButtonEvent {
-        private Scheduled? scheduled_timeout = null;
-        
-        public signal void release_timeout();
-        
-        public InternalButtonEvent(Gtk.Widget widget, Gdk.EventButton event) {
-            base (widget, event);
-        }
-        
-        public override void update_press(Gtk.Widget widget, Gdk.EventButton press_event) {
-            base.update_press(widget, press_event);
-            
-            if (scheduled_timeout != null)
-                scheduled_timeout.cancel();
-        }
-        
-        public override void update_release(Gtk.Widget widget, Gdk.EventButton release_event) {
-            base.update_release(widget, release_event);
-            
-            scheduled_timeout = new Scheduled.once_after_msec(CLICK_DETERMINATION_DELAY_MSEC,
-                on_timeout, Priority.LOW);
-        }
-        
-        private void on_timeout() {
-            release_timeout();
-        }
-    }
-    
-    private Gee.HashMap<Gtk.Widget, InternalButtonEvent> primary_states = new Gee.HashMap<
-        Gtk.Widget, InternalButtonEvent>();
-    private Gee.HashMap<Gtk.Widget, InternalButtonEvent> secondary_states = new Gee.HashMap<
-        Gtk.Widget, InternalButtonEvent>();
-    private Gee.HashMap<Gtk.Widget, InternalButtonEvent> tertiary_states = new Gee.HashMap<
-        Gtk.Widget, InternalButtonEvent>();
+    private Gee.HashMap<Gtk.Widget, ButtonEvent> primary_states = new Gee.HashMap<
+        Gtk.Widget, ButtonEvent>();
+    private Gee.HashMap<Gtk.Widget, ButtonEvent> secondary_states = new Gee.HashMap<
+        Gtk.Widget, ButtonEvent>();
+    private Gee.HashMap<Gtk.Widget, ButtonEvent> tertiary_states = new Gee.HashMap<
+        Gtk.Widget, ButtonEvent>();
     
     /**
      * The "raw" "button-pressed" signal received by {@link ButtonConnector}.
@@ -80,33 +46,26 @@ public class ButtonConnector : EventConnector {
     /**
      * Fired when a button is pressed and released once.
      *
-     * The "guaranteed" flag is important to distinguish here.  If set, that indicates a timeout
-     * has occurred and the user did not follow the click with a second or third.  If not set,
-     * this was fired immediately after the user released the button and it is unknown if the user
-     * intends to follow it with more clicks.
-     *
-     * Because no timeout has occurred, unguaranteed clicks can be processed immediately if they
-     * occur on a widget or location where double- and triple-clicks are meaningless.
-     *
-     * NOTE: This means "clicked" (and {@link double_clicked} and {@link triple_clicked} will be
-     * fired ''twice'', once unguaranteed, once guaranteed.  To prevent double-processing, handlers
-     * should always check the flag.
+     * Note that this can be fired after {@link double_clicked} and {@link triple_clicked}.  That
+     * indicates that the user double- or triple-clicked ''and'' the other signal handlers did not
+     * return {@link Toolkit.STOP}, indicating the event was unhandled or unabsorbed by the signal
+     * handlers.  If either returns STOP, "clicked" will not fire.
      */
-    public signal void clicked(ButtonEvent details, bool guaranteed);
+    public signal bool clicked(ButtonEvent details);
     
     /**
      * Fired when a button is pressed and released twice in succession.
      *
-     * See {@link clicked} for an explanation of the {@link guaranteed} flag.
+     * See {@link clicked} for an explanation of signal firing order.
      */
-    public signal void double_clicked(ButtonEvent details, bool guaranteed);
+    public signal bool double_clicked(ButtonEvent details);
     
     /**
      * Fired when a button is pressed and released thrice in succession.
      *
-     * See {@link clicked} for an explanation of the {@link guaranteed} flag.
+     * See {@link clicked} for an explanation of signal firing order.
      */
-    public signal void triple_clicked(ButtonEvent details, bool guaranteed);
+    public signal bool triple_clicked(ButtonEvent details);
     
     /**
      * Create a new {@link ButtonConnector} for monitoring (mouse) button events from Gtk.Widgets.
@@ -119,7 +78,7 @@ public class ButtonConnector : EventConnector {
      * Subclasses may override this method to hook into this event before or after the signal
      * has fired.
      *
-     * @return {@link EVENT_STOP} or {@link EVENT_PROPAGATE}.
+     * @return {@link STOP} or {@link PROPAGATE}.
      */
     protected virtual bool notify_pressed(Gtk.Widget widget, Button button, Gdk.Point point,
         Gdk.EventType event_type) {
@@ -130,7 +89,7 @@ public class ButtonConnector : EventConnector {
      * Subclasses may override this method to hook into this event before or after the signal
      * has fired.
      *
-     * @return {@link EVENT_STOP} or {@link EVENT_PROPAGATE}.
+     * @return {@link STOP} or {@link PROPAGATE}.
      */
     protected virtual bool notify_released(Gtk.Widget widget, Button button, Gdk.Point point,
         Gdk.EventType event_type) {
@@ -141,24 +100,24 @@ public class ButtonConnector : EventConnector {
      * Subclasses may override this method to hook into this event before or after the signal
      * has fired.
      */
-    protected virtual void notify_clicked(ButtonEvent details, bool guaranteed) {
-        clicked(details, guaranteed);
+    protected virtual bool notify_clicked(ButtonEvent details) {
+        return clicked(details);
     }
     
     /**
      * Subclasses may override this method to hook into this event before or after the signal
      * has fired.
      */
-    protected virtual void notify_double_clicked(ButtonEvent details, bool guaranteed) {
-        double_clicked(details, guaranteed);
+    protected virtual bool notify_double_clicked(ButtonEvent details) {
+        return double_clicked(details);
     }
     
     /**
      * Subclasses may override this method to hook into this event before or after the signal
      * has fired.
      */
-    protected virtual void notify_triple_clicked(ButtonEvent details, bool guaranteed) {
-        triple_clicked(details, guaranteed);
+    protected virtual bool notify_triple_clicked(ButtonEvent details) {
+        return triple_clicked(details);
     }
     
     protected override void connect_signals(Gtk.Widget widget) {
@@ -182,7 +141,7 @@ public class ButtonConnector : EventConnector {
         tertiary_states.unset(widget);
     }
     
-    private Gee.HashMap<Gtk.Widget, InternalButtonEvent>? get_states_map(Button button) {
+    private Gee.HashMap<Gtk.Widget, ButtonEvent>? get_states_map(Button button) {
         switch (button) {
             case Button.PRIMARY:
                 return primary_states;
@@ -208,7 +167,7 @@ public class ButtonConnector : EventConnector {
     }
     
     private bool process_button_event(Gtk.Widget widget, Gdk.EventButton event,
-        Button button, Gee.HashMap<Gtk.Widget, InternalButtonEvent>? button_states) {
+        Button button, Gee.HashMap<Gtk.Widget, ButtonEvent>? button_states) {
         switch(event.type) {
             case Gdk.EventType.BUTTON_PRESS:
             case Gdk.EventType.2BUTTON_PRESS:
@@ -227,10 +186,9 @@ public class ButtonConnector : EventConnector {
                 // previous press (possible for multiple press events to arrive back-to-back
                 // when double- and triple-clicking)
                 if (button_states != null) {
-                    InternalButtonEvent? details = button_states.get(widget);
+                    ButtonEvent? details = button_states.get(widget);
                     if (details == null) {
-                        details = new InternalButtonEvent(widget, event);
-                        details.release_timeout.connect(on_release_timeout);
+                        details = new ButtonEvent(widget, event);
                         button_states.set(widget, details);
                     } else {
                         details.update_press(widget, event);
@@ -249,28 +207,13 @@ public class ButtonConnector : EventConnector {
                     return Toolkit.STOP;
                 }
                 
-                // update saved state (if any) with release info and start timer
+                // update saved state (if any) with release info and synthesize click
                 if (button_states != null) {
-                    InternalButtonEvent? details = button_states.get(widget);
+                    ButtonEvent? details = button_states.get(widget);
                     if (details != null) {
-                        // fire "unguaranteed" clicked signals now (with button release) rather than
-                        // wait for timeout using the current value of press_type before the details
-                        // are updated
-                        switch (details.press_type) {
-                            case Gdk.EventType.BUTTON_PRESS:
-                                notify_clicked(details, false);
-                            break;
-                            
-                            case Gdk.EventType.2BUTTON_PRESS:
-                                notify_double_clicked(details, false);
-                            break;
-                            
-                            case Gdk.EventType.3BUTTON_PRESS:
-                                notify_triple_clicked(details, false);
-                            break;
-                        }
-                        
                         details.update_release(widget, event);
+                        
+                        synthesize_click(details);
                     }
                 }
             break;
@@ -279,27 +222,36 @@ public class ButtonConnector : EventConnector {
         return Toolkit.PROPAGATE;
     }
     
-    private void on_release_timeout(InternalButtonEvent details) {
-        // release button timed-out, meaning it's time to evaluate where the sequence stands and
-        // notify subscribers
+    private void synthesize_click(ButtonEvent details) {
+        // use Accept flags to indicate which signal(s) to fire
+        bool result = Toolkit.PROPAGATE;
         switch (details.press_type) {
             case Gdk.EventType.BUTTON_PRESS:
-                notify_clicked(details, true);
+                result = notify_clicked(details);
             break;
             
             case Gdk.EventType.2BUTTON_PRESS:
-                notify_double_clicked(details, true);
+                result = notify_double_clicked(details);
+                if (result != Toolkit.STOP)
+                    result = notify_clicked(details);
             break;
             
             case Gdk.EventType.3BUTTON_PRESS:
-                notify_triple_clicked(details, true);
+                result = notify_triple_clicked(details);
+                if (result != Toolkit.STOP) {
+                    result = notify_double_clicked(details);
+                    if (result != Toolkit.STOP)
+                        result = notify_clicked(details);
+                }
             break;
         }
         
-        // drop state, now finished with it
-        Gee.HashMap<Gtk.Widget, InternalButtonEvent>? states_map = get_states_map(details.button);
-        if (states_map != null)
-            states_map.unset(details.widget);
+        // drop event details if done here or if end-of-the-road click-wise
+        if (result == Toolkit.STOP || details.press_type == Gdk.EventType.3BUTTON_PRESS) {
+            Gee.HashMap<Gtk.Widget, ButtonEvent>? states_map = get_states_map(details.button);
+            if (states_map != null)
+                states_map.unset(details.widget);
+        }
     }
 }
 

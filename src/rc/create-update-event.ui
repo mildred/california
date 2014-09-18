@@ -6,12 +6,8 @@
     <property name="name">grid</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="margin_left">8</property>
-    <property name="margin_right">8</property>
-    <property name="margin_top">8</property>
-    <property name="margin_bottom">8</property>
-    <property name="row_spacing">8</property>
-    <property name="column_homogeneous">True</property>
+    <property name="row_spacing">6</property>
+    <property name="column_spacing">6</property>
     <child>
       <object class="GtkEntry" id="summary_entry">
         <property name="visible">True</property>
@@ -25,23 +21,57 @@
         <property name="placeholder_text" translatable="yes">Untitled event</property>
       </object>
       <packing>
-        <property name="left_attach">0</property>
+        <property name="left_attach">1</property>
         <property name="top_attach">0</property>
-        <property name="width">2</property>
+        <property name="width">1</property>
         <property name="height">1</property>
       </packing>
     </child>
     <child>
-      <object class="GtkBox" id="dt_selection_box">
+      <object class="GtkLabel" id="summary_label">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="xalign">1</property>
+        <property name="label" translatable="yes">Summary</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="time_label">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="xalign">1</property>
+        <property name="label" translatable="yes">Time</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="time_box">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">4</property>
-        <property name="baseline_position">top</property>
         <child>
-          <object class="GtkLabel" id="from_label">
+          <object class="GtkLabel" id="time_summary_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" comments="As in &quot;From &lt;date&gt; &lt;time&gt; to &lt;date&gt; &lt;time&gt;&quot;">From</property>
+            <property name="label">(none)</property>
+            <property name="selectable">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -50,13 +80,20 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="dtstart_date_button">
-            <property name="label">dtstart</property>
+          <object class="GtkButton" id="edit_time_button">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="xalign">0.52999997138977051</property>
-            <signal name="clicked" handler="on_date_button_clicked" object="CaliforniaHostCreateUpdateEvent" swapped="no"/>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Set the start and end time</property>
+            <property name="relief">none</property>
+            <signal name="clicked" handler="on_edit_time_button_clicked" object="CaliforniaHostCreateUpdateEvent" swapped="no"/>
+            <child>
+              <object class="GtkImage" id="image1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="icon_name">alarm-symbolic</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -64,177 +101,110 @@
             <property name="position">1</property>
           </packing>
         </child>
-        <child>
-          <object class="GtkComboBoxText" id="dtstart_time_combo">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="to_label">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes" comments="As in &quot;From &lt;date&gt; &lt;time&gt; to &lt;date&gt; &lt;time&gt;&quot;">to</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="dtend_date_button">
-            <property name="label">dtend</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <signal name="clicked" handler="on_date_button_clicked" object="CaliforniaHostCreateUpdateEvent" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkComboBoxText" id="dtend_time_combo">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">5</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkCheckButton" id="all_day_toggle">
-            <property name="label" translatable="yes">_All-day</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="halign">start</property>
-            <property name="use_underline">True</property>
-            <property name="xalign">0</property>
-            <property name="image_position">right</property>
-            <property name="draw_indicator">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">6</property>
-          </packing>
-        </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
+        <property name="left_attach">1</property>
         <property name="top_attach">1</property>
-        <property name="width">2</property>
+        <property name="width">1</property>
         <property name="height">1</property>
       </packing>
     </child>
     <child>
-      <object class="GtkGrid" id="grid1">
+      <object class="GtkEntry" id="location_entry">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="activates_default">True</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">3</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="location_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="row_spacing">6</property>
-        <property name="column_spacing">6</property>
-        <child>
-          <object class="GtkLabel" id="location_label">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Location</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">location_entry</property>
-            <property name="single_line_mode">True</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkEntry" id="location_entry">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="description_label">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="xalign">1</property>
-            <property name="yalign">0</property>
-            <property name="label" translatable="yes">_Description</property>
-            <property name="use_underline">True</property>
-            <property name="wrap">True</property>
-            <property name="mnemonic_widget">description_textview</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow" id="scrolledwindow1">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="shadow_type">in</property>
-            <property name="min_content_height">75</property>
-            <child>
-              <object class="GtkViewport" id="viewport1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkTextView" id="description_textview">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="wrap_mode">word</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
+        <property name="xalign">1</property>
+        <property name="label" translatable="yes">_Location</property>
+        <property name="use_underline">True</property>
+        <property name="single_line_mode">True</property>
         <style>
           <class name="dim-label"/>
         </style>
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">2</property>
-        <property name="width">2</property>
+        <property name="top_attach">3</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="description_label">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="xalign">1</property>
+        <property name="yalign">0</property>
+        <property name="label" translatable="yes">_Description</property>
+        <property name="use_underline">True</property>
+        <property name="wrap">True</property>
+        <property name="mnemonic_widget">description_textview</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">4</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow" id="scrolledwindow1">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="shadow_type">in</property>
+        <property name="min_content_height">75</property>
+        <child>
+          <object class="GtkViewport" id="viewport1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkTextView" id="description_textview">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="wrap_mode">word</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">4</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="calendar_label">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="xalign">1</property>
+        <property name="label" translatable="yes">Calendar</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">5</property>
+        <property name="width">1</property>
         <property name="height">1</property>
       </packing>
     </child>
@@ -242,34 +212,61 @@
       <object class="GtkComboBoxText" id="calendar_combo">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">5</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="rotating_button_box_container">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_top">8</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">False</property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">3</property>
+        <property name="top_attach">6</property>
         <property name="width">2</property>
         <property name="height">1</property>
       </packing>
     </child>
     <child>
-      <object class="GtkButtonBox" id="button_box">
+      <object class="GtkLabel" id="repeats_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="valign">end</property>
-        <property name="margin_top">8</property>
-        <property name="vexpand">True</property>
-        <property name="spacing">6</property>
-        <property name="homogeneous">True</property>
-        <property name="layout_style">end</property>
+        <property name="xalign">1</property>
+        <property name="label" translatable="yes">Recurrence</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">2</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="recurring_box">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">4</property>
         <child>
-          <object class="GtkButton" id="cancel_button">
-            <property name="label" translatable="yes">_Cancel</property>
+          <object class="GtkLabel" id="recurring_explanation_label">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="can_default">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <property name="image_position">bottom</property>
-            <signal name="clicked" handler="on_cancel_button_clicked" object="CaliforniaHostCreateUpdateEvent" swapped="no"/>
+            <property name="can_focus">False</property>
+            <property name="xalign">0</property>
+            <property name="label">(none)</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -278,32 +275,32 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="accept_button">
-            <property name="label" translatable="yes">C_reate</property>
+          <object class="GtkButton" id="recurring_button">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="can_default">True</property>
-            <property name="has_default">True</property>
             <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <property name="image_position">bottom</property>
-            <signal name="clicked" handler="on_accept_clicked" object="CaliforniaHostCreateUpdateEvent" swapped="no"/>
-            <style>
-              <class name="suggested-action"/>
-            </style>
+            <property name="tooltip_text" translatable="yes">Add or remove recurrences of the event</property>
+            <property name="relief">none</property>
+            <signal name="clicked" handler="on_recurring_button_clicked" object="CaliforniaHostCreateUpdateEvent" swapped="no"/>
+            <child>
+              <object class="GtkImage" id="image2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="icon_name">rotation-allowed-symbolic</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
             <property name="position">1</property>
           </packing>
         </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">4</property>
-        <property name="width">2</property>
+        <property name="left_attach">1</property>
+        <property name="top_attach">2</property>
+        <property name="width">1</property>
         <property name="height">1</property>
       </packing>
     </child>

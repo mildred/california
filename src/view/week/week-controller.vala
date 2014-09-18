@@ -52,6 +52,16 @@ public class Controller : BaseObject, View.Controllable {
     public bool is_viewing_today { get; protected set; }
     
     /**
+     * @inheritDoc
+     */
+    public ChronologyMotion motion { get { return ChronologyMotion.HORIZONTAL; } }
+    
+    /**
+     * @inheritDoc
+     */
+    public bool in_transition { get; protected set; }
+    
+    /**
      * {@link View.Palette} for the entire hosted view.
      */
     public View.Palette palette { get; private set; }
@@ -66,6 +76,7 @@ public class Controller : BaseObject, View.Controllable {
         stack = new ViewContainer(this);
         stack.homogeneous = true;
         stack.transition_duration = Toolkit.SLOW_STACK_TRANSITION_DURATION_MSEC;
+        stack.bind_property("transition-running", this, PROP_IN_TRANSITION, BindingFlags.SYNC_CREATE);
         
         stack_model = new Toolkit.StackModel<Calendar.Week>(stack,
             Toolkit.StackModel.OrderedTransitionType.SLIDE_LEFT_RIGHT, model_presentation,
@@ -120,6 +131,15 @@ public class Controller : BaseObject, View.Controllable {
         Grid? current = get_current_grid();
         if (current != null)
             current.unselect_all();
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public Gtk.Widget? get_widget_for_date(Calendar.Date date) {
+        Grid? current_grid = get_current_grid();
+        
+        return current_grid != null ? current_grid.get_all_day_cell_for_date(date) : null;
     }
     
     private Grid? get_current_grid() {

@@ -4,10 +4,10 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Activator {
+namespace California.Activator.Google {
 
 [GtkTemplate (ui = "/org/yorba/california/rc/google-login.ui")]
-internal class GoogleLoginPane : Gtk.Grid, Toolkit.Card {
+internal class LoginPane : Gtk.Grid, Toolkit.Card {
     public const string ID = "GoogleLoginPane";
     
     public string card_id { get { return ID; } }
@@ -27,14 +27,19 @@ internal class GoogleLoginPane : Gtk.Grid, Toolkit.Card {
     [GtkChild]
     private Gtk.Button login_button;
     
-    public GoogleLoginPane() {
+    private Toolkit.EntryClearTextConnector clear_text_connector = new Toolkit.EntryClearTextConnector();
+    
+    public LoginPane() {
+        clear_text_connector.connect_to(account_entry);
         account_entry.bind_property("text-length", login_button, "sensitive",
             BindingFlags.SYNC_CREATE, on_entry_changed);
+        
+        clear_text_connector.connect_to(password_entry);
         password_entry.bind_property("text-length", login_button, "sensitive",
             BindingFlags.SYNC_CREATE, on_entry_changed);
     }
     
-    public void jumped_to(Toolkit.Card? from, Value? msg) {
+    public void jumped_to(Toolkit.Card? from, Toolkit.Card.Jump reason, Value? msg) {
         password_entry.text = "";
     }
     
@@ -51,7 +56,7 @@ internal class GoogleLoginPane : Gtk.Grid, Toolkit.Card {
     
     [GtkCallback]
     private void on_login_button_clicked() {
-        jump_to_card_by_name(GoogleAuthenticatingPane.ID, new GoogleAuthenticatingPane.Message(
+        jump_to_card_by_name(AuthenticatingPane.ID, new AuthenticatingPane.Message(
             account_entry.text, password_entry.text));
     }
 }

@@ -8,19 +8,27 @@ AM_CPPFLAGS = \
 
 bin_PROGRAMS = california
 
+# This ensures that all ./configure switches and detected configuration variances are accounted for
+# when compiling the Vala files.  However, this also means Vala is required to build California.
+california_vala.stamp: ../config.status
+
 california_VALASOURCES = \
 	activator/activator.vala \
 	activator/activator-instance.vala \
 	activator/activator-instance-list.vala \
-	activator/activator-window.vala \
 	\
-	activator/google/activator-google.vala \
-	activator/google/activator-google-authenticating-pane.vala \
-	activator/google/activator-google-calendar-list-pane.vala \
-	activator/google/activator-google-login-pane.vala \
+	activator/caldav/caldav-activator-instance.vala \
+	activator/caldav/caldav-subscribe.vala \
 	\
-	activator/webcal/activator-webcal.vala \
-	activator/webcal/activator-webcal-pane.vala \
+	activator/generic/generic-subscribe.vala \
+	\
+	activator/google/google-activator-instance.vala \
+	activator/google/google-authenticating-pane.vala \
+	activator/google/google-calendar-list-pane.vala \
+	activator/google/google-login-pane.vala \
+	\
+	activator/webcal/webcal-activator-instance.vala \
+	activator/webcal/webcal-subscribe.vala \
 	\
 	application/california-application.vala \
 	application/california-commandline.vala \
@@ -51,6 +59,7 @@ california_VALASOURCES = \
 	calendar/calendar-day-of-month.vala \
 	calendar/calendar-day-of-week.vala \
 	calendar/calendar-date.vala \
+	calendar/calendar-date-ordering.vala \
 	calendar/calendar-dbus.vala \
 	calendar/calendar-duration.vala \
 	calendar/calendar-error.vala \
@@ -92,21 +101,28 @@ california_VALASOURCES = \
 	host/host.vala \
 	host/host-calendar-list-item.vala \
 	host/host-create-update-event.vala \
+	host/host-create-update-recurring.vala \
+	host/host-date-time-widget.vala \
+	host/host-event-time-settings.vala \
 	host/host-import-calendar.vala \
 	host/host-main-window.vala \
+	host/host-main-window-title.vala \
 	host/host-quick-create-event.vala \
 	host/host-show-event.vala \
 	\
 	manager/manager.vala \
 	manager/manager-calendar-list.vala \
 	manager/manager-calendar-list-item.vala \
+	manager/manager-remove-calendar.vala \
 	manager/manager-window.vala \
 	\
 	tests/tests.vala \
 	tests/tests-calendar-date.vala \
+	tests/tests-calendar-exact-time.vala \
 	tests/tests-calendar-month-of-year.vala \
 	tests/tests-calendar-month-span.vala \
 	tests/tests-calendar-wall-time.vala \
+	tests/tests-iterable.vala \
 	tests/tests-quick-add.vala \
 	tests/tests-quick-add-recurring.vala \
 	tests/tests-string.vala \
@@ -118,20 +134,25 @@ california_VALASOURCES = \
 	toolkit/toolkit-card.vala \
 	toolkit/toolkit-combo-box-text-model.vala \
 	toolkit/toolkit-deck.vala \
+	toolkit/toolkit-deck-popover.vala \
 	toolkit/toolkit-deck-window.vala \
 	toolkit/toolkit-editable-label.vala \
+	toolkit/toolkit-entry-clear-text-connector.vala \
+	toolkit/toolkit-entry-filter-connector.vala \
 	toolkit/toolkit-event-connector.vala \
 	toolkit/toolkit-listbox-model.vala \
 	toolkit/toolkit-motion-connector.vala \
 	toolkit/toolkit-motion-event.vala \
 	toolkit/toolkit-mutable-widget.vala \
 	toolkit/toolkit-popup.vala \
+	toolkit/toolkit-rotating-button-box.vala \
 	toolkit/toolkit-stack-model.vala \
 	\
 	util/util.vala \
 	util/util-gfx.vala \
 	util/util-markup.vala \
 	util/util-memory.vala \
+	util/util-numeric.vala \
 	util/util-scheduled.vala \
 	util/util-string.vala \
 	util/util-uri.vala \
@@ -139,6 +160,7 @@ california_VALASOURCES = \
 	unit-test/unit-test-harness.vala \
 	\
 	view/view.vala \
+	view/view-chronology-motion.vala \
 	view/view-container.vala \
 	view/view-controllable.vala \
 	view/view-palette.vala \
@@ -175,12 +197,17 @@ california_RC = \
 	rc/calendar-manager-list.ui \
 	rc/calendar-manager-list-item.ui \
 	rc/create-update-event.ui \
+	rc/create-update-recurring.ui \
+	rc/date-time-widget.ui \
+	rc/event-time-settings.ui \
+	rc/generic-subscribe.ui \
 	rc/google-authenticating.ui \
 	rc/google-calendar-list.ui \
 	rc/google-login.ui \
+	rc/main-window-title.ui \
 	rc/quick-create-event.ui \
+	rc/remove-calendar.ui \
 	rc/show-event.ui \
-	rc/webcal-subscribe.ui \
 	rc/window-menu.interface \
 	$(NULL)
 
@@ -190,8 +217,8 @@ if ENABLE_UNITY
 california_OPTIONAL_VALAFLAGS += --define ENABLE_UNITY
 endif
 
-if IS_GTK_312
-california_OPTIONAL_VALAFLAGS += --define GTK_312
+if HAVE__NL_TIME_FIRST_WEEKDAY
+california_OPTIONAL_VALAFLAGS += --define HAVE__NL_TIME_FIRST_WEEKDAY
 endif
 
 california_VALAFLAGS = \
@@ -208,7 +235,8 @@ california_VALAFLAGS = \
 	--pkg libical \
 	--pkg libsoup-2.4 \
 	--pkg libgdata \
-	--pkg=Goa-1.0 \
+	--pkg Goa-1.0 \
+	--pkg langinfo \
 	$(NULL)
 
 california_CFLAGS = \

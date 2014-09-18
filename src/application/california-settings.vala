@@ -33,6 +33,7 @@ public class Settings : BaseObject {
     
     private const string VALUE_FIRST_OF_WEEK_SUNDAY = "sunday";
     private const string VALUE_FIRST_OF_WEEK_MONDAY = "monday";
+    private const string VALUE_FIRST_OF_WEEK_SYSTEM = "system";
     
     public static Settings instance { get; private set; }
     
@@ -155,6 +156,17 @@ public class Settings : BaseObject {
         Calendar.terminate();
     }
     
+    /**
+     * Reset settings to use system-defined (or locale-defined) first day of week.
+     *
+     * This is necessary because {@link Settings} will monitor {@link Calendar.System.first_of_week}
+     * for changes and save them to GSettings, but there's no way via that interface to specify
+     * "fall back on system's value".
+     */
+    public void use_system_first_of_week() {
+        settings.set_string(KEY_FIRST_OF_WEEK, VALUE_FIRST_OF_WEEK_SYSTEM);
+    }
+    
     private void on_setting_changed(string key) {
         switch (key.casefold()) {
             case KEY_FIRST_OF_WEEK:
@@ -174,8 +186,9 @@ public class Settings : BaseObject {
                 to_set = Calendar.FirstOfWeek.SUNDAY;
             break;
             
+            case VALUE_FIRST_OF_WEEK_SYSTEM:
             default:
-                to_set = Calendar.FirstOfWeek.DEFAULT;
+                to_set = Calendar.System.instance.system_first_of_week;
             break;
         }
         

@@ -44,19 +44,24 @@ public class Deck : Gtk.Stack {
     private Gee.HashMap<string, Card> names = new Gee.HashMap<string, Card>();
     
     /**
-     * @see Card.dismiss
+     * Fired before {@link Card}s are added or removed.
      */
-    public signal void dismiss(bool user_request, bool final);
+    public signal void adding_removing_cards(Gee.List<Card>? adding, Gee.Collection<Card>? removing);
     
     /**
-     * @see Card.success
+     * Fired after {@link Card}s are added or removed.
      */
-    public signal void success();
+    public signal void added_removed_cards(Gee.List<Card>? added, Gee.Collection<Card>? removed);
+    
+    /**
+     * @see Card.dismiss
+     */
+    public signal void dismiss(Card.DismissReason reason);
     
     /**
      * @see Card.failure
      */
-    public signal void failure(string? user_message);
+    public signal void error_message(string user_message);
     
     /**
      * Create a new {@link Deck}.
@@ -73,20 +78,21 @@ public class Deck : Gtk.Stack {
     }
     
     ~Deck() {
-        foreach (Card card in names.values)
+        foreach (Card card in names.values) {
             card.map.disconnect(on_card_mapped);
+            card.realize.disconnect(on_card_realized);
+        }
     }
     
     private void on_child_to_top() {
         // disconnect from previous top card and push onto nav stack
         if (top != null) {
-            top.jump_to_card.disconnect(on_jump_to_card);
+            top.jump_to_card.disconnect(on_jump_to_card_instance);
             top.jump_to_card_by_name.disconnect(on_jump_to_card_by_name);
             top.jump_back.disconnect(on_jump_back);
             top.jump_home.disconnect(on_jump_home);
             top.dismiss.disconnect(on_dismiss);
-            top.success.disconnect(on_success);
-            top.failure.disconnect(on_failure);
+            top.error_message.disconnect(on_error_message);
             
             navigation_stack.offer_head(top);
             top = null;
@@ -95,13 +101,12 @@ public class Deck : Gtk.Stack {
         // make new visible child top Card and connect to its signals
         top = visible_child as Card;
         if (top != null) {
-            top.jump_to_card.connect(on_jump_to_card);
+            top.jump_to_card.connect(on_jump_to_card_instance);
             top.jump_to_card_by_name.connect(on_jump_to_card_by_name);
             top.jump_back.connect(on_jump_back);
             top.jump_home.connect(on_jump_home);
             top.dismiss.connect(on_dismiss);
-            top.success.connect(on_success);
-            top.failure.connect(on_failure);
+            top.error_message.connect(on_error_message);
         }
     }
     
@@ -124,6 +129,8 @@ public class Deck : Gtk.Stack {
         if (cards.size == 0)
             return;
         
+        adding_removing_cards(cards, null);
+        
         // if empty, first card is home and should be made visible when added
         bool set_home_visible = size == 0;
         
@@ -145,14 +152,19 @@ public class Deck : Gtk.Stack {
             // i.e. home)
             card.map.connect(on_card_mapped);
             
+            // some theme issues with Unity
+            card.realize.connect(on_card_realized);
+            
             // add in order to ensure order is preserved if sparsely removed later
             list.add(card);
         }
         
         if (set_home_visible && home != null) {
             set_visible_child(home);
-            home.jumped_to(null, null);
+            home.jumped_to(null, Card.Jump.HOME, null);
         }
+        
+        added_removed_cards(cards, null);
     }
     
     /**
@@ -161,8 +173,10 @@ public class Deck : Gtk.Stack {
      * If the {@link top} card is removed, the Deck will return {@link home}, clearing the
      * navigation stack in the process.
      */
-    public void remove_cards(Gee.Iterable<Card> cards) {
+    public void remove_cards(Gee.Collection<Card> cards) {
         bool displaying = top != null;
+        
+        adding_removing_cards(null, cards);
         
         foreach (Card card in cards) {
             if (!names.has_key(card.card_id)) {
@@ -172,6 +186,7 @@ public class Deck : Gtk.Stack {
             }
             
             card.map.disconnect(on_card_mapped);
+            card.realize.disconnect(on_card_realized);
             
             remove(card);
             
@@ -187,8 +202,10 @@ public class Deck : Gtk.Stack {
         if (displaying && top == null && home != null) {
             navigation_stack.clear();
             set_visible_child(home);
-            home.jumped_to(null, null);
+            home.jumped_to(null, Card.Jump.HOME, null);
         }
+        
+        added_removed_cards(null, cards);
     }
     
     private Value? strip_null_value(Value? message) {
@@ -223,10 +240,10 @@ public class Deck : Gtk.Stack {
         navigation_stack.clear();
         
         set_visible_child(home);
-        home.jumped_to(null, strip_null_value(message));
+        home.jumped_to(null, Card.Jump.HOME, strip_null_value(message));
     }
     
-    private void on_jump_to_card(Card card, Card next, Value? message) {
+    private void on_jump_to_card(Card card, Card next, Card.Jump reason, Value? message) {
         // do nothing if already visible
         if (get_visible_child() == next) {
             debug("Already showing card %s", next.card_id);
@@ -242,13 +259,17 @@ public class Deck : Gtk.Stack {
         }
         
         set_visible_child(next);
-        next.jumped_to(card, strip_null_value(message));
+        next.jumped_to(card, reason, strip_null_value(message));
+    }
+    
+    private void on_jump_to_card_instance(Card card, Card next, Value? message) {
+        on_jump_to_card(card, next, Card.Jump.DIRECT, message);
     }
     
     private void on_jump_to_card_by_name(Card card, string name, Value? message) {
         Card? next = names.get(name);
         if (next != null)
-            on_jump_to_card(card, next, message);
+            on_jump_to_card(card, next, Card.Jump.DIRECT, message);
         else
             GLib.message("Card %s not found in Deck", name);
     }
@@ -256,7 +277,7 @@ public class Deck : Gtk.Stack {
     private void on_jump_back(Card card) {
         // if still not empty, next card is "back", so pop that off and jump to it
         if (!navigation_stack.is_empty)
-            on_jump_to_card(card, navigation_stack.poll_head(), null);
+            on_jump_to_card(card, navigation_stack.poll_head(), Card.Jump.BACK, null);
     }
     
     private void on_jump_home(Card card) {
@@ -264,31 +285,45 @@ public class Deck : Gtk.Stack {
         navigation_stack.clear();
         
         if (home != null)
-            on_jump_to_card(card, home, null);
+            on_jump_to_card(card, home, Card.Jump.HOME, null);
         else
             message("No home card in Deck");
     }
     
-    private void on_dismiss(bool user_request, bool final) {
-        dismiss(user_request, final);
+    private void on_dismiss(Card.DismissReason reason) {
+        dismiss(reason);
     }
     
-    private void on_success() {
-        success();
-    }
-    
-    private void on_failure(string? user_message) {
-        failure(user_message);
+    private void on_error_message(string user_message) {
+        error_message(user_message);
     }
     
     private void on_card_mapped(Gtk.Widget widget) {
         Card card = (Card) widget;
         
-        if (card.default_widget != null && card.default_widget.can_default)
-            card.default_widget.grab_default();
+        if (card.default_widget != null) {
+            if (card.default_widget.can_default)
+                card.default_widget.grab_default();
+            else
+                message("Card %s specifies default widget that cannot be default", card.card_id);
+        }
         
-        if (card.initial_focus != null && card.initial_focus.can_focus)
-            card.initial_focus.grab_focus();
+        if (card.initial_focus != null) {
+            if (card.initial_focus.can_focus)
+                card.initial_focus.grab_focus();
+            else
+                message("Card %s specifies initial focus that cannot focus", card.card_id);
+        }
+    }
+    
+    // When a child GtkScrolledWindow is visible, the entire GtkStack's background color goes black;
+    // this overrides the color and uses the toplevel's background color for the Card.  See:
+    // https://bugzilla.gnome.org/show_bug.cgi?id=735421
+    private void on_card_realized(Gtk.Widget card) {
+#if ENABLE_UNITY
+        Gdk.RGBA bg = card.get_toplevel().get_style_context().get_background_color(Gtk.StateFlags.NORMAL);
+        card.override_background_color(Gtk.StateFlags.NORMAL, bg);
+#endif
     }
 }
 

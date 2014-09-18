@@ -72,6 +72,21 @@ public abstract class Store : BaseObject {
     internal abstract async void close_async(Cancellable? cancellable) throws Error;
     
     /**
+     * Asynchronously remove the {@link Source} from the {@link Store}.
+     *
+     * This is a permanent deletion of local data and the Source will no longer be available to the
+     * user.  There is no mechanism here for optionally deleting the account or calendar on the
+     * network backend, if any.
+     *
+     * This Store ''must'' be the same as {@link Source.store}.  INVALID is thrown otherwise.
+     *
+     * This operation is guaranteed not to succeed if {@link Source.is_removable} is false.
+     *
+     * The Store must be open before calling this method.
+     */
+    public abstract async void remove_source_async(Source source, Cancellable? cancellable) throws Error;
+    
+    /**
      * Return a read-ony list of all {@link Source}s managed by this {@link Store}.
      *
      * The Sources will be sorted by their titles in lexiographic order.

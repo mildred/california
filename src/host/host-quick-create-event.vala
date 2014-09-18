@@ -16,12 +16,14 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
     
     public new Component.Event? event { get; private set; default = null; }
     
+    public bool edit_required { get; private set; default = false; }
+    
     public Gtk.Widget? default_widget { get { return create_button; } }
     
     public Gtk.Widget? initial_focus { get { return details_entry; } }
     
     [GtkChild]
-    private Gtk.Box when_box;
+    private Gtk.Label when_label;
     
     [GtkChild]
     private Gtk.Label when_text_label;
@@ -38,53 +40,96 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
     [GtkChild]
     private Gtk.Button create_button;
     
-    private Toolkit.ComboBoxTextModel<Backing.CalendarSource> model;
+    [GtkChild]
+    private Gtk.Button cancel_button;
     
-    public QuickCreateEvent(Component.Event? initial) {
-        event = initial;
+    private Toolkit.ComboBoxTextModel<Backing.CalendarSource> model;
+    private Toolkit.EntryClearTextConnector clear_text_connector = new Toolkit.EntryClearTextConnector();
+    
+    public QuickCreateEvent(bool in_deck_window) {
+        model = build_calendar_source_combo_model(calendar_combo_box);
+        
+        clear_text_connector.connect_to(details_entry);
+        details_entry.bind_property("text", create_button, "sensitive", BindingFlags.SYNC_CREATE,
+            transform_text_to_sensitivity);
+        
+        // Only show Cancel button if in a DeckWindow; if in popover, dismissal is easy and doesn't
+        // require one
+        cancel_button.visible = in_deck_window;
+        cancel_button.no_show_all = !in_deck_window;
+    }
+    
+    private bool transform_text_to_sensitivity(Binding binding, Value source_value, ref Value target_value) {
+        target_value = from_string(details_entry.text).any(ch => !ch.isspace());
+        
+        return true;
+    }
+    
+    public void jumped_to(Toolkit.Card? from, Toolkit.Card.Jump reason, Value? message) {
+        event = (message != null) ? message as Component.Event : null;
         
         // if initial date/times supplied, reveal to the user and change the example
         string eg;
-        if (initial != null && (initial.date_span != null || initial.exact_time_span != null)) {
-            when_box.visible = true;
-            when_text_label.label = initial.get_event_time_pretty_string(Calendar.Timezone.local);
-            if (initial.date_span != null)
+        if (event != null && (event.date_span != null || event.exact_time_span != null)) {
+            when_label.visible = when_text_label.visible = true;
+            when_label.no_show_all = when_text_label.no_show_all = false;
+            when_text_label.label = event.get_event_time_pretty_string(Calendar.Date.PrettyFlag.NONE,
+                Calendar.ExactTimeSpan.PrettyFlag.ALLOW_MULTILINE, Calendar.Timezone.local);
+            if (event.date_span != null)
                 eg = _("Example: Dinner at Tadich Grill 7:30pm");
             else
                 eg = _("Example: Dinner at Tadich Grill");
         } else {
-            when_box.visible = false;
-            when_box.no_show_all = true;
+            when_label.visible = when_text_label.visible = false;
+            when_label.no_show_all = when_text_label.no_show_all = true;
             eg = _("Example: Dinner at Tadich Grill 7:30pm tomorrow");
         }
-
+        
         example_label.label = "<small><i>%s</i></small>".printf(eg);
-        
-        // create and initialize combo box model
-        model = new Toolkit.ComboBoxTextModel<Backing.CalendarSource>(calendar_combo_box,
-            (cal) => cal.title);
-        foreach (Backing.CalendarSource calendar_source in
-            Backing.Manager.instance.get_sources_of_type<Backing.CalendarSource>()) {
-            if (calendar_source.visible && !calendar_source.read_only)
-                model.add(calendar_source);
-        }
-        
-        details_entry.secondary_icon_name = get_direction() == Gtk.TextDirection.RTL
-            ? "edit-clear-rtl-symbolic" : "edit-clear-symbolic";
         
         // make first item active
         calendar_combo_box.active = 0;
     }
     
-    public void jumped_to(Toolkit.Card? from, Value? message) {
+    [GtkCallback]
+    private void on_help_button_clicked() {
+        try {
+            Gtk.show_uri(null, Application.QUICK_ADD_HELP_URL, Gtk.get_current_event_time());
+        } catch (Error err) {
+            report_error(_("Error opening help: %s").printf(err.message));
+        }
     }
     
     [GtkCallback]
-    private void on_details_entry_icon_release(Gtk.Entry entry, Gtk.EntryIconPosition icon,
-        Gdk.Event event) {
-        // check for clear icon being pressed
-        if (icon == Gtk.EntryIconPosition.SECONDARY)
-            details_entry.text = "";
+    private void on_create_button_clicked() {
+        // shouldn't be sensitive if no text
+        string details = details_entry.text.strip();
+        if (String.is_empty(details))
+            return;
+        
+        Component.DetailsParser parser = new Component.DetailsParser(details, model.active,
+            event);
+        event = parser.event;
+        
+        // create if possible, otherwise jump to editor
+        if (event.is_valid(true))
+            create_event_async.begin(null);
+        else
+            edit_event();
+    }
+    
+    [GtkCallback]
+    private void on_edit_button_clicked() {
+        // empty text okay
+        string details = details_entry.text.strip();
+        if (!String.is_empty(details)) {
+            Component.DetailsParser parser = new Component.DetailsParser(details, model.active,
+                event);
+            event = parser.event;
+        }
+        
+        // always edit
+        edit_event();
     }
     
     [GtkCallback]
@@ -92,37 +137,23 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
         notify_user_closed();
     }
     
-    [GtkCallback]
-    private void on_create_button_clicked() {
-        string details = details_entry.text.strip();
+    private void edit_event() {
+        // Must pass some kind of event to create/update, so use blank if required
+        if (event == null)
+            event = new Component.Event.blank();
         
-        if (String.is_empty(details)) {
-            // jump to Create/Update dialog and remove this Card from the Deck ... this ensures
-            // that if the user presses Cancel in the Create/Update dialog the Deck exits rather
-            // than returns here (via jump_home_or_user_closed())
-            jump_to_card_by_name(CreateUpdateEvent.ID, event);
-            deck.remove_cards(iterate<Toolkit.Card>(this).to_array_list());
-            
-            return;
-        }
+        // ensure it's at least valid
+        if (!event.is_valid(false))
+            event.set_event_date_span(Calendar.System.today.to_date_span());
         
-        Component.DetailsParser parser = new Component.DetailsParser(details, model.active,
-            event);
-        event = parser.event;
+        edit_required = true;
         
-        if (event.is_valid(true)) {
-            create_event_async.begin(null);
-        } else {
-            // see note above about why the Deck jumps to Create/Update and then this Card is
-            // removed
-            jump_to_card_by_name(CreateUpdateEvent.ID, event);
-            deck.remove_cards(iterate<Toolkit.Card>(this).to_array_list());
-        }
+        notify_user_closed();
     }
     
     private async void create_event_async(Cancellable? cancellable) {
         if (event.calendar_source == null) {
-            notify_failure(_("Unable to create event: calendar must be specified"));
+            report_error(_("Unable to create event: calendar must be specified"));
             
             return;
         }
@@ -141,7 +172,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
         if (create_err == null)
             notify_success();
         else
-            notify_failure(_("Unable to create event: %s").printf(create_err.message));
+            report_error(_("Unable to create event: %s").printf(create_err.message));
     }
 }
 
