@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-09-08 15:00+0000\n"
-"PO-Revision-Date: 2014-09-08 16:31-0300\n"
+"POT-Creation-Date: 2014-09-12 23:41+0000\n"
+"PO-Revision-Date: 2014-09-18 02:04-0300\n"
 "Last-Translator: Rafael Ferreira <rafael.f.f1@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -152,19 +152,19 @@ msgstr "Copyright 2014 Yorba Foundation"
 msgid "Visit California's home page"
 msgstr "Visite a página web do Califórnia"
 
-#: ../src/application/california-application.vala:180
+#: ../src/application/california-application.vala:184
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "Não foi possível abrir Califórnia: %s"
 
-#: ../src/application/california-application.vala:282
+#: ../src/application/california-application.vala:294
 #, c-format
 msgid "About %s"
 msgstr "Sobre %s"
 
 #. Translators: add your name and email address to receive credit in the About dialog
 #. For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:288
+#: ../src/application/california-application.vala:300
 msgid "translator-credits"
 msgstr "Rafael Ferreira <rafael.f.f1@gmail.com>"
 
@@ -198,6 +198,175 @@ msgstr "%s para %s"
 #: ../src/calendar/calendar-date.vala:360
 msgid "Today"
 msgstr "Hoje"
+
+#. See get_day_of_week_of_month().
+#: ../src/calendar/calendar-day-of-week.vala:60
+msgid "last Monday"
+msgstr "última segunda-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:60
+msgid "first Monday"
+msgstr "primeira segunda-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:60
+msgid "second Monday"
+msgstr "segunda segunda-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:60
+msgid "third Monday"
+msgstr "terceira segunda-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:60
+msgid "fourth Monday"
+msgstr "quarta segunda-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:60
+msgid "fifth Monday"
+msgstr "quinta segunda-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:61
+msgid "last Tuesday"
+msgstr "última terça-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:61
+msgid "first Tuesday"
+msgstr "primeira terça-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:61
+msgid "second Tuesday"
+msgstr "segunda terça-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:61
+msgid "third Tuesday"
+msgstr "terceira terça-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:61
+msgid "fourth Tuesday"
+msgstr "quarta terça-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:61
+msgid "fifth Tuesday"
+msgstr "quinta terça-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:62
+msgid "last Wednesday"
+msgstr "última quarta-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:62
+msgid "first Wednesday"
+msgstr "primeira quarta-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:62
+msgid "second Wednesday"
+msgstr "segunda quarta-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:62
+msgid "third Wednesday"
+msgstr "terceira quarta-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:62
+msgid "fourth Wednesday"
+msgstr "quarta quarta-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:62
+msgid "fifth Wednesday"
+msgstr "quinta quarta-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:63
+msgid "last Thursday"
+msgstr "última quinta-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:63
+msgid "first Thursday"
+msgstr "primeira quinta-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:63
+msgid "second Thursday"
+msgstr "segunda quinta-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:63
+msgid "third Thursday"
+msgstr "terceira quinta-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:63
+msgid "fourth Thursday"
+msgstr "quarta quinta-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:63
+msgid "fifth Thursday"
+msgstr "quinta quinta-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:64
+msgid "last Friday"
+msgstr "última sexta-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:64
+msgid "first Friday"
+msgstr "primeira sexta-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:64
+msgid "second Friday"
+msgstr "segundaa sexta-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:64
+msgid "third Friday"
+msgstr "terceira sexta-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:64
+msgid "fourth Friday"
+msgstr "quarta sexta-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:64
+msgid "fifth Friday"
+msgstr "quinta sexta-feira"
+
+#: ../src/calendar/calendar-day-of-week.vala:65
+msgid "last Saturday"
+msgstr "último sábado"
+
+#: ../src/calendar/calendar-day-of-week.vala:65
+msgid "first Saturday"
+msgstr "primeiro sábado"
+
+#: ../src/calendar/calendar-day-of-week.vala:65
+msgid "second Saturday"
+msgstr "segundo sábado"
+
+#: ../src/calendar/calendar-day-of-week.vala:65
+msgid "third Saturday"
+msgstr "terceiro sábado"
+
+#: ../src/calendar/calendar-day-of-week.vala:65
+msgid "fourth Saturday"
+msgstr "quarto sábado"
+
+#: ../src/calendar/calendar-day-of-week.vala:65
+msgid "fifth Saturday"
+msgstr "quinto sábado"
+
+#: ../src/calendar/calendar-day-of-week.vala:66
+msgid "last Sunday"
+msgstr "último domingo"
+
+#: ../src/calendar/calendar-day-of-week.vala:66
+msgid "first Sunday"
+msgstr "primeiro domingo"
+
+#: ../src/calendar/calendar-day-of-week.vala:66
+msgid "second Sunday"
+msgstr "segundo domingo"
+
+#: ../src/calendar/calendar-day-of-week.vala:66
+msgid "third Sunday"
+msgstr "terceiro domingo"
+
+#: ../src/calendar/calendar-day-of-week.vala:66
+msgid "fourth Sunday"
+msgstr "quarto domingo"
+
+#: ../src/calendar/calendar-day-of-week.vala:66
+msgid "fifth Sunday"
+msgstr "quinto domingo"
 
 #. Multi-day timed event, print "<full time>, <full date>" on both lines,
 #. including year if either not current year
@@ -598,9 +767,9 @@ msgstr "Repete a cada %s, %s"
 
 #: ../src/component/component-recurrence-rule.vala:635
 #: ../src/component/component-recurrence-rule.vala:718
-#: ../src/component/component-recurrence-rule.vala:795
-#: ../src/component/component-recurrence-rule.vala:835
-#: ../src/component/component-recurrence-rule.vala:872
+#: ../src/component/component-recurrence-rule.vala:763
+#: ../src/component/component-recurrence-rule.vala:803
+#: ../src/component/component-recurrence-rule.vala:840
 #, c-format
 msgid "%d time"
 msgid_plural "%d times"
@@ -647,8 +816,8 @@ msgstr ", "
 #. As in, "Repeats every month on day 4, 3 times"
 #. As in, "Repeats every year on 3 March 2014, 2 times"
 #: ../src/component/component-recurrence-rule.vala:717
-#: ../src/component/component-recurrence-rule.vala:834
-#: ../src/component/component-recurrence-rule.vala:871
+#: ../src/component/component-recurrence-rule.vala:802
+#: ../src/component/component-recurrence-rule.vala:839
 #, c-format
 msgid "Repeats every %s on %s, %s"
 msgstr "Repete a cada %s em %s, %s"
@@ -657,8 +826,8 @@ msgstr "Repete a cada %s em %s, %s"
 #. As in, "Repeats every month on day 21 until Sept. 2, 2014"
 #. As in, "Repeats every year on 3 March 2014 until Sept. 2, 2014"
 #: ../src/component/component-recurrence-rule.vala:724
-#: ../src/component/component-recurrence-rule.vala:841
-#: ../src/component/component-recurrence-rule.vala:878
+#: ../src/component/component-recurrence-rule.vala:809
+#: ../src/component/component-recurrence-rule.vala:846
 #, c-format
 msgid "Repeats every %s on %s until %s"
 msgstr "Repete a cada %s em %s até %s"
@@ -667,8 +836,8 @@ msgstr "Repete a cada %s em %s até %s"
 #. As in, "Repeats every month on day 20 until Sept. 2, 2014, 8:00pm"
 #. As in, "Repeats every year on 3 March 2014 until Sept. 2, 2014, 8:00pm"
 #: ../src/component/component-recurrence-rule.vala:731
-#: ../src/component/component-recurrence-rule.vala:848
-#: ../src/component/component-recurrence-rule.vala:885
+#: ../src/component/component-recurrence-rule.vala:816
+#: ../src/component/component-recurrence-rule.vala:853
 #, c-format
 msgid "Repeats every %s on %s until %s, %s"
 msgstr "Repete a cada %s em %s até %s, %s"
@@ -677,68 +846,32 @@ msgstr "Repete a cada %s em %s até %s, %s"
 #. As in, "Repeats every month on day 5"
 #. As in, "Repeats every year on 3 March 2014"
 #: ../src/component/component-recurrence-rule.vala:738
-#: ../src/component/component-recurrence-rule.vala:855
-#: ../src/component/component-recurrence-rule.vala:892
+#: ../src/component/component-recurrence-rule.vala:823
+#: ../src/component/component-recurrence-rule.vala:860
 #, c-format
 msgid "Repeats every %s on %s"
 msgstr "Repete a cada %s em %s"
 
-#. As in, "first Thursday of the month"
-#: ../src/component/component-recurrence-rule.vala:760
-#, c-format
-msgid "first %s"
-msgstr "primeiro(a) %s"
-
-#. As in, "second Thursday of the month"
-#: ../src/component/component-recurrence-rule.vala:765
-#, c-format
-msgid "second %s"
-msgstr "segundo(a) %s"
-
-#. As in, "third Thursday of the month"
-#: ../src/component/component-recurrence-rule.vala:770
-#, c-format
-msgid "third %s"
-msgstr "terceiro(a) %s"
-
-#. As in, "fourth Thursday of the month"
-#: ../src/component/component-recurrence-rule.vala:775
-#, c-format
-msgid "fourth %s"
-msgstr "quarto(a) %s"
-
-#. As in, "fifth Thursday of the month"
-#: ../src/component/component-recurrence-rule.vala:780
-#, c-format
-msgid "fifth %s"
-msgstr "quinto(a) %s"
-
-#. As in, "last Thursday of the month"
-#: ../src/component/component-recurrence-rule.vala:785
-#, c-format
-msgid "last %s"
-msgstr "último(a) %s"
-
 #. As in, "Repeats every month on the first Tuesday, 3 times"
-#: ../src/component/component-recurrence-rule.vala:794
+#: ../src/component/component-recurrence-rule.vala:762
 #, c-format
 msgid "Repeats every %s on the %s, %s"
 msgstr "Repete a cada %s no(a) %s, %s"
 
 #. As in, "Repeats every month on the second Monday until Sept. 2, 2014"
-#: ../src/component/component-recurrence-rule.vala:801
+#: ../src/component/component-recurrence-rule.vala:769
 #, c-format
 msgid "Repeats every %s on the %s until %s"
 msgstr "Repete a cada %s no(a) %s até %s"
 
 #. As in, "Repeats every month on the last Friday until Sept. 2, 2014, 8:00pm"
-#: ../src/component/component-recurrence-rule.vala:808
+#: ../src/component/component-recurrence-rule.vala:776
 #, c-format
 msgid "Repeats every %s on the %s until %s, %s"
 msgstr "Repete a cada %s no(a) %s até %s, %s"
 
 #. As in, "Repeats every month on the third Tuesday"
-#: ../src/component/component-recurrence-rule.vala:815
+#: ../src/component/component-recurrence-rule.vala:783
 #, c-format
 msgid "Repeats every %s on the %s"
 msgstr "Repete a cada %s no(a) %s"
@@ -750,6 +883,7 @@ msgstr "Repete a cada %s no(a) %s"
 #: ../src/rc/event-time-settings.ui.h:4 ../src/rc/generic-subscribe.ui.h:5
 #: ../src/rc/google-authenticating.ui.h:1
 #: ../src/rc/google-calendar-list.ui.h:2 ../src/rc/google-login.ui.h:1
+#: ../src/rc/remove-calendar.ui.h:1
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -842,6 +976,11 @@ msgstr "Exemplo: Jantar no Tadich Grill"
 msgid "Example: Dinner at Tadich Grill 7:30pm tomorrow"
 msgstr "Exemplo: Jantar no Tadich Grill 7:30pm amanhã"
 
+#: ../src/host/host-quick-create-event.vala:99
+#, c-format
+msgid "Error opening help: %s"
+msgstr "Erro ao abrir a ajuda: %s"
+
 #: ../src/host/host-show-event.vala:73
 msgid "Delete"
 msgstr "Excluir"
@@ -868,12 +1007,39 @@ msgstr "Excluir evento"
 
 #. No number is supplied because the number of events removed is indefinite in certain
 #. situations ... plural text should simply be for "more than one"
-#: ../src/host/host-show-event.vala:281
+#: ../src/host/host-show-event.vala:268
 #, c-format
 msgid "Unable to remove event: %s"
 msgid_plural "Unable to remove events: %s"
 msgstr[0] "Não foi possível remover o evento: %s"
 msgstr[1] "Não foi possível remover os eventos: %s"
+
+#: ../src/manager/manager-calendar-list-item.vala:78
+msgid "Calendar is read-only"
+msgstr "Agenda em somente leitura"
+
+#: ../src/manager/manager-remove-calendar.vala:39
+#, c-format
+msgid ""
+"This will remove the %s local calendar from your computer.  All associated "
+"information will be deleted permanently."
+msgstr ""
+"Isso vai remover a agenda local %s do seu computador. Toda informação "
+"associada será excluída permanentemente."
+
+#: ../src/manager/manager-remove-calendar.vala:41
+#, c-format
+msgid ""
+"This will remove the %s network calendar from your computer.  This will not "
+"affect information stored on the server."
+msgstr ""
+"Isso vai remover a agenda de rede %s do seu computador. Isso não vai afetar "
+"a informação armazenada no servidor."
+
+#: ../src/manager/manager-remove-calendar.vala:74
+#, c-format
+msgid "Unable to remove calendar: %s"
+msgstr "Não foi possível remover a agenda: %s"
 
 #. *
 #. * @inheritDoc
@@ -898,10 +1064,14 @@ msgid "_Calendars"
 msgstr "A_gendas"
 
 #: ../src/rc/app-menu.interface.h:2
+msgid "_Help"
+msgstr "A_juda"
+
+#: ../src/rc/app-menu.interface.h:3
 msgid "_About"
 msgstr "S_obre"
 
-#: ../src/rc/app-menu.interface.h:3
+#: ../src/rc/app-menu.interface.h:4
 msgid "_Quit"
 msgstr "_Sair"
 
@@ -931,8 +1101,8 @@ msgid "Rename calendar"
 msgstr "Renomear agenda"
 
 #: ../src/rc/calendar-manager-list.ui.h:4
-msgid "Delete calendar"
-msgstr "Excluir agenda"
+msgid "Remove calendar"
+msgstr "Remover agenda"
 
 #: ../src/rc/create-update-event.ui.h:1
 msgid "Untitled event"
@@ -1175,6 +1345,14 @@ msgstr "Edita detalhes de evento"
 msgid "Create event"
 msgstr "Cria evento"
 
+#: ../src/rc/remove-calendar.ui.h:2
+msgid "_Remove"
+msgstr "_Remover"
+
+#: ../src/rc/remove-calendar.ui.h:3
+msgid "Are you sure you want to remove this calendar?"
+msgstr "Tem certeza que deseja remover esta agenda?"
+
 #: ../src/rc/show-event.ui.h:2
 msgid "Where"
 msgstr "Onde"
@@ -1191,6 +1369,9 @@ msgstr "_Reduzir"
 msgid "_Normal Size"
 msgstr "_Tamanho normal"
 
+#~ msgid "Delete calendar"
+#~ msgstr "Excluir agenda"
+
 #~ msgid "Re_peats…"
 #~ msgstr "Re_pete…"
 
@@ -1205,9 +1386,6 @@ msgstr "_Tamanho normal"
 
 #~ msgid "_Create"
 #~ msgstr "_Criar"
-
-#~ msgid "_Remove"
-#~ msgstr "_Remover"
 
 #~ msgid "_Name:"
 #~ msgstr "_Nome:"
