@@ -608,7 +608,7 @@ public class RecurrenceRule : BaseObject {
                 if (has_byday == has_bymonthday || byrules.size != 1)
                     return null;
                 
-                string unit = ngettext("month", "%d months", interval).printf(interval);
+                string unit = ngettext("%d month", "%d months", interval).printf(interval);
                 
                 if (has_byday)
                     return explain_monthly_byday(unit);
