@@ -7,6 +7,7 @@
 extern const string PACKAGE_VERSION;
 extern const string GETTEXT_PACKAGE;
 extern const string PREFIX;
+extern const string SOURCE_ROOT_DIR;
 
 namespace California {
 
@@ -22,7 +23,6 @@ public class Application : Gtk.Application {
     public const string WEBSITE_NAME = _("Visit California's home page");
     public const string WEBSITE_URL = "https://wiki.gnome.org/Apps/California";
     public const string BUGREPORT_URL = "https://bugzilla.gnome.org/enter_bug.cgi?product=california";
-    public const string QUICK_ADD_HELP_URL = "https://wiki.gnome.org/Apps/California/HowToUseQuickAdd";
     public const string ID = "org.yorba.california";
     public const string ICON_NAME = "x-office-calendar";
     
@@ -277,9 +277,36 @@ public class Application : Gtk.Application {
     
     private void on_help() {
         try {
-            Gtk.show_uri(null, WEBSITE_URL, Gdk.CURRENT_TIME);
-        } catch (Error error) {
-            message("Error opening help URL: %s", error.message);
+            help();
+        } catch (Error err) {
+            error_message(main_window, err.message);
+        }
+    }
+    
+    /**
+     * Launch help for the specified topic.
+     *
+     * topic should be the name of the help page without its extension (i.e. no .page).
+     *
+     * If null, the main help page will be launched.
+     */
+    public void help(string? topic = null) throws Error {
+        if (is_installed) {
+            Gtk.show_uri(null,
+                String.is_empty(topic) ? "help:california" : "help:california/%s".printf(topic),
+                Gdk.CURRENT_TIME);
+        } else {
+            string path = String.is_empty(topic)
+                ? "%s/help/C/".printf(SOURCE_ROOT_DIR)
+                : "%s/help/C/%s.page".printf(SOURCE_ROOT_DIR, topic);
+            
+            string[] argv = { "gnome-help", path };
+            
+            Pid pid;
+            if (!Process.spawn_async(exec_dir.get_path(), argv, null,
+                SpawnFlags.SEARCH_PATH | SpawnFlags.STDERR_TO_DEV_NULL, null, out pid)) {
+                debug("Failed to launch help locally.");
+            }
         }
     }
     

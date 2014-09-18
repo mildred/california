@@ -1,5 +1,7 @@
 @YELP_HELP_RULES@
 
+NULL =
+
 HELP_ID = california
 
 HELP_MEDIA = \
@@ -22,8 +24,9 @@ HELP_FILES = \
 	gnome-help.sct \
 	index.page \
 	legal.xml \
-	schematron.sh \
 	$(NULL)
+
+HELP_LINGUAS = 
 
 GITIGNOREFILES = \
 	Makefile \

@@ -236,9 +236,13 @@ california_VALAFLAGS = \
 	--pkg langinfo \
 	$(NULL)
 
+# Note that code for SOURCE_ROOT_DIR must be changed if this file is moved to different directory
+SOURCE_ROOT_DIR = `cd ..; pwd`
+
 california_CFLAGS = \
 	-DGETTEXT_PACKAGE=\""california"\" \
 	-DPREFIX=\"$(prefix)\" \
+	-DSOURCE_ROOT_DIR=\"$(SOURCE_ROOT_DIR)\" \
 	$(NULL)
 
 LIBS = \
