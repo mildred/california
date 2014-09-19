@@ -58,6 +58,9 @@
       the event's date and time:</p>
       <p><em>Go to Jeff and Mindy's wedding on October 26th at 4:00pm</em>
       </p></item>
+      <item><p>You can also define how long the event takes place:</p>
+      <p><em>Visit Alice at office on November 1st from 1pm to 2:30pm</em>
+      </p></item>
     </list>
 
     <list ui:expanded="false">
@@ -65,6 +68,7 @@
       <item><p><em>Take out the trash every Tuesday at 7:30am</em></p></item>
       <item><p><em>Swimming class every Tuesday and Thursday at 6:00pm</em></p>
       </item>
+      <item><p><em>Meet at Barney's every Monday at 9am until December 1st</em></p></item>
     </list>
     </item>
     
@@ -79,7 +83,7 @@
 
   <note style="tip"><p>By default, the <em>Quick Add</em> feature will create
   events that last for one hour. You may wish to adjust the duration of your
-  events. See the <link href="cal-event-edit.page">Edit an Event</link>
+  events or add additional details. See the <link href="cal-event-edit.page">Edit an Event</link>
   page for more information about editing events.</p></note>
   </section>
 </page>

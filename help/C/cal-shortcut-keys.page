@@ -41,15 +41,15 @@
       </thead>
       <tbody>
         <tr>
-          <td><p>Reset the view to highlight events for the current day</p></td>
+          <td><p>Reset the view to highlight the current day</p></td>
           <td><p><keyseq><key>Ctrl</key><key>T</key></keyseq></p></td>
         </tr>
         <tr>
-          <td><p>View events for the current week</p></td>
+          <td><p>View the calendar as weeks</p></td>
           <td><p><keyseq><key>Ctrl</key><key>W</key></keyseq></p></td>
         </tr>
         <tr>
-          <td><p>View events for the current month</p></td>
+          <td><p>View the calendar as months</p></td>
           <td><p><keyseq><key>Ctrl</key><key>M</key></keyseq></p></td>
         </tr>
 
@@ -68,6 +68,18 @@
         <tr>
           <td><p>Open the list of calendars</p></td>
           <td><p><keyseq><key>Ctrl</key><key>L</key></keyseq></p></td>
+        </tr>
+        <tr>
+          <td><p>Increase the font size</p></td>
+          <td><p><keyseq><key>+</key></keyseq></p></td>
+        </tr>
+        <tr>
+          <td><p>Decrease the font size</p></td>
+          <td><p><keyseq><key>-</key></keyseq></p></td>
+        </tr>
+        <tr>
+          <td><p>Reset the font size</p></td>
+          <td><p><keyseq><key>*</key></keyseq></p></td>
         </tr>
         <tr>
           <td><p>Quit the application</p></td>
