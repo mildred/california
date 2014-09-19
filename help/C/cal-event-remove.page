@@ -1,0 +1,63 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="guide" style="task"
+      id="cal-event-remove">
+
+  <info>
+    <desc>Delete an event from your calendar.</desc>
+    <link type="guide" xref="index#cal-manage-events"/>
+    <link type="seealso" xref="cal-hide-a-calendar"/>
+    <revision pkgversion="0.2" date="2014-09-14" status="candidate"/>
+
+    <credit type="author copyright">
+      <name>Jim Campbell</name>
+      <email its:translate="no">jcampbell@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+  </info>
+
+  <title>Remove an Event</title>
+
+  <p>This page describes how to remove events from your calendar.</p>
+  
+  <note style="warning"><p>Removing an event from your calendar is permanent.
+  It is not possible to restore an event that you have deleted.</p></note>
+  
+  <steps>
+    <title>Here is how to remove an event or a series of recurring events:
+    </title>
+    <item><p>Find the event you want to remove from your calendar.</p></item>
+    <item><p>Select the event. A window will open, displaying the event's
+    details.</p></item>
+    <item><p>Select <gui>Delete</gui>. If you are deleting a one-time event
+    that does not repeat, the event will be deleted immediately. If you are
+    deleting a recurring event, you will have other options:</p>
+      <list>
+        <item><p><gui>Delete This Event</gui>. This will delete only this
+        single event. All other recurring events in this series, both events
+        from the future and events from the past, will not be changed.</p>
+        </item>
+        <item><p><gui>Delete This and Future Events</gui>. This will delete
+        this event, as well as future events in this series. Events that
+        occurred in the past will not be changed.</p></item>
+        <item><p><gui>Delete All Events</gui>. This will delete all events in
+        this series, including events that occurred in the past.</p></item>
+      </list>
+    </item>
+    <item><p>If you do not want to remove an event, select <gui>Cancel</gui>.
+    </p></item>
+  </steps> 
+
+  <note><p>You will not be able to delete events that are part of certain
+  web-based calendar feeds. For example, if you subscribe to a friend's
+  Google Calendar, but do not have permission to edit events on your friend's
+  calendar, you will not be able to delete their events from your view of
+  their calendar.</p>
+  <p>If you want to not see certain types of events on your calendar, review
+  how to <link xref="cal-hide-a-calendar">hide a calendar from view</link>.
+  </p></note>
+
+</page>
+

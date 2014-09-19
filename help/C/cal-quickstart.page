@@ -1,0 +1,35 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="topic" style="task"
+      id="cal-quickstart">
+
+  <info>
+    <desc>Get started with California.</desc>
+    <link type="guide" xref="index"/>
+    <revision pkgversion="0.2" date="2014-07-05" status="draft"/>
+    
+    <credit type="author copyright">
+      <name>Jim Campbell</name>
+      <email its:translate="no">jcampbell@gnome.org</email>
+      <years>2014</years>
+    </credit>
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+  </info>
+
+  <title>Introduction</title>
+  <p><app>California</app> is a modern calendar application for the GNOME
+  desktop. Once <app>California</app> launches, you can start using it right
+  away.</p>
+  
+  <media type="image" mime="image/png" src="media/california-screenshot.png"/>
+  
+  <p>To add a new event, just click the <gui>Plus</gui> icon in the
+  <app>California</app> toolbar. You may find it helpful to review the
+  <link xref="cal-event-quick-add">Quick Add</link> help page, as it will show
+  you how to add both one-time and recurring events to your calendar.</p>
+
+  <p>To learn about additional <app>California</app> features, and to get
+  assistance with performing additional tasks, explore <link xref="index">the
+  other portions</link> of the <app>California</app> help.</p>
+
+</page>

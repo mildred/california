@@ -1,0 +1,139 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      xmlns:ui="http://projectmallard.org/ui/1.0/"
+      type="guide" style="task" version="1.0 ui/1.0"
+      id="cal-add-calendar">
+
+  <info>
+    <desc>Sync or display web-based calendar feeds.</desc>
+    <link type="guide" xref="index#cal-manage-calendars"/>
+    <link type="seealso" xref="cal-rename-calendar"/>
+    <link type="seealso" xref="cal-hide-a-calendar"/>
+    <revision pkgversion="0.2" date="2014-09-06" status="candidate"/>
+
+    <credit type="author copyright">
+      <name>Jim Campbell</name>
+      <email its:translate="no">jcampbell@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+  </info>
+
+  <title>Add a Calendar</title>
+    
+  <p>By default, <app>California</app> includes two calendars: a
+  <em>Personal</em> calendar and a <em>Birthdays &amp; Anniversaries</em>
+  calendar. You can add or sync other calendars, as well:</p>
+
+  <section id="cal-sync-gcal" ui:expanded="false">
+    <title>Add a Google calendar</title>
+    
+    <p>Adding a Google calendar to <app>California</app> will both add and
+    <em>sync</em> the calendar. If you add an event in <app>California</app>,
+    the event will appear in your Google calendar. Likewise, if you add or edit
+    an event in your Google calendar, those changes will also be updated in
+    <app>California</app>.</p>
+    
+    <steps>
+      <title>Follow these steps to syncronize your Google calendar with
+      <app>California</app>:</title>
+      <include href="cal-open-calendar-list.xml" 
+      xpointer="xmlns(mal=http://projectmallard.org/1.0/)xpointer(/mal:steps/mal:item)"
+      xmlns="http://www.w3.org/2001/XInclude"/>
+      <item><p>Select <gui>Google Calendar</gui> and click <gui>Add</gui>.</p>
+      </item>
+      <item><p>Enter your Google account name and Google password. Click
+      <gui>Login</gui>.</p>
+      <p>If you have entered the proper credentials, <app>California</app> will
+      indicate that your account has been authenticated. If you have mis-typed
+      your Google password, you will need to enter your password again.</p>
+      </item>
+      <item><p>Your default Google account calendar will appear in a window of
+      <gui>My Calendars</gui>. If you also subscribe to other calendars through
+      your Google account, those calendars will also appear in a list of
+      <gui>Other available calendars</gui>.</p></item>
+      <item><p>Select all of the calendars that you wish to sync, and select
+      <gui>Subscribe</gui>.</p></item>
+    </steps>
+    <note><p>You may also be prompted to enter your Google password one
+    additional time. This will save your password into your computer so that
+    you don't have to enter it again.</p></note>
+    <note><p>Your primary Google calendar will fully sync between
+    <app>California</app> and your Google calendar. However, you may or may
+    not have the proper permissions for any <gui>Other available
+    calendars</gui> to fully sync between <app>California</app> and your
+    Google calendars. Consult the
+    <link href="https://support.google.com/calendar/">Google Calendar Help
+    Center</link> if you encounter any problems with syncing any of the
+    calendars in your list of <gui>Other available calendars</gui>.</p></note>
+  </section>
+  
+  <section id="cal-sync-caldav" ui:expanded="false">
+    <title>Add a CalDAV calendar</title>
+    <p><code>CalDAV</code> is an open standard for transmitting and storing
+    calendar information. It is used by many popular services including the
+    <app>ownCloud</app> calendar and Apple's <app>iCloud</app> service.</p>
+    
+    <steps>
+      <title>Follow these steps to syncronize a <code>CalDAV</code> calendar
+      with <app>California</app>:</title>
+
+      <item><p>Obtain the URL address of the calendar that you wish to add to
+      <app>California</app>. You will need to get this address from your
+      calendar provider or from your system administrator.</p></item>      
+      <include href="cal-open-calendar-list.xml" 
+      xpointer="xmlns(mal=http://projectmallard.org/1.0/)xpointer(/mal:steps/mal:item)"
+      xmlns="http://www.w3.org/2001/XInclude"/>
+      <item><p>Select <gui>CalDAV</gui> and click <gui>Add</gui>.</p></item>
+      <item><p>Enter a calendar name. This can be any name of your
+      choosing.</p></item>
+      <item><p>Enter the calendar URL address.</p></item>
+      <item><p>Enter your the username for your online calendar into the
+      <gui>Username</gui> field.</p></item>
+      <item><p>Click <gui>Subscribe</gui>.</p></item>
+      <item><p>If you have entered a username, you may also be prompted to
+      enter a password.</p></item>
+    </steps>
+    <note><p>Although the <gui>Username</gui> field is listed as
+    <gui>Optional</gui>, most <app>CalDAV</app> calendars require a username. 
+    <app>California</app> may not be able to display your <app>CalDAV</app>
+    calendar if you do not enter a valid username.</p></note>
+  </section>
+
+  <section id="cal-display-ics" ui:expanded="false">
+    <title>Display a Web Calendar (.ics or webcal) Feed</title>
+
+    <p>Adding a Web Calendar (.ics or webcal) feed to <app>California</app>
+    will allow you to view an online calendar from within
+    <app>California</app>. Although <app>California</app> will display events
+    from a <app>Web Calendar</app> feed, you will not be able to change or
+    delete these events.</p>
+    
+    <steps>
+      <title>Follow these steps to add a
+      <app>Web Calendar (.ics or webcal)</app> feed to
+      <app>California</app>:</title>
+      <item><p>Obtain the URL address of the calendar feed that you wish to
+      add to <app>California</app>. The address will end with a ".ics"
+      extension.</p></item>
+      <include href="cal-open-calendar-list.xml" 
+      xpointer="xmlns(mal=http://projectmallard.org/1.0/)xpointer(/mal:steps/mal:item)"
+      xmlns="http://www.w3.org/2001/XInclude"/>
+      <item><p>Select <gui>Web Calendar (.ics or webcal)</gui> and click
+      <gui>Add</gui>.</p></item>
+      <item><p>Enter a calendar name. This can be any name of your
+      choosing.</p></item>
+      <item><p>Enter the calendar URL address.</p></item>
+      <item><p>If required, enter your the username for your web calendar into
+      the <gui>Username</gui> field.</p></item>
+      <item><p>Click <gui>Subscribe</gui>.</p></item>
+      <item><p>If you have entered a username, you may also be prompted to
+      enter a password.</p></item>
+    </steps>
+    
+    <note style="tip"><p>Most <app>Web Calendar (.ics or webcal)</app> feeds do
+    not require a password.</p></note>
+
+  </section>   
+</page>

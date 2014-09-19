@@ -1,0 +1,123 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      xmlns:ui="http://projectmallard.org/ui/1.0/"
+      type="guide" style="task" version="1.0 ui/1.0"
+      id="cal-event-edit">
+
+  <info>
+    <desc>Change an event's details.</desc>
+    <link type="guide" xref="index#cal-manage-events"/>
+    <revision pkgversion="0.2" date="2014-09-13" status="review"/>
+
+    <credit type="author copyright">
+      <name>Jim Campbell</name>
+      <email its:translate="no">jcampbell@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+  </info>
+
+  <title>Edit an Event</title>
+
+  <p>This page describes how to add specific details to an event that you are
+  creating, or how to change the details of an event that you created in the
+  past.</p>
+  
+  <note><p>You will not be able to edit events that are part of certain
+  web-based calendar feeds. For example, if you subscribe to a friend's
+  Google Calendar, but do not have permission to edit events on your friend's
+  calendar, you will not be able to change the details of their events.</p>
+  </note>
+
+  <steps>
+    <title>Here is how to change an event's details:</title>
+    <item><p>Find the event you want to edit on your calendar.</p></item>
+    <item><p>Select the event. A window will open, displaying the event's
+    details.</p></item>
+    <item><p>Select <gui>Edit</gui>.</p></item>
+    <item><p>Change or enter all of the event's relevant details.</p>
+      <p>You can change an event's summary, time, location, description,
+      and the frequency with which the event occurs. You can also change the
+      calendar on which you would like the event to appear.</p>
+      <p>Detailed instructions for changing the time of an event, or how often
+      it occurs, are included below.</p></item>
+    <item><p>When you are finished editing the event, select <gui>Save</gui>.
+    If you do not want to save your changes, select <gui>Cancel</gui>.</p>
+    </item>
+  </steps>
+
+  <section id="edit-event-time" ui:expanded="false">
+    <title>Change the Time or Duration of an Event</title>
+    
+    <steps>
+      <title>To change the start or end time of an event:</title>
+      <item><p>Find the event you want to edit on your calendar.</p></item>
+      <item><p>Select the event. A window will open, displaying the event's
+      details.</p></item>
+      <item><p>Select <gui>Edit</gui>.</p></item>
+      <item><p>Select the <gui>Clock</gui> icon next to the event's time. A
+      new window will appear.</p></item>
+      <item><p>Select the <em>start</em> date and time using the calendar and
+      time selectors on the <em>left</em>.</p></item>
+      <item><p>Select the <em>end</em> date and time using the calendar and
+      time selectors on the <em>right</em>.</p></item>
+      <item><p>Select <gui>OK</gui>.</p></item>
+      <item><p>If necessary, enter information into any of the other event's
+      detail fields.</p></item>
+      <item><p>When you are done, select <gui>Save</gui>. If you do not want to
+      save your changes, select <gui>Cancel</gui>.</p></item>
+    </steps>
+    
+  </section>
+
+  <section id="edit-event-frequency" ui:expanded="false">
+    <title>Change How Often an Event Occurs</title>
+    
+    <steps>
+      <title>To change the frequency, or how often an event occurs:</title>
+      <item><p>Find the event you want to edit on your calendar.</p></item>
+      <item><p>Select the event. A window will open, displaying the event's
+      details.</p></item>
+      <item><p>Select <gui>Edit</gui>.</p></item>
+      <item><p>Select <gui>Repeats . . .</gui></p></item>
+      <item><p>Mark or unmark the <gui>Repeating event</gui> check box. This
+      box is used to indicate whether or not this event will repeat.
+      </p></item>
+      <item><p>If the event repeats, select how often it repeats:</p>
+        <list>
+          <item><p><em>Daily</em> events occur every day.</p></item>
+          <item><p><em>Weekly</em> events occur on a weekly basis, and you can
+          set them to occur on certain days of the week.</p>
+          <p>To select the days of the week that you would like the event to
+          occur, mark the check box next to each day that you would like the
+          event to repeat.</p></item> 
+          <item><p><em>Day of the week</em> events occur every month on the day
+          you have selected.</p></item>
+          <item><p><em>Day of the month</em> events occur every month.</p>
+          </item>
+          <item><p><em>Yearly</em> events occur every year.</p></item>         
+        </list>
+      </item>
+      <item><p>Enter or change the date that the event <em>Starts</em>.</p>
+      </item>
+      <item><p>Enter or change the date that the event <em>Ends</em>. You can
+      set events to end in this manner:</p>
+        <list>
+          <item><p><em>Never</em>. Events that are set to never end will repeat
+          indefinitely on your calendar. This is appropriate for events like
+          birthdays, anniversaries, or other dates that you will always want
+          to remember.</p></item>
+          <item><p><em>On</em>. You can set repeating events to end on a
+          certain date</p></item>
+          <item><p><em>After</em>. Use this option to mark an event as ending
+          after a certain number of occurrences.</p></item>
+        </list>
+      </item>
+      <item><p>Select <gui>OK</gui>.</p></item>
+      <item><p>Select <gui>Save</gui>.</p></item>
+    </steps>
+
+  </section>
+  
+</page>

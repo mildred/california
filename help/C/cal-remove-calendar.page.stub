@@ -1,0 +1,26 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="guide" style="tip" version="1.0 ui/1.0"
+      id="cal-remove-calendar">
+
+  <info>
+    <desc>Delete a calendar and its related event details.</desc>
+    <link type="guide" xref="index#cal-manage-calendars"/>
+    <link type="seealso" xref="cal-hide-a-calendar"/>
+    <revision pkgversion="0.2" date="2014-07-20" status="stub"/>
+
+    <credit type="author copyright">
+      <name>Jim Campbell</name>
+      <email its:translate="no">jcampbell@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+  </info>
+
+  <title>Remove a Calendar</title>
+
+  <p>In some cases, you may decide that you no longer want to store or
+  track</p>
+
+</page>

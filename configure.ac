@@ -49,6 +49,7 @@ AC_SUBST(CALIFORNIA_CFLAGS)
 AC_SUBST(CALIFORNIA_LIBS)
 
 GLIB_GSETTINGS
+YELP_HELP_INIT
 
 #
 # system capabilities
@@ -88,6 +89,7 @@ AC_CONFIG_FILES([
 	Makefile
 	src/Makefile
 	po/Makefile.in
+	help/Makefile
 	data/california.desktop.in
 ])
 

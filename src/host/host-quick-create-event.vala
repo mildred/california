@@ -94,7 +94,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
     [GtkCallback]
     private void on_help_button_clicked() {
         try {
-            Gtk.show_uri(null, Application.QUICK_ADD_HELP_URL, Gtk.get_current_event_time());
+            Application.instance.help("cal-event-quick-add");
         } catch (Error err) {
             report_error(_("Error opening help: %s").printf(err.message));
         }

@@ -1,6 +1,3 @@
-NULL =
-GITIGNOREFILES = 
-
 AM_CPPFLAGS = \
 	$(CALIFORNIA_CFLAGS) \
 	-include $(CONFIG_HEADER) \
@@ -239,9 +236,13 @@ california_VALAFLAGS = \
 	--pkg langinfo \
 	$(NULL)
 
+# Note that code for SOURCE_ROOT_DIR must be changed if this file is moved to different directory
+SOURCE_ROOT_DIR = `cd ..; pwd`
+
 california_CFLAGS = \
 	-DGETTEXT_PACKAGE=\""california"\" \
 	-DPREFIX=\"$(prefix)\" \
+	-DSOURCE_ROOT_DIR=\"$(SOURCE_ROOT_DIR)\" \
 	$(NULL)
 
 LIBS = \
@@ -268,7 +269,7 @@ DISTCLEANFILES = \
 	Makefile.in \
 	$(NULL)
 
-GITIGNOREFILES += \
+GITIGNOREFILES = \
 	$(california_VALASOURCES:%.vala=%.c) \
 	$(NULL)
 

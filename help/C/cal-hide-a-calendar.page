@@ -1,0 +1,47 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="guide" style="task" version="1.0 ui/1.0"
+      id="cal-hide-a-calendar">
+
+  <info>
+    <link type="guide" xref="index#cal-manage-calendars"/>
+    <desc>Simplify your calendar's interface.</desc>
+    <revision pkgversion="0.2" date="2014-08-31" status="candidate"/>
+
+    <credit type="author copyright">
+      <name>Jim Campbell</name>
+      <email its:translate="no">jcampbell@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+  </info>
+
+  <title>Hide a Calendar From View</title>
+  
+  <p>If you keep track of more than one calendar, your calendar may get
+  cluttered with events. This can make it hard to read your calendar.</p>
+  
+  <p>If you want to make it easier to see only certain types of events,
+  you can <em>hide a calendar</em>. This will temporarily remove the calendar
+  from view, but it will not delete the calendar, and all of the calendar's
+  events will remain intact.</p>
+
+  <steps>
+    <title>Hide a Calendar From View:</title>
+      <item><p>Click the <gui>Calendar</gui> icon in the upper-right portion of
+      <app>California's</app> menu bar. A list of your current calendars will
+      appear in a new window.</p></item>
+      <item><p>Identify the calendar that you want to hide.</p></item>
+      <item><p>Unmark the check box next to the calendar that you wish to hide.
+      </p></item>
+      <item><p>Click <gui>Close</gui>.</p></item>
+  </steps>
+  
+  <p>The calendar that you selected will now be hidden from view.</p>
+  
+  <note style="tip"><p>To make a calendar visible again, complete the same
+  steps, but <em>check the box</em> next to the calendar that you want to
+  see.</p></note>  
+
+</page>

@@ -1,0 +1,7 @@
+<steps xmlns="http://projectmallard.org/1.0/">
+  <item><p>Select the <gui>Calendar</gui> icon in the upper-right portion of
+  <app>California's</app> menu bar. A list of your current calendars will
+  appear in a new window.</p></item>
+  <item><p>Select the <gui>Plus</gui> icon at the bottom of that window.</p>
+  </item>
+</steps>

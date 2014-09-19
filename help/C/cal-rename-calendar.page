@@ -1,0 +1,37 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="guide" style="tip" version="1.0 ui/1.0"
+      id="cal-rename-calendar">
+
+  <info>
+    <desc>Change the name of a calendar.</desc>
+    <link type="guide" xref="index#cal-manage-calendars"/>
+    <link type="seealso" xref="cal-hide-a-calendar"/>
+    <revision pkgversion="0.2" date="2014-09-16" status="candidate"/>
+
+    <credit type="author copyright">
+      <name>Jim Campbell</name>
+      <email its:translate="no">jcampbell@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+  </info>
+
+  <title>Rename a Calendar</title>
+  
+  <steps>
+    <title>You can change the names of your calendars. Here is how to do it:
+    </title>
+    <item><p>Select the <gui>Calendar</gui> icon in the upper-right portion of
+    <app>California's</app> menu bar, or press <keyseq><key>Ctrl</key>
+    <key>L</key></keyseq>. A list of your current calendars will appear in a
+    new window.</p></item>
+    <item><p>Double-click the name of the calendar that you would like to
+    change.</p></item>
+    <item><p>Enter the new name for that calendar.</p></item>
+    <item><p>Select <gui>Close</gui>. The name of your calendar will be updated
+    immediately.</p></item>
+  </steps>
+
+</page>

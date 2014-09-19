@@ -6,6 +6,7 @@ GITIGNOREFILES =
 SUBDIRS = \
 	src \
 	po \
+	help \
 	$(NULL)
 
 californiadocdir = ${prefix}/doc/california

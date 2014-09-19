@@ -1,0 +1,65 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="guide" style="task" version="1.0 ui/1.0"
+      id="cal-change-view">
+
+  <info>
+    <link type="guide" xref="index#cal-manage-calendars"/>
+    <link type="seealso" xref="cal-shortcut-keys"/>
+    <desc>Choose a monthly, weekly or daily view of your calendar.</desc>
+    <revision pkgversion="0.2" date="2014-09-06" status="candidate"/>
+
+    <credit type="author copyright">
+      <name>Jim Campbell</name>
+      <email its:translate="no">jcampbell@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+  </info>
+
+  <title>Change Your Calendar's View</title>
+  
+  <p><app>California</app> will display a month's worth of events by default,
+  However you may wish to focus in on events for just one week or just one
+  day. Change the view options for <app>California</app> by selecting your
+  desired option from the buttons on the left-hand portion of the
+  menu bar:</p>
+  
+  <list>
+    <item><p>Selecting <gui>Week</gui> will display events for the current
+    week.</p></item>
+    <item><p>Selecting <gui>Month</gui> will display events for the entire
+    month.</p></item>
+    <item><p>Selecting <gui>Today</gui> will highlight the current day. This
+    can be helpful if you've been looking at events in the future or in the
+    past and want to quickly return to see current events.</p></item>
+  </list>
+
+  <p>You can also change your calendar view by using keyboard shortcuts:</p>
+
+    <table rules="rows" frame="top bottom">
+    <title>Calendar View Shortcut Keys</title>
+      <thead>
+        <tr>
+          <td><p>To Do This</p></td>
+          <td><p>Press This</p></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><p>View the calendar as weeks</p></td>
+          <td><p><keyseq><key>Ctrl</key><key>W</key></keyseq></p></td>
+        </tr>
+        <tr>
+          <td><p>View the calendar as months</p></td>
+          <td><p><keyseq><key>Ctrl</key><key>M</key></keyseq></p></td>
+        </tr>
+        <tr>
+          <td><p>Reset the view to highlight the current day</p></td>
+          <td><p><keyseq><key>Ctrl</key><key>T</key></keyseq></p></td>
+        </tr>
+      </tbody>
+    </table>
+
+</page>

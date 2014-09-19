@@ -1,0 +1,89 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      xmlns:ui="http://projectmallard.org/ui/1.0/"
+      xmlns:e="http://projectmallard.org/experimental/"
+      type="guide" style="task" version="1.0 ui/1.0"
+      id="cal-event-quick-add">
+
+  <info>
+    <desc>Add an event to your calendar using everyday language.</desc>
+    <link type="guide" xref="index#cal-manage-events" group="first"/>
+    <link type="seealso" xref="cal-event-edit"/>
+    <revision pkgversion="0.2" date="2014-09-11" status="review"/>
+
+    <credit type="author copyright">
+      <name>Jim Campbell</name>
+      <email its:translate="no">jcampbell@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+  </info>
+
+  <title>Use the Quick Add Feature to Add Events</title>
+  
+  <p>One of the best features of <app>California</app> is called the
+  <em>Quick Add</em> feature. It allows you to add events to your calendar
+  using everyday language. Let's look at a few examples to see how it works.
+  </p>
+
+  <section id="quick-add-event">
+    <title>Create Both One-Time and Recurring Events</title> 
+  
+  <p>We can use the <em>Quick Add</em> feature to add events that occur only
+  one time and events that occur more than once:</p>
+  
+  <steps>
+    <item><p>Start the <em>Quick Add</em> feature by doing any of the
+    following:</p>
+      <list>
+        <item><p>Find the date or time on your calendar when the event will
+        occur, and <em>double-click</em> that portion of the calendar.</p>
+        </item>
+        <item><p>Press the <gui>Plus</gui> button in the upper-right portion of
+        <app>California's</app> <gui>menu bar</gui>.</p></item>
+        <item><p>Press <keyseq><key>Ctrl</key><key>N</key></keyseq>.</p></item>
+      </list>
+    <p>The <em>Quick Add</em> window will appear.</p></item>
+    
+    <item><p>Enter the details of your event. You can describe the event using
+    natural language:</p>
+    <list ui:expanded="false">
+      <title>Examples of one-time events</title>
+      <item><p>If you double-clicked on the specific date and time you want an
+      event to occur, just type out the details of the event:</p>
+      <p><em>Meet James at the movies.</em></p></item>
+      <item><p>If you selected the <gui>Plus</gui> button or pressed
+      <keyseq><key>Ctrl</key><key>N</key></keyseq>, you will need to also enter
+      the event's date and time:</p>
+      <p><em>Go to Jeff and Mindy's wedding on October 26th at 4:00pm</em>
+      </p></item>
+      <item><p>You can also define how long the event takes place:</p>
+      <p><em>Visit Alice at office on November 1st from 1pm to 2:30pm</em>
+      </p></item>
+    </list>
+
+    <list ui:expanded="false">
+      <title>Examples of recurring events</title>
+      <item><p><em>Take out the trash every Tuesday at 7:30am</em></p></item>
+      <item><p><em>Swimming class every Tuesday and Thursday at 6:00pm</em></p>
+      </item>
+      <item><p><em>Meet at Barney's every Monday at 9am until December 1st</em></p></item>
+    </list>
+    </item>
+    
+    <item><p>If you want to enter specific details regarding the event, select
+    <gui>Edit</gui>. See the <link href="cal-event-edit.page">Edit an
+    Event</link> page for information about editing events.</p></item>
+    
+    <item><p>After you have entered your event details, press
+    <gui>Create</gui>. <app>California</app> will use the information that you
+    have entered to create the event on your calendar.</p></item>
+  </steps>
+
+  <note style="tip"><p>By default, the <em>Quick Add</em> feature will create
+  events that last for one hour. You may wish to adjust the duration of your
+  events or add additional details. See the <link href="cal-event-edit.page">Edit an Event</link>
+  page for more information about editing events.</p></note>
+  </section>
+</page>

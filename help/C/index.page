@@ -1,0 +1,49 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      xmlns:e="http://projectmallard.org/experimental/"
+      type="guide" style="2column task"
+      id="index">
+
+  <info>
+    <desc>The California Help Guide.</desc>
+    <title type="link">California</title>
+    <title type="text">California</title>
+
+    <revision pkgversion="0.2" date="2014-09-06" status="candidate"/>
+    <credit type="author copyright">
+      <name>Jim Campbell</name>
+      <email its:translate="no">jcampbell@gnome.org</email>
+      <years>2014</years>
+    </credit>
+
+   <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude" /> 
+
+  </info>
+  
+  <title>
+    <media type="image" mime="image/png" src="media/x-office-calendar.png"
+    its:translate="no" />
+    California Calendar Help
+  </title>
+  <p>Welcome to the <app>California</app> help guide. For a
+  quick introduction into both <app>California's</app> most basic features,
+  as well as some advanced keyboard shortcuts, visit the
+  <link xref="cal-quickstart">Introduction</link> and
+  <link xref="cal-shortcut-keys">Shortcut Keys</link> pages.</p>
+
+  <p>Other help topics are grouped together into sections below.  Enjoy using
+  <app>California</app>!</p>
+  
+  <section id="cal-manage-calendars" style="2column">
+    <title>Manage Calendars</title>
+    <p>Learn how to add and manage your calendars.</p>
+  </section>
+
+  <section id="cal-manage-events">
+    <title>Manage Calendar Events</title>
+    <p>Learn how to add and manage events on your calendar.</p>
+    <links type="topic" groups="first" style="2column"/>
+  </section>
+
+
+</page>
