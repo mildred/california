@@ -13,7 +13,8 @@ Build-Depends: debhelper (>= 8),
  libgdata-dev (>= 0.14.0),
  libgoa-1.0-dev (>= 3.8.3),
  gnome-common,
- libgirepository1.0-dev
+ libgirepository1.0-dev,
+ yelp-tools
 Standards-Version: 3.8.3
 Homepage: https://wiki.gnome.org/Apps/California
 
