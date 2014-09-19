@@ -52,6 +52,7 @@ private class Grid : Gtk.Grid {
     private Gee.HashMap<Calendar.Date, Cell> date_to_cell = new Gee.HashMap<Calendar.Date, Cell>();
     private Backing.CalendarSubscriptionManager? subscriptions = null;
     private Toolkit.ButtonConnector cell_button_connector = new Toolkit.ButtonConnector();
+    private Toolkit.MotionConnector cell_motion_connector = new Toolkit.MotionConnector();
     private Scheduled? scheduled_subscription_update = null;
     
     public Grid(Controller owner, Calendar.MonthOfYear month_of_year) {
@@ -65,6 +66,10 @@ private class Grid : Gtk.Grid {
         
         cell_button_connector.clicked.connect(on_cell_single_click);
         cell_button_connector.double_clicked.connect(on_cell_double_click);
+        cell_motion_connector.entered.connect(on_cell_entered_exited);
+        cell_motion_connector.exited.connect(on_cell_entered_exited);
+        cell_motion_connector.motion.connect(on_cell_motion);
+        cell_motion_connector.button_motion.connect(on_cell_button_motion);
         
         // create a WeekSpan for the first week of the month to the last week of the month
         Calendar.WeekSpan span = new Calendar.WeekSpan.from_span(month_of_year, Calendar.System.first_of_week);
@@ -87,7 +92,7 @@ private class Grid : Gtk.Grid {
                 Cell cell = new Cell(this, date, rows, col);
                 cell.expand = true;
                 cell_button_connector.connect_to(cell);
-                cell.motion_notify_event.connect(on_cell_motion_event);
+                cell_motion_connector.connect_to(cell);
                 
                 attach(cell, col, rows, 1, 1);
                 
@@ -300,6 +305,8 @@ private class Grid : Gtk.Grid {
         
         Cell press_cell = (Cell) details.widget;
         
+        Toolkit.set_toplevel_cursor(this, null);
+        
         // if pressed and released on the same cell, display the event at the released location
         if (press_cell == release_cell) {
             Component.Event? event = release_cell.get_event_at(details.release_point);
@@ -343,27 +350,48 @@ private class Grid : Gtk.Grid {
         if (release_cell.get_event_at(release_cell_point) != null)
             return Toolkit.STOP;
         
+        Toolkit.set_toplevel_cursor(this, null);
+        
         owner.request_create_all_day_event(new Calendar.DateSpan(press_cell.date, release_cell.date),
             release_cell, release_cell_point);
         
         return Toolkit.STOP;
     }
     
-    private bool on_cell_motion_event(Gtk.Widget widget, Gdk.EventMotion event) {
+    private void on_cell_entered_exited(Toolkit.MotionEvent details) {
+        // when entering or leaving cell, reset the cursor
+        Toolkit.set_toplevel_cursor(details.widget, null);
+    }
+    
+    private void on_cell_motion(Toolkit.MotionEvent details) {
+        Cell cell = (Cell) details.widget;
+        
+        // if hovering over an event, show the "hyperlink" cursor
+        Gdk.CursorType? cursor_type = null;
+        if (cell.get_event_at(details.point) != null)
+            cursor_type = Gdk.CursorType.HAND1;
+        
+        Toolkit.set_toplevel_cursor(cell, cursor_type);
+    }
+    
+    private void on_cell_button_motion(Toolkit.MotionEvent event) {
+        if (!event.is_button_pressed(Toolkit.Button.PRIMARY))
+            return;
+        
         // Because using button 1 motion mask, widget is always the original cell the button-pressed
         // event originated at
-        Cell press_cell = (Cell) widget;
+        Cell press_cell = (Cell) event.widget;
         
         // turn Cell coordinates into GtkGrid coordinates
         int grid_x, grid_y;
-        if (!press_cell.translate_coordinates(this, (int) event.x, (int) event.y, out grid_x, out grid_y))
-            return false;
+        if (!press_cell.translate_coordinates(this, event.point.x, event.point.y, out grid_x, out grid_y))
+            return;
         
         // get the cell the pointer is currently over ... if not found or the same as the original,
         // do nothing
         Cell? hover_cell = translate_to_cell(grid_x, grid_y);
         if (hover_cell == null || hover_cell == press_cell)
-            return false;
+            return;
         
         // mark two cells and all in-between as selected, being sure to mark any previous selected
         // as unselected
@@ -373,8 +401,6 @@ private class Grid : Gtk.Grid {
             
             return true;
         });
-        
-        return true;
     }
 }
 

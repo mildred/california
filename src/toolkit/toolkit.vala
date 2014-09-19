@@ -72,18 +72,7 @@ public void spin_event_loop() {
  * {@link set_window_unbusy}.
  */
 public Gdk.Cursor? set_busy(Gtk.Widget widget) {
-    Gtk.Widget toplevel = widget.get_toplevel();
-    if (!toplevel.is_toplevel()) {
-        debug("Unable to set busy: widget has no toplevel window");
-        
-        return null;
-    }
-    
-    Gdk.Window gdk_window = toplevel.get_window();
-    Gdk.Cursor? unbusy_cursor = gdk_window.get_cursor();
-    gdk_window.set_cursor(new Gdk.Cursor.for_display(toplevel.get_display(), Gdk.CursorType.WATCH));
-    
-    return unbusy_cursor;
+    return set_toplevel_cursor(widget, Gdk.CursorType.WATCH);
 }
 
 /**
@@ -101,6 +90,30 @@ public void set_unbusy(Gtk.Widget widget, Gdk.Cursor? unbusy_cursor) {
     }
     
     toplevel.get_window().set_cursor(unbusy_cursor);
+}
+
+/**
+ * Sets the Gtk.Widget's toplevel's cursor.
+ *
+ * @returns The toplevel's current cursor.  This can be saved to restore later or simply dropped.
+ */
+public Gdk.Cursor? set_toplevel_cursor(Gtk.Widget widget, Gdk.CursorType? cursor_type) {
+    Gtk.Widget toplevel = widget.get_toplevel();
+    if (!toplevel.is_toplevel()) {
+        debug("Unable to set cursor: widget has no toplevel window");
+        
+        return null;
+    }
+    
+    Gdk.Window gdk_window = toplevel.get_window();
+    Gdk.Cursor? old_cursor = gdk_window.get_cursor();
+    
+    if (cursor_type != null)
+        gdk_window.set_cursor(new Gdk.Cursor.for_display(toplevel.get_display(), cursor_type));
+    else
+        gdk_window.set_cursor(null);
+    
+    return old_cursor;
 }
 
 /**

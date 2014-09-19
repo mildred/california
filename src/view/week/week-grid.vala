@@ -49,8 +49,8 @@ internal class Grid : Gtk.Box {
     private Toolkit.ButtonConnector instance_container_button_connector = new Toolkit.ButtonConnector();
     private Toolkit.ButtonConnector all_day_button_connector = new Toolkit.ButtonConnector();
     private Toolkit.ButtonConnector day_pane_button_connector = new Toolkit.ButtonConnector();
-    private Toolkit.MotionConnector day_pane_motion_connector = new Toolkit.MotionConnector.button_only();
-    private Toolkit.MotionConnector all_day_cell_motion_connector = new Toolkit.MotionConnector.button_only();
+    private Toolkit.MotionConnector day_pane_motion_connector = new Toolkit.MotionConnector();
+    private Toolkit.MotionConnector all_day_cell_motion_connector = new Toolkit.MotionConnector();
     private Gtk.ScrolledWindow scrolled_panes;
     private Gtk.Widget right_spacer;
     private bool vadj_init = false;
@@ -150,8 +150,15 @@ internal class Grid : Gtk.Box {
         instance_container_button_connector.double_clicked.connect(on_instance_container_double_clicked);
         
         // connect to individual motion event handlers for different types of instance containers
+        all_day_cell_motion_connector.entered.connect(on_instance_container_entered_exited);
+        all_day_cell_motion_connector.exited.connect(on_instance_container_entered_exited);
+        all_day_cell_motion_connector.motion.connect(on_instance_container_motion);
         all_day_cell_motion_connector.button_motion.connect(on_all_day_cell_button_motion);
-        day_pane_motion_connector.button_motion.connect(on_day_pane_motion);
+        
+        day_pane_motion_connector.entered.connect(on_instance_container_entered_exited);
+        day_pane_motion_connector.exited.connect(on_instance_container_entered_exited);
+        day_pane_motion_connector.motion.connect(on_instance_container_motion);
+        day_pane_motion_connector.button_motion.connect(on_day_pane_button_motion);
         
         // connect to individual button released handlers for different types of instance containers
         all_day_button_connector.released.connect(on_all_day_cell_button_released);
@@ -336,6 +343,8 @@ internal class Grid : Gtk.Box {
         if (details.button != Toolkit.Button.PRIMARY)
             return Toolkit.PROPAGATE;
         
+        Toolkit.set_toplevel_cursor(this, null);
+        
         Common.InstanceContainer instance_container = (Common.InstanceContainer) details.widget;
         
         Component.Event? event = instance_container.get_event_at(details.press_point);
@@ -343,6 +352,21 @@ internal class Grid : Gtk.Box {
             owner.request_display_event(event, instance_container, details.press_point);
         
         return Toolkit.STOP;
+    }
+    
+    private void on_instance_container_motion(Toolkit.MotionEvent details) {
+        Common.InstanceContainer instance_container = (Common.InstanceContainer) details.widget;
+        
+        Gdk.CursorType? cursor_type = null;
+        if (instance_container.get_event_at(details.point) != null)
+            cursor_type = Gdk.CursorType.HAND1;
+        
+        Toolkit.set_toplevel_cursor(instance_container, cursor_type);
+    }
+    
+    private void on_instance_container_entered_exited(Toolkit.MotionEvent details) {
+        // when entering or leaving instance container (all day cell or day pane), reset the cursor
+        Toolkit.set_toplevel_cursor(details.widget, null);
     }
     
     private bool on_instance_container_double_clicked(Toolkit.ButtonEvent details) {
@@ -354,6 +378,8 @@ internal class Grid : Gtk.Box {
         // if an event is at this location, don't process
         if (instance_container.get_event_at(details.press_point) != null)
             return Toolkit.PROPAGATE;
+        
+        Toolkit.set_toplevel_cursor(instance_container, null);
         
         // if a DayPane, use double-click to determine rounded time of the event's start
         DayPane? day_pane = instance_container as DayPane;
@@ -379,7 +405,7 @@ internal class Grid : Gtk.Box {
         return Toolkit.STOP;
     }
     
-    private void on_day_pane_motion(Toolkit.MotionEvent details) {
+    private void on_day_pane_button_motion(Toolkit.MotionEvent details) {
         DayPane day_pane = (DayPane) details.widget;
         
         // only update selection as long as button is depressed
