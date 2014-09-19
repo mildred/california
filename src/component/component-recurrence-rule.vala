@@ -795,7 +795,7 @@ public class RecurrenceRule : BaseObject {
             return null;
         
         // As in, "Repeats on day 4 of the month"
-        string day = "day %d".printf(traverse<int>(monthdays).first());
+        string day = _("day %d").printf(traverse<int>(monthdays).first());
         
         if (count > 0) {
             // As in, "Repeats every month on day 4, 3 times"
