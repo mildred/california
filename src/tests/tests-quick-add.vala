@@ -55,9 +55,12 @@ private class QuickAdd : UnitTest.Harness {
         add_case("time-range-no-meridiem", time_range_no_meridiem);
         add_case("atsign-location", atsign_location);
         add_case("atsign-time", atsign_time);
+        add_case("hash-location", hash_location);
+        add_case("hash-time", hash_time);
         add_case("quoted", quoted);
         add_case("open-quoted", open_quoted);
         add_case("quoted-atsign", quoted_atsign);
+        add_case("quoted-hash", quoted_hash);
         add_case("ymd-dm", ymd_dm);
     }
     
@@ -611,7 +614,7 @@ private class QuickAdd : UnitTest.Harness {
         
         dump = parser.event.source;
         
-        return parser.event.summary == "Dinner"
+        return parser.event.summary == "Dinner @ Tadich Grill"
             && parser.event.location == "Tadich Grill"
             && !parser.event.is_all_day
             && parser.event.exact_time_span.start_exact_time.hour == 19
@@ -624,6 +627,38 @@ private class QuickAdd : UnitTest.Harness {
     private bool atsign_time(out string? dump) throws Error {
         Component.DetailsParser parser = new Component.DetailsParser(
             "Dinner @ 7pm", null);
+        
+        dump = parser.event.source;
+        
+        return parser.event.summary == "Dinner"
+            && parser.event.location == null
+            && !parser.event.is_all_day
+            && parser.event.exact_time_span.start_exact_time.hour == 19
+            && parser.event.exact_time_span.start_exact_time.minute == 0
+            && parser.event.exact_time_span.end_exact_time.hour == 20
+            && parser.event.exact_time_span.end_exact_time.minute == 0
+            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span());
+    }
+    
+    private bool hash_location(out string? dump) throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "Dinner # Tadich Grill 7pm", null);
+        
+        dump = parser.event.source;
+        
+        return parser.event.summary == "Dinner"
+            && parser.event.location == "Tadich Grill"
+            && !parser.event.is_all_day
+            && parser.event.exact_time_span.start_exact_time.hour == 19
+            && parser.event.exact_time_span.start_exact_time.minute == 0
+            && parser.event.exact_time_span.end_exact_time.hour == 20
+            && parser.event.exact_time_span.end_exact_time.minute == 0
+            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span());
+    }
+    
+    private bool hash_time(out string? dump) throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "Dinner # 7pm", null);
         
         dump = parser.event.source;
         
@@ -666,6 +701,22 @@ private class QuickAdd : UnitTest.Harness {
     private bool quoted_atsign(out string? dump) throws Error {
         Component.DetailsParser parser = new Component.DetailsParser(
             "\"Live at Budokon\" @ The Roxy 7pm", null);
+        
+        dump = parser.event.source;
+        
+        return parser.event.summary == "\"Live at Budokon\" @ The Roxy"
+            && parser.event.location == "The Roxy"
+            && !parser.event.is_all_day
+            && parser.event.exact_time_span.start_exact_time.hour == 19
+            && parser.event.exact_time_span.start_exact_time.minute == 0
+            && parser.event.exact_time_span.end_exact_time.hour == 20
+            && parser.event.exact_time_span.end_exact_time.minute == 0
+            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span());
+    }
+    
+    private bool quoted_hash(out string? dump) throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "\"Live at Budokon\" # The Roxy 7pm", null);
         
         dump = parser.event.source;
         

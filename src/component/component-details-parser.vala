@@ -27,7 +27,11 @@ public class DetailsParser : BaseObject {
         /**
          * {@link Shorthand} for TIME or LOCATION.
          */
-        ATSIGN;
+        ATSIGN,
+        /**
+         * {@link Shorthand} for TIME or LOCATION w/o including in title.
+         */
+        HASH;
         
         /**
          * Converts a string to a recognized {@link Shorthand}.
@@ -36,6 +40,9 @@ public class DetailsParser : BaseObject {
             switch (str) {
                 case "@":
                     return ATSIGN;
+                
+                case "#":
+                    return HASH;
                 
                 default:
                     return NONE;
@@ -222,7 +229,12 @@ public class DetailsParser : BaseObject {
                 continue;
             stack.restore();
             
-            // The ATSIGN is also recognized as a TIME preposition
+            // The ATSIGN and HASH is also recognized as a TIME preposition
+            stack.mark();
+            if (token.shorthand == Shorthand.HASH && parse_time(stack.pop(), false))
+                continue;
+            stack.restore();
+            
             stack.mark();
             if (token.shorthand == Shorthand.ATSIGN && parse_time(stack.pop(), false))
                 continue;
@@ -250,14 +262,15 @@ public class DetailsParser : BaseObject {
             stack.restore();
             
             // only look for LOCATION prepositions if not already adding text to the location field
-            // (ATSIGN is considered a LOCATION preposition)
+            // (HASH is considered a special LOCATION preposition)
             if (!adding_location
-                && (token.casefolded in LOCATION_PREPOSITIONS || token.shorthand == Shorthand.ATSIGN)) {
+                && (token.casefolded in LOCATION_PREPOSITIONS || token.shorthand == Shorthand.HASH
+                || token.shorthand == Shorthand.ATSIGN)) {
                 // add current token (the preposition) to summary but not location (because location
                 // tokens are added to summary, i.e. "dinner at John's" yields "John's" for location
-                // and "dinner at John's" for summary) ... note that ATSIGN does not add to summary
+                // and "dinner at John's" for summary) ... note that HASH does not add to summary
                 // to allow for more concise summaries
-                if (token.shorthand != Shorthand.ATSIGN)
+                if (token.shorthand != Shorthand.HASH)
                     add_text(token);
                 
                 // now adding to both summary and location
@@ -265,7 +278,7 @@ public class DetailsParser : BaseObject {
                 
                 // ...unless at-sign used, which has the side-effect of not adding to summary
                 // (see above)
-                if (token.shorthand == Shorthand.ATSIGN)
+                if (token.shorthand == Shorthand.HASH)
                     adding_summary = false;
                 
                 continue;
