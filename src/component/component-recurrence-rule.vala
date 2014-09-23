@@ -594,10 +594,10 @@ public class RecurrenceRule : BaseObject {
     public string? explain(Calendar.Date start_date) {
         switch (freq) {
             case iCal.icalrecurrencetype_frequency.DAILY_RECURRENCE:
-                return explain_daily(ngettext("day", "%d days", interval).printf(interval));
+                return explain_daily(ngettext("%d day", "%d days", interval).printf(interval));
             
             case iCal.icalrecurrencetype_frequency.WEEKLY_RECURRENCE:
-                return explain_weekly(ngettext("week", "%d weeks", interval).printf(interval));
+                return explain_weekly(ngettext("%d week", "%d weeks", interval).printf(interval));
             
             case iCal.icalrecurrencetype_frequency.MONTHLY_RECURRENCE:
                 Gee.Set<ByRule> byrules = get_active_by_rules();
@@ -616,7 +616,7 @@ public class RecurrenceRule : BaseObject {
                     return explain_monthly_bymonthday(unit);
             
             case iCal.icalrecurrencetype_frequency.YEARLY_RECURRENCE:
-                return explain_yearly(ngettext("year", "%d years", interval).printf(interval), start_date);
+                return explain_yearly(ngettext("%d year", "%d years", interval).printf(interval), start_date);
             
             default:
                 return null;
