@@ -19,6 +19,7 @@
         <property name="hexpand">False</property>
         <property name="vexpand">False</property>
         <property name="action_name">win.previous</property>
+        <property name="relief">none</property>
         <child>
           <object class="GtkImage" id="prev_image">
             <property name="visible">True</property>
@@ -45,6 +46,7 @@
         <property name="hexpand">False</property>
         <property name="vexpand">False</property>
         <property name="action_name">win.next</property>
+        <property name="relief">none</property>
         <child>
           <object class="GtkImage" id="next_image">
             <property name="visible">True</property>
