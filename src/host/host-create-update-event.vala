@@ -158,11 +158,13 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         location_entry.text = event.location ?? "";
         description_textview.buffer.text = event.description ?? "";
         
+        Component.Event master = event.is_master_instance ? event : (Component.Event) event.master;
+        
         // if RecurrenceRule.explain() returns null, means it cannot express the RRULE, which
         // should be made clear here
         string? explanation = null;
-        if (event.rrule != null) {
-            explanation = event.rrule.explain(event.get_event_date_span(Calendar.Timezone.local).start_date);
+        if (master.rrule != null) {
+            explanation = master.rrule.explain(master.get_event_date_span(Calendar.Timezone.local).start_date);
             if (explanation == null)
                 explanation = _("It's complicated…");
         }
