@@ -25,6 +25,8 @@ private class QuickAdd : UnitTest.Harness {
         add_case("with-delay-and-duration", with_delay_and_duration);
         add_case("indeterminate-time", indeterminate_time);
         add_case("dialog-example", dialog_example);
+        add_case("yesterday", yesterday);
+        add_case("today", today);
         add_case("noon", noon);
         add_case("midnight", midnight);
         add_case("pm1230", pm1230);
@@ -72,6 +74,16 @@ private class QuickAdd : UnitTest.Harness {
     protected override void teardown() {
         Component.terminate();
         Calendar.terminate();
+    }
+    
+    // Guaranteeing a future time of day in Quick Add is tricky for a variety of reasons, but if
+    // a date is specified without a year, then the DetailsParser should pick a date that is today
+    // in the future
+    private bool is_today_or_future(Component.Event event) {
+        if (event.date_span == null && event.exact_time_span == null)
+            return false;
+        
+        return event.get_event_date_span(Calendar.Timezone.local).start_date.compare_to(Calendar.System.today) >= 0;
     }
     
     private bool null_details() throws Error {
@@ -138,7 +150,8 @@ private class QuickAdd : UnitTest.Harness {
         return parser.event.is_valid(false)
             && !parser.event.is_valid(true)
             && California.String.is_empty(parser.event.summary)
-            && parser.event.exact_time_span != null;
+            && parser.event.exact_time_span != null
+            && is_today_or_future(parser.event);
     }
     
     private bool with_12hr_time() throws Error {
@@ -165,7 +178,8 @@ private class QuickAdd : UnitTest.Harness {
         return parser.event.summary == "dinner with Alice"
             && parser.event.location == null
             && parser.event.exact_time_span.start_exact_time.equal_to(time)
-            && parser.event.exact_time_span.end_exact_time.equal_to(time.adjust_time(1, Calendar.TimeUnit.HOUR));
+            && parser.event.exact_time_span.end_exact_time.equal_to(time.adjust_time(1, Calendar.TimeUnit.HOUR))
+            && is_today_or_future(parser.event);
     }
     
     private bool with_day_of_week() throws Error {
@@ -173,7 +187,8 @@ private class QuickAdd : UnitTest.Harness {
         
         return parser.event.summary == "dinner at Bob's with Alice"
             && parser.event.location == "Bob's with Alice"
-            && parser.event.date_span.start_date.day_of_week == Calendar.DayOfWeek.MON;
+            && parser.event.date_span.start_date.day_of_week == Calendar.DayOfWeek.MON
+            && is_today_or_future(parser.event);
     }
     
     private bool with_delay() throws Error {
@@ -186,7 +201,7 @@ private class QuickAdd : UnitTest.Harness {
         assert(parser.event.exact_time_span.start_exact_time.to_wall_time().equal_to(start));
         assert(parser.event.exact_time_span.start_exact_time.to_wall_time().adjust(1, Calendar.TimeUnit.HOUR, null).equal_to(end));
         
-        return true;
+        return is_today_or_future(parser.event);
     }
     
     private bool with_duration() throws Error {
@@ -197,7 +212,8 @@ private class QuickAdd : UnitTest.Harness {
         
         return parser.event.summary == "meet Alice"
             && parser.event.exact_time_span.start_exact_time.to_wall_time().equal_to(start)
-            && parser.event.exact_time_span.end_exact_time.to_wall_time().equal_to(end);
+            && parser.event.exact_time_span.end_exact_time.to_wall_time().equal_to(end)
+            && is_today_or_future(parser.event);
     }
     
     private bool with_delay_and_duration() throws Error {
@@ -208,7 +224,8 @@ private class QuickAdd : UnitTest.Harness {
         
         return parser.event.summary == "meet Alice"
             && parser.event.exact_time_span.start_exact_time.to_wall_time().equal_to(start)
-            && parser.event.exact_time_span.end_exact_time.to_wall_time().equal_to(end);
+            && parser.event.exact_time_span.end_exact_time.to_wall_time().equal_to(end)
+            && is_today_or_future(parser.event);
     }
     
     private bool indeterminate_time() throws Error {
@@ -232,7 +249,42 @@ private class QuickAdd : UnitTest.Harness {
         return parser.event.summary == "Dinner at Tadich Grill"
             && parser.event.location == "Tadich Grill"
             && parser.event.exact_time_span.start_exact_time.equal_to(time)
-            && parser.event.exact_time_span.end_exact_time.equal_to(time.adjust_time(1, Calendar.TimeUnit.HOUR));
+            && parser.event.exact_time_span.end_exact_time.equal_to(time.adjust_time(1, Calendar.TimeUnit.HOUR))
+            && is_today_or_future(parser.event);
+    }
+    
+    private bool yesterday() throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "Dinner at Tadich Grill 7:30pm yesterday", null);
+        
+        Calendar.ExactTime time = new Calendar.ExactTime(
+            Calendar.System.timezone,
+            Calendar.System.today.previous(),
+            new Calendar.WallTime(19, 30, 0)
+        );
+        
+        return parser.event.summary == "Dinner at Tadich Grill"
+            && parser.event.location == "Tadich Grill"
+            && parser.event.exact_time_span.start_exact_time.equal_to(time)
+            && parser.event.exact_time_span.end_exact_time.equal_to(time.adjust_time(1, Calendar.TimeUnit.HOUR))
+            && !is_today_or_future(parser.event);
+    }
+    
+    private bool today() throws Error {
+        Component.DetailsParser parser = new Component.DetailsParser(
+            "Dinner at Tadich Grill 7:30pm today", null);
+        
+        Calendar.ExactTime time = new Calendar.ExactTime(
+            Calendar.System.timezone,
+            Calendar.System.today,
+            new Calendar.WallTime(19, 30, 0)
+        );
+        
+        return parser.event.summary == "Dinner at Tadich Grill"
+            && parser.event.location == "Tadich Grill"
+            && parser.event.exact_time_span.start_exact_time.equal_to(time)
+            && parser.event.exact_time_span.end_exact_time.equal_to(time.adjust_time(1, Calendar.TimeUnit.HOUR))
+            && is_today_or_future(parser.event);
     }
     
     private bool noon() throws Error {
@@ -246,7 +298,8 @@ private class QuickAdd : UnitTest.Harness {
         
         return parser.event.summary == "Lunch"
             && parser.event.exact_time_span.start_exact_time.equal_to(start)
-            && parser.event.exact_time_span.end_exact_time.equal_to(end);
+            && parser.event.exact_time_span.end_exact_time.equal_to(end)
+            && is_today_or_future(parser.event);
     }
     
     private bool midnight() throws Error {
@@ -260,7 +313,8 @@ private class QuickAdd : UnitTest.Harness {
         
         return parser.event.summary == "Dinner"
             && parser.event.exact_time_span.start_exact_time.equal_to(start)
-            && parser.event.exact_time_span.end_exact_time.equal_to(end);
+            && parser.event.exact_time_span.end_exact_time.equal_to(end)
+            && is_today_or_future(parser.event);
     }
     
     private bool pm1230() throws Error {
@@ -277,7 +331,8 @@ private class QuickAdd : UnitTest.Harness {
         
         return parser.event.summary == "Lunch with Eric and Charles"
             && parser.event.exact_time_span.start_exact_time.equal_to(start)
-            && parser.event.exact_time_span.end_exact_time.equal_to(end);
+            && parser.event.exact_time_span.end_exact_time.equal_to(end)
+            && is_today_or_future(parser.event);
     }
     
     private bool bogus_time() throws Error {
@@ -300,7 +355,8 @@ private class QuickAdd : UnitTest.Harness {
         
         return parser.event.summary == "Dinner"
             && parser.event.exact_time_span.start_exact_time.equal_to(start)
-            && parser.event.exact_time_span.end_exact_time.equal_to(end);
+            && parser.event.exact_time_span.end_exact_time.equal_to(end)
+            && is_today_or_future(parser.event);
     }
     
     private bool oh_twenty_four_hours() throws Error {
@@ -314,7 +370,8 @@ private class QuickAdd : UnitTest.Harness {
         
         return parser.event.summary == "Dinner"
             && parser.event.exact_time_span.start_exact_time.equal_to(start)
-            && parser.event.exact_time_span.end_exact_time.equal_to(end);
+            && parser.event.exact_time_span.end_exact_time.equal_to(end)
+            && is_today_or_future(parser.event);
     }
     
     private bool midnight_to_one() throws Error {
@@ -328,7 +385,8 @@ private class QuickAdd : UnitTest.Harness {
         
         return parser.event.summary == "Dinner"
             && parser.event.exact_time_span.start_exact_time.equal_to(start)
-            && parser.event.exact_time_span.end_exact_time.equal_to(end);
+            && parser.event.exact_time_span.end_exact_time.equal_to(end)
+            && is_today_or_future(parser.event);
     }
     
     private bool separate_am() throws Error {
@@ -339,7 +397,8 @@ private class QuickAdd : UnitTest.Harness {
             new Calendar.WallTime(13, 0, 0));
         
         return parser.event.summary == "Dinner with Denny"
-            && parser.event.exact_time_span.start_exact_time.equal_to(start);
+            && parser.event.exact_time_span.start_exact_time.equal_to(start)
+            && is_today_or_future(parser.event);
     }
     
     private bool separate_pm() throws Error {
@@ -350,18 +409,28 @@ private class QuickAdd : UnitTest.Harness {
             new Calendar.WallTime(11, 0, 0));
         
         return parser.event.summary == "Dinner"
-            && parser.event.exact_time_span.start_exact_time.equal_to(start);
+            && parser.event.exact_time_span.start_exact_time.equal_to(start)
+            && is_today_or_future(parser.event);
     }
     
-    private bool start_date_ordinal() throws Error {
+    private Calendar.Date future_may(int dom) throws Error {
+        Calendar.Date date = new Calendar.Date(Calendar.DayOfMonth.for(dom), Calendar.Month.MAY,
+            Calendar.System.today.year);
+        if (date.difference(Calendar.System.today) > 0)
+            date = date.adjust_by(1, Calendar.DateUnit.YEAR);
+        
+        return date;
+    }
+    
+    private bool start_date_ordinal(out string? dump) throws Error {
         Component.DetailsParser parser = new Component.DetailsParser(
             "Dinner May 1st", null);
         
-        Calendar.Date start = new Calendar.Date(Calendar.DayOfMonth.for(1), Calendar.Month.MAY,
-            Calendar.System.today.year);
+        dump = parser.event.source;
         
         return parser.event.summary == "Dinner"
-            && parser.event.date_span.start_date.equal_to(start);
+            && parser.event.date_span.start_date.equal_to(future_may(1))
+            && is_today_or_future(parser.event);
     }
     
     private bool end_date_ordinal(out string? dump) throws Error {
@@ -370,14 +439,10 @@ private class QuickAdd : UnitTest.Harness {
         
         dump = parser.event.source;
         
-        Calendar.Date start = new Calendar.Date(Calendar.DayOfMonth.for(1), Calendar.Month.MAY,
-            Calendar.System.today.year);
-        Calendar.Date end = new Calendar.Date(Calendar.DayOfMonth.for(2), Calendar.Month.MAY,
-            Calendar.System.today.year);
-        
         return parser.event.summary == "Off-site"
-            && parser.event.date_span.start_date.equal_to(start)
-            && parser.event.date_span.end_date.equal_to(end);
+            && parser.event.date_span.start_date.equal_to(future_may(1))
+            && parser.event.date_span.end_date.equal_to(future_may(2))
+            && is_today_or_future(parser.event);
     }
     
     private bool simple_and(out string? dump) throws Error {
@@ -390,7 +455,8 @@ private class QuickAdd : UnitTest.Harness {
             && parser.event.location == "Airport Hyatt, Shelbyville"
             && parser.event.is_all_day
             && parser.event.date_span.start_date.day_of_week == Calendar.DayOfWeek.SAT
-            && parser.event.date_span.end_date.day_of_week == Calendar.DayOfWeek.SUN;
+            && parser.event.date_span.end_date.day_of_week == Calendar.DayOfWeek.SUN
+            && is_today_or_future(parser.event);
     }
     
     private bool this_weekend(out string? dump) throws Error {
@@ -403,7 +469,8 @@ private class QuickAdd : UnitTest.Harness {
             && parser.event.location == "Airport Hyatt, Shelbyville"
             && parser.event.is_all_day
             && parser.event.date_span.start_date.day_of_week == Calendar.DayOfWeek.SAT
-            && parser.event.date_span.end_date.day_of_week == Calendar.DayOfWeek.SUN;
+            && parser.event.date_span.end_date.day_of_week == Calendar.DayOfWeek.SUN
+            && is_today_or_future(parser.event);
     }
     
     private bool numeric_md(out string? dump) throws Error {
@@ -418,7 +485,8 @@ private class QuickAdd : UnitTest.Harness {
             && parser.event.is_all_day
             && parser.event.date_span.duration.days == 1
             && parser.event.date_span.start_date.month == Calendar.Month.JUL
-            && parser.event.date_span.start_date.day_of_month.value == 2;
+            && parser.event.date_span.start_date.day_of_month.value == 2
+            && is_today_or_future(parser.event);
     }
     
     private bool numeric_dm(out string? dump) throws Error {
@@ -433,7 +501,8 @@ private class QuickAdd : UnitTest.Harness {
             && parser.event.is_all_day
             && parser.event.date_span.duration.days == 1
             && parser.event.date_span.start_date.month == Calendar.Month.JUL
-            && parser.event.date_span.start_date.day_of_month.value == 2;
+            && parser.event.date_span.start_date.day_of_month.value == 2
+            && is_today_or_future(parser.event);
     }
     
     private bool numeric_mdy(out string? dump) throws Error {
@@ -542,7 +611,8 @@ private class QuickAdd : UnitTest.Harness {
             && parser.event.location == "Burrito Shack, 450 Main"
             && !parser.event.is_all_day
             && parser.event.exact_time_span.start_exact_time.hour == 18
-            && parser.event.exact_time_span.start_exact_time.minute == 30;
+            && parser.event.exact_time_span.start_exact_time.minute == 30
+            && is_today_or_future(parser.event);
     }
     
     private bool street_address_3a(out string? dump) throws Error {
@@ -557,7 +627,8 @@ private class QuickAdd : UnitTest.Harness {
             && parser.event.exact_time_span.start_exact_time.hour == 18
             && parser.event.exact_time_span.start_exact_time.minute == 30
             && parser.event.exact_time_span.start_date.day_of_week == Calendar.DayOfWeek.FRI
-            && parser.event.exact_time_span.duration.hours == 1;
+            && parser.event.exact_time_span.duration.hours == 1
+            && is_today_or_future(parser.event);
     }
     
     private bool street_address_4(out string? dump) throws Error {
@@ -570,7 +641,8 @@ private class QuickAdd : UnitTest.Harness {
             && parser.event.location == "Burrito Shack, 1235 Main"
             && !parser.event.is_all_day
             && parser.event.exact_time_span.start_exact_time.hour == 18
-            && parser.event.exact_time_span.start_exact_time.minute == 30;
+            && parser.event.exact_time_span.start_exact_time.minute == 30
+            && is_today_or_future(parser.event);
     }
     
     private bool test_time_range(string details, out string? dump) throws Error {
@@ -583,7 +655,8 @@ private class QuickAdd : UnitTest.Harness {
             && parser.event.exact_time_span.start_exact_time.hour == 18
             && parser.event.exact_time_span.start_exact_time.minute == 0
             && parser.event.exact_time_span.end_exact_time.hour == 21
-            && parser.event.exact_time_span.end_exact_time.minute == 0;
+            && parser.event.exact_time_span.end_exact_time.minute == 0
+            && is_today_or_future(parser.event);
     }
     
     private bool time_range_both_meridiem(out string? dump) throws Error {
@@ -621,7 +694,8 @@ private class QuickAdd : UnitTest.Harness {
             && parser.event.exact_time_span.start_exact_time.minute == 0
             && parser.event.exact_time_span.end_exact_time.hour == 20
             && parser.event.exact_time_span.end_exact_time.minute == 0
-            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span());
+            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span())
+            && is_today_or_future(parser.event);
     }
     
     private bool atsign_time(out string? dump) throws Error {
@@ -637,7 +711,8 @@ private class QuickAdd : UnitTest.Harness {
             && parser.event.exact_time_span.start_exact_time.minute == 0
             && parser.event.exact_time_span.end_exact_time.hour == 20
             && parser.event.exact_time_span.end_exact_time.minute == 0
-            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span());
+            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span())
+            && is_today_or_future(parser.event);
     }
     
     private bool hash_location(out string? dump) throws Error {
@@ -653,7 +728,8 @@ private class QuickAdd : UnitTest.Harness {
             && parser.event.exact_time_span.start_exact_time.minute == 0
             && parser.event.exact_time_span.end_exact_time.hour == 20
             && parser.event.exact_time_span.end_exact_time.minute == 0
-            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span());
+            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span())
+            && is_today_or_future(parser.event);
     }
     
     private bool hash_time(out string? dump) throws Error {
@@ -669,7 +745,8 @@ private class QuickAdd : UnitTest.Harness {
             && parser.event.exact_time_span.start_exact_time.minute == 0
             && parser.event.exact_time_span.end_exact_time.hour == 20
             && parser.event.exact_time_span.end_exact_time.minute == 0
-            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span());
+            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span())
+            && is_today_or_future(parser.event);
     }
     
     private bool quoted(out string? dump) throws Error {
@@ -685,7 +762,8 @@ private class QuickAdd : UnitTest.Harness {
             && parser.event.exact_time_span.start_exact_time.minute == 0
             && parser.event.exact_time_span.end_exact_time.hour == 20
             && parser.event.exact_time_span.end_exact_time.minute == 0
-            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span());
+            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span())
+            && is_today_or_future(parser.event);
     }
     
     private bool open_quoted(out string? dump) throws Error {
@@ -711,7 +789,8 @@ private class QuickAdd : UnitTest.Harness {
             && parser.event.exact_time_span.start_exact_time.minute == 0
             && parser.event.exact_time_span.end_exact_time.hour == 20
             && parser.event.exact_time_span.end_exact_time.minute == 0
-            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span());
+            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span())
+            && is_today_or_future(parser.event);
     }
     
     private bool quoted_hash(out string? dump) throws Error {
@@ -727,7 +806,8 @@ private class QuickAdd : UnitTest.Harness {
             && parser.event.exact_time_span.start_exact_time.minute == 0
             && parser.event.exact_time_span.end_exact_time.hour == 20
             && parser.event.exact_time_span.end_exact_time.minute == 0
-            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span());
+            && parser.event.exact_time_span.get_date_span().equal_to(Calendar.System.today.to_date_span())
+            && is_today_or_future(parser.event);
     }
     
     // See https://bugzilla.gnome.org/show_bug.cgi?id=735096
@@ -746,7 +826,8 @@ private class QuickAdd : UnitTest.Harness {
             && California.String.is_empty(parser.event.location)
             && parser.event.is_all_day
             && parser.event.date_span.start_date.day_of_month.value == 9
-            && parser.event.date_span.start_date.month.value == 6;
+            && parser.event.date_span.start_date.month.value == 6
+            && is_today_or_future(parser.event);
     }
 }
 

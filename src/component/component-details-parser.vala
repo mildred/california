@@ -1015,7 +1015,7 @@ public class DetailsParser : BaseObject {
     }
     
     // Parses potential date specifiers into a specific calendar date
-    private Calendar.Date? parse_day_month(Token day, Token mon, Calendar.Year? year = null) {
+    private Calendar.Date? parse_day_month(Token day, Token mon, Calendar.Year? yr = null) {
         int day_ordinal = parse_ordinal(day);
         if (day_ordinal < 0)
             return null;
@@ -1024,14 +1024,22 @@ public class DetailsParser : BaseObject {
         if (month == null)
             return null;
         
-        if (year == null)
-            year = Calendar.System.today.year;
-        
-        try {
-            return new Calendar.Date(Calendar.DayOfMonth.for(day_ordinal), month, year);
-        } catch (CalendarError calerr) {
-            // probably an out-of-bounds day of month
-            return null;
+        // always guarantee a future value if year is not specified
+        Calendar.Year year = (yr != null) ? yr : Calendar.System.today.year;
+        for (;;) {
+            Calendar.Date date;
+            try {
+                date = new Calendar.Date(Calendar.DayOfMonth.for(day_ordinal), month, year);
+            } catch (CalendarError calerr) {
+                // probably an out-of-bounds day of month
+                return null;
+            }
+            
+            // if year not specified, always use today or date in the future
+            if (yr == null && Calendar.System.today.difference(date) < 0)
+                year = year.adjust(1);
+            else
+                return date;
         }
     }
     
