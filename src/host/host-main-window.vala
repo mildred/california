@@ -61,15 +61,15 @@ public class MainWindow : Gtk.ApplicationWindow {
     
     private const string DETAILED_ACTION_INCREASE_FONT = "win.increase-font";
     private const string ACTION_INCREASE_FONT = "increase-font";
-    private const string[] ACCELS_INCREASE_FONT = { "KP_Add", "plus", "equal", null };
+    private const string ACCEL_INCREASE_FONT = "KP_Add";
     
     private const string DETAILED_ACTION_DECREASE_FONT = "win.decrease-font";
     private const string ACTION_DECREASE_FONT = "decrease-font";
-    private const string[] ACCELS_DECREASE_FONT = { "KP_Subtract", "minus", null };
+    private const string ACCEL_DECREASE_FONT = "KP_Subtract";
     
     private const string DETAILED_ACTION_RESET_FONT = "win.reset-font";
     private const string ACTION_RESET_FONT = "reset-font";
-    private const string[] ACCELS_RESET_FONT = { "KP_Multiply", "asterisk", null };
+    private const string ACCEL_RESET_FONT = "KP_Multiply";
     
     private static const ActionEntry[] action_entries = {
         { ACTION_QUICK_CREATE_EVENT, on_quick_create_event },
@@ -124,10 +124,9 @@ public class MainWindow : Gtk.ApplicationWindow {
             null);
         Application.instance.add_accelerator(ACCEL_MONTH, DETAILED_ACTION_MONTH, null);
         Application.instance.add_accelerator(ACCEL_WEEK, DETAILED_ACTION_WEEK, null);
-        
-        Application.instance.set_accels_for_action(DETAILED_ACTION_INCREASE_FONT, ACCELS_INCREASE_FONT);
-        Application.instance.set_accels_for_action(DETAILED_ACTION_DECREASE_FONT, ACCELS_DECREASE_FONT);
-        Application.instance.set_accels_for_action(DETAILED_ACTION_RESET_FONT, ACCELS_RESET_FONT);
+        Application.instance.add_accelerator(ACCEL_INCREASE_FONT, DETAILED_ACTION_INCREASE_FONT, null);
+        Application.instance.add_accelerator(ACCEL_DECREASE_FONT, DETAILED_ACTION_DECREASE_FONT, null);
+        Application.instance.add_accelerator(ACCEL_RESET_FONT, DETAILED_ACTION_RESET_FONT, null);
         
         // view stack settings
         view_stack.homogeneous = true;
