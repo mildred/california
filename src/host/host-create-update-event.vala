@@ -247,9 +247,9 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
                         Calendar.Timezone.local
                     );
                 }
+                
+                return;
             }
-            
-            return;
         }
         
         if (dt.is_all_day)
