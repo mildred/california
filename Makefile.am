@@ -24,6 +24,8 @@ BUILD_VAPI = \
 	vapi/libecal-1.2.vapi \
 	vapi/libecal-1.2/libecal-1.2.deps \
 	vapi/langinfo.vapi \
+	vapi/gtk+-3.0.deps \
+	vapi/gtk+-3.0.vapi \
 	$(NULL)
 
 EXTRA_DIST = \
