@@ -571,15 +571,15 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
         // set start and end dates (which may actually be date-times, so use adjust)
         if (never_radiobutton.active) {
             // no duration
-            master.adjust_event_date_span(start_date.to_date_span());
+            master.adjust_start_date(start_date);
             rrule.set_recurrence_end_date(null);
         } else if (ends_on_radiobutton.active) {
-            master.adjust_event_date_span(new Calendar.DateSpan(start_date, end_date));
+            master.adjust_start_date(start_date);
             rrule.set_recurrence_end_date(end_date);
         } else {
             assert(after_radiobutton.active);
             
-            master.adjust_event_date_span(start_date.to_date_span());
+            master.adjust_start_date(start_date);
             rrule.set_recurrence_count(Numeric.floor_int(int.parse(after_entry.text), 1));
         }
         
