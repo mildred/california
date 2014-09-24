@@ -34,6 +34,7 @@ public class StackModel<G> : BaseObject {
      * Transition type for spatial transitions according to ordering.
      */
     public enum OrderedTransitionType {
+        NONE,
         CROSSFADE,
         SLIDE_LEFT_RIGHT,
         SLIDE_UP_DOWN;
@@ -51,6 +52,9 @@ public class StackModel<G> : BaseObject {
                 return (this == CROSSFADE) ? Gtk.StackTransitionType.CROSSFADE : Gtk.StackTransitionType.NONE;
             
             switch (this) {
+                case NONE:
+                    return Gtk.StackTransitionType.NONE;
+                
                 case CROSSFADE:
                     return Gtk.StackTransitionType.CROSSFADE;
                 
@@ -116,7 +120,6 @@ public class StackModel<G> : BaseObject {
     private Gee.HashMap<G, Gtk.Widget?> items;
     private bool in_balance_cache = false;
     private bool stack_destroyed = false;
-    private Scheduled? scheduled_balance_cache = null;
     
     public StackModel(Gtk.Stack stack,
         OrderedTransitionType ordered_transition_type,
@@ -138,12 +141,14 @@ public class StackModel<G> : BaseObject {
         
         stack.remove.connect(on_stack_removed);
         stack.notify["visible-child"].connect(on_stack_child_visible);
+        stack.notify["transition-running"].connect(on_stack_transition_running);
         stack.destroy.connect(on_stack_destroyed);
     }
     
     ~StackModel() {
         stack.remove.disconnect(on_stack_removed);
         stack.notify["visible-child"].disconnect(on_stack_child_visible);
+        stack.notify["transition-running"].disconnect(on_stack_transition_running);
         stack.destroy.disconnect(on_stack_destroyed);
     }
     
@@ -253,20 +258,19 @@ public class StackModel<G> : BaseObject {
             if (iter.get_value() == stack.visible_child) {
                 visible_item = iter.get_key();
                 
-                // to avoid stutter, only balance the cache when the transition has completed,
-                // which (apparently) it has not when this change is made (probably made at start
-                // of transition, not the end) ... "transition-running" property would be useful
-                // here, but that's not available until GTK 3.12
-                scheduled_balance_cache = new Scheduled.once_at_idle(() => {
-                    balance_cache("on_stack_child_visible");
-                }, Priority.LOW);
-                
                 return;
             }
         }
         
         // nothing found
         visible_item = null;
+    }
+    
+    // to avoid stutter, only balance the cache when the transition has completed,
+    private void on_stack_transition_running() {
+        // don't care if it is running, want to known when it's not
+        if (!stack.transition_running)
+            balance_cache("!on_stack_transition_running");
     }
     
     private void on_stack_destroyed() {
