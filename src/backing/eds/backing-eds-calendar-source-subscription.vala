@@ -187,7 +187,7 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
                 notifier(added_event);
             }
         } catch (Error err) {
-            debug("Unable to process added event: %s", err.message);
+            debug("Unable to process added event: %s\n%s", err.message, ical_component.as_ical_string());
         }
         
         return added_event;
@@ -268,7 +268,8 @@ internal class EdsCalendarSourceSubscription : CalendarSourceSubscription {
             try {
                 modified_event.full_update(ical_component, null);
             } catch (Error err) {
-                debug("Unable to update event %s: %s", modified_event.to_string(), err.message);
+                debug("Unable to update event %s: %s\n%s", modified_event.to_string(), err.message,
+                    ical_component.as_ical_string());
                 
                 continue;
             }
