@@ -410,7 +410,7 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
     
     [GtkCallback]
     private void on_update_explanation() {
-        update_explanation(make_recurring_checkbutton.active ? make_rrule() : null, start_date);
+        update_explanation(can_make_rrule() ? make_rrule() : null, start_date);
     }
     
     [GtkCallback]
@@ -489,6 +489,23 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
     private void on_ok_button_clicked() {
         update_master();
         jump_to_card_by_name(CreateUpdateEvent.ID, event);
+    }
+    
+    private bool can_make_rrule() {
+        if (!make_recurring_checkbutton.active)
+            return false;
+        
+        switch (repeats_combobox.active) {
+            case Repeats.DAILY:
+            case Repeats.WEEKLY:
+            case Repeats.DAY_OF_THE_WEEK:
+            case Repeats.DAY_OF_THE_MONTH:
+            case Repeats.YEARLY:
+                return true;
+            
+            default:
+                return false;
+        }
     }
     
     private Component.RecurrenceRule make_rrule() {
@@ -593,7 +610,7 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
         master.exdates = null;
         master.rdates = null;
         
-        if (!make_recurring_checkbutton.active)
+        if (!can_make_rrule())
             master.make_recurring(null);
         else
             master.make_recurring(make_rrule());
