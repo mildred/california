@@ -176,6 +176,10 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
             BindingFlags.SYNC_CREATE, transform_to_ok_button_sensitive);
         after_entry.bind_property("text", ok_button, "sensitive",
             BindingFlags.SYNC_CREATE, transform_to_ok_button_sensitive);
+        
+        // These values are set in the Glade file, but apparently are not being honored by GTK+
+        every_entry.max_length = after_entry.max_length = 4;
+        every_entry.max_width_chars = after_entry.max_width_chars = 5;
     }
     
     private bool transform_repeats_active_to_on_days_visible(Binding binding, Value source_value,
