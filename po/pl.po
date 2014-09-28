@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-21 15:02+0200\n"
-"PO-Revision-Date: 2014-09-21 15:04+0200\n"
+"POT-Creation-Date: 2014-09-28 20:14+0200\n"
+"PO-Revision-Date: 2014-09-28 20:15+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -731,20 +731,18 @@ msgid "st;nd;rd;th"
 msgstr "st;nd;rd;th"
 
 #: ../src/component/component-recurrence-rule.vala:597
-#: ../src/host/host-create-update-recurring.vala:447
 #, c-format
-msgid "day"
+msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] "dzień"
+msgstr[0] "%d dzień"
 msgstr[1] "%d dni"
 msgstr[2] "%d dni"
 
 #: ../src/component/component-recurrence-rule.vala:600
-#: ../src/host/host-create-update-recurring.vala:438
 #, c-format
-msgid "week"
+msgid "%d week"
 msgid_plural "%d weeks"
-msgstr[0] "tydzień"
+msgstr[0] "%d tydzień"
 msgstr[1] "%d tygodnie"
 msgstr[2] "%d tygodni"
 
@@ -757,11 +755,10 @@ msgstr[1] "%d miesiące"
 msgstr[2] "%d miesięcy"
 
 #: ../src/component/component-recurrence-rule.vala:619
-#: ../src/host/host-create-update-recurring.vala:442
 #, c-format
-msgid "year"
+msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] "rok"
+msgstr[0] "%d rok"
 msgstr[1] "%d lata"
 msgstr[2] "%d lat"
 
@@ -908,50 +905,71 @@ msgstr "Zapisz _wszystkie wydarzenia"
 msgid "Save _This Event"
 msgstr "Zapisz _to wydarzenie"
 
-#: ../src/host/host-create-update-event.vala:167
+#: ../src/host/host-create-update-event.vala:169
 msgid "It's complicated…"
 msgstr "To skomplikowane…"
 
-#: ../src/host/host-create-update-event.vala:170
+#: ../src/host/host-create-update-event.vala:172
 msgid "Never"
 msgstr "Nigdy"
 
-#: ../src/host/host-create-update-event.vala:172
+#: ../src/host/host-create-update-event.vala:174
 msgid "_Save"
 msgstr "_Zapisz"
 
-#: ../src/host/host-create-update-event.vala:172
+#: ../src/host/host-create-update-event.vala:174
 msgid "C_reate"
 msgstr "U_twórz"
 
-#: ../src/host/host-create-update-event.vala:286
+#: ../src/host/host-create-update-event.vala:288
 #: ../src/host/host-quick-create-event.vala:156
 msgid "Unable to create event: calendar must be specified"
 msgstr "Nie można utworzyć wydarzenia: należy podać kalendarz"
 
-#: ../src/host/host-create-update-event.vala:305
+#: ../src/host/host-create-update-event.vala:307
 #: ../src/host/host-quick-create-event.vala:175
 #, c-format
 msgid "Unable to create event: %s"
 msgstr "Nie można utworzyć wydarzenia: %s"
 
-#: ../src/host/host-create-update-event.vala:310
+#: ../src/host/host-create-update-event.vala:312
 msgid "Unable to update event: calendar must be specified"
 msgstr "Nie można zaktualizować wydarzenia: należy podać kalendarz"
 
-#: ../src/host/host-create-update-event.vala:355
+#: ../src/host/host-create-update-event.vala:357
 #, c-format
 msgid "Unable to update event: %s"
 msgstr "Nie można zaktualizować wydarzenia: %s"
 
-#: ../src/host/host-create-update-recurring.vala:434
+#: ../src/host/host-create-update-recurring.vala:438
 msgid "month"
 msgid_plural "months"
 msgstr[0] "miesiąc"
 msgstr[1] "miesiące"
 msgstr[2] "miesięcy"
 
-#: ../src/host/host-create-update-recurring.vala:459
+#: ../src/host/host-create-update-recurring.vala:442
+msgid "week"
+msgid_plural "weeks"
+msgstr[0] "%d tydzień"
+msgstr[1] "%d tygodnie"
+msgstr[2] "%d tygodni"
+
+#: ../src/host/host-create-update-recurring.vala:446
+msgid "year"
+msgid_plural "years"
+msgstr[0] "%d rok"
+msgstr[1] "%d lata"
+msgstr[2] "%d lat"
+
+#: ../src/host/host-create-update-recurring.vala:451
+msgid "day"
+msgid_plural "days"
+msgstr[0] "%d dzień"
+msgstr[1] "%d dni"
+msgstr[2] "%d dni"
+
+#: ../src/host/host-create-update-recurring.vala:463
 msgid "event"
 msgid_plural "events"
 msgstr[0] "wydarzenie"
