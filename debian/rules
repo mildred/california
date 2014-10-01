@@ -12,6 +12,12 @@
 %:
 	dh $@ --parallel
 
-override_dh_auto_configure:
-	./configure --prefix=/usr --enable-unity
+configure:
+	./autogen.sh --prefix=/usr --enable-unity
+
+build-arch: configure
+	dh $@
+
+build: configure
+	dh $@
 
