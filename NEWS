@@ -1,3 +1,15 @@
+California 0.2.0 - 30 September 2014
+------------------------------------
+
+  * F1 Help (thanks to Jim Campbell)
+  * Migrate to GTK+ 3.12
+  * Quick Add improvements
+  * Display recurring event information as plain language summary
+  * Remove calendar from EDS
+  * Various UI improvements
+  * Updated translations
+
+
 California 0.1.4 - 19 August 2014
 ---------------------------------
 

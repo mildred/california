@@ -1,4 +1,4 @@
-AC_INIT([california], [0.1.4], [jim@yorba.org], [california])
+AC_INIT([california], [0.2.0], [jim@yorba.org], [california])
 AC_CONFIG_SRCDIR([Makefile.am])
 AC_CONFIG_HEADERS([config/config.h])
 AC_CONFIG_MACRO_DIR([m4])

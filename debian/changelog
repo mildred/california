@@ -1,3 +1,16 @@
+california (0.2.0-1~utopic2) utopic; urgency=low
+
+  * F1 Help (thanks to Jim Campbell)
+  * Migrate to GTK+ 3.12
+  * Quick Add improvements
+  * Display recurring event information as plain language summary
+  * Remove calendar from EDS
+  * Various UI improvements
+  * Updated translations
+
+ -- Jim Nelson <jim@yorba.org>  Tue, 30 Sep 2014 16:24:00 -0700
+
+
 california (0.1.4-1~saucy1) saucy; urgency=low
 
   * Rebuild .c files when configuration changes
