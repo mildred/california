@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-10-01 15:03+0000\n"
-"PO-Revision-Date: 2014-10-01 22:17+0300\n"
+"POT-Creation-Date: 2014-10-01 19:21+0000\n"
+"PO-Revision-Date: 2014-10-07 00:45+0300\n"
 "Last-Translator: Stas Solovey <whats_up@tut.by>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -41,7 +41,7 @@ msgstr ""
 
 #: ../data/california.appdata.xml.in.h:4
 msgid "Modern, clean interface"
-msgstr ""
+msgstr "Современный, лёгкий интерфейс"
 
 #: ../data/california.appdata.xml.in.h:5
 msgid "Month and week view of your schedule"
@@ -75,7 +75,7 @@ msgstr "Календарь GNOME 3"
 
 #: ../data/california.desktop.in.in.h:3
 msgid "Event;Events;Schedule;"
-msgstr ""
+msgstr "Событие;События;Расписание"
 
 #: ../src/activator/activator.vala:36
 msgid "Web calendar (.ics or webcal:)"
@@ -162,20 +162,20 @@ msgstr "Stas Solovey <whats_up@tut.by>"
 
 #: ../src/application/california-commandline.vala:9
 msgid "[.ics FILE...]"
-msgstr ""
+msgstr "[.ics ФАЙЛ…"
 
 #: ../src/application/california-commandline.vala:15
 msgid "Display program version"
-msgstr ""
+msgstr "Отобразить версию приложения"
 
 #: ../src/application/california-commandline.vala:32
 msgid "Please report problems and requests to:"
-msgstr ""
+msgstr "Пожалуйста сообщайте о проблемах и пожеланиях на:"
 
 #: ../src/application/california-commandline.vala:38
 #, c-format
 msgid "Unknown options: %s\n"
-msgstr ""
+msgstr "Неизвестные опции: %s\n"
 
 #. Prints a span of dates, i.e. "Monday, January 3 to Thursday, January 6"
 #. A span of time, i.e. "3:30pm to 4:30pm"
@@ -485,28 +485,28 @@ msgstr "%m/%d"
 #. format user settings to be honored)
 #: ../src/calendar/calendar.vala:186
 msgid "am"
-msgstr ""
+msgstr "д. п."
 
 #. Brief ante meridiem, i.e. "am" -> "a"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
 #: ../src/calendar/calendar.vala:191
 msgid "a"
-msgstr ""
+msgstr "д."
 
 #. Post meridiem
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
 #: ../src/calendar/calendar.vala:196
 msgid "pm"
-msgstr ""
+msgstr "п. п."
 
 #. Brief post meridiem, i.e. "pm" -> "p"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
 #: ../src/calendar/calendar.vala:201
 msgid "p"
-msgstr ""
+msgstr "п."
 
 #. The 12-hour time with minute and meridiem ("am" or "pm"), i.e. "5:06pm"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
@@ -652,7 +652,7 @@ msgstr ""
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:124
 msgid "and;or;"
-msgstr ""
+msgstr "и;или;"
 
 #. Used by quick-add to determine if the word is a TIME preposition (indicating a
 #. specific time of day, not a duration).  Each word must be separated by semi-colons.
@@ -790,7 +790,7 @@ msgstr ""
 #. look for expressible patterns
 #: ../src/component/component-recurrence-rule.vala:677
 msgid "every day"
-msgstr ""
+msgstr "каждый день"
 
 #: ../src/component/component-recurrence-rule.vala:682
 msgid "the weekend"
@@ -873,7 +873,7 @@ msgstr ""
 #: ../src/component/component-recurrence-rule.vala:798
 #, c-format
 msgid "day %d"
-msgstr ""
+msgstr "день %d"
 
 #: ../src/host/host-create-update-event.vala:67
 #: ../src/host/host-create-update-event.vala:70
@@ -888,11 +888,11 @@ msgstr "_Отменить"
 
 #: ../src/host/host-create-update-event.vala:68
 msgid "Save A_ll Events"
-msgstr ""
+msgstr "Сохранить _все события"
 
 #: ../src/host/host-create-update-event.vala:69
 msgid "Save _This Event"
-msgstr ""
+msgstr "Сохранить _это событие"
 
 #: ../src/host/host-create-update-event.vala:169
 msgid "It's complicated…"
@@ -913,22 +913,22 @@ msgstr "С_оздать"
 #: ../src/host/host-create-update-event.vala:288
 #: ../src/host/host-quick-create-event.vala:156
 msgid "Unable to create event: calendar must be specified"
-msgstr ""
+msgstr "Невозможно создать событие: должен быть указан календарь"
 
 #: ../src/host/host-create-update-event.vala:307
 #: ../src/host/host-quick-create-event.vala:175
 #, c-format
 msgid "Unable to create event: %s"
-msgstr ""
+msgstr "Невозможно создать событие: %s"
 
 #: ../src/host/host-create-update-event.vala:312
 msgid "Unable to update event: calendar must be specified"
-msgstr ""
+msgstr "Невозможно обновить событие: должен быть указан календарь"
 
 #: ../src/host/host-create-update-event.vala:357
 #, c-format
 msgid "Unable to update event: %s"
-msgstr ""
+msgstr "Невозможно обновить событие: %s"
 
 #: ../src/host/host-create-update-recurring.vala:438
 msgid "month"
@@ -978,11 +978,11 @@ msgstr "С_егодня"
 
 #: ../src/host/host-main-window.vala:164
 msgid "Jump to today's date (Ctrl+T)"
-msgstr ""
+msgstr "Переместиться на сегодняшнюю дату (Ctrl+T)"
 
 #: ../src/host/host-main-window.vala:182
 msgid "Quick add event (Ctrl+N)"
-msgstr ""
+msgstr "Быстро добавить событие (Ctrl+N)"
 
 #: ../src/host/host-main-window.vala:188
 msgid "Calendars (Ctrl+L)"
@@ -991,24 +991,24 @@ msgstr "Календари (Ctrl+L)"
 #: ../src/host/host-main-window.vala:486
 #, c-format
 msgid "Unable to edit event: %s"
-msgstr ""
+msgstr "Невозможно изменить событие: %s"
 
 #: ../src/host/host-quick-create-event.vala:79
 msgid "Example: Dinner at Tadich Grill 7:30pm"
-msgstr ""
+msgstr "Например: Встреча в кафе в 10:00"
 
 #: ../src/host/host-quick-create-event.vala:81
 msgid "Example: Dinner at Tadich Grill"
-msgstr ""
+msgstr "Например: Встреча в кафе"
 
 #: ../src/host/host-quick-create-event.vala:85
 msgid "Example: Dinner at Tadich Grill 7:30pm tomorrow"
-msgstr ""
+msgstr "Например: Встреча в кафе в 10:00 завтра"
 
 #: ../src/host/host-quick-create-event.vala:99
 #, c-format
 msgid "Error opening help: %s"
-msgstr ""
+msgstr "Ошибка открытия справки: %s"
 
 #: ../src/host/host-show-event.vala:73
 msgid "Delete"
@@ -1054,6 +1054,8 @@ msgid ""
 "This will remove the %s local calendar from your computer.  All associated "
 "information will be deleted permanently."
 msgstr ""
+"Это приведёт к удалению локального календаря %s с компьютера. Все связанная "
+"с ним информация будет безвозвратно удалена."
 
 #: ../src/manager/manager-remove-calendar.vala:41
 #, c-format
@@ -1061,11 +1063,13 @@ msgid ""
 "This will remove the %s network calendar from your computer.  This will not "
 "affect information stored on the server."
 msgstr ""
+"Это приведёт к удалению сетевого календаря %s с компьютера. Это не повлияет "
+"на информацию, хранящуюся на сервере."
 
 #: ../src/manager/manager-remove-calendar.vala:74
 #, c-format
 msgid "Unable to remove calendar: %s"
-msgstr ""
+msgstr "Не удалось удалить календарь: %s"
 
 #. *
 #. * @inheritDoc
@@ -1325,11 +1329,11 @@ msgstr "_Логин"
 
 #: ../src/rc/google-login.ui.h:3
 msgid "Google _account name"
-msgstr ""
+msgstr "Имя _учётной записи Google"
 
 #: ../src/rc/google-login.ui.h:4
 msgid "Google _password"
-msgstr ""
+msgstr "_Пароль Google"
 
 #: ../src/rc/main-window-title.ui.h:1
 msgid "Previous (Alt+Left)"
@@ -1341,7 +1345,7 @@ msgstr "Следующий (Alt+Стрелка вправо)"
 
 #: ../src/rc/quick-create-event.ui.h:1
 msgid "_Quick Add Event"
-msgstr "_Быстро добавить событие"
+msgstr "_Добавление события"
 
 #: ../src/rc/quick-create-event.ui.h:2 ../src/rc/show-event.ui.h:1
 msgid "When"
@@ -1354,7 +1358,7 @@ msgstr "Описание"
 
 #: ../src/rc/quick-create-event.ui.h:5
 msgid "Quick Add help"
-msgstr "Справка «Быстрое добавление события»"
+msgstr "Справка «Добавление события»"
 
 #: ../src/rc/quick-create-event.ui.h:6
 msgid "Cancel"
