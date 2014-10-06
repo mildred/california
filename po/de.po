@@ -3,15 +3,16 @@
 # This file is distributed under the same license as the california package.
 # rhaglion <rhaglion@riseup.net>, 2014.
 # Benjamin Steinwender <b@stbe.at>, 2014.
+# Wolfgang Stöggl <c72578@yahoo.de>, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-09-20 15:01+0000\n"
-"PO-Revision-Date: 2014-09-21 00:06+0100\n"
-"Last-Translator: Bernd Homuth <dev@hmt.im>\n"
+"POT-Creation-Date: 2014-09-23 22:07+0000\n"
+"PO-Revision-Date: 2014-09-27 07:42+0100\n"
+"Last-Translator: Wolfgang Stoeggl <c72578@yahoo.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -182,7 +183,7 @@ msgstr "Programmversion anzeigen"
 
 #: ../src/application/california-commandline.vala:32
 msgid "Please report problems and requests to:"
-msgstr "Bitte Melden Sie sich mit Problemen und Fragen bei:"
+msgstr "Bitte melden Sie sich mit Problemen und Fragen bei:"
 
 #: ../src/application/california-commandline.vala:38
 #, c-format
@@ -639,21 +640,23 @@ msgstr "Woche;Wochen;W;"
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:106
 msgid "day;days;"
-msgstr "Tag;Tagen"
+msgstr "Tag;Tage;"
 
+# Kein Strichpunkt am Ende des Originals, wie bei den anderen.
 #. Used by quick-add to convert a user's hours unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:111
 msgid "hour;hours;hr;hrs"
-msgstr "Stunde;Stunden"
+msgstr "Stunde;Stunden;"
 
+# Kein Strichpunkt am Ende des Originals, wie bei den anderen.
 #. Used by quick-add to convert a user's minute unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:116
 msgid "minute;minutes;min;mins"
-msgstr "Minute;Minuten;min"
+msgstr "Minute;Minuten;min;"
 
 #. Used by quick-add to determine if the word is a COMMON preposition (indicating linkage or a
 #. connection).  Each word must be separate by semi-colons.
@@ -731,19 +734,17 @@ msgid "st;nd;rd;th"
 msgstr "."
 
 #: ../src/component/component-recurrence-rule.vala:597
-#: ../src/host/host-create-update-recurring.vala:447
 #, c-format
-msgid "day"
+msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] "Tag"
+msgstr[0] "%d Tag"
 msgstr[1] "%d Tage"
 
 #: ../src/component/component-recurrence-rule.vala:600
-#: ../src/host/host-create-update-recurring.vala:438
 #, c-format
-msgid "week"
+msgid "%d week"
 msgid_plural "%d weeks"
-msgstr[0] "Woche"
+msgstr[0] "%d Woche"
 msgstr[1] "%d Wochen"
 
 #: ../src/component/component-recurrence-rule.vala:611
@@ -754,18 +755,17 @@ msgstr[0] "Monat"
 msgstr[1] "%d Monate"
 
 #: ../src/component/component-recurrence-rule.vala:619
-#: ../src/host/host-create-update-recurring.vala:442
 #, c-format
-msgid "year"
+msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] "Jahr"
+msgstr[0] "%d Jahr"
 msgstr[1] "%d Jahre"
 
 #. As in, "Repeats every day, 2 times"
 #: ../src/component/component-recurrence-rule.vala:634
 #, c-format
 msgid "Repeats every %s, %s"
-msgstr ""
+msgstr "Wiederholt sich jeden %s, %s"
 
 #: ../src/component/component-recurrence-rule.vala:635
 #: ../src/component/component-recurrence-rule.vala:718
@@ -782,20 +782,19 @@ msgstr[1] "%d mal"
 #: ../src/component/component-recurrence-rule.vala:641
 #, c-format
 msgid "Repeats every %s until %s"
-msgstr ""
+msgstr "Wiederholt sich jede %s bis %s"
 
 #. As in, "Repeats every month until Sept. 2, 2014, 8:00pm"
 #: ../src/component/component-recurrence-rule.vala:648
 #, c-format
 msgid "Repeats every %s until %s, %s"
-msgstr ""
+msgstr "Wiederholt sich jeden %s bis %s, %s"
 
 #. As in, "Repeats every day"
 #: ../src/component/component-recurrence-rule.vala:655
-#, fuzzy, c-format
-#| msgid "_Repeating event"
+#, c-format
 msgid "Repeats every %s"
-msgstr "_Wiederkehrendes Ereignis"
+msgstr "Wiederholt sich jeden %s"
 
 #. look for expressible patterns
 #: ../src/component/component-recurrence-rule.vala:677
@@ -815,6 +814,7 @@ msgstr "an Wochentagen"
 msgid ", "
 msgstr ", "
 
+# Die Woche, der Monat, das Jahr
 #. As in, "Repeats every week on Monday, Tuesday, 3 times"
 #. As in, "Repeats every month on day 4, 3 times"
 #. As in, "Repeats every year on 3 March 2014, 2 times"
@@ -825,6 +825,7 @@ msgstr ", "
 msgid "Repeats every %s on %s, %s"
 msgstr ""
 
+# Die Woche, der Monat, das Jahr
 #. As in, "Repeats every week on Thursday until Sept. 2, 2014"
 #. As in, "Repeats every month on day 21 until Sept. 2, 2014"
 #. As in, "Repeats every year on 3 March 2014 until Sept. 2, 2014"
@@ -835,6 +836,7 @@ msgstr ""
 msgid "Repeats every %s on %s until %s"
 msgstr ""
 
+# Die Woche, der Monat, das Jahr
 #. As in, "Repeats every week on Friday, Saturday until Sept. 2, 2014, 8:00pm"
 #. As in, "Repeats every month on day 20 until Sept. 2, 2014, 8:00pm"
 #. As in, "Repeats every year on 3 March 2014 until Sept. 2, 2014, 8:00pm"
@@ -845,6 +847,7 @@ msgstr ""
 msgid "Repeats every %s on %s until %s, %s"
 msgstr ""
 
+# Die Woche, der Monat, das Jahr
 #. As in, "Repeats every week on Monday, Wednesday, Friday"
 #. As in, "Repeats every month on day 5"
 #. As in, "Repeats every year on 3 March 2014"
@@ -859,25 +862,25 @@ msgstr ""
 #: ../src/component/component-recurrence-rule.vala:762
 #, c-format
 msgid "Repeats every %s on the %s, %s"
-msgstr ""
+msgstr "Wiederholt sich jeden %s am %s, %s"
 
 #. As in, "Repeats every month on the second Monday until Sept. 2, 2014"
 #: ../src/component/component-recurrence-rule.vala:769
 #, c-format
 msgid "Repeats every %s on the %s until %s"
-msgstr ""
+msgstr "Wiederholt sich jeden %s am %s bis %s"
 
 #. As in, "Repeats every month on the last Friday until Sept. 2, 2014, 8:00pm"
 #: ../src/component/component-recurrence-rule.vala:776
 #, c-format
 msgid "Repeats every %s on the %s until %s, %s"
-msgstr ""
+msgstr "Wiederholt sich jeden %s am %s bis %s, %s"
 
 #. As in, "Repeats every month on the third Tuesday"
 #: ../src/component/component-recurrence-rule.vala:783
 #, c-format
 msgid "Repeats every %s on the %s"
-msgstr ""
+msgstr "Wiederholt sich jeden %s am %s"
 
 #. As in, "Repeats on day 4 of the month"
 #: ../src/component/component-recurrence-rule.vala:798
@@ -947,6 +950,24 @@ msgid "month"
 msgid_plural "months"
 msgstr[0] "Monat"
 msgstr[1] "Monate"
+
+#: ../src/host/host-create-update-recurring.vala:438
+msgid "week"
+msgid_plural "weeks"
+msgstr[0] "Woche"
+msgstr[1] "Wochen"
+
+#: ../src/host/host-create-update-recurring.vala:442
+msgid "year"
+msgid_plural "years"
+msgstr[0] "Jahr"
+msgstr[1] "Jahre"
+
+#: ../src/host/host-create-update-recurring.vala:447
+msgid "day"
+msgid_plural "days"
+msgstr[0] "Tag"
+msgstr[1] "Tage"
 
 #: ../src/host/host-create-update-recurring.vala:459
 msgid "event"
