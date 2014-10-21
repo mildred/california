@@ -55,6 +55,9 @@ internal abstract class Subscribe : Gtk.Grid, Toolkit.Card {
     }
     
     public virtual void jumped_to(Toolkit.Card? from, Toolkit.Card.Jump reason, Value? message) {
+        name_entry.text = "";
+        url_entry.text = "";
+        username_entry.text = "";
     }
     
     private bool on_entry_changed(Binding binding, Value source_value, ref Value target_value) {
@@ -97,6 +100,8 @@ internal abstract class Subscribe : Gtk.Grid, Toolkit.Card {
             notify_failure(_("Unable to subscribe to calendar at %s: %s").printf(url_entry.text,
                 subscribe_err.message));
         }
+        
+        sensitive = true;
     }
     
     protected abstract async void subscribe_async(string name, Soup.URI uri, string? username,
