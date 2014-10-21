@@ -591,7 +591,7 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
             if (repeats_combobox.active == Repeats.DAY_OF_THE_WEEK) {
                 // if > 4th week of month, use last week position indicator, since many months don't
                 // have more than 4 weeks
-                int position = start_date.week_of(Calendar.System.first_of_week).week_of_month;
+                int position = start_date.day_of_month.week_of_month;
                 if (position > 4)
                     position = -1;
                 
