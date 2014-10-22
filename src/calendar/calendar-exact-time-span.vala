@@ -108,6 +108,14 @@ public class ExactTimeSpan : BaseObject, Gee.Comparable<ExactTimeSpan>, Gee.Hash
     }
     
     /**
+     * Returns true if there's a union between the two {@link ExactTimeSpan}s.
+     */
+    public bool coincides_with(ExactTimeSpan other) {
+        return contains(other.start_exact_time) || contains(other.end_exact_time)
+            || other.contains(start_exact_time) || other.contains(end_exact_time);
+    }
+    
+    /**
      * Returns a prettified string describing the {@link Event}'s time span in as concise and
      * economical manner possible.
      *

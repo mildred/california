@@ -142,6 +142,7 @@ california_VALASOURCES = \
 	toolkit/toolkit-motion-event.vala \
 	toolkit/toolkit-mutable-widget.vala \
 	toolkit/toolkit-popup.vala \
+	toolkit/toolkit-region-manager.vala \
 	toolkit/toolkit-rotating-button-box.vala \
 	toolkit/toolkit-stack-model.vala \
 	\
