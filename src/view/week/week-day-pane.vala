@@ -241,11 +241,7 @@ internal class DayPane : Pane, Common.InstanceContainer {
         
         // ... as are events that span days (or outside this date, although that technically
         // shouldn't happen)
-        Calendar.DateSpan date_span = event.get_event_date_span(Calendar.Timezone.local);
-        if (!date_span.is_same_day || !(date in date_span))
-            return false;
-        
-        return true;
+        return date in event.get_event_date_span(Calendar.Timezone.local);
     }
     
     // note that a painter's algorithm should be used here: background should be painted before
@@ -269,13 +265,28 @@ internal class DayPane : Pane, Common.InstanceContainer {
             .filter(event => event.calendar_source != null && event.calendar_source.visible)
             .to_tree_set();
         foreach (Component.Event event in sorted_events) {
-            Calendar.WallTime start_time =
-                event.exact_time_span.start_exact_time.to_timezone(Calendar.Timezone.local).to_wall_time();
-            Calendar.WallTime end_time =
-                event.exact_time_span.end_exact_time.to_timezone(Calendar.Timezone.local).to_wall_time();
+            // The actual WallTime is the time on the starting date (which may not be this Pane's
+            // date).  The draw WallTime is the time on this Pane's date to start and end drawing
+            // the rectangle
             
-            int start_y = get_line_y(start_time);
-            int end_y = get_line_y(end_time);
+            Calendar.WallTime actual_start_time =
+                event.exact_time_span.start_exact_time.to_timezone(Calendar.Timezone.local).to_wall_time();
+            Calendar.WallTime draw_start_time;
+            if (event.exact_time_span.start_date.equal_to(date))
+                draw_start_time = actual_start_time;
+            else
+                draw_start_time = Calendar.WallTime.earliest;
+            
+            Calendar.WallTime actual_end_time =
+                event.exact_time_span.end_exact_time.to_timezone(Calendar.Timezone.local).to_wall_time();
+            Calendar.WallTime draw_end_time;
+            if (event.exact_time_span.end_date.equal_to(date))
+                draw_end_time = actual_end_time;
+            else
+                draw_end_time = Calendar.WallTime.latest;
+            
+            int start_y = get_line_y(draw_start_time);
+            int end_y = get_line_y(draw_end_time);
             
             Gdk.RGBA rgba = event.calendar_source.color_as_rgba();
             
@@ -300,10 +311,10 @@ internal class DayPane : Pane, Common.InstanceContainer {
             // time range on first line, summary on second ... note that separator character is an
             // endash
             string timespan = "%s &#x2013; %s".printf(
-                start_time.to_pretty_string(Calendar.WallTime.PrettyFlag.NONE),
-                end_time.to_pretty_string(Calendar.WallTime.PrettyFlag.NONE));
-            Pango.Layout layout_0 = print_line(ctx, start_time, 0, timespan, rgba, rect_width, true);
-            Pango.Layout layout_1 = print_line(ctx, start_time, 1, event.summary, rgba, rect_width, false);
+                actual_start_time.to_pretty_string(Calendar.WallTime.PrettyFlag.NONE),
+                actual_end_time.to_pretty_string(Calendar.WallTime.PrettyFlag.NONE));
+            Pango.Layout layout_0 = print_line(ctx, draw_start_time, 0, timespan, rgba, rect_width, true);
+            Pango.Layout layout_1 = print_line(ctx, draw_start_time, 1, event.summary, rgba, rect_width, false);
             
             // if either was ellipsized, set tooltip (otherwise clear any existing)
             bool is_ellipsized = layout_0.is_ellipsized() || layout_1.is_ellipsized();
