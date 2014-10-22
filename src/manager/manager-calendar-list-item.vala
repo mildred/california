@@ -36,6 +36,9 @@ internal class CalendarListItem : Gtk.Grid, Toolkit.MutableWidget {
     [GtkChild]
     private Gtk.ColorButton color_button;
     
+    [GtkChild]
+    private Gtk.Image default_icon;
+    
     private Toolkit.EditableLabel? editable_label = null;
     
     public CalendarListItem(Backing.CalendarSource source) {
@@ -55,6 +58,10 @@ internal class CalendarListItem : Gtk.Grid, Toolkit.MutableWidget {
             BindingFlags.SYNC_CREATE, xform_readonly_to_icon_name);
         source.bind_property(Backing.Source.PROP_READONLY, readonly_icon, "tooltip-text",
             BindingFlags.SYNC_CREATE, xform_readonly_to_tooltip_text);
+        source.bind_property(Backing.CalendarSource.PROP_IS_DEFAULT, default_icon, "icon-name",
+            BindingFlags.SYNC_CREATE, xform_default_to_icon_name);
+        source.bind_property(Backing.CalendarSource.PROP_IS_DEFAULT, default_icon, "tooltip-text",
+            BindingFlags.SYNC_CREATE, xform_default_to_tooltip_text);
         
         title_eventbox.button_release_event.connect(on_title_button_release);
     }
@@ -76,6 +83,18 @@ internal class CalendarListItem : Gtk.Grid, Toolkit.MutableWidget {
     
     private bool xform_readonly_to_tooltip_text(Binding binding, Value source_value, ref Value target_value) {
         target_value = source.read_only ? _("Calendar is read-only") : null;
+        
+        return true;
+    }
+    
+    private bool xform_default_to_icon_name(Binding binding, Value source_value, ref Value target_value) {
+        target_value = source.is_default ? "starred-symbolic" : "";
+        
+        return true;
+    }
+    
+    private bool xform_default_to_tooltip_text(Binding binding, Value source_value, ref Value target_value) {
+        target_value = source.is_default ? _("Calendar is default") : _("Make this calendar default");
         
         return true;
     }
@@ -149,6 +168,15 @@ internal class CalendarListItem : Gtk.Grid, Toolkit.MutableWidget {
     private void on_title_edit_accepted(string text) {
         if (!String.is_empty(text))
             source.title = text;
+    }
+    
+    [GtkCallback]
+    private void on_default_button_clicked() {
+        try {
+            source.store.make_default_calendar(source);
+        } catch (Error err) {
+            message("Unable to set default calendar to %s: %s", source.title, err.message);
+        }
     }
 }
 

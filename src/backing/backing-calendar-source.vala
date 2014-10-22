@@ -18,6 +18,8 @@ namespace California.Backing {
  */
 
 public abstract class CalendarSource : Source {
+    public const string PROP_IS_DEFAULT = "is-default";
+    
     /**
      * The affected range of a removal operation.
      *
@@ -39,8 +41,27 @@ public abstract class CalendarSource : Source {
         ALL
     }
     
+    /**
+     * Indicates this {@link CalendarSource} is the default calendar for its {@link Backing.Store}.
+     *
+     * Thus, if/when there are more than one Backing.Store, there can be more than one default
+     * CalendarSource.
+     */
+    public bool is_default { get; private set; default = false; }
+    
     protected CalendarSource(Store store, string id, string title) {
         base (store, id, title);
+        
+        // watch store for change to default calendar
+        store.notify[Store.PROP_DEFAULT_CALENDAR].connect(on_store_default_calendar_changed);
+    }
+    
+    ~CalendarSource() {
+        store.notify[Store.PROP_DEFAULT_CALENDAR].disconnect(on_store_default_calendar_changed);
+    }
+    
+    private void on_store_default_calendar_changed() {
+        is_default = store.default_calendar == this;
     }
     
     /**

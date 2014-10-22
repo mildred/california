@@ -48,6 +48,7 @@ private Toolkit.ComboBoxTextModel<Backing.CalendarSource> build_calendar_source_
     
     // initialize with current list of calendars ... this control does not auto-update as
     // calendars are added/removed/modified
+    Backing.CalendarSource? first_default = null;
     foreach (Backing.CalendarSource calendar_source in
         Backing.Manager.instance.get_sources_of_type<Backing.CalendarSource>()) {
         if (!include_invisible && !calendar_source.visible)
@@ -57,6 +58,15 @@ private Toolkit.ComboBoxTextModel<Backing.CalendarSource> build_calendar_source_
             continue;
         
         model.add(calendar_source);
+        
+        // set first calendar marked as default as the initial choice
+        if (calendar_source.is_default && first_default == null)
+            first_default = calendar_source;
+    }
+    
+    if (first_default != null) {
+        model.set_item_active(first_default);
+        model.make_default_active(first_default);
     }
     
     return model;

@@ -87,8 +87,8 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
         
         example_label.label = "<small><i>%s</i></small>".printf(eg);
         
-        // make first item active
-        calendar_combo_box.active = 0;
+        // reset calendar combo to default active item
+        model.set_item_default_active();
     }
     
     [GtkCallback]

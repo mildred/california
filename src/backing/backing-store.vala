@@ -14,6 +14,7 @@ namespace California.Backing {
 
 public abstract class Store : BaseObject {
     public const string PROP_IS_OPEN = "is-open";
+    public const string PROP_DEFAULT_CALENDAR = "default-calendar";
     
     /**
      * Set when the {@link Store} is opened.
@@ -21,6 +22,11 @@ public abstract class Store : BaseObject {
      * This must be set by the base class.
      */
     public bool is_open { get; protected set; default = false; }
+    
+    /**
+     * Set to the default {@link CalendarSource} for this {@link Store}.
+     */
+    public CalendarSource? default_calendar { get; protected set; default = null; }
     
     private string desc;
     
@@ -113,6 +119,13 @@ public abstract class Store : BaseObject {
         
         return result;
     }
+    
+    /**
+     * Set the {@link CalendarSource} to the default for this {@link Store}.
+     *
+     * @throws {@link BackingError.MISMATCH} if CalendarSource did not originate from this store.
+     */
+    public abstract void make_default_calendar(Backing.CalendarSource calendar) throws Error;
     
     public override string to_string() {
         return desc;

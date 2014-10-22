@@ -151,7 +151,7 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         if (event.calendar_source != null) {
             calendar_model.set_item_active(event.calendar_source);
         } else {
-            calendar_combo.active = 0;
+            calendar_model.set_item_default_active();
             is_update = false;
         }
         

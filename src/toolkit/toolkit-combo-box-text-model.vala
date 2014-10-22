@@ -27,6 +27,13 @@ public class ComboBoxTextModel<G> : BaseObject {
     public G? active { get; private set; }
     
     /**
+     * The default active item.
+     *
+     * This can be used to restore the model to an initial state.
+     */
+    public G? default_active { get; private set; default = null; }
+    
+    /**
      * Set to true if the {@link ModelPresentation} returns Pango markup instead of plain text.
      */
     public bool is_markup { get; set; default = false; }
@@ -154,6 +161,45 @@ public class ComboBoxTextModel<G> : BaseObject {
             return false;
         
         combo_box.active = indices.get(item);
+        
+        return true;
+    }
+    
+    /**
+     * Makes the item the {@link default_active} item.
+     *
+     * The supplied item must already be a member of the model.
+     *
+     * @returns False if not present in model.
+     */
+    public bool make_default_active(G item) {
+        if (!indices.has_key(item))
+            return false;
+        
+        default_active = item;
+        
+        return true;
+    }
+    
+    /**
+     * Clears the {@link default_active} item.
+     */
+    public void clear_default_active() {
+        default_active = null;
+    }
+    
+    /**
+     * Makes the {@link default_active} item active in the Gtk.ComboBoxText.
+     *
+     * If default_active is null, the Gtk.ComboBoxText's zeroeth item will be set active.
+     *
+     * Returns the result of {@link set_item_active} or true if default_active is null.
+     */
+    public bool set_item_default_active() {
+        if (default_active != null)
+            return set_item_active(default_active);
+        
+        combo_box.active = 0;
         
         return true;
     }

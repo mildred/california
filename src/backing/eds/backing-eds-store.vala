@@ -30,6 +30,10 @@ internal class EdsStore : Store, WebCalSubscribable, CalDAVSubscribable {
         registry.source_added.connect(eds_source => add_eds_source_async.begin(eds_source));
         registry.source_removed.connect(eds_source => remove_eds_source(eds_source));
         
+        // watch for external changes of the default calendar and use handler to initialize
+        registry.notify["default-calendar"].connect(on_default_calendar_changed);
+        on_default_calendar_changed();
+        
         is_open = true;
     }
     
@@ -43,12 +47,33 @@ internal class EdsStore : Store, WebCalSubscribable, CalDAVSubscribable {
         is_open = false;
     }
     
+    private void check_open() throws BackingError {
+        if (!is_open)
+            throw new BackingError.UNAVAILABLE("EDS not open");
+    }
+    
+    private void on_default_calendar_changed() {
+        // EDS has a habit of issue property notifications in background threads, so ensure this
+        // property change happens in the foreground thread
+        Idle.add(() => {
+            Backing.CalendarSource? new_default_calendar = sources[registry.default_calendar]
+                as Backing.CalendarSource;
+            if (default_calendar == new_default_calendar)
+                return false;
+            
+            default_calendar = new_default_calendar;
+            
+            debug("Default EDS calendar: %s", (default_calendar != null) ? default_calendar.title : "(none)");
+            
+            return false;
+        });
+    }
+    
     /**
      * @inheritDoc
      */
     public override async void remove_source_async(Source source, Cancellable? cancellable) throws Error {
-        if (!is_open)
-            throw new BackingError.UNAVAILABLE("EDS not open");
+        check_open();
         
         if (source.store != this) {
             throw new BackingError.INVALID("Attempted to remove source %s from wrong store %s",
@@ -101,8 +126,7 @@ internal class EdsStore : Store, WebCalSubscribable, CalDAVSubscribable {
     
     private async void subscribe_eds_async(string title, Soup.URI uri, string? username, string color,
         string backend_name, Cancellable? cancellable) throws Error {
-        if (!is_open)
-            throw new BackingError.UNAVAILABLE("EDS not open");
+        check_open();
         
         E.Source scratch = new E.Source(null, null);
         // Surprise -- Google gets special treatment
@@ -154,6 +178,9 @@ internal class EdsStore : Store, WebCalSubscribable, CalDAVSubscribable {
         yield registry.create_sources(sources, cancellable);
     }
     
+    /**
+     * @inheritDoc
+     */
     public override Gee.List<Source> get_sources() {
         Gee.List<Source> list = new Gee.ArrayList<Source>();
         list.add_all(sources.values.read_only_view);
@@ -200,6 +227,20 @@ internal class EdsStore : Store, WebCalSubscribable, CalDAVSubscribable {
         EdsCalendarSource? calendar = source as EdsCalendarSource;
         if (calendar != null)
             calendar.close_async.begin(null);
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public override void make_default_calendar(Backing.CalendarSource calendar) throws Error {
+        check_open();
+        
+        Backing.EdsCalendarSource? eds_calendar = calendar as Backing.EdsCalendarSource;
+        if (eds_calendar == null)
+            throw new BackingError.MISMATCH("Not an EDS calendar source");
+        
+        if (registry.default_calendar != eds_calendar.eds_source)
+            registry.default_calendar = eds_calendar.eds_source;
     }
 }
 
