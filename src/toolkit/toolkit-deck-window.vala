@@ -22,7 +22,7 @@ public class DeckWindow : Gtk.Dialog {
         transient_for = parent;
         modal = true;
         resizable = false;
-        decorated = false;
+        set_titlebar((Gtk.Widget) null);
         
         deck.dismiss.connect(on_deck_dismissed);
         
