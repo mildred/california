@@ -345,15 +345,14 @@ private class Grid : Gtk.Grid {
         if (press_cell != release_cell)
             return Toolkit.PROPAGATE;
         
-        // if an existing event is double-clicked, ignore, as the single click handler is displaying
-        // it (but stop propagation)
-        if (release_cell.get_event_at(release_cell_point) != null)
-            return Toolkit.STOP;
-        
-        Toolkit.set_toplevel_cursor(this, null);
-        
-        owner.request_create_all_day_event(new Calendar.DateSpan(press_cell.date, release_cell.date),
-            release_cell, release_cell_point);
+        // if an existing event is double-clicked, open for editing, otherwise create new event
+        Component.Event? event = release_cell.get_event_at(release_cell_point);
+        if (event != null) {
+            owner.request_edit_event(event, release_cell, release_cell_point);
+        } else {
+            owner.request_create_all_day_event(new Calendar.DateSpan(press_cell.date, release_cell.date),
+                release_cell, release_cell_point);
+        }
         
         return Toolkit.STOP;
     }

@@ -82,6 +82,13 @@ public interface Controllable : Object {
         Gdk.Point? for_location);
     
     /**
+     * Signal from the {@link Controllable} that the {@link Component.Event} editor should be
+     * opened.
+     */
+    public signal void request_edit_event(Component.Event event, Gtk.Widget relative_to,
+        Gdk.Point? for_location);
+    
+    /**
      * Returns the {@link Container} that should be used to display the {@link Controllable}'s
      * contents.
      *

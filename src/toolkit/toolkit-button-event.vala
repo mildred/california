@@ -67,6 +67,8 @@ public enum Button {
  */
 
 public class ButtonEvent : BaseObject {
+    private const int SYNTHESIZED_CLICK_MSEC = 125;
+    
     /**
      * The Gtk.Widget the button press occurred on.
      *
@@ -97,12 +99,30 @@ public class ButtonEvent : BaseObject {
     private Gdk.Point _release_point = Gdk.Point();
     public Gdk.Point release_point { get { return _release_point; } }
     
+    // Indicates a full click-through has been received or a click has been synthesized after a
+    // delay.
+    internal signal void clicked();
+    
+    private Scheduled? scheduled_click = null;
+    
     internal ButtonEvent(Gtk.Widget widget, Gdk.EventButton press_event) {
         this.widget = widget;
         button = Button.from_button_event(press_event);
         press_type = press_event.type;
         _press_point.x = (int) press_event.x;
         _press_point.y = (int) press_event.y;
+    }
+    
+    ~ButtonEvent() {
+        cancel_click();
+    }
+    
+    private void cancel_click() {
+        if (scheduled_click == null)
+            return;
+        
+        scheduled_click.cancel();
+        scheduled_click = null;
     }
     
     // Update state with the next button press
@@ -113,6 +133,8 @@ public class ButtonEvent : BaseObject {
         press_type = press_event.type;
         _press_point.x = (int) press_event.x;
         _press_point.y = (int) press_event.y;
+        
+        cancel_click();
     }
     
     // Update state with the next button release and start the release timer
@@ -122,6 +144,13 @@ public class ButtonEvent : BaseObject {
         
         _release_point.x = (int) release_event.x;
         _release_point.y = (int) release_event.y;
+        
+        cancel_click();
+        
+        if (press_type == Gdk.EventType.3BUTTON_PRESS)
+            clicked();
+        else
+            scheduled_click = new Scheduled.once_after_msec(SYNTHESIZED_CLICK_MSEC, () => { clicked(); });
     }
     
     public override string to_string() {

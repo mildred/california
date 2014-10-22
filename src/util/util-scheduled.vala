@@ -176,6 +176,9 @@ public class Scheduled : BaseObject {
     }
     
     private bool on_once() {
+        if (is_executing || source_id == 0)
+            return false;
+        
         is_executing = true;
         schedule_once();
         is_executing = false;
@@ -187,6 +190,9 @@ public class Scheduled : BaseObject {
     }
     
     private bool on_continuous() {
+        if (is_executing || source_id == 0)
+            return false;
+        
         is_executing = true;
         Reschedule reschedule = schedule_continuous();
         is_executing = false;

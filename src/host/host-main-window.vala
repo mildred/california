@@ -297,6 +297,7 @@ public class MainWindow : Gtk.ApplicationWindow {
             current_controller.request_create_timed_event.disconnect(on_request_create_timed_event);
             current_controller.request_create_all_day_event.disconnect(on_request_create_all_day_event);
             current_controller.request_display_event.disconnect(on_request_display_event);
+            current_controller.request_edit_event.disconnect(on_request_edit_event);
             current_controller.notify[View.Controllable.PROP_IS_VIEWING_TODAY].disconnect(
                 on_is_viewing_today_changed);
             
@@ -311,6 +312,7 @@ public class MainWindow : Gtk.ApplicationWindow {
             current_controller.request_create_timed_event.connect(on_request_create_timed_event);
             current_controller.request_create_all_day_event.connect(on_request_create_all_day_event);
             current_controller.request_display_event.connect(on_request_display_event);
+            current_controller.request_edit_event.connect(on_request_edit_event);
             current_controller.notify[View.Controllable.PROP_IS_VIEWING_TODAY].connect(
                 on_is_viewing_today_changed);
             on_is_viewing_today_changed();
@@ -492,6 +494,11 @@ public class MainWindow : Gtk.ApplicationWindow {
         });
         
         show_deck_popover(relative_to, for_location, deck);
+    }
+    
+    private void on_request_edit_event(Component.Event event, Gtk.Widget relative_to,
+        Gdk.Point? for_location) {
+        on_edit_event(event, true);
     }
     
     private void edit_event(Component.Event event, bool is_update) {

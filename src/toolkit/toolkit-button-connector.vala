@@ -189,6 +189,8 @@ public class ButtonConnector : EventConnector {
                     ButtonEvent? details = button_states.get(widget);
                     if (details == null) {
                         details = new ButtonEvent(widget, event);
+                        details.clicked.connect(synthesize_click);
+                        
                         button_states.set(widget, details);
                     } else {
                         details.update_press(widget, event);
@@ -210,11 +212,8 @@ public class ButtonConnector : EventConnector {
                 // update saved state (if any) with release info and synthesize click
                 if (button_states != null) {
                     ButtonEvent? details = button_states.get(widget);
-                    if (details != null) {
+                    if (details != null)
                         details.update_release(widget, event);
-                        
-                        synthesize_click(details);
-                    }
                 }
             break;
         }
@@ -223,7 +222,6 @@ public class ButtonConnector : EventConnector {
     }
     
     private void synthesize_click(ButtonEvent details) {
-        // use Accept flags to indicate which signal(s) to fire
         bool result = Toolkit.PROPAGATE;
         switch (details.press_type) {
             case Gdk.EventType.BUTTON_PRESS:

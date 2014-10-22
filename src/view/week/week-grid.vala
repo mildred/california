@@ -375,9 +375,13 @@ internal class Grid : Gtk.Box {
         
         Common.InstanceContainer instance_container = (Common.InstanceContainer) details.widget;
         
-        // if an event is at this location, don't process
-        if (instance_container.get_event_at(details.press_point) != null)
-            return Toolkit.PROPAGATE;
+        // if an event is at this location, open for editing
+        Component.Event? event = instance_container.get_event_at(details.press_point);
+        if (event != null) {
+            owner.request_edit_event(event, instance_container, details.release_point);
+            
+            return Toolkit.STOP;
+        }
         
         Toolkit.set_toplevel_cursor(instance_container, null);
         
