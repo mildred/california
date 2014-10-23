@@ -18,6 +18,7 @@ public int run(string[] args) {
     UnitTest.Harness.register(new CalendarMonthOfYear());
     UnitTest.Harness.register(new CalendarWallTime());
     UnitTest.Harness.register(new CalendarExactTime());
+    UnitTest.Harness.register(new CalendarExactTimeSpan());
     UnitTest.Harness.register(new QuickAdd());
     UnitTest.Harness.register(new QuickAddRecurring());
     

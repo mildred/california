@@ -116,6 +116,7 @@ california_VALASOURCES = \
 	tests/tests.vala \
 	tests/tests-calendar-date.vala \
 	tests/tests-calendar-exact-time.vala \
+	tests/tests-calendar-exact-time-span.vala \
 	tests/tests-calendar-month-of-year.vala \
 	tests/tests-calendar-month-span.vala \
 	tests/tests-calendar-wall-time.vala \

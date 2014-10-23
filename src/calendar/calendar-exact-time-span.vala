@@ -107,12 +107,25 @@ public class ExactTimeSpan : BaseObject, Gee.Comparable<ExactTimeSpan>, Gee.Hash
             && end_exact_time.compare_to(exact_time) >= 0;
     }
     
+    private static bool coincides_with_compare(Calendar.ExactTime start, Calendar.ExactTime end,
+        Calendar.ExactTime exact_time) {
+        return start.compare_to(exact_time) <= 0 && end.compare_to(exact_time) >= 0;
+    }
+    
     /**
      * Returns true if there's a union between the two {@link ExactTimeSpan}s.
+     *
+     * Note that a time span ending at the exact same time as the other starts (with one-second
+     * accuracy) does ''not'' count as overlapping, i.e. the end times are exclusive.
      */
     public bool coincides_with(ExactTimeSpan other) {
-        return contains(other.start_exact_time) || contains(other.end_exact_time)
-            || other.contains(start_exact_time) || other.contains(end_exact_time);
+        Calendar.ExactTime end_excl = end_exact_time.adjust_time(-1, TimeUnit.SECOND);
+        Calendar.ExactTime other_end_excl = other.end_exact_time.adjust_time(-1, TimeUnit.SECOND);
+        
+        return coincides_with_compare(start_exact_time, end_excl, other.start_exact_time)
+            || coincides_with_compare(start_exact_time, end_excl, other_end_excl)
+            || coincides_with_compare(other.start_exact_time, other_end_excl, start_exact_time)
+            || coincides_with_compare(other.start_exact_time, other_end_excl, end_excl);
     }
     
     /**

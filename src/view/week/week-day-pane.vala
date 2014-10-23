@@ -348,6 +348,11 @@ internal class DayPane : Pane, Common.InstanceContainer {
                 else
                     draw_end_time = Calendar.WallTime.latest;
                 
+                // for purposes of visualization, an event ends one minute inward on both ends; i.e.
+                // an event from 1pm to 2pm is drawn as starting at 1:01pm and ending at 1:59pm
+                draw_start_time = draw_start_time.adjust(1, Calendar.TimeUnit.MINUTE, null);
+                draw_end_time = draw_end_time.adjust(-1, Calendar.TimeUnit.MINUTE, null);
+                
                 int start_x = ctr * rect_width;
                 int start_y = get_line_y(draw_start_time);
                 int end_y = get_line_y(draw_end_time);
