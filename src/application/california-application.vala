@@ -121,7 +121,10 @@ public class Application : Gtk.Application {
         }
     }
     
-    private Host.MainWindow? main_window = null;
+    /**
+     * The {@link MainWindow}.
+     */
+    public Host.MainWindow? main_window { get; private set; default = null; }
     
     private Application() {
         Object (application_id: ID);

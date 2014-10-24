@@ -23,12 +23,14 @@ public void init() throws Error {
     Backing.init();
     Calendar.init();
     Toolkit.init();
+    Component.init();
 }
 
 public void terminate() {
     if (!Unit.do_terminate(ref init_count))
         return;
     
+    Component.terminate();
     View.terminate();
     Backing.terminate();
     Calendar.terminate();

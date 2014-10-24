@@ -69,6 +69,8 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         Gtk.IconSize.BUTTON);
     private Gtk.Button remove_button = new Gtk.Button.from_icon_name("user-trash-symbolic",
         Gtk.IconSize.BUTTON);
+    private Gtk.Button export_button = new Gtk.Button.from_icon_name("document-save-symbolic",
+        Gtk.IconSize.BUTTON);
     
     private Gtk.Label delete_label = new Gtk.Label(_("Delete"));
     private Gtk.Button remove_all_button = new Gtk.Button.with_mnemonic(_("A_ll Events"));
@@ -82,10 +84,12 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         Calendar.System.instance.today_changed.connect(build_display);
         
         update_button.tooltip_text = _("Edit event");
+        export_button.tooltip_text = _("Export event as .ics");
         remove_button.tooltip_text = _("Delete event");
-        update_button.relief = remove_button.relief = Gtk.ReliefStyle.NONE;
+        update_button.relief = remove_button.relief = export_button.relief = Gtk.ReliefStyle.NONE;
         
         action_box.pack_end(update_button, false, false);
+        action_box.pack_end(export_button, false, false);
         action_box.pack_end(remove_button, false, false);
         
         remove_this_button.get_style_context().add_class("destructive-action");
@@ -93,6 +97,7 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         remove_all_button.get_style_context().add_class("destructive-action");
         
         update_button.clicked.connect(on_update_button_clicked);
+        export_button.clicked.connect(on_export_button_clicked);
         remove_button.clicked.connect(on_remove_button_clicked);
         remove_all_button.clicked.connect(on_remove_all_button_clicked);
         remove_this_button.clicked.connect(on_remove_this_button_clicked);
@@ -240,6 +245,38 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         edit_requested = true;
         
         notify_user_closed();
+    }
+    
+    private void on_export_button_clicked() {
+        // Export as a self-contained iCalendar
+        Component.iCalendar icalendar = new Component.iCalendar(iCal.icalproperty_method.PUBLISH,
+            Component.ICAL_PRODID, Component.ICAL_VERSION, null,
+            iterate<Component.Instance>(event).to_array_list());
+        
+        Gtk.FileChooserDialog dialog = new Gtk.FileChooserDialog(_("Export event as .ics"),
+            Application.instance.main_window, Gtk.FileChooserAction.SAVE,
+            _("_Cancel"), Gtk.ResponseType.CANCEL,
+            _("E_xport"), Gtk.ResponseType.ACCEPT);
+        // This is the suggested filename for saving (exporting) an event.  The .ics file extension
+        // should always be present no matter the translation, as many systems rely on it to detect
+        // the file type
+        dialog.set_current_name(_("event.ics"));
+        dialog.do_overwrite_confirmation = true;
+        
+        dialog.show_all();
+        int response = dialog.run();
+        string filename = dialog.get_filename();
+        dialog.destroy();
+        
+        if (response != Gtk.ResponseType.ACCEPT)
+            return;
+        
+        try {
+            FileUtils.set_contents(filename, icalendar.source);
+        } catch (Error err) {
+            Application.instance.error_message(Application.instance.main_window,
+                _("Unable to export event as file: %s").printf(err.message));
+        }
     }
     
     private async void remove_events_async(Component.DateTime? rid,

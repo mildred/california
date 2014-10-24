@@ -15,6 +15,23 @@
 
 namespace California.Component {
 
+/**
+ * iCalendar PRODID (Product Identifier).
+ *
+ * {@link init} ''must'' be called before referencing this string.
+ *
+ * See [[https://tools.ietf.org/html/rfc5545#section-3.7.3]]
+ * and [[https://en.wikipedia.org/wiki/Formal_Public_Identifier]]
+ */
+public static string ICAL_PRODID;
+
+/**
+ * iCalendar version this application adheres to.
+ *
+ * See [[https://tools.ietf.org/html/rfc5545#section-3.7.4]]
+ */
+public const string ICAL_VERSION = "2.0";
+
 private int init_count = 0;
 
 private string TODAY;
@@ -46,6 +63,8 @@ public void init() throws Error {
     // external unit init
     Collection.init();
     Calendar.init();
+    
+    ICAL_PRODID = "-//Yorba Foundation//NONSGML California Calendar %s//EN".printf(Application.VERSION);
     
     // Used by quick-add to indicate the user wants to create an event for today.
     // For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
@@ -186,6 +205,8 @@ public void terminate() {
     TODAY = TOMORROW = YESTERDAY = DAILY = WEEKLY = YEARLY = null;
     UNIT_WEEKDAYS = UNIT_WEEKENDS = UNIT_YEARS = UNIT_MONTHS = UNIT_WEEKS = UNIT_DAYS = UNIT_HOURS
         = UNIT_MINS = null;
+    
+    ICAL_PRODID = null;
     
     Calendar.terminate();
     Collection.terminate();
