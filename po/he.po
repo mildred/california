@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-01 12:23+0300\n"
-"PO-Revision-Date: 2014-10-01 12:39+0300\n"
-"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
+"POT-Creation-Date: 2014-10-26 00:40+0300\n"
+"PO-Revision-Date: 2014-10-26 00:42+0300\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -88,7 +88,7 @@ msgstr "לוח שנה Google"
 msgid "CalDAV"
 msgstr "CalDAV"
 
-#: ../src/activator/generic/generic-subscribe.vala:97
+#: ../src/activator/generic/generic-subscribe.vala:100
 #, c-format
 msgid "Unable to subscribe to calendar at %s: %s"
 msgstr "לא ניתן להירשם ללוח בשנה ב־%s: ‏%s"
@@ -143,19 +143,19 @@ msgstr "כל הזכויות שמורות 2014 Yorba Foundation"
 msgid "Visit California's home page"
 msgstr "ביקור בדף הבית של California"
 
-#: ../src/application/california-application.vala:184
+#: ../src/application/california-application.vala:187
 #, c-format
 msgid "Unable to open California: %s"
 msgstr "לא ניתן לפתוח את California: ‏%s"
 
-#: ../src/application/california-application.vala:321
+#: ../src/application/california-application.vala:324
 #, c-format
 msgid "About %s"
 msgstr "על אודות  %s"
 
 #. Translators: add your name and email address to receive credit in the About dialog
 #. For example: Yamada Taro <yamada.taro@example.com>
-#: ../src/application/california-application.vala:327
+#: ../src/application/california-application.vala:330
 msgid "translator-credits"
 msgstr "יוסף אור בוצ׳קו <yoseforb@gnome.org>"
 
@@ -180,7 +180,7 @@ msgstr "Unknown options: %s\n"
 #. A span of time, i.e. "3:30pm to 4:30pm"
 #. date formatting: "<Start Date> to <End Date>"
 #: ../src/calendar/calendar-date-span.vala:95
-#: ../src/calendar/calendar-exact-time-span.vala:127
+#: ../src/calendar/calendar-exact-time-span.vala:148
 #: ../src/view/week/week-controller.vala:192
 #, c-format
 msgid "%s to %s"
@@ -364,7 +364,7 @@ msgstr "יום ראשון החמישי"
 #. Prints two full time and date strings on separate lines, i.e.:
 #. 12 January 2012, 3:30pm
 #. 13 January 2013, 6:30am
-#: ../src/calendar/calendar-exact-time-span.vala:142
+#: ../src/calendar/calendar-exact-time-span.vala:163
 #, c-format
 msgid ""
 "%s, %s\n"
@@ -375,7 +375,7 @@ msgstr ""
 
 #. Prints full time and date strings on a single line, i.e.:
 #. 12 January 2012, 3:30pm to 13 January 2013, 6:30am
-#: ../src/calendar/calendar-exact-time-span.vala:151
+#: ../src/calendar/calendar-exact-time-span.vala:172
 #, c-format
 msgid "%s, %s to %s, %s"
 msgstr "בין %s, %s ל־%s, %s"
@@ -548,37 +548,37 @@ msgstr "צהריים"
 
 #. Used by quick-add to indicate the user wants to create an event for today.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:52
+#: ../src/component/component.vala:71
 msgid "today"
 msgstr "היום"
 
 #. Used by quick-add to indicate the user wants to create an event for tomorrow.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:56
+#: ../src/component/component.vala:75
 msgid "tomorrow"
 msgstr "מחר"
 
 #. Used by quick-add to indicate the user wants to create an event for yesterday.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:60
+#: ../src/component/component.vala:79
 msgid "yesterday"
 msgstr "אתמול"
 
 #. Used by quick-add to indicate the user wants to create a daily recurring event
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:64
+#: ../src/component/component.vala:83
 msgid "daily"
 msgstr "יומי"
 
 #. Used by quick-add to indicate the user wants to create a weekly recurring event
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:68
+#: ../src/component/component.vala:87
 msgid "weekly"
 msgstr "שבועי"
 
 #. Used by quick-add to indicate the user wants to create a yearly recurring event
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:72
+#: ../src/component/component.vala:91
 msgid "yearly"
 msgstr "שנתי"
 
@@ -587,7 +587,7 @@ msgstr "שנתי"
 #. Common abbreviations (without punctuation) should be included.  Each word must be separated
 #. by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:79
+#: ../src/component/component.vala:98
 msgid "weekday;weekdays;"
 msgstr "יום חול;ימי חול;"
 
@@ -596,49 +596,49 @@ msgstr "יום חול;ימי חול;"
 #. Common abbreviations (without punctuation) should be included.  Each word must be separated
 #. by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:86
+#: ../src/component/component.vala:105
 msgid "weekend;weekends;"
 msgstr "סוף שבוע;סוף השבוע;סופי שבוע;"
 
 #. Used by quick-add to convert a user's years unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:91
+#: ../src/component/component.vala:110
 msgid "year;years;yr;yrs;"
 msgstr "שנה;שנים;שנ׳;"
 
 #. Used by quick-add to convert a user's month unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:96
+#: ../src/component/component.vala:115
 msgid "month;months;mo;mos;"
 msgstr "חודש;חודשים;ח׳;"
 
 #. Used by quick-add to convert a user's week unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:101
+#: ../src/component/component.vala:120
 msgid "week;weeks;wk;weeks;"
 msgstr "שבוע;שבועות;"
 
 #. Used by quick-add to convert a user's day unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:106
+#: ../src/component/component.vala:125
 msgid "day;days;"
 msgstr "יום;ימים;"
 
 #. Used by quick-add to convert a user's hours unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:111
+#: ../src/component/component.vala:130
 msgid "hour;hours;hr;hrs"
 msgstr "שעה;שעות;ש"
 
 #. Used by quick-add to convert a user's minute unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:116
+#: ../src/component/component.vala:135
 msgid "minute;minutes;min;mins"
 msgstr "דקה;דקות;ד;דק"
 
@@ -648,7 +648,7 @@ msgstr "דקה;דקות;ד;דק"
 #. This list can be empty but that will limit the parser or cause unexpected results.
 #. Examples: "wednesday and thursday", "monday or friday"
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:124
+#: ../src/component/component.vala:143
 msgid "and;or;"
 msgstr "ו;וגם;או;"
 
@@ -659,7 +659,7 @@ msgstr "ו;וגם;או;"
 #. The list can be empty, but that will limit the parser.
 #. Examples: "at 9am", "from 10pm to 11:30pm", "on monday", "until June 3rd", "this Friday"
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:133
+#: ../src/component/component.vala:152
 msgid "at;from;to;on;until;this;"
 msgstr ""
 "ב;ב־;בשעה;מ;מ־;משעה;עד;ל־;עד ל־;עד לשעה;בתאריך;עד לתאריך;תאריך;הזה;הקרוב;"
@@ -671,7 +671,7 @@ msgstr ""
 #. The list can be empty, but that will limit the parser.
 #. Examples: "for 3 hours", "for 90 minutes"
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:142
+#: ../src/component/component.vala:161
 msgid "for;"
 msgstr "במשך;"
 
@@ -682,7 +682,7 @@ msgstr "במשך;"
 #. The list can be empty, but that will limit the parser.
 #. Example: "in 3 hours" (meaning 3 hours from now)
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:151
+#: ../src/component/component.vala:170
 msgid "in;"
 msgstr "בעוד;"
 
@@ -693,7 +693,7 @@ msgstr "בעוד;"
 #. The list can be empty, but that will limit the parser.
 #. Example: "every 3 days", "every Friday"
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:160
+#: ../src/component/component.vala:179
 msgid "every;"
 msgstr "כל;בכל;"
 
@@ -704,7 +704,7 @@ msgstr "כל;בכל;"
 #. parser.
 #. Example: "at supermarket", "at Eiffel Tower"
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:169
+#: ../src/component/component.vala:188
 msgid "at;"
 msgstr "ב;ב־;"
 
@@ -714,7 +714,7 @@ msgstr "ב;ב־;"
 #. suffixes.
 #. Example: "1st", "2nd", "3rd", "4th"
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:177
+#: ../src/component/component.vala:196
 msgid "st;nd;rd;th"
 msgstr " "
 
@@ -877,8 +877,9 @@ msgstr "יום %d"
 
 #: ../src/host/host-create-update-event.vala:67
 #: ../src/host/host-create-update-event.vala:70
-#: ../src/host/host-show-event.vala:78 ../src/rc/activator-list.ui.h:1
-#: ../src/rc/calendar-import.ui.h:1 ../src/rc/create-update-recurring.ui.h:24
+#: ../src/host/host-show-event.vala:80 ../src/host/host-show-event.vala:258
+#: ../src/rc/activator-list.ui.h:1 ../src/rc/calendar-import.ui.h:1
+#: ../src/rc/create-update-recurring.ui.h:24
 #: ../src/rc/event-time-settings.ui.h:4 ../src/rc/generic-subscribe.ui.h:5
 #: ../src/rc/google-authenticating.ui.h:1
 #: ../src/rc/google-calendar-list.ui.h:2 ../src/rc/google-login.ui.h:1
@@ -931,7 +932,6 @@ msgid "Unable to update event: %s"
 msgstr "לא ניתן לעדכן את האירוע: %s"
 
 #: ../src/host/host-create-update-recurring.vala:438
-#, c-format
 msgid "month"
 msgid_plural "months"
 msgstr[0] "חודש"
@@ -939,7 +939,6 @@ msgstr[1] "חודשים"
 msgstr[2] "חודשים"
 
 #: ../src/host/host-create-update-recurring.vala:442
-#, c-format
 msgid "week"
 msgid_plural "weeks"
 msgstr[0] "שבוע"
@@ -947,7 +946,6 @@ msgstr[1] "שבועות"
 msgstr[2] "שבועות"
 
 #: ../src/host/host-create-update-recurring.vala:446
-#, c-format
 msgid "year"
 msgid_plural "years"
 msgstr[0] "שנה"
@@ -955,7 +953,6 @@ msgstr[1] "שנים"
 msgstr[2] "שנים"
 
 #: ../src/host/host-create-update-recurring.vala:451
-#, c-format
 msgid "day"
 msgid_plural "days"
 msgstr[0] "יום"
@@ -992,7 +989,7 @@ msgstr "הוספה מהירה של אירוע (Ctrl+מ)"
 msgid "Calendars (Ctrl+L)"
 msgstr "לוחות שנה (Ctrl+ך)"
 
-#: ../src/host/host-main-window.vala:486
+#: ../src/host/host-main-window.vala:488
 #, c-format
 msgid "Unable to edit event: %s"
 msgstr "לא ניתן לערוך את האירוע: %s"
@@ -1017,33 +1014,53 @@ msgstr "<small><i>לדוגמה: ארוחת ערב בתל אביב ב־7:30 מח�
 msgid "Error opening help: %s"
 msgstr "שגיאה בפתחית העזרה: %s"
 
-#: ../src/host/host-show-event.vala:73
+#: ../src/host/host-show-event.vala:75
 msgid "Delete"
 msgstr "מחיקה"
 
-#: ../src/host/host-show-event.vala:74
+#: ../src/host/host-show-event.vala:76
 msgid "A_ll Events"
 msgstr "_כל האירועים"
 
-#: ../src/host/host-show-event.vala:75
+#: ../src/host/host-show-event.vala:77
 msgid "_This Event"
 msgstr "אירוע _זה"
 
-#: ../src/host/host-show-event.vala:77
+#: ../src/host/host-show-event.vala:79
 msgid "This & _Future Events"
 msgstr "זה ואירועים _עתידיים"
 
-#: ../src/host/host-show-event.vala:84
+#: ../src/host/host-show-event.vala:86
 msgid "Edit event"
 msgstr "עריכת אירוע"
 
-#: ../src/host/host-show-event.vala:85
+#: ../src/host/host-show-event.vala:87 ../src/host/host-show-event.vala:256
+msgid "Export event as .ics"
+msgstr "יצוא אירוע כ־‎.ics"
+
+#: ../src/host/host-show-event.vala:88
 msgid "Delete event"
 msgstr "מחיקת אירוע"
 
+#: ../src/host/host-show-event.vala:259
+msgid "E_xport"
+msgstr "_יצוא"
+
+#. This is the suggested filename for saving (exporting) an event.  The .ics file extension
+#. should always be present no matter the translation, as many systems rely on it to detect
+#. the file type
+#: ../src/host/host-show-event.vala:263
+msgid "event.ics"
+msgstr "אירוע.ics"
+
+#: ../src/host/host-show-event.vala:278
+#, c-format
+msgid "Unable to export event as file: %s"
+msgstr "לא ניתן לייצא אירוע כקובץ: %s"
+
 #. No number is supplied because the number of events removed is indefinite in certain
 #. situations ... plural text should simply be for "more than one"
-#: ../src/host/host-show-event.vala:268
+#: ../src/host/host-show-event.vala:305
 #, c-format
 msgid "Unable to remove event: %s"
 msgid_plural "Unable to remove events: %s"
@@ -1051,9 +1068,17 @@ msgstr[0] "לא ניתן להסיר את האירוע: %s"
 msgstr[1] "לא ניתן להסיר את האירועים: %s"
 msgstr[2] "לא ניתן להסיר את האירועים: %s"
 
-#: ../src/manager/manager-calendar-list-item.vala:78
+#: ../src/manager/manager-calendar-list-item.vala:85
 msgid "Calendar is read-only"
 msgstr "לוח השנה ניתן לקריאה בלבד"
+
+#: ../src/manager/manager-calendar-list-item.vala:97
+msgid "Calendar is default"
+msgstr "לוח השנה מוגדר בררת מחדל"
+
+#: ../src/manager/manager-calendar-list-item.vala:97
+msgid "Make this calendar default"
+msgstr "להגדיר לוח שנה זה כבררת מחדל"
 
 #: ../src/manager/manager-remove-calendar.vala:39
 #, c-format
