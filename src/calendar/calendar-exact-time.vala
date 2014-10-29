@@ -197,6 +197,13 @@ public class ExactTime : BaseObject, Gee.Comparable<ExactTime>, Gee.Hashable<Exa
     }
     
     /**
+     * Same as {@link to_timezone} with {@link System.timezone} passed as the {@link Timezone}.
+     */
+    public ExactTime to_local() {
+        return to_timezone(System.timezone);
+    }
+    
+    /**
      * Returns the {@link WallTime} for the {@link ExactTime}.
      */
     public WallTime to_wall_time() {

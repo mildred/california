@@ -335,7 +335,7 @@ internal class DayPane : Pane, Common.InstanceContainer {
                 Calendar.WallTime actual_start_time =
                     event.exact_time_span.start_exact_time.to_timezone(Calendar.Timezone.local).to_wall_time();
                 Calendar.WallTime draw_start_time;
-                if (event.exact_time_span.start_date.equal_to(date))
+                if (event.exact_time_span.to_local().start_date.equal_to(date))
                     draw_start_time = actual_start_time;
                 else
                     draw_start_time = Calendar.WallTime.earliest;
@@ -343,7 +343,7 @@ internal class DayPane : Pane, Common.InstanceContainer {
                 Calendar.WallTime actual_end_time =
                     event.exact_time_span.end_exact_time.to_timezone(Calendar.Timezone.local).to_wall_time();
                 Calendar.WallTime draw_end_time;
-                if (event.exact_time_span.end_date.equal_to(date))
+                if (event.exact_time_span.to_local().end_date.equal_to(date))
                     draw_end_time = actual_end_time;
                 else
                     draw_end_time = Calendar.WallTime.latest;

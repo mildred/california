@@ -100,6 +100,13 @@ public class ExactTimeSpan : BaseObject, Gee.Comparable<ExactTimeSpan>, Gee.Hash
     }
     
     /**
+     * Same as {@link to_timezone} with {@link System.timezone} passed as the {@link Timezone}.
+     */
+    public ExactTimeSpan to_local() {
+        return to_timezone(System.timezone);
+    }
+    
+    /**
      * Returns true if the {@link ExactTime} is in this {@link ExactTimeSpan}.
      */
     public bool contains(ExactTime exact_time) {
