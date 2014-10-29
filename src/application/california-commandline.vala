@@ -27,8 +27,10 @@ public bool parse(string[] args, out int exitcode) {
     context.set_help_enabled(true);
     context.add_main_entries(options, null);
     context.set_summary(Application.DESCRIPTION);
-    context.set_description("%s\n\n%s\n\t%s\n".printf(
+    context.set_description("%s\n\n%s\n\t%s\n\n%s\n\t%s\n".printf(
         Application.COPYRIGHT,
+        _("To log debug to standard out:"),
+        _("$ G_MESSAGES_DEBUG=all california"),
         _("Please report problems and requests to:"),
         Application.BUGREPORT_URL));
     
