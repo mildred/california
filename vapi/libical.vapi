@@ -99,7 +99,7 @@ namespace iCal {
 		[CCode (cname = "icalcomponent_get_due")]
 		public iCal.icaltimetype get_due ();
 		[CCode (cname = "icalcomponent_get_duration")]
-		public unowned iCal.icaldurationtype get_duration ();
+		public iCal.icaldurationtype get_duration ();
 		[CCode (cname = "icalcomponent_get_first_component")]
 		public unowned iCal.icalcomponent? get_first_component (iCal.icalcomponent_kind kind);
 		[CCode (cname = "icalcomponent_get_first_property")]
@@ -213,9 +213,9 @@ namespace iCal {
 		[CCode (cname = "icalcomponent_new_xstandard", has_construct_function = false)]
 		public icalcomponent.xstandard ();
 	}
-	[CCode (cheader_filename = "libical/ical.h")]
-	[Compact]
-	public class icaldurationtype {
+	[CCode (cheader_filename = "libical/ical.h", cname="struct icaldurationtype")]
+	[SimpleType]
+	public struct icaldurationtype {
 		public uint days;
 		public uint hours;
 		public int is_neg;
@@ -229,17 +229,17 @@ namespace iCal {
 		[CCode (cname = "icaldurationtype_as_int")]
 		public int as_int ();
 		[CCode (cname = "icaldurationtype_bad_duration")]
-		public static unowned iCal.icaldurationtype bad_duration ();
+		public static iCal.icaldurationtype bad_duration ();
 		[CCode (cname = "icaldurationtype_from_int")]
-		public static unowned iCal.icaldurationtype from_int (int t);
+		public static iCal.icaldurationtype from_int (int t);
 		[CCode (cname = "icaldurationtype_from_string")]
-		public static unowned iCal.icaldurationtype from_string (string p1);
+		public static iCal.icaldurationtype from_string (string p1);
 		[CCode (cname = "icaldurationtype_is_bad_duration")]
 		public int is_bad_duration ();
 		[CCode (cname = "icaldurationtype_is_null_duration")]
 		public int is_null_duration ();
 		[CCode (cname = "icaldurationtype_null_duration")]
-		public static unowned iCal.icaldurationtype null_duration ();
+		public static iCal.icaldurationtype null_duration ();
 	}
 	[CCode (cheader_filename = "libical/ical.h", free_function = "icalparameter_free")]
 	[Compact]
@@ -657,7 +657,7 @@ namespace iCal {
 		[CCode (cname = "icalproperty_get_due")]
 		public iCal.icaltimetype get_due ();
 		[CCode (cname = "icalproperty_get_duration")]
-		public unowned iCal.icaldurationtype get_duration ();
+		public iCal.icaldurationtype get_duration ();
 		[CCode (cname = "icalproperty_get_exdate")]
 		public iCal.icaltimetype get_exdate ();
 		[CCode (cname = "icalproperty_get_expand")]
@@ -779,7 +779,7 @@ namespace iCal {
 		[CCode (cname = "icalproperty_get_url")]
 		public unowned string get_url ();
 		[CCode (cname = "icalproperty_get_value")]
-		public unowned iCal.icalvalue get_value ();
+		public unowned iCal.icalvalue? get_value ();
 		[CCode (cname = "icalproperty_get_value_as_string")]
 		public unowned string get_value_as_string ();
 		[CCode (cname = "icalproperty_get_value_as_string_r")]
@@ -1502,7 +1502,7 @@ namespace iCal {
 		[CCode (cname = "icalvalue_get_datetimeperiod")]
 		public iCal.icaldatetimeperiodtype get_datetimeperiod ();
 		[CCode (cname = "icalvalue_get_duration")]
-		public unowned iCal.icaldurationtype get_duration ();
+		public iCal.icaldurationtype get_duration ();
 		[CCode (cname = "icalvalue_get_float")]
 		public global::float get_float ();
 		[CCode (cname = "icalvalue_get_geo")]
@@ -1694,7 +1694,7 @@ namespace iCal {
 	public struct icalperiodtype {
 		public iCal.icaltimetype start;
 		public iCal.icaltimetype end;
-		public weak iCal.icaldurationtype duration;
+		public iCal.icaldurationtype duration;
 		[CCode (cname = "icalperiodtype_as_ical_string")]
 		public unowned string as_ical_string ();
 		[CCode (cname = "icalperiodtype_as_ical_string_r")]
@@ -1789,7 +1789,7 @@ namespace iCal {
 	[CCode (cheader_filename = "libical/ical.h")]
 	public struct icaltriggertype {
 		public iCal.icaltimetype time;
-		public weak iCal.icaldurationtype duration;
+		public iCal.icaldurationtype duration;
 		[CCode (cname = "icaltriggertype_from_int")]
 		public static iCal.icaltriggertype from_int (int reltime);
 		[CCode (cname = "icaltriggertype_from_string")]
@@ -2640,7 +2640,7 @@ namespace iCal {
 	[CCode (cheader_filename = "libical/ical.h", cname = "icaltime_start_doy_week")]
 	public static int icaltime_start_doy_week (iCal.icaltimetype t, int fdow);
 	[CCode (cheader_filename = "libical/ical.h", cname = "icaltime_subtract")]
-	public static unowned iCal.icaldurationtype icaltime_subtract (iCal.icaltimetype t1, iCal.icaltimetype t2);
+	public static iCal.icaldurationtype icaltime_subtract (iCal.icaltimetype t1, iCal.icaltimetype t2);
 	[CCode (cheader_filename = "libical/ical.h", cname = "icaltime_today")]
 	public static iCal.icaltimetype icaltime_today ();
 	[CCode (cheader_filename = "libical/ical.h", cname = "icaltime_week_number")]

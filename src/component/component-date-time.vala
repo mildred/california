@@ -80,8 +80,19 @@ public class DateTime : BaseObject, Gee.Hashable<DateTime>, Gee.Comparable<DateT
         init_from_property(prop);
     }
     
+    private DateTime.from_icaltimetype(iCal.icaltimetype dt, iCal.icalproperty_kind kind) {
+        this.dt = dt;
+        this.kind = kind;
+        this.value = "";
+    }
+    
     private void init_from_property(iCal.icalproperty prop) throws ComponentError {
-        unowned iCal.icalvalue prop_value = prop.get_value();
+        unowned iCal.icalvalue? prop_value = prop.get_value();
+        if (prop_value == null) {
+            throw new ComponentError.UNAVAILABLE("Property of kind %s has no associated value",
+                prop.isa().to_string());
+        }
+        
         switch (prop_value.isa()) {
             case iCal.icalvalue_kind.DATE_VALUE:
                 dt = prop_value.get_date();
@@ -164,6 +175,44 @@ public class DateTime : BaseObject, Gee.Hashable<DateTime>, Gee.Comparable<DateT
         kind = iCal.icalproperty_kind.RRULE_PROPERTY;
         dt = rrule.until;
         zone = (!until_is_date || until_is_utc) ? Calendar.OlsonZone.utc : null;
+    }
+    
+    /**
+     * Return a {@link DateTime} adjusted with the supplied iCal component's DURATION and the
+     * supplied property kind.
+     *
+     * The returned DateTime will have an empty string for its value.
+     *
+     * @throws ComponentError.UNAVAILABLE if DURATION not found
+     * @throws ComponentError.INVALID if not a valid DURATION (including a null DURATION)
+     */
+    public DateTime adjust_duration(iCal.icalcomponent ical_component, iCal.icalproperty_kind new_kind)
+        throws ComponentError {
+        unowned iCal.icalproperty? prop = ical_component.get_first_property(
+            iCal.icalproperty_kind.DURATION_PROPERTY);
+        if (prop == null)
+            throw new ComponentError.UNAVAILABLE("No DURATION property found");
+        
+        unowned iCal.icalvalue? value = prop.get_value();
+        if (value == null)
+            throw new ComponentError.UNAVAILABLE("No value for DURATION property");
+        
+        if (value.isa() != iCal.icalvalue_kind.DURATION_VALUE)
+            throw new ComponentError.INVALID("DURATION property does not have a DURATION value");
+        
+        iCal.icaldurationtype duration = value.get_duration();
+        if (duration.is_bad_duration() != 0 || duration.is_null_duration() != 0)
+            throw new ComponentError.INVALID("DURATION value is bad or null");
+        
+        // if adjusting a DATE DTSTART, only days and weeks are to be respected in the adjustment:
+        // https://tools.ietf.org/html/rfc5545#section-3.8.2.5
+        if (kind == iCal.icalproperty_kind.DTSTART_PROPERTY && is_date) {
+            duration.hours = 0;
+            duration.minutes = 0;
+            duration.seconds = 0;
+        }
+        
+        return new DateTime.from_icaltimetype(iCal.icaltime_add(dt, duration), new_kind);
     }
     
     /**

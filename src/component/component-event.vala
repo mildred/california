@@ -122,12 +122,42 @@ public class Event : Instance, Gee.Comparable<Event> {
         description = ical_component.get_description();
         
         DateTime dt_start = new DateTime(ical_component, iCal.icalproperty_kind.DTSTART_PROPERTY);
-        DateTime dt_end = new DateTime(ical_component, iCal.icalproperty_kind.DTEND_PROPERTY);
+        
+        // DTSTART is required for a valid VEVENT but DTEND is not.  See
+        // https://tools.ietf.org/html/rfc5545#section-3.6.1 for how a missing DTEND is treated
+        // when interpreting a VEVENT.
+        DateTime? dt_end = null;
+        try {
+            dt_end = new DateTime(ical_component, iCal.icalproperty_kind.DTEND_PROPERTY);
+        } catch (ComponentError comperr) {
+            // if UNAVAILABLE, fall through and follow interpretation rules in iCal spec
+            if (!(comperr is ComponentError.UNAVAILABLE))
+                throw comperr;
+        }
+        
+        // If no DTEND, look for a DURATION
+        if (dt_end == null) {
+            try {
+                dt_end = dt_start.adjust_duration(ical_component, iCal.icalproperty_kind.DTEND_PROPERTY);
+            } catch (ComponentError comperr) {
+                // fall through
+            }
+        }
+        
+        bool dtend_inclusive = false;
+        if (dt_end == null) {
+            // For DTSTART w/ DATE, treat DTEND as one-day event; for DATETIME, use DTSTART for DTEND.
+            // Because DTEND is non-inclusive in VEVENTs, that means use the same value in both cases
+            // and just don't convert as non-inclusive
+            dt_end = dt_start;
+            dtend_inclusive = true;
+        }
+        
         // convert start and end DATE/DATE-TIMEs to internal values ... note that VEVENT dtend
         // is non-inclusive (see https://tools.ietf.org/html/rfc5545#section-3.6.1)
         Calendar.DateSpan? date_span;
         Calendar.ExactTimeSpan? exact_time_span;
-        DateTime.to_span(dt_start, dt_end, false, out date_span, out exact_time_span);
+        DateTime.to_span(dt_start, dt_end, dtend_inclusive, out date_span, out exact_time_span);
         if (exact_time_span != null) {
             set_event_exact_time_span(exact_time_span);
         } else {
