@@ -448,16 +448,21 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
      * from the others.  That is, if the minutes setting is adjusted from 59 to 0, the hour remains
      * unchanged.
      *
+     * rollover is returned just as it is with {@link adjust}.
+     *
      * An amount of zero returns the current {@link WallTime}.
      *
      * @see adjust
      */
-    public WallTime free_adjust(int amount, TimeUnit time_unit) {
-        if (amount == 0)
+    public WallTime free_adjust(int amount, TimeUnit time_unit, out bool rollover) {
+        if (amount == 0) {
+            rollover = false;
+            
             return this;
+        }
         
         // piggyback on adjust() to do the heavy lifting, then rearrange its results
-        WallTime adjusted = adjust(amount, time_unit, null);
+        WallTime adjusted = adjust(amount, time_unit, out rollover);
         switch (time_unit) {
             case TimeUnit.HOUR:
                 return new WallTime(adjusted.hour, minute, second);

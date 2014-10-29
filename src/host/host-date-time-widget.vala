@@ -195,12 +195,34 @@ public class DateTimeWidget : Gtk.Box {
             return Toolkit.PROPAGATE;
         
         // use free_adjust() to adjust each unit individually without affecting others
-        Calendar.WallTime new_wall_time = wall_time.free_adjust(amount, time_unit);
+        bool rollover;
+        Calendar.WallTime new_wall_time = wall_time.free_adjust(amount, time_unit, out rollover);
+        
+        // if rolled-over, adjust the date ... note that this only happens when adjusting the
+        // hour, as the other free-adjust widgets aren't designed to change the date (that is, only
+        // the hour widget is locked to the date)
+        Calendar.Date new_date = date;
+        if (rollover) {
+            int date_amount;
+            if (details.widget == hour_up)
+                date_amount = 1;
+            else if (details.widget == hour_down)
+                date_amount = -1;
+            else
+                date_amount = 0;
+            
+            new_date = date.adjust(date_amount);
+        }
         
         // ensure it's clamped ... this assignment will update the entry fields, so don't
         // disconnect widget signals
-        if (is_valid_date_time(date, new_wall_time))
+        if (is_valid_date_time(new_date, new_wall_time)) {
+            freeze_notify();
             wall_time = new_wall_time;
+            if (!date.equal_to(new_date))
+                date = new_date;
+            thaw_notify();
+        }
         
         return Toolkit.STOP;
     }
