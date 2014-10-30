@@ -105,8 +105,8 @@ public class Event : Instance, Gee.Comparable<Event> {
      * A {@link Calendar.DateSpan} or a {@link Calendar.ExactTimeSpan} must be specified in order
      * to generate a minimally-valid Event.
      */
-    public Event.blank() {
-        base.blank(iCal.icalcomponent_kind.VEVENT_COMPONENT);
+    public Event.blank(Backing.CalendarSource? calendar_source = null) {
+        base.blank(iCal.icalcomponent_kind.VEVENT_COMPONENT, calendar_source);
         
         notify.connect(on_notify);
     }

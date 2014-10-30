@@ -43,11 +43,11 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
     [GtkChild]
     private Gtk.Button cancel_button;
     
-    private Toolkit.ComboBoxTextModel<Backing.CalendarSource> model;
+    private Toolkit.ComboBoxTextModel<Backing.CalendarSource> calendar_model;
     private Toolkit.EntryClearTextConnector clear_text_connector = new Toolkit.EntryClearTextConnector();
     
     public QuickCreateEvent(bool in_deck_window) {
-        model = build_calendar_source_combo_model(calendar_combo_box);
+        calendar_model = build_calendar_source_combo_model(calendar_combo_box);
         
         clear_text_connector.connect_to(details_entry);
         details_entry.bind_property("text", create_button, "sensitive", BindingFlags.SYNC_CREATE,
@@ -88,7 +88,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
         example_label.label = "<small><i>%s</i></small>".printf(eg);
         
         // reset calendar combo to default active item
-        model.set_item_default_active();
+        calendar_model.set_item_default_active();
     }
     
     [GtkCallback]
@@ -107,7 +107,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
         if (String.is_empty(details))
             return;
         
-        Component.DetailsParser parser = new Component.DetailsParser(details, model.active,
+        Component.DetailsParser parser = new Component.DetailsParser(details, calendar_model.active,
             event);
         event = parser.event;
         
@@ -123,7 +123,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
         // empty text okay
         string details = details_entry.text.strip();
         if (!String.is_empty(details)) {
-            Component.DetailsParser parser = new Component.DetailsParser(details, model.active,
+            Component.DetailsParser parser = new Component.DetailsParser(details, calendar_model.active,
                 event);
             event = parser.event;
         }
@@ -152,7 +152,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
     }
     
     private async void create_event_async(Cancellable? cancellable) {
-        if (event.calendar_source == null) {
+        if (calendar_model.active == null) {
             report_error(_("Unable to create event: calendar must be specified"));
             
             return;
@@ -162,7 +162,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
         
         Error? create_err = null;
         try {
-            yield event.calendar_source.create_component_async(event, cancellable);
+            yield calendar_model.active.create_component_async(event, cancellable);
         } catch (Error err) {
             create_err = err;
         }

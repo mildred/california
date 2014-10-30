@@ -477,20 +477,8 @@ public class MainWindow : Gtk.ApplicationWindow {
         deck.go_home(event);
         
         deck.dismiss.connect(() => {
-            if (!show_event.edit_requested)
-                return;
-                
-            // pass a clone of the existing event for editing
-            Component.Event clone;
-            try {
-                clone = event.clone() as Component.Event;
-            } catch (Error err) {
-                Application.instance.error_message(this, _("Unable to edit event: %s").printf(err.message));
-                
-                return;
-            }
-            
-            edit_event(clone, true);
+            if (show_event.edit_requested)
+                edit_event(event, true);
         });
         
         show_deck_popover(relative_to, for_location, deck);
@@ -511,6 +499,16 @@ public class MainWindow : Gtk.ApplicationWindow {
     }
     
     private void on_edit_event(Component.Event event, bool is_update) {
+        // pass a clone of the existing event for editing
+        Component.Event clone;
+        try {
+            clone = event.clone() as Component.Event;
+        } catch (Error err) {
+            Application.instance.error_message(this, _("Unable to edit event: %s").printf(err.message));
+            
+            return;
+        }
+        
         CreateUpdateEvent create_update = new CreateUpdateEvent();
         create_update.is_update = is_update;
         
@@ -525,7 +523,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         );
         
         // "initialize" the Deck with the requested Event
-        deck.go_home(event);
+        deck.go_home(clone);
         
         show_deck_window(deck);
     }

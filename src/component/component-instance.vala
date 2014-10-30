@@ -47,7 +47,7 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      *
      * This will initialize as null if created as a {@link blank} Instance.
      */
-    public Backing.CalendarSource? calendar_source { get; set; default = null; }
+    public Backing.CalendarSource? calendar_source { get; private set; default = null; }
     
     /**
      * The date-time stamp of the {@link Instance}.
@@ -236,10 +236,11 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      *
      * Unlike the primary constructor, this will not call {@link full_update}.
      */
-    protected Instance.blank(iCal.icalcomponent_kind kind) {
+    protected Instance.blank(iCal.icalcomponent_kind kind, Backing.CalendarSource? calendar_source) {
         _ical_component = new iCal.icalcomponent(kind);
         uid = Component.UID.generate();
         _ical_component.set_uid(uid.value);
+        this.calendar_source = calendar_source;
         
         notify.connect(on_notify);
     }
@@ -578,6 +579,9 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
             return false;
         
         if (sequence != other.sequence)
+            return false;
+        
+        if (calendar_source != other.calendar_source)
             return false;
         
         return uid.equal_to(other.uid);

@@ -57,7 +57,6 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     
     private new Component.Event event = new Component.Event.blank();
     private EventTimeSettings.Message? dt = null;
-    private Backing.CalendarSource? original_calendar_source = null;
     private Toolkit.ComboBoxTextModel<Backing.CalendarSource> calendar_model;
     
     private Toolkit.RotatingButtonBox rotating_button_box = new Toolkit.RotatingButtonBox();
@@ -132,8 +131,6 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
             event = (Component.Event) message;
             if (dt == null)
                 dt = new EventTimeSettings.Message.from_event(event);
-            
-            original_calendar_source = event.calendar_source;
         }
         
         update_controls();
@@ -229,7 +226,6 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     // Event's properties and update that way ... doesn't quite work when updating the master event,
     // however
     private void update_component(Component.Event target, bool replace_dtstart) {
-        target.calendar_source = calendar_model.active;
         target.summary = summary_entry.text;
         target.location = location_entry.text;
         target.description = description_textview.buffer.text;
@@ -284,7 +280,7 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     }
     
     private async void create_event_async(Component.Event target, Cancellable? cancellable) {
-        if (target.calendar_source == null) {
+        if (calendar_model.active == null) {
             report_error(_("Unable to create event: calendar must be specified"));
             
             return;
@@ -294,7 +290,7 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         
         Error? create_err = null;
         try {
-            yield target.calendar_source.create_component_async(target, cancellable);
+            yield calendar_model.active.create_component_async(target, cancellable);
         } catch (Error err) {
             create_err = err;
         }
@@ -308,14 +304,14 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     }
     
     private async void update_event_async(Component.Event target, Cancellable? cancellable) {
-        if (target.calendar_source == null) {
+        if (calendar_model.active == null) {
             report_error(_("Unable to update event: calendar must be specified"));
             
             return;
         }
         
         // no original calendar source, then not an update or a move but a create
-        if (original_calendar_source == null) {
+        if (target.calendar_source == null) {
             yield create_event_async(target, cancellable);
             
             return;
@@ -324,7 +320,7 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         Gdk.Cursor? cursor = Toolkit.set_busy(this);
         
         Error? update_err = null;
-        if (target.calendar_source == original_calendar_source) {
+        if (calendar_model.active == target.calendar_source) {
             // straight-up update
             try {
                 yield target.calendar_source.update_component_async(target, cancellable);
@@ -334,15 +330,16 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         } else {
             // move event from one calendar to another ... start with create on new calendar
             try {
-                yield target.calendar_source.create_component_async(target, cancellable);
+                yield calendar_model.active.create_component_async(target, cancellable);
             } catch (Error err) {
                 update_err = err;
             }
             
-            // only delete old one if new one created
+            // only delete old one if new one created ... the new one will be reported via a
+            // calendar subscription and added to the main display that way
             if (update_err == null) {
                 try {
-                    yield original_calendar_source.remove_all_instances_async(target.uid, cancellable);
+                    yield target.calendar_source.remove_all_instances_async(target.uid, cancellable);
                 } catch (Error err) {
                     update_err = err;
                 }

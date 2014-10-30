@@ -135,8 +135,7 @@ public class DetailsParser : BaseObject {
      * If the details string is empty, a blank Event is generated.
      */
     public DetailsParser(string? details, Backing.CalendarSource? calendar_source, Event? initial = null) {
-        event = initial ?? new Component.Event.blank();
-        event.calendar_source = calendar_source;
+        event = initial ?? new Component.Event.blank(calendar_source);
         this.details = details ?? "";
         
         // pull out details from the initial Event and add to the local state, which is then
