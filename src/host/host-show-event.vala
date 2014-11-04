@@ -248,11 +248,6 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     }
     
     private void on_export_button_clicked() {
-        // Export as a self-contained iCalendar
-        Component.iCalendar icalendar = new Component.iCalendar(iCal.icalproperty_method.PUBLISH,
-            Component.ICAL_PRODID, Component.ICAL_VERSION, null,
-            iterate<Component.Instance>(event).to_array_list());
-        
         Gtk.FileChooserDialog dialog = new Gtk.FileChooserDialog(_("Export event as .ics"),
             Application.instance.main_window, Gtk.FileChooserAction.SAVE,
             _("_Cancel"), Gtk.ResponseType.CANCEL,
@@ -263,6 +258,15 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         dialog.set_current_name(_("event.ics"));
         dialog.do_overwrite_confirmation = true;
         
+        // if a generated instance of a recurring event, offer to export the master event rather
+        // than this instance of it
+        Gtk.CheckButton? export_master_checkbutton = null;
+        if (event.is_generated_instance) {
+            export_master_checkbutton = new Gtk.CheckButton.with_mnemonic(_("Export _master event"));
+            export_master_checkbutton.active = false;
+            dialog.extra_widget = export_master_checkbutton;
+        }
+        
         dialog.show_all();
         int response = dialog.run();
         string filename = dialog.get_filename();
@@ -270,6 +274,16 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         
         if (response != Gtk.ResponseType.ACCEPT)
             return;
+        
+        // if switch available and active, export master not the generated instance
+        Component.Instance to_export = (export_master_checkbutton != null && export_master_checkbutton.active)
+            ? event.master
+            : event;
+        
+        // Export as a self-contained iCalendar
+        Component.iCalendar icalendar = new Component.iCalendar(iCal.icalproperty_method.PUBLISH,
+            Component.ICAL_PRODID, Component.ICAL_VERSION, null,
+            iterate<Component.Instance>(to_export).to_array_list());
         
         try {
             FileUtils.set_contents(filename, icalendar.source);
