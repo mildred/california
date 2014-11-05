@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-25 19:04+0200\n"
-"PO-Revision-Date: 2014-10-25 19:05+0200\n"
+"POT-Creation-Date: 2014-11-05 13:28+0100\n"
+"PO-Revision-Date: 2014-11-05 13:29+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -181,10 +181,18 @@ msgid "Display program version"
 msgstr "Wyświetla wersję programu"
 
 #: ../src/application/california-commandline.vala:32
+msgid "To log debug to standard out:"
+msgstr "Aby przekazać dziennik debugowania do standardowego wyjścia:"
+
+#: ../src/application/california-commandline.vala:33
+msgid "$ G_MESSAGES_DEBUG=all california"
+msgstr "$ G_MESSAGES_DEBUG=all california"
+
+#: ../src/application/california-commandline.vala:34
 msgid "Please report problems and requests to:"
 msgstr "Prosimy zgłaszać problemy na adres (w języku angielskim):"
 
-#: ../src/application/california-commandline.vala:38
+#: ../src/application/california-commandline.vala:40
 #, c-format
 msgid "Unknown options: %s\n"
 msgstr "Nieznane opcje: %s\n"
@@ -193,7 +201,7 @@ msgstr "Nieznane opcje: %s\n"
 #. A span of time, i.e. "3:30pm to 4:30pm"
 #. date formatting: "<Start Date> to <End Date>"
 #: ../src/calendar/calendar-date-span.vala:95
-#: ../src/calendar/calendar-exact-time-span.vala:148
+#: ../src/calendar/calendar-exact-time-span.vala:155
 #: ../src/view/week/week-controller.vala:192
 #, c-format
 msgid "%s to %s"
@@ -377,7 +385,7 @@ msgstr "piąta niedziela"
 #. Prints two full time and date strings on separate lines, i.e.:
 #. 12 January 2012, 3:30pm
 #. 13 January 2013, 6:30am
-#: ../src/calendar/calendar-exact-time-span.vala:163
+#: ../src/calendar/calendar-exact-time-span.vala:170
 #, c-format
 msgid ""
 "%s, %s\n"
@@ -388,7 +396,7 @@ msgstr ""
 
 #. Prints full time and date strings on a single line, i.e.:
 #. 12 January 2012, 3:30pm to 13 January 2013, 6:30am
-#: ../src/calendar/calendar-exact-time-span.vala:172
+#: ../src/calendar/calendar-exact-time-span.vala:179
 #, c-format
 msgid "%s, %s to %s, %s"
 msgstr "%s, %s do %s, %s"
@@ -886,9 +894,9 @@ msgstr "Powtarzanie co %s w %s"
 msgid "day %d"
 msgstr "%d. dzień"
 
-#: ../src/host/host-create-update-event.vala:67
-#: ../src/host/host-create-update-event.vala:70
-#: ../src/host/host-show-event.vala:80 ../src/host/host-show-event.vala:258
+#: ../src/host/host-create-update-event.vala:66
+#: ../src/host/host-create-update-event.vala:69
+#: ../src/host/host-show-event.vala:80 ../src/host/host-show-event.vala:253
 #: ../src/rc/activator-list.ui.h:1 ../src/rc/calendar-import.ui.h:1
 #: ../src/rc/create-update-recurring.ui.h:24
 #: ../src/rc/event-time-settings.ui.h:4 ../src/rc/generic-subscribe.ui.h:5
@@ -898,46 +906,46 @@ msgstr "%d. dzień"
 msgid "_Cancel"
 msgstr "_Anuluj"
 
-#: ../src/host/host-create-update-event.vala:68
+#: ../src/host/host-create-update-event.vala:67
 msgid "Save A_ll Events"
 msgstr "Zapisz _wszystkie wydarzenia"
 
-#: ../src/host/host-create-update-event.vala:69
+#: ../src/host/host-create-update-event.vala:68
 msgid "Save _This Event"
 msgstr "Zapisz _to wydarzenie"
 
-#: ../src/host/host-create-update-event.vala:169
+#: ../src/host/host-create-update-event.vala:166
 msgid "It's complicated…"
 msgstr "To skomplikowane…"
 
-#: ../src/host/host-create-update-event.vala:172
+#: ../src/host/host-create-update-event.vala:169
 msgid "Never"
 msgstr "Nigdy"
 
-#: ../src/host/host-create-update-event.vala:174
+#: ../src/host/host-create-update-event.vala:171
 msgid "_Save"
 msgstr "_Zapisz"
 
-#: ../src/host/host-create-update-event.vala:174
+#: ../src/host/host-create-update-event.vala:171
 msgid "C_reate"
 msgstr "U_twórz"
 
-#: ../src/host/host-create-update-event.vala:288
+#: ../src/host/host-create-update-event.vala:284
 #: ../src/host/host-quick-create-event.vala:156
 msgid "Unable to create event: calendar must be specified"
 msgstr "Nie można utworzyć wydarzenia: należy podać kalendarz"
 
-#: ../src/host/host-create-update-event.vala:307
+#: ../src/host/host-create-update-event.vala:303
 #: ../src/host/host-quick-create-event.vala:175
 #, c-format
 msgid "Unable to create event: %s"
 msgstr "Nie można utworzyć wydarzenia: %s"
 
-#: ../src/host/host-create-update-event.vala:312
+#: ../src/host/host-create-update-event.vala:308
 msgid "Unable to update event: calendar must be specified"
 msgstr "Nie można zaktualizować wydarzenia: należy podać kalendarz"
 
-#: ../src/host/host-create-update-event.vala:357
+#: ../src/host/host-create-update-event.vala:354
 #, c-format
 msgid "Unable to update event: %s"
 msgstr "Nie można zaktualizować wydarzenia: %s"
@@ -1000,7 +1008,7 @@ msgstr "Szybko tworzy nowe wydarzenie (Ctrl+N)"
 msgid "Calendars (Ctrl+L)"
 msgstr "Kalendarze (Ctrl+L)"
 
-#: ../src/host/host-main-window.vala:488
+#: ../src/host/host-main-window.vala:507
 #, c-format
 msgid "Unable to edit event: %s"
 msgstr "Nie można zmodyfikować wydarzenia: %s"
@@ -1042,7 +1050,7 @@ msgstr "To i p_rzyszłe wydarzenia"
 msgid "Edit event"
 msgstr "Modyfikuje wydarzenie"
 
-#: ../src/host/host-show-event.vala:87 ../src/host/host-show-event.vala:256
+#: ../src/host/host-show-event.vala:87 ../src/host/host-show-event.vala:251
 msgid "Export event as .ics"
 msgstr "Eksportuje wydarzenie jako plik .ics"
 
@@ -1050,25 +1058,29 @@ msgstr "Eksportuje wydarzenie jako plik .ics"
 msgid "Delete event"
 msgstr "Usuwa wydarzenie"
 
-#: ../src/host/host-show-event.vala:259
+#: ../src/host/host-show-event.vala:254
 msgid "E_xport"
 msgstr "Wy_eksportuj"
 
 #. This is the suggested filename for saving (exporting) an event.  The .ics file extension
 #. should always be present no matter the translation, as many systems rely on it to detect
 #. the file type
-#: ../src/host/host-show-event.vala:263
+#: ../src/host/host-show-event.vala:258
 msgid "event.ics"
 msgstr "wydarzenie.ics"
 
-#: ../src/host/host-show-event.vala:278
+#: ../src/host/host-show-event.vala:265
+msgid "Export _master event"
+msgstr "_Wyeksportuj główne wydarzenie"
+
+#: ../src/host/host-show-event.vala:292
 #, c-format
 msgid "Unable to export event as file: %s"
 msgstr "Nie można wyeksportować wydarzenia jako plik: %s"
 
 #. No number is supplied because the number of events removed is indefinite in certain
 #. situations ... plural text should simply be for "more than one"
-#: ../src/host/host-show-event.vala:305
+#: ../src/host/host-show-event.vala:319
 #, c-format
 msgid "Unable to remove event: %s"
 msgid_plural "Unable to remove events: %s"
