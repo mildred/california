@@ -482,6 +482,13 @@ public class Event : Instance, Gee.Comparable<Event> {
         if (compare != 0)
             return compare;
         
+        // calendar source
+        if (calendar_source != null && other.calendar_source != null) {
+            compare = calendar_source.compare_to(other.calendar_source);
+            if (compare != 0)
+                return compare;
+        }
+        
         // stabilize with UIDs
         return uid.compare_to(other.uid);
     }
