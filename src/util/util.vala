@@ -14,12 +14,14 @@ public void init() throws Error {
     
     // internal init
     Markup.init();
+    URI.init();
 }
 
 public void terminate() {
     if (!Unit.do_terminate(ref init_count))
         return;
     
+    URI.terminate();
     Markup.terminate();
 }
 

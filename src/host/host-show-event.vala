@@ -43,6 +43,18 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     private Gtk.Label where_text;
     
     [GtkChild]
+    private Gtk.Label organizers_label;
+    
+    [GtkChild]
+    private Gtk.Label organizers_text;
+    
+    [GtkChild]
+    private Gtk.Label attendees_label;
+    
+    [GtkChild]
+    private Gtk.Label attendees_text;
+    
+    [GtkChild]
     private Gtk.Label calendar_label;
     
     [GtkChild]
@@ -155,6 +167,19 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         set_label(when_label, when_text, event.get_event_time_pretty_string(Calendar.Date.PrettyFlag.NONE,
             Calendar.ExactTimeSpan.PrettyFlag.NONE, Calendar.Timezone.local));
         
+        // organizers as a sorted LF-delimited string
+        string organizers = traverse<Component.Person>(event.organizers)
+            .sort()
+            .to_string(stringify_person) ?? "";
+        set_label(organizers_label, organizers_text, organizers);
+        
+        // attendees as a sort LF-delimited string w/ organizers removed
+        string attendees = traverse<Component.Person>(event.attendees)
+            .filter(person => !event.organizers.contains(person))
+            .sort()
+            .to_string(stringify_person) ?? "";
+        set_label(attendees_label, attendees_text, attendees);
+        
         // calendar
         set_label(calendar_label, calendar_text, event.calendar_source != null ? event.calendar_source.title : null);
         
@@ -195,6 +220,10 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         post_markup = "</a>";
         
         return true;
+    }
+    
+    private string? stringify_person(Component.Person person, bool is_first, bool is_last) {
+        return "%s%s".printf(person.full_mailbox, is_last ? "" : "\n");
     }
     
     // Note that text is not escaped, up to caller to determine if necessary or not.

@@ -24,6 +24,10 @@ public bool ci_equal(string a, string b) {
     return stricmp(a, b) == 0;
 }
 
+public bool ascii_ci_equal(string a, string b) {
+    return a.ascii_casecmp(b) == 0;
+}
+
 /**
  * Removes redundant whitespace (including tabs and newlines) and strips whitespace from beginning
  * and end of string.

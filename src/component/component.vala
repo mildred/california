@@ -63,6 +63,7 @@ public void init() throws Error {
     // external unit init
     Collection.init();
     Calendar.init();
+    Util.init();
     
     ICAL_PRODID = "-//Yorba Foundation//NONSGML California Calendar %s//EN".printf(Application.VERSION);
     
@@ -208,6 +209,7 @@ public void terminate() {
     
     ICAL_PRODID = null;
     
+    Util.terminate();
     Calendar.terminate();
     Collection.terminate();
 }

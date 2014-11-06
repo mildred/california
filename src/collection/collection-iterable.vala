@@ -103,12 +103,17 @@ public class Iterable<G> : Object {
     /**
      * For {@link to_string}.
      */
-    public delegate string? ToString<G>(G element);
+    public delegate string? ToString<G>(G element, bool is_first, bool is_last);
     
     /**
      * For simple iteration of the {@link Iterable}.
      */
     public delegate void Iterate<G>(G element);
+    
+    /**
+     * For simple transformation of elements in the {@link Iterable}.
+     */
+    public delegate G Transform<G>(G element);
     
     /**
      * For mapping a single value of one type to multiple values of another.
@@ -164,6 +169,30 @@ public class Iterable<G> : Object {
         }
         
         return new Iterable<G>(list.iterator());
+    }
+    
+    /**
+     * Like {@link iterate}, called for each element, but adds the returned (possibly transformed)
+     * element.
+     */
+    public Iterable<G> transform(Transform<G> transformer) {
+        Gee.ArrayList<G> list = new Gee.ArrayList<G>();
+        foreach (G g in this)
+            list.add(transformer(g));
+        
+        return new Iterable<G>(list.iterator());
+    }
+    
+    /**
+     * Sorts the elements of the {@link Iterable} so that the next iteration they are in the
+     * comparator's order.
+     */
+    public Iterable<G> sort(owned Gee.EqualDataFunc<G>? equal_func = null,
+        owned CompareDataFunc<G>? compare_func = null) {
+        Gee.ArrayList<G> sorted = to_array_list(equal_func);
+        sorted.sort(compare_func);
+        
+        return new Iterable<G>(sorted.iterator());
     }
     
     public Iterable<A> map<A>(Gee.MapFunc<A, G> f) {
@@ -365,12 +394,19 @@ public class Iterable<G> : Object {
      *
      * If {@link ToString} returns null or an empty string, nothing is appended to the final string.
      *
+     * is_first is passed true to ToString if the string is the first element of the Iterable.  If
+     * prior elements resulted in null being returned, then is_first will continue to be true.  In
+     * other words, is_first is true if the built string so far is empty.
+     *
+     * is_last is only true when the last element of the Iterable has been reached.
+     *
      * If the final string is empty, null is returned instead.
      */
     public string? to_string(ToString<G> string_cb) {
         StringBuilder builder = new StringBuilder();
-        foreach (G element in this) {
-            string? str = string_cb(element);
+        Gee.Iterator<G> iter = iterator();
+        while (iter.next()) {
+            string? str = string_cb(iter.get(), String.is_empty(builder.str), !iter.has_next());
             if (!String.is_empty(str))
                 builder.append(str);
         }

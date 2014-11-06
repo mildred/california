@@ -39,6 +39,8 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     public const string PROP_RDATES = "rdates";
     public const string PROP_SEQUENCE = "sequence";
     public const string PROP_MASTER = "master";
+    public const string PROP_ORGANIZERS = "organizers";
+    public const string PROP_ATTENDEES = "attendees";
     
     protected const string PROP_IN_FULL_UPDATE = "in-full-update";
     
@@ -169,6 +171,31 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      * See [[https://tools.ietf.org/html/rfc5545#section-3.8.7.4]]
      */
     public int sequence { get; set; default = 0; }
+    
+    /**
+     * ORGANIZERs of a VEVENT, VTODO, or VJOURNAL.
+     *
+     * To add or remove organizers, use {@link add_organizers}, {@link remove_organizers}, and
+     * {@link clear_organizers}. Because those methods always update the property itself and not
+     * merely modify the list, the property can be watched for changes with the "notify" and/or
+     * "altered" signals.
+     *
+     * See [[https://tools.ietf.org/html/rfc5545#section-3.8.4.3]]  In particular, note that the
+     * {@link organizer} must be specified in group-scheduled calendar entity.
+     */
+    public Gee.Set<Person> organizers { get; private set; default = new Gee.HashSet<Person>(); }
+    
+    /**
+     * ATTENDEEs for a VEVENT, VTODO, or VJOURNAL.
+     *
+     * To add or remove attendees, use {@link add_attendees}, {@link remove_attendees}, and
+     * {@link clear_attendees}. Because those methods always update the property itself and not
+     * merely modify the list, the property can be watched for changes with the "notify" and/or
+     * "altered" signals.
+     *
+     * See [[https://tools.ietf.org/html/rfc5545#section-3.8.4.1]]
+     */
+    public Gee.Set<Person> attendees { get; private set; default = new Gee.HashSet<Person>(); }
     
     /**
      * The iCal component being represented by this {@link Instance}.
@@ -352,9 +379,28 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
         exdates = get_multiple_date_times(iCal.icalproperty_kind.EXDATE_PROPERTY);
         rdates = get_multiple_date_times(iCal.icalproperty_kind.RDATE_PROPERTY);
         
+        persons_from_component(ical_component, organizers, iCal.icalproperty_kind.ORGANIZER_PROPERTY);
+        persons_from_component(ical_component, attendees, iCal.icalproperty_kind.ATTENDEE_PROPERTY);
+        
         // save own copy of component; no ownership transferrance w/ current bindings
         if (_ical_component != ical_component)
             _ical_component = ical_component.clone();
+    }
+    
+    private void persons_from_component(iCal.icalcomponent ical_component, Gee.Set<Person> persons,
+        iCal.icalproperty_kind kind) {
+        persons.clear();
+        
+        unowned iCal.icalproperty? prop = ical_component.get_first_property(kind);
+        while (prop != null) {
+            try {
+                persons.add(new Person.from_property(prop));
+            } catch (Error err) {
+                debug("Unable to parse %s for %s: %s", kind.to_string(), to_string(), err.message);
+            }
+            
+            prop = ical_component.get_next_property(kind);
+        }
     }
     
     private void on_notify(ParamSpec pspec) {
@@ -396,6 +442,18 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
                     remove_all_properties(iCal.icalproperty_kind.RDATE_PROPERTY);
                 else
                     set_multiple_date_times(iCal.icalproperty_kind.RDATE_PROPERTY, rdates);
+            break;
+            
+            case PROP_ORGANIZERS:
+                remove_all_properties(iCal.icalproperty_kind.ORGANIZER_PROPERTY);
+                foreach (Person organizer in organizers)
+                    ical_component.add_property(organizer.as_ical_property());
+            break;
+            
+            case PROP_ATTENDEES:
+                remove_all_properties(iCal.icalproperty_kind.ATTENDEE_PROPERTY);
+                foreach (Person attendee in attendees)
+                    ical_component.add_property(attendee.as_ical_property());
             break;
             
             default:
@@ -446,6 +504,61 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
         
         // count this as an alteration
         notify_altered(false);
+    }
+    
+    /**
+     * Add one or more {@link Person}s as {@link organizers}.
+     */
+    public void add_organizers(Gee.Collection<Person> to_add) {
+        organizers = add_persons(organizers, to_add);
+    }
+    
+    /**
+     * Remove one or more {@link Person}s as (@link organizers}.
+     */
+    public void remove_organizers(Gee.Collection<Person> to_remove) {
+        organizers = remove_persons(organizers, to_remove);
+    }
+    
+    /*
+     * Removes all {@link organizers}.
+     */
+    public void clear_organizers() {
+        organizers = new Gee.HashSet<Person>();
+    }
+    
+    /**
+     * Add one or more {@link Person}s as {@link attendees}.
+     */
+    public void add_attendees(Gee.Collection<Person> to_add) {
+        attendees = add_persons(attendees, to_add);
+    }
+    
+    /**
+     * Remove one or more {@link Person}s as (@link attendees}.
+     */
+    public void remove_attendees(Gee.Collection<Person> to_remove) {
+        attendees = remove_persons(attendees, to_remove);
+    }
+    
+    /*
+     * Removes all {@link attendees}.
+     */
+    public void clear_attendees() {
+        attendees = new Gee.HashSet<Person>();
+    }
+    
+    private Gee.Set<Person> add_persons(Gee.Set<Person> existing, Gee.Collection<Person> to_add) {
+        Gee.Set<Person> copy = traverse<Person>(attendees).to_hash_set();
+        copy.add_all(to_add);
+        
+        return copy;
+    }
+    
+    private Gee.Set<Person> remove_persons(Gee.Set<Person> existing, Gee.Collection<Person> to_remove) {
+        return traverse<Person>(existing)
+            .filter(person => !to_remove.contains(person))
+            .to_hash_set();
     }
     
     /**
