@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-05 13:28+0100\n"
-"PO-Revision-Date: 2014-11-05 13:29+0100\n"
+"POT-Creation-Date: 2014-11-10 02:37+0100\n"
+"PO-Revision-Date: 2014-11-10 02:38+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -569,37 +569,37 @@ msgstr "południe"
 
 #. Used by quick-add to indicate the user wants to create an event for today.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:71
+#: ../src/component/component.vala:72
 msgid "today"
 msgstr "dzisiaj"
 
 #. Used by quick-add to indicate the user wants to create an event for tomorrow.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:75
+#: ../src/component/component.vala:76
 msgid "tomorrow"
 msgstr "jutro"
 
 #. Used by quick-add to indicate the user wants to create an event for yesterday.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:79
+#: ../src/component/component.vala:80
 msgid "yesterday"
 msgstr "wczoraj"
 
 #. Used by quick-add to indicate the user wants to create a daily recurring event
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:83
+#: ../src/component/component.vala:84
 msgid "daily"
 msgstr "codziennie"
 
 #. Used by quick-add to indicate the user wants to create a weekly recurring event
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:87
+#: ../src/component/component.vala:88
 msgid "weekly"
 msgstr "co tydzień"
 
 #. Used by quick-add to indicate the user wants to create a yearly recurring event
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:91
+#: ../src/component/component.vala:92
 msgid "yearly"
 msgstr "co roku"
 
@@ -608,7 +608,7 @@ msgstr "co roku"
 #. Common abbreviations (without punctuation) should be included.  Each word must be separated
 #. by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:98
+#: ../src/component/component.vala:99
 msgid "weekday;weekdays;"
 msgstr "dzień roboczy;dni robocze;dni roboczych;"
 
@@ -617,49 +617,49 @@ msgstr "dzień roboczy;dni robocze;dni roboczych;"
 #. Common abbreviations (without punctuation) should be included.  Each word must be separated
 #. by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:105
+#: ../src/component/component.vala:106
 msgid "weekend;weekends;"
 msgstr "weekend;weekendy;"
 
 #. Used by quick-add to convert a user's years unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:110
+#: ../src/component/component.vala:111
 msgid "year;years;yr;yrs;"
 msgstr "rok;lata;lat;"
 
 #. Used by quick-add to convert a user's month unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:115
+#: ../src/component/component.vala:116
 msgid "month;months;mo;mos;"
 msgstr "miesiąc;miesiące;miesięcy;"
 
 #. Used by quick-add to convert a user's week unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:120
+#: ../src/component/component.vala:121
 msgid "week;weeks;wk;weeks;"
 msgstr "tydzień;tygodnie;tygodni;"
 
 #. Used by quick-add to convert a user's day unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:125
+#: ../src/component/component.vala:126
 msgid "day;days;"
 msgstr "dzień;dni;"
 
 #. Used by quick-add to convert a user's hours unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:130
+#: ../src/component/component.vala:131
 msgid "hour;hours;hr;hrs"
 msgstr "godzina;godziny;godzin;g;h;"
 
 #. Used by quick-add to convert a user's minute unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:135
+#: ../src/component/component.vala:136
 msgid "minute;minutes;min;mins"
 msgstr "minuta;minuty;minut;min;m;"
 
@@ -669,7 +669,7 @@ msgstr "minuta;minuty;minut;min;m;"
 #. This list can be empty but that will limit the parser or cause unexpected results.
 #. Examples: "wednesday and thursday", "monday or friday"
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:143
+#: ../src/component/component.vala:144
 msgid "and;or;"
 msgstr "i;oraz;lub;albo;"
 
@@ -680,7 +680,7 @@ msgstr "i;oraz;lub;albo;"
 #. The list can be empty, but that will limit the parser.
 #. Examples: "at 9am", "from 10pm to 11:30pm", "on monday", "until June 3rd", "this Friday"
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:152
+#: ../src/component/component.vala:153
 msgid "at;from;to;on;until;this;"
 msgstr "o;od;do;w;przed;ten;ta;"
 
@@ -691,7 +691,7 @@ msgstr "o;od;do;w;przed;ten;ta;"
 #. The list can be empty, but that will limit the parser.
 #. Examples: "for 3 hours", "for 90 minutes"
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:161
+#: ../src/component/component.vala:162
 msgid "for;"
 msgstr "przez;"
 
@@ -702,7 +702,7 @@ msgstr "przez;"
 #. The list can be empty, but that will limit the parser.
 #. Example: "in 3 hours" (meaning 3 hours from now)
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:170
+#: ../src/component/component.vala:171
 msgid "in;"
 msgstr "za;"
 
@@ -713,7 +713,7 @@ msgstr "za;"
 #. The list can be empty, but that will limit the parser.
 #. Example: "every 3 days", "every Friday"
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:179
+#: ../src/component/component.vala:180
 msgid "every;"
 msgstr "co;każdy;każda;każdego;"
 
@@ -724,7 +724,7 @@ msgstr "co;każdy;każda;każdego;"
 #. parser.
 #. Example: "at supermarket", "at Eiffel Tower"
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:188
+#: ../src/component/component.vala:189
 msgid "at;"
 msgstr "w;na;"
 
@@ -734,7 +734,7 @@ msgstr "w;na;"
 #. suffixes.
 #. Example: "1st", "2nd", "3rd", "4th"
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
-#: ../src/component/component.vala:196
+#: ../src/component/component.vala:197
 msgid "st;nd;rd;th"
 msgstr "st;nd;rd;th"
 
@@ -896,7 +896,7 @@ msgstr "%d. dzień"
 
 #: ../src/host/host-create-update-event.vala:66
 #: ../src/host/host-create-update-event.vala:69
-#: ../src/host/host-show-event.vala:80 ../src/host/host-show-event.vala:253
+#: ../src/host/host-show-event.vala:92 ../src/host/host-show-event.vala:282
 #: ../src/rc/activator-list.ui.h:1 ../src/rc/calendar-import.ui.h:1
 #: ../src/rc/create-update-recurring.ui.h:24
 #: ../src/rc/event-time-settings.ui.h:4 ../src/rc/generic-subscribe.ui.h:5
@@ -1030,57 +1030,57 @@ msgstr "Przykład: kolacja w Barze Mlecznym 19:30 jutro"
 msgid "Error opening help: %s"
 msgstr "Błąd podczas otwierania pomocy: %s"
 
-#: ../src/host/host-show-event.vala:75
+#: ../src/host/host-show-event.vala:87
 msgid "Delete"
 msgstr "Usuń"
 
-#: ../src/host/host-show-event.vala:76
+#: ../src/host/host-show-event.vala:88
 msgid "A_ll Events"
 msgstr "_Wszystkie wydarzenia"
 
-#: ../src/host/host-show-event.vala:77
+#: ../src/host/host-show-event.vala:89
 msgid "_This Event"
 msgstr "_To wydarzenie"
 
-#: ../src/host/host-show-event.vala:79
+#: ../src/host/host-show-event.vala:91
 msgid "This & _Future Events"
 msgstr "To i p_rzyszłe wydarzenia"
 
-#: ../src/host/host-show-event.vala:86
+#: ../src/host/host-show-event.vala:98
 msgid "Edit event"
 msgstr "Modyfikuje wydarzenie"
 
-#: ../src/host/host-show-event.vala:87 ../src/host/host-show-event.vala:251
+#: ../src/host/host-show-event.vala:99 ../src/host/host-show-event.vala:280
 msgid "Export event as .ics"
 msgstr "Eksportuje wydarzenie jako plik .ics"
 
-#: ../src/host/host-show-event.vala:88
+#: ../src/host/host-show-event.vala:100
 msgid "Delete event"
 msgstr "Usuwa wydarzenie"
 
-#: ../src/host/host-show-event.vala:254
+#: ../src/host/host-show-event.vala:283
 msgid "E_xport"
 msgstr "Wy_eksportuj"
 
 #. This is the suggested filename for saving (exporting) an event.  The .ics file extension
 #. should always be present no matter the translation, as many systems rely on it to detect
 #. the file type
-#: ../src/host/host-show-event.vala:258
+#: ../src/host/host-show-event.vala:287
 msgid "event.ics"
 msgstr "wydarzenie.ics"
 
-#: ../src/host/host-show-event.vala:265
+#: ../src/host/host-show-event.vala:294
 msgid "Export _master event"
 msgstr "_Wyeksportuj główne wydarzenie"
 
-#: ../src/host/host-show-event.vala:292
+#: ../src/host/host-show-event.vala:321
 #, c-format
 msgid "Unable to export event as file: %s"
 msgstr "Nie można wyeksportować wydarzenia jako plik: %s"
 
 #. No number is supplied because the number of events removed is indefinite in certain
 #. situations ... plural text should simply be for "more than one"
-#: ../src/host/host-show-event.vala:319
+#: ../src/host/host-show-event.vala:348
 #, c-format
 msgid "Unable to remove event: %s"
 msgid_plural "Unable to remove events: %s"
@@ -1203,25 +1203,41 @@ msgid "Set the start and end time"
 msgstr "Ustawia czas rozpoczęcia i ukończenia"
 
 #: ../src/rc/create-update-event.ui.h:5
-msgid "_Location"
-msgstr "_Położenie"
+msgid "Recurrence"
+msgstr "Powtarzanie"
 
 #: ../src/rc/create-update-event.ui.h:6
-msgid "_Description"
-msgstr "_Opis"
+msgid "Add or remove recurrences of the event"
+msgstr "Dodaje lub usuwa powtórzenia wydarzenia"
 
 #: ../src/rc/create-update-event.ui.h:7 ../src/rc/quick-create-event.ui.h:4
-#: ../src/rc/show-event.ui.h:3
+#: ../src/rc/show-event.ui.h:4
 msgid "Calendar"
 msgstr "Kalendarz"
 
 #: ../src/rc/create-update-event.ui.h:8
-msgid "Recurrence"
-msgstr "Powtarzanie"
+msgid "_Description"
+msgstr "_Opis"
 
 #: ../src/rc/create-update-event.ui.h:9
-msgid "Add or remove recurrences of the event"
-msgstr "Dodaje lub usuwa powtórzenia wydarzenia"
+msgid "_Location"
+msgstr "_Położenie"
+
+#: ../src/rc/create-update-event.ui.h:10
+msgid "_Guests"
+msgstr "_Goście"
+
+#: ../src/rc/create-update-event.ui.h:11
+msgid ""
+"For example:\n"
+"alice@example.com, bob@example.com"
+msgstr ""
+"Na przykład:\n"
+"alicja@example.com, tomek@example.com"
+
+#: ../src/rc/create-update-event.ui.h:13
+msgid "Email address(es)"
+msgstr "Adresy e-mail"
 
 #: ../src/rc/create-update-recurring.ui.h:1
 msgid "_Repeating event"
@@ -1441,6 +1457,15 @@ msgstr "Na pewno usunąć ten kalendarz?"
 #: ../src/rc/show-event.ui.h:2
 msgid "Where"
 msgstr "Gdzie"
+
+#: ../src/rc/show-event.ui.h:3
+msgid "Organizers"
+msgstr "Organizatorzy"
+
+#: ../src/rc/show-event.ui.h:5
+msgctxt "Attendees of an event (who are not organizing it)"
+msgid "Guests"
+msgstr "Goście"
 
 #: ../src/rc/window-menu.interface.h:1
 msgid "Zoom _In"
