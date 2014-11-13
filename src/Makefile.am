@@ -97,6 +97,7 @@ california_VALASOURCES = \
 	component/component-vtype.vala \
 	\
 	host/host.vala \
+	host/host-attendees-editor.vala \
 	host/host-calendar-list-item.vala \
 	host/host-create-update-event.vala \
 	host/host-create-update-recurring.vala \
@@ -192,6 +193,7 @@ california_SOURCES = \
 california_RC = \
 	rc/activator-list.ui \
 	rc/app-menu.interface \
+	rc/attendees-editor.ui \
 	rc/calendar-import.ui \
 	rc/calendar-list-item.ui \
 	rc/calendar-manager-list.ui \

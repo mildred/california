@@ -42,6 +42,9 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     private Gtk.Entry location_entry;
     
     [GtkChild]
+    private Gtk.Label attendees_text;
+    
+    [GtkChild]
     private Gtk.TextView description_textview;
     
     [GtkChild]
@@ -89,6 +92,9 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         update_all_button.clicked.connect(on_update_all_button_clicked);
         update_this_button.clicked.connect(on_update_this_button_clicked);
         cancel_recurring_button.clicked.connect(on_cancel_recurring_button_clicked);
+        
+        attendees_text.query_tooltip.connect(on_attendees_text_query_tooltip);
+        attendees_text.has_tooltip = true;
         
         rotating_button_box.pack_end(FAMILY_NORMAL, cancel_button);
         rotating_button_box.pack_end(FAMILY_NORMAL, accept_button);
@@ -154,6 +160,14 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         
         location_entry.text = event.location ?? "";
         description_textview.buffer.text = event.description ?? "";
+        attendees_text.label = traverse<Component.Person>(event.attendees)
+            .filter(attendee => !event.organizers.contains(attendee))
+            .sort()
+            .to_string(stringify_attendees);
+        if (String.is_empty(attendees_text.label)) {
+            // "None" as in "no people"
+            attendees_text.label = _("None");
+        }
         
         Component.Event master = event.is_master_instance ? event : (Component.Event) event.master;
         
@@ -172,6 +186,28 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         accept_button.use_underline = true;
         
         rotating_button_box.family = FAMILY_NORMAL;
+    }
+    
+    private bool on_attendees_text_query_tooltip(Gtk.Widget widget, int x, int y, bool keyboard,
+        Gtk.Tooltip tooltip) {
+        if (!attendees_text.get_layout().is_ellipsized())
+            return false;
+        
+        tooltip.set_text(traverse<Component.Person>(event.attendees)
+            .filter(attendee => !event.organizers.contains(attendee))
+            .sort()
+            .to_string(stringify_attendees_tooltip));
+        
+        return true;
+    }
+    
+    private string? stringify_attendees(Component.Person person, bool is_first, bool is_last) {
+        // Email address followed by common separator, i.e. "alice@example.com, bob@example.com"
+        return !is_last ? _("%s, ").printf(person.full_mailbox) : person.full_mailbox;
+    }
+    
+    private string? stringify_attendees_tooltip(Component.Person person, bool is_first, bool is_last) {
+        return !is_last ? "%s\n".printf(person.full_mailbox) : person.full_mailbox;
     }
     
     private void on_update_time_summary() {
@@ -205,6 +241,11 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         update_component(event, true);
         
         jump_to_card_by_name(EventTimeSettings.ID, dt);
+    }
+    
+    [GtkCallback]
+    private void on_attendees_button_clicked() {
+        jump_to_card_by_name(AttendeesEditor.ID, event);
     }
     
     private void on_accept_button_clicked() {

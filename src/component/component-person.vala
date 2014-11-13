@@ -23,6 +23,19 @@ namespace California.Component {
 
 public class Person : BaseObject, Gee.Hashable<Person>, Gee.Comparable<Person> {
     /**
+     * The relationship of this {@link Person} to the {@link Instance}.
+     */
+    public enum Relationship {
+        ORGANIZER,
+        ATTENDEE
+    }
+    
+    /**
+     * The {@link Person}'s {@link Relationship} to the {@link Instance}.
+     */
+    public Relationship relationship { get; private set; }
+    
+    /**
      * The mailto: of the {@link Person}, the only required value for the property.
      */
     public Soup.URI mailto { get; private set; }
@@ -31,6 +44,16 @@ public class Person : BaseObject, Gee.Hashable<Person>, Gee.Comparable<Person> {
      * The CN (common name) for the {@link Person}.
      */
     public string? common_name { get; private set; default = null; }
+    
+    /**
+     * The participation ROLE for the {@link Person}.
+     */
+    public iCal.icalparameter_role role { get; private set; default = iCal.icalparameter_role.REQPARTICIPANT; }
+    
+    /**
+     * RSVP required for the {@link Person}.
+     */
+    public bool rsvp { get; private set; default = false; }
     
     /**
      * The {@link mailto} URI as a text string.
@@ -59,21 +82,46 @@ public class Person : BaseObject, Gee.Hashable<Person>, Gee.Comparable<Person> {
     private Gee.HashSet<string> parameters = new Gee.HashSet<string>(String.ci_hash, String.ci_equal);
     
     /**
-     * Create an {@link Person} with the required {@link mailto} and optional {@link common_name}.
+     * Create a {@link Person} with the required {@link mailto} and optional {@link common_name}.
      */
-    public Person(Soup.URI mailto, string? common_name) throws ComponentError {
+    public Person(Relationship relationship, Soup.URI mailto, string? common_name = null,
+        iCal.icalparameter_role role = iCal.icalparameter_role.REQPARTICIPANT, bool rsvp = false)
+        throws ComponentError {
         validate_mailto(mailto);
         
+        this.relationship = relationship;
         this.mailto = mailto;
         this.common_name = common_name;
+        this.role = role;
+        this.rsvp = rsvp;
         full_mailbox = make_full_address(mailto, common_name);
         
         // store in parameters in case object is serialized as an iCal property.
         if (!String.is_empty(common_name))
             parameters.add(new iCal.icalparameter.cn(common_name).as_ical_string());
+        
+        if (role != iCal.icalparameter_role.REQPARTICIPANT)
+            parameters.add(new iCal.icalparameter.role(role).as_ical_string());
+        
+        if (rsvp)
+            parameters.add(new iCal.icalparameter.rsvp(iCal.icalparameter_rsvp.TRUE).as_ical_string());
     }
     
     internal Person.from_property(iCal.icalproperty prop) throws Error {
+        switch (prop.isa()) {
+            case iCal.icalproperty_kind.ATTENDEE_PROPERTY:
+                relationship = Relationship.ATTENDEE;
+            break;
+            
+            case iCal.icalproperty_kind.ORGANIZER_PROPERTY:
+                relationship = Relationship.ORGANIZER;
+            break;
+            
+            default:
+                throw new ComponentError.INVALID("Property must be an ATTENDEE or ORGANIZER: %s",
+                    prop.isa().to_string());
+        }
+        
         unowned iCal.icalvalue? prop_value = prop.get_value();
         if (prop_value == null || prop_value.is_valid() == 0) {
             throw new ComponentError.INVALID("Property of kind %s has no associated value",
@@ -103,6 +151,14 @@ public class Person : BaseObject, Gee.Hashable<Person>, Gee.Comparable<Person> {
                     common_name = param.get_cn();
                 break;
                 
+                case iCal.icalparameter_kind.ROLE_PARAMETER:
+                    role = param.get_role();
+                break;
+                
+                case iCal.icalparameter_kind.RSVP_PARAMETER:
+                    rsvp = param.get_rsvp() == iCal.icalparameter_rsvp.TRUE;
+                break;
+                
                 default:
                     // fall-through
                 break;
@@ -115,7 +171,7 @@ public class Person : BaseObject, Gee.Hashable<Person>, Gee.Comparable<Person> {
     }
     
     private static void validate_mailto(Soup.URI uri) throws ComponentError {
-        if (uri.scheme != "mailto" || String.is_empty(uri.path))
+        if (!String.ci_equal(uri.scheme, "mailto") || String.is_empty(uri.path) || !URI.is_valid_mailbox(uri.path))
             throw new ComponentError.INVALID("Invalid mailto: %s", uri.to_string(false));
     }
     
@@ -128,19 +184,37 @@ public class Person : BaseObject, Gee.Hashable<Person>, Gee.Comparable<Person> {
     }
     
     internal iCal.icalproperty as_ical_property() {
-        iCal.icalproperty prop = new iCal.icalproperty.attendee(mailto_text);
-        foreach (string parameter in parameters)
-            prop.add_parameter(new iCal.icalparameter.from_string(parameter));
+        iCal.icalproperty prop;
+        switch (relationship) {
+            case Relationship.ATTENDEE:
+                prop = new iCal.icalproperty.attendee(mailto_text);
+            break;
+            
+            case Relationship.ORGANIZER:
+                prop = new iCal.icalproperty.organizer(mailto_text);
+            break;
+            
+            default:
+                assert_not_reached();
+        }
+        
+        foreach (string parameter in parameters) {
+            iCal.icalparameter param = new iCal.icalparameter.from_string(parameter);
+            prop.add_parameter((owned) param);
+        }
         
         return prop;
     }
     
     public uint hash() {
-        return String.ci_hash(mailto.path);
+        return String.ci_hash(mailto.path) ^ relationship;
     }
     
     public bool equal_to(Person other) {
-        return (this != other) ? String.ci_equal(mailto.path, other.mailto.path) : true;
+        if (this == other)
+            return true;
+        
+        return relationship == other.relationship && String.ci_equal(mailto.path, other.mailto.path);
     }
     
     public int compare_to(Person other) {
@@ -154,7 +228,11 @@ public class Person : BaseObject, Gee.Hashable<Person>, Gee.Comparable<Person> {
                 return compare;
         }
         
-        return String.stricmp(mailbox, other.mailbox);
+        int compare = String.stricmp(mailbox, other.mailbox);
+        if (compare != 0)
+            return compare;
+        
+        return relationship - other.relationship;
     }
     
     public override string to_string() {

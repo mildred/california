@@ -516,9 +516,12 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         EventTimeSettings event_time_settings = new EventTimeSettings();
         
+        AttendeesEditor attendees_editor = new AttendeesEditor();
+        
         Toolkit.Deck deck = new Toolkit.Deck();
         deck.add_cards(
-            iterate<Toolkit.Card>(create_update, create_update_recurring, event_time_settings)
+            iterate<Toolkit.Card>(create_update, create_update_recurring, event_time_settings,
+                attendees_editor)
             .to_array_list()
         );
         

@@ -548,14 +548,14 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
         attendees = new Gee.HashSet<Person>();
     }
     
-    private Gee.Set<Person> add_persons(Gee.Set<Person> existing, Gee.Collection<Person> to_add) {
-        Gee.Set<Person> copy = traverse<Person>(attendees).to_hash_set();
+    private static Gee.Set<Person> add_persons(Gee.Set<Person> existing, Gee.Collection<Person> to_add) {
+        Gee.Set<Person> copy = traverse<Person>(existing).to_hash_set();
         copy.add_all(to_add);
         
         return copy;
     }
     
-    private Gee.Set<Person> remove_persons(Gee.Set<Person> existing, Gee.Collection<Person> to_remove) {
+    private static Gee.Set<Person> remove_persons(Gee.Set<Person> existing, Gee.Collection<Person> to_remove) {
         return traverse<Person>(existing)
             .filter(person => !to_remove.contains(person))
             .to_hash_set();

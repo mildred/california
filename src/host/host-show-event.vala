@@ -171,6 +171,7 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         string organizers = traverse<Component.Person>(event.organizers)
             .sort()
             .to_string(stringify_person) ?? "";
+        organizers_label.label = ngettext("Organizer", "Organizers", event.organizers.size);
         set_label(organizers_label, organizers_text, organizers);
         
         // attendees as a sort LF-delimited string w/ organizers removed
@@ -178,6 +179,10 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
             .filter(person => !event.organizers.contains(person))
             .sort()
             .to_string(stringify_person) ?? "";
+        int attendee_count = traverse<Component.Person>(event.attendees)
+            .filter(person => !event.organizers.contains(person))
+            .count();
+        attendees_label.label = ngettext("Guest", "Guests", attendee_count);
         set_label(attendees_label, attendees_text, attendees);
         
         // calendar

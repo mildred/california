@@ -13,6 +13,7 @@ src/calendar/calendar-exact-time-span.c
 src/component/component.c
 src/component/component-event.c
 src/component/component-recurrence-rule.c
+src/host/host-attendees-editor.c
 src/host/host-create-update-event.c
 src/host/host-import-calendar.c
 src/host/host-main-window.c

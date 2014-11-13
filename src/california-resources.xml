@@ -7,6 +7,9 @@
         <file compressed="true">rc/app-menu.interface</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
+        <file compressed="true">rc/attendees-editor.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
         <file compressed="true">rc/calendar-import.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">

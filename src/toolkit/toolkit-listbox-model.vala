@@ -197,6 +197,21 @@ public class ListBoxModel<G> : BaseObject {
     }
     
     /**
+     * A Gee.Set of all items in the {@link ListBoxModel}, sorted if appropriate.
+     */
+    public Gee.Set<G> all() {
+        Gee.TreeSet<G> treeset;
+        if (comparator != null)
+            treeset = new Gee.TreeSet<G>(comparator);
+        else
+            treeset = new Gee.TreeSet<G>();
+        
+        treeset.add_all(items.keys);
+        
+        return treeset;
+    }
+    
+    /**
      * Returns the {@link ModelPresentation} widget for the item.
      */
     public Gtk.Widget? get_widget_for_item(G item) {
@@ -227,7 +242,7 @@ public class ListBoxModel<G> : BaseObject {
      * Each removed item generates a {@link removed} signal.
      */
     public void clear() {
-        foreach (G item in items.keys)
+        foreach (G item in items.keys.to_array())
             remove(item);
     }
     

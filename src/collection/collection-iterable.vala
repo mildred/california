@@ -285,6 +285,18 @@ public class Iterable<G> : Object {
         return true;
     }
     
+    /**
+     * The total number of items held in the {@link Iterable}.
+     */
+    public int count() {
+        int count = 0;
+        Gee.Iterator<G> iter = iterator();
+        while (iter.next())
+            count++;
+        
+        return count;
+    }
+    
     public int count_matching(owned Gee.Predicate<G> f) {
         int count = 0;
         foreach (G g in this) {

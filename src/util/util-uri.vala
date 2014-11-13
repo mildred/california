@@ -76,5 +76,14 @@ public bool is_valid_mailbox(string str) {
     return email_regex.match(str);
 }
 
+/**
+ * Generates a valid mailto: Soup.URI given a mailbox (i.e. email) address.
+ *
+ * No validity checking is done here on the mailbox; use {@link is_valid_mailbox}.
+ */
+public Soup.URI generate_mailto(string mailbox) throws Error {
+    return parse("mailto:%s".printf(GLib.Uri.escape_string(mailbox, "@")));
+}
+
 }
 

@@ -499,7 +499,7 @@ namespace iCal {
 		[CCode (cname = "icalproperty_new_action", has_construct_function = false)]
 		public icalproperty.action (iCal.icalproperty_action v);
 		[CCode (cname = "icalproperty_add_parameter")]
-		public void add_parameter (iCal.icalparameter parameter);
+		public void add_parameter (owned iCal.icalparameter parameter);
 		[CCode (cname = "icalproperty_add_parameters")]
 		public static void add_parameters (iCal.icalproperty prop, void* args);
 		[CCode (cname = "icalproperty_new_allowconflict", has_construct_function = false)]
@@ -1009,7 +1009,7 @@ namespace iCal {
 		[CCode (cname = "icalproperty_set_owner")]
 		public void set_owner (string v);
 		[CCode (cname = "icalproperty_set_parameter")]
-		public void set_parameter (iCal.icalparameter parameter);
+		public void set_parameter (owned iCal.icalparameter parameter);
 		[CCode (cname = "icalproperty_set_parameter_from_string")]
 		public void set_parameter_from_string (string name, string value);
 		[CCode (cname = "icalproperty_set_percentcomplete")]
