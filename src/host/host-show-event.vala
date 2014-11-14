@@ -170,7 +170,7 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         // organizers as a sorted LF-delimited string
         string organizers = traverse<Component.Person>(event.organizers)
             .sort()
-            .to_string(stringify_person) ?? "";
+            .to_string(stringify_person_markup) ?? "";
         organizers_label.label = ngettext("Organizer", "Organizers", event.organizers.size);
         set_label(organizers_label, organizers_text, organizers);
         
@@ -178,7 +178,7 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         string attendees = traverse<Component.Person>(event.attendees)
             .filter(person => !event.organizers.contains(person))
             .sort()
-            .to_string(stringify_person) ?? "";
+            .to_string(stringify_person_markup) ?? "";
         int attendee_count = traverse<Component.Person>(event.attendees)
             .filter(person => !event.organizers.contains(person))
             .count();
@@ -227,8 +227,18 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         return true;
     }
     
-    private string? stringify_person(Component.Person person, bool is_first, bool is_last) {
-        return "%s%s".printf(person.full_mailbox, is_last ? "" : "\n");
+    private string? stringify_person_markup(Component.Person person, bool is_first, bool is_last) {
+        // keep adding linefeeds until the last address
+        unowned string suffix = is_last ? "" : "\n";
+        
+        // more complicated if full name available: link only the email address inside the brackets
+        if (!String.is_empty(person.common_name) && !String.ci_equal(person.common_name, person.mailbox)) {
+            return "%s &lt;<a href=\"%s\">%s</a>&gt;%s".printf(escape(person.common_name), person.mailto_text,
+                escape(person.mailbox), suffix);
+        }
+        
+        // otherwise, only the email address
+        return "<a href=\"%s\">%s</a>%s".printf(person.mailto_text, escape(person.mailbox), suffix);
     }
     
     // Note that text is not escaped, up to caller to determine if necessary or not.

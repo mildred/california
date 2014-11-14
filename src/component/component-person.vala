@@ -42,6 +42,9 @@ public class Person : BaseObject, Gee.Hashable<Person>, Gee.Comparable<Person> {
     
     /**
      * The CN (common name) for the {@link Person}.
+     *
+     * Note that it's common for agents to use the {@link mailbox} for the common name if a name
+     * is not given when producing the component.
      */
     public string? common_name { get; private set; default = null; }
     
@@ -171,7 +174,7 @@ public class Person : BaseObject, Gee.Hashable<Person>, Gee.Comparable<Person> {
     }
     
     private static void validate_mailto(Soup.URI uri) throws ComponentError {
-        if (!String.ci_equal(uri.scheme, "mailto") || String.is_empty(uri.path) || !URI.is_valid_mailbox(uri.path))
+        if (!String.ci_equal(uri.scheme, "mailto") || String.is_empty(uri.path) || !Email.is_valid_mailbox(uri.path))
             throw new ComponentError.INVALID("Invalid mailto: %s", uri.to_string(false));
     }
     

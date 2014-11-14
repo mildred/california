@@ -47,7 +47,7 @@ public class AttendeesEditor : Gtk.Box, Toolkit.Card {
     
     private bool transform_add_guest_text_to_button(Binding binding, Value source_value,
         ref Value target_value) {
-        target_value = URI.is_valid_mailbox(add_guest_entry.text);
+        target_value = Email.is_valid_mailbox(add_guest_entry.text);
         
         return true;
     }
@@ -91,13 +91,13 @@ public class AttendeesEditor : Gtk.Box, Toolkit.Card {
     [GtkCallback]
     private void on_add_guest_button_clicked() {
         string mailbox = add_guest_entry.text.strip();
-        if (!URI.is_valid_mailbox(mailbox))
+        if (!Email.is_valid_mailbox(mailbox))
             return;
         
         try {
             // add to model (which adds to listbox) and clear entry
             guest_model.add(new Component.Person(Component.Person.Relationship.ATTENDEE,
-                URI.generate_mailto(mailbox)));
+                Email.generate_mailto_uri(mailbox)));
             add_guest_entry.text = "";
         } catch (Error err) {
             debug("Unable to generate mailto from \"%s\": %s", mailbox, err.message);

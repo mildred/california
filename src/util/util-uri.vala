@@ -14,18 +14,6 @@ errordomain URIError {
 
 namespace California.URI {
 
-private Regex email_regex;
-
-internal void init() throws Error {
-    // http://www.regular-expressions.info/email.html
-    // matches john@dep.aol.museum not john@aol...com
-    email_regex = new Regex("[A-Z0-9._%+-]+@(?:[A-Z0-9-]+\\.)+[A-Z]{2,5}", RegexCompileFlags.CASELESS);
-}
-
-internal void terminate() {
-    email_regex = null;
-}
-
 /**
  * Basic validation of a string intended to be parsed as an absolute URI.
  *
@@ -67,22 +55,6 @@ public Soup.URI parse(string uri) throws Error {
         throw new URIError.INVALID("Invalid URI: %s", uri);
     
     return parsed;
-}
-
-/**
- * Validates a string as a valid RFC822 mailbox (i.e. email) address.
- */
-public bool is_valid_mailbox(string str) {
-    return email_regex.match(str);
-}
-
-/**
- * Generates a valid mailto: Soup.URI given a mailbox (i.e. email) address.
- *
- * No validity checking is done here on the mailbox; use {@link is_valid_mailbox}.
- */
-public Soup.URI generate_mailto(string mailbox) throws Error {
-    return parse("mailto:%s".printf(GLib.Uri.escape_string(mailbox, "@")));
 }
 
 }

@@ -150,6 +150,7 @@ california_VALASOURCES = \
 	toolkit/toolkit-stack-model.vala \
 	\
 	util/util.vala \
+	util/util-email.vala \
 	util/util-gfx.vala \
 	util/util-markup.vala \
 	util/util-memory.vala \
