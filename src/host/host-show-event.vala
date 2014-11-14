@@ -211,17 +211,19 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
     }
     
     private bool linkify_delegate(string uri, bool known_protocol, out string? pre_markup,
-        out string? post_markup) {
+        out string? markup, out string? post_markup) {
         // preserve but don't linkify if unknown protocol
         if (!known_protocol) {
             pre_markup = null;
+            markup = null;
             post_markup = null;
             
             return true;
         }
         
-        // anchor it
+        // anchor it and preserve uri (i.e. markup = null)
         pre_markup = "<a href=\"%s\">".printf(uri);
+        markup = null;
         post_markup = "</a>";
         
         return true;
