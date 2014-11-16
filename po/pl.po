@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-10 02:37+0100\n"
-"PO-Revision-Date: 2014-11-10 02:38+0100\n"
+"POT-Creation-Date: 2014-11-16 15:50+0100\n"
+"PO-Revision-Date: 2014-11-16 15:52+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -131,7 +131,9 @@ msgstr "Nie można pobrać listy kalendarzy: %s"
 msgid "Authenticated"
 msgstr "Uwierzytelniono"
 
+#. "None" as in "no people"
 #: ../src/activator/google/google-calendar-list-pane.vala:65
+#: ../src/host/host-create-update-event.vala:169
 msgid "None"
 msgstr "Brak"
 
@@ -894,11 +896,11 @@ msgstr "Powtarzanie co %s w %s"
 msgid "day %d"
 msgstr "%d. dzień"
 
-#: ../src/host/host-create-update-event.vala:66
 #: ../src/host/host-create-update-event.vala:69
-#: ../src/host/host-show-event.vala:92 ../src/host/host-show-event.vala:282
-#: ../src/rc/activator-list.ui.h:1 ../src/rc/calendar-import.ui.h:1
-#: ../src/rc/create-update-recurring.ui.h:24
+#: ../src/host/host-create-update-event.vala:72
+#: ../src/host/host-show-event.vala:92 ../src/host/host-show-event.vala:299
+#: ../src/rc/activator-list.ui.h:1 ../src/rc/attendees-editor.ui.h:6
+#: ../src/rc/calendar-import.ui.h:1 ../src/rc/create-update-recurring.ui.h:24
 #: ../src/rc/event-time-settings.ui.h:4 ../src/rc/generic-subscribe.ui.h:5
 #: ../src/rc/google-authenticating.ui.h:1
 #: ../src/rc/google-calendar-list.ui.h:2 ../src/rc/google-login.ui.h:1
@@ -906,46 +908,52 @@ msgstr "%d. dzień"
 msgid "_Cancel"
 msgstr "_Anuluj"
 
-#: ../src/host/host-create-update-event.vala:67
+#: ../src/host/host-create-update-event.vala:70
 msgid "Save A_ll Events"
 msgstr "Zapisz _wszystkie wydarzenia"
 
-#: ../src/host/host-create-update-event.vala:68
+#: ../src/host/host-create-update-event.vala:71
 msgid "Save _This Event"
 msgstr "Zapisz _to wydarzenie"
 
-#: ../src/host/host-create-update-event.vala:166
+#: ../src/host/host-create-update-event.vala:180
 msgid "It's complicated…"
 msgstr "To skomplikowane…"
 
-#: ../src/host/host-create-update-event.vala:169
+#: ../src/host/host-create-update-event.vala:183
 msgid "Never"
 msgstr "Nigdy"
 
-#: ../src/host/host-create-update-event.vala:171
+#: ../src/host/host-create-update-event.vala:185
 msgid "_Save"
 msgstr "_Zapisz"
 
-#: ../src/host/host-create-update-event.vala:171
+#: ../src/host/host-create-update-event.vala:185
 msgid "C_reate"
 msgstr "U_twórz"
 
-#: ../src/host/host-create-update-event.vala:284
+#. Email address followed by common separator, i.e. "alice@example.com, bob@example.com"
+#: ../src/host/host-create-update-event.vala:206
+#, c-format
+msgid "%s, "
+msgstr "%s, "
+
+#: ../src/host/host-create-update-event.vala:325
 #: ../src/host/host-quick-create-event.vala:156
 msgid "Unable to create event: calendar must be specified"
 msgstr "Nie można utworzyć wydarzenia: należy podać kalendarz"
 
-#: ../src/host/host-create-update-event.vala:303
+#: ../src/host/host-create-update-event.vala:344
 #: ../src/host/host-quick-create-event.vala:175
 #, c-format
 msgid "Unable to create event: %s"
 msgstr "Nie można utworzyć wydarzenia: %s"
 
-#: ../src/host/host-create-update-event.vala:308
+#: ../src/host/host-create-update-event.vala:349
 msgid "Unable to update event: calendar must be specified"
 msgstr "Nie można zaktualizować wydarzenia: należy podać kalendarz"
 
-#: ../src/host/host-create-update-event.vala:354
+#: ../src/host/host-create-update-event.vala:395
 #, c-format
 msgid "Unable to update event: %s"
 msgstr "Nie można zaktualizować wydarzenia: %s"
@@ -1050,7 +1058,7 @@ msgstr "To i p_rzyszłe wydarzenia"
 msgid "Edit event"
 msgstr "Modyfikuje wydarzenie"
 
-#: ../src/host/host-show-event.vala:99 ../src/host/host-show-event.vala:280
+#: ../src/host/host-show-event.vala:99 ../src/host/host-show-event.vala:297
 msgid "Export event as .ics"
 msgstr "Eksportuje wydarzenie jako plik .ics"
 
@@ -1058,29 +1066,43 @@ msgstr "Eksportuje wydarzenie jako plik .ics"
 msgid "Delete event"
 msgstr "Usuwa wydarzenie"
 
-#: ../src/host/host-show-event.vala:283
+#: ../src/host/host-show-event.vala:174
+msgid "Organizer"
+msgid_plural "Organizers"
+msgstr[0] "Organizator"
+msgstr[1] "Organizatorzy"
+msgstr[2] "Organizatorzy"
+
+#: ../src/host/host-show-event.vala:185
+msgid "Guest"
+msgid_plural "Guests"
+msgstr[0] "Gość"
+msgstr[1] "Goście"
+msgstr[2] "Goście"
+
+#: ../src/host/host-show-event.vala:300
 msgid "E_xport"
 msgstr "Wy_eksportuj"
 
 #. This is the suggested filename for saving (exporting) an event.  The .ics file extension
 #. should always be present no matter the translation, as many systems rely on it to detect
 #. the file type
-#: ../src/host/host-show-event.vala:287
+#: ../src/host/host-show-event.vala:304
 msgid "event.ics"
 msgstr "wydarzenie.ics"
 
-#: ../src/host/host-show-event.vala:294
+#: ../src/host/host-show-event.vala:311
 msgid "Export _master event"
 msgstr "_Wyeksportuj główne wydarzenie"
 
-#: ../src/host/host-show-event.vala:321
+#: ../src/host/host-show-event.vala:338
 #, c-format
 msgid "Unable to export event as file: %s"
 msgstr "Nie można wyeksportować wydarzenia jako plik: %s"
 
 #. No number is supplied because the number of events removed is indefinite in certain
 #. situations ... plural text should simply be for "more than one"
-#: ../src/host/host-show-event.vala:348
+#: ../src/host/host-show-event.vala:365
 #, c-format
 msgid "Unable to remove event: %s"
 msgid_plural "Unable to remove events: %s"
@@ -1157,6 +1179,30 @@ msgstr "_O programie"
 msgid "_Quit"
 msgstr "Za_kończ"
 
+#: ../src/rc/attendees-editor.ui.h:1
+msgid "Add / remove guests"
+msgstr "Dodawanie/usuwanie gości"
+
+#: ../src/rc/attendees-editor.ui.h:2
+msgid "For example, bob@example.com"
+msgstr "Na przykład: tomek@example.com"
+
+#: ../src/rc/attendees-editor.ui.h:3
+msgid "Email address"
+msgstr "Adres e-mail"
+
+#: ../src/rc/attendees-editor.ui.h:4
+msgid "A_dd Guest"
+msgstr "_Dodaj gościa"
+
+#: ../src/rc/attendees-editor.ui.h:5
+msgid "_Remove Guest"
+msgstr "_Usuń gościa"
+
+#: ../src/rc/attendees-editor.ui.h:7
+msgid "_Accept"
+msgstr "Z_aakceptuj"
+
 #: ../src/rc/calendar-import.ui.h:2
 msgid "_Import"
 msgstr "_Zaimportuj"
@@ -1224,20 +1270,12 @@ msgid "_Location"
 msgstr "_Położenie"
 
 #: ../src/rc/create-update-event.ui.h:10
-msgid "_Guests"
-msgstr "_Goście"
+msgid "Invited Guests"
+msgstr "Zaproszeni goście"
 
 #: ../src/rc/create-update-event.ui.h:11
-msgid ""
-"For example:\n"
-"alice@example.com, bob@example.com"
-msgstr ""
-"Na przykład:\n"
-"alicja@example.com, tomek@example.com"
-
-#: ../src/rc/create-update-event.ui.h:13
-msgid "Email address(es)"
-msgstr "Adresy e-mail"
+msgid "Add and remove invited guests"
+msgstr "Dodaje i usuwa zaproszonych gości"
 
 #: ../src/rc/create-update-recurring.ui.h:1
 msgid "_Repeating event"
