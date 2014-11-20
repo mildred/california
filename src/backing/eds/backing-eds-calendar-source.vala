@@ -49,6 +49,8 @@ internal class EdsCalendarSource : CalendarSource {
         notify[PROP_TITLE].connect(on_title_changed);
         notify[PROP_VISIBLE].connect(on_visible_changed);
         notify[PROP_COLOR].connect(on_color_changed);
+        
+        // see note in open_async() about setting the "mailbox" property
     }
     
     ~EdsCalendarSource() {
@@ -162,6 +164,76 @@ internal class EdsCalendarSource : CalendarSource {
         }
     }
     
+    private string? get_webdav_email() {
+        E.SourceWebdav? webdav = eds_source.get_extension(E.SOURCE_EXTENSION_WEBDAV_BACKEND)
+            as E.SourceWebdav;
+        if (webdav == null)
+            return null;
+        
+        // watch for empty and malformed strings
+        if (String.is_empty(webdav.email_address) || !Email.is_valid_mailbox(webdav.email_address))
+            return null;
+        
+        debug("WebDAV email for %s: %s", to_string(), webdav.email_address);
+        
+        return webdav.email_address;
+    }
+    
+    // Can only be called after open_async() has been called
+    private string? get_backend_email(Cancellable? cancellable) {
+        try {
+            string mailbox_string;
+            client.get_backend_property_sync(E.CAL_BACKEND_PROPERTY_CAL_EMAIL_ADDRESS, out mailbox_string,
+                cancellable);
+            if (!String.is_empty(mailbox_string)) {
+                debug("Using backend email for %s: %s", to_string(), mailbox_string);
+                
+                return mailbox_string;
+            }
+        } catch (Error err) {
+            debug("Unable to fetch calendar email from backend for %s: %s", to_string(), err.message);
+        }
+        
+        return null;
+    }
+    
+    private string? get_authentication_email(string? calendar_domain, string? email_domain) {
+        E.SourceAuthentication? auth = eds_source.get_extension(E.SOURCE_EXTENSION_AUTHENTICATION)
+            as E.SourceAuthentication;
+        if (auth == null)
+            return null;
+        
+        // watch for empty string
+        if (String.is_empty(auth.user))
+            return null;
+        
+        // if email address, use that
+        if (Email.is_valid_mailbox(auth.user)) {
+            debug("Using authentication email for %s: %s", to_string(), auth.user);
+            
+            return auth.user;
+        }
+        
+        // if calendar is on a known service, try tacking on email_domain, but only if both spec'd
+        if (calendar_domain == null || email_domain == null)
+            return null;
+        
+        // ... but this only works if an at-sign isn't already present in the username
+        if (auth.user.contains("@"))
+            return null;
+        
+        if (auth.host != calendar_domain && !auth.host.has_suffix("." + calendar_domain))
+            return null;
+        
+        string manufactured = "%s%s".printf(auth.user, email_domain);
+        if (!Email.is_valid_mailbox(manufactured))
+            return null;
+        
+        debug("Manufactured email for %s: %s", to_string(), manufactured);
+        
+        return manufactured;
+    }
+    
     // Invoked by EdsStore prior to making it available outside of unit
     internal async void open_async(Cancellable? cancellable) throws Error {
         client = (E.CalClient) yield E.CalClient.connect(eds_source, E.CalClientSourceType.EVENTS,
@@ -171,6 +243,29 @@ internal class EdsCalendarSource : CalendarSource {
         client.notify["readonly"].connect(() => {
             debug("%s readonly: %s", to_string(), client.readonly.to_string());
         });
+        
+        
+        //
+        // Unfortunately, obtaining an email address associated with a calendar is not guaranteed
+        // in a lot of ways with EDS, so use an approach that looks for it in the most likely
+        // places .. one approach has to wait until open_async() is called.  First location with
+        // valid email wins.
+        //
+        // Ordering:
+        // * WebDAV extension's email address
+        // * Use backend extension's email address
+        // * Authentication username (if valid email address)
+        // * Same with Google, but appending "@gmail.com" if a plain username (i.e.
+        //   "alice" -> "alice@gmail.com")
+        // * TODO: Same with Yahoo! Calendar, when supported
+        //
+        mailbox = get_webdav_email();
+        if (mailbox == null)
+            mailbox = get_backend_email(cancellable);
+        if (mailbox == null)
+            mailbox = get_authentication_email(null, null);
+        if (mailbox == null)
+            mailbox = get_authentication_email("google.com", "@gmail.com");
     }
     
     // Invoked by EdsStore when closing and dropping all its refs

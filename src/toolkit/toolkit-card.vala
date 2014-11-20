@@ -97,21 +97,11 @@ public interface Card : Gtk.Widget {
     public Deck? deck { get { return parent as Deck; } }
     
     /**
-     * Fired when the {@link Card} wishes to jump to another Card in the same {@link Deck.}
-     *
-     * Each Card can accept a message which parameterizes its activation.  It's up to Cards
-     * navigating to the new one to construct and pass an appropriate message.
-     *
-     * @see jump_to_card_by_name
-     */
-    public signal void jump_to_card(Card next, Value? message);
-    
-    /**
      * Fired when the {@link Card} wishes to jump to another Card by its name.
      *
      * @see jump_to_card
      */
-    public signal void jump_to_card_by_name(string name, Value? message);
+    public signal void jump_to_card_by_id(string id, Value? message);
     
     /**
      * Fired when the {@link Card} wishes to jump to the previous Card in the {@link Deck}.

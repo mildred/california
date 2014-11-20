@@ -560,11 +560,11 @@ namespace E {
 	public delegate bool CalRecurInstanceFn (E.CalComponent comp, time_t instance_start, time_t instance_end);
 	[CCode (cheader_filename = "libecal/libecal.h")]
 	public delegate iCal.icaltimezone CalRecurResolveTimezoneFn (string tzid);
-	[CCode (cheader_filename = "libecal/libecal.h")]
+	[CCode (cheader_filename = "libecal/libecal.h", cname = "CAL_BACKEND_PROPERTY_ALARM_EMAIL_ADDRESS")]
 	public const string CAL_BACKEND_PROPERTY_ALARM_EMAIL_ADDRESS;
-	[CCode (cheader_filename = "libecal/libecal.h")]
+	[CCode (cheader_filename = "libecal/libecal.h", cname = "CAL_BACKEND_PROPERTY_CAL_EMAIL_ADDRESS")]
 	public const string CAL_BACKEND_PROPERTY_CAL_EMAIL_ADDRESS;
-	[CCode (cheader_filename = "libecal/libecal.h")]
+	[CCode (cheader_filename = "libecal/libecal.h", cname = "CAL_BACKEND_PROPERTY_DEFAULT_OBJECT")]
 	public const string CAL_BACKEND_PROPERTY_DEFAULT_OBJECT;
 	[CCode (cheader_filename = "libecal/libecal.h")]
 	public const string CAL_STATIC_CAPABILITY_ALARM_DESCRIPTION;

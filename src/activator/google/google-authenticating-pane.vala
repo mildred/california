@@ -134,7 +134,7 @@ public class AuthenticatingPane : Gtk.Grid, Toolkit.Card {
         // delay gives the user a chance to see what's transpired
         yield sleep_msec_async(SUCCESS_DELAY_MSEC);
         
-        jump_to_card_by_name(CalendarListPane.ID, new CalendarListPane.Message(
+        jump_to_card_by_id(CalendarListPane.ID, new CalendarListPane.Message(
             credentials.username, own_calendars, all_calendars));
     }
     

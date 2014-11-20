@@ -56,7 +56,7 @@ internal class LoginPane : Gtk.Grid, Toolkit.Card {
     
     [GtkCallback]
     private void on_login_button_clicked() {
-        jump_to_card_by_name(AuthenticatingPane.ID, new AuthenticatingPane.Message(
+        jump_to_card_by_id(AuthenticatingPane.ID, new AuthenticatingPane.Message(
             account_entry.text, password_entry.text));
     }
 }

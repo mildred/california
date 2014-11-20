@@ -128,7 +128,7 @@ internal class CalendarList : Gtk.Grid, Toolkit.Card {
     
     [GtkCallback]
     private void on_add_button_clicked() {
-        jump_to_card_by_name(Activator.InstanceList.ID, null);
+        jump_to_card_by_id(Activator.InstanceList.ID, null);
     }
     
     [GtkCallback]
@@ -143,7 +143,7 @@ internal class CalendarList : Gtk.Grid, Toolkit.Card {
     [GtkCallback]
     private void on_remove_button_clicked() {
         if (model.selected != null)
-            jump_to_card_by_name(RemoveCalendar.ID, model.selected);
+            jump_to_card_by_id(RemoveCalendar.ID, model.selected);
     }
     
     [GtkCallback]

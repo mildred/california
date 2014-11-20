@@ -42,6 +42,12 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     private Gtk.Entry location_entry;
     
     [GtkChild]
+    private Gtk.Label organizer_label;
+    
+    [GtkChild]
+    private Gtk.Label organizer_text;
+    
+    [GtkChild]
     private Gtk.Label attendees_text;
     
     [GtkChild]
@@ -92,6 +98,9 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         update_all_button.clicked.connect(on_update_all_button_clicked);
         update_this_button.clicked.connect(on_update_this_button_clicked);
         cancel_recurring_button.clicked.connect(on_cancel_recurring_button_clicked);
+        
+        organizer_text.query_tooltip.connect(on_organizer_text_query_tooltip);
+        organizer_text.has_tooltip = true;
         
         attendees_text.query_tooltip.connect(on_attendees_text_query_tooltip);
         attendees_text.has_tooltip = true;
@@ -160,10 +169,20 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         
         location_entry.text = event.location ?? "";
         description_textview.buffer.text = event.description ?? "";
+        
+        // Only show "Organizer" and associated text if something to show
+        organizer_text.label = traverse<Component.Person>(event.organizers)
+            .sort()
+            .to_string(stringify_persons);
+        bool has_organizer = !String.is_empty(organizer_text.label);
+        organizer_label.visible = organizer_text.visible = has_organizer;
+        organizer_label.no_show_all = organizer_text.no_show_all = !has_organizer;
+        
+        // Don't count organizers as attendees
         attendees_text.label = traverse<Component.Person>(event.attendees)
             .filter(attendee => !event.organizers.contains(attendee))
             .sort()
-            .to_string(stringify_attendees);
+            .to_string(stringify_persons);
         if (String.is_empty(attendees_text.label)) {
             // "None" as in "no people"
             attendees_text.label = _("None");
@@ -188,6 +207,18 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         rotating_button_box.family = FAMILY_NORMAL;
     }
     
+    private bool on_organizer_text_query_tooltip(Gtk.Widget widget, int x, int y, bool keyboard,
+        Gtk.Tooltip tooltip) {
+        if (!organizer_text.get_layout().is_ellipsized())
+            return false;
+        
+        tooltip.set_text(traverse<Component.Person>(event.organizers)
+            .sort()
+            .to_string(stringify_persons_tooltip));
+        
+        return true;
+    }
+    
     private bool on_attendees_text_query_tooltip(Gtk.Widget widget, int x, int y, bool keyboard,
         Gtk.Tooltip tooltip) {
         if (!attendees_text.get_layout().is_ellipsized())
@@ -196,17 +227,17 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         tooltip.set_text(traverse<Component.Person>(event.attendees)
             .filter(attendee => !event.organizers.contains(attendee))
             .sort()
-            .to_string(stringify_attendees_tooltip));
+            .to_string(stringify_persons_tooltip));
         
         return true;
     }
     
-    private string? stringify_attendees(Component.Person person, bool is_first, bool is_last) {
+    private string? stringify_persons(Component.Person person, bool is_first, bool is_last) {
         // Email address followed by common separator, i.e. "alice@example.com, bob@example.com"
         return !is_last ? _("%s, ").printf(person.full_mailbox) : person.full_mailbox;
     }
     
-    private string? stringify_attendees_tooltip(Component.Person person, bool is_first, bool is_last) {
+    private string? stringify_persons_tooltip(Component.Person person, bool is_first, bool is_last) {
         return !is_last ? "%s\n".printf(person.full_mailbox) : person.full_mailbox;
     }
     
@@ -229,7 +260,7 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         update_component(event, true);
         
         // send off to recurring editor
-        jump_to_card_by_name(CreateUpdateRecurring.ID, event);
+        jump_to_card_by_id(CreateUpdateRecurring.ID, event);
     }
     
     [GtkCallback]
@@ -240,12 +271,13 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         // save changes with what's in the component now
         update_component(event, true);
         
-        jump_to_card_by_name(EventTimeSettings.ID, dt);
+        jump_to_card_by_id(EventTimeSettings.ID, dt);
     }
     
     [GtkCallback]
     private void on_attendees_button_clicked() {
-        jump_to_card_by_name(AttendeesEditor.ID, event);
+        if (calendar_model.active != null)
+            AttendeesEditor.pass_message(this, event, calendar_model.active);
     }
     
     private void on_accept_button_clicked() {
@@ -338,6 +370,8 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         
         Toolkit.set_unbusy(this, cursor);
         
+        invite_attendees(target, true);
+        
         if (create_err == null)
             notify_success();
         else
@@ -389,12 +423,169 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         
         Toolkit.set_unbusy(this, cursor);
         
+        // PUBLISH is used to update an existing event
+        invite_attendees(target, false);
+        
         if (update_err == null)
             notify_success();
         else
             report_error(_("Unable to update event: %s").printf(update_err.message));
     }
     
+    private void invite_attendees(Component.Event event, bool is_create) {
+        // Make list of invitees, which are attendees who are not organizers
+        Gee.List<Component.Person> invitees = traverse<Component.Person>(event.attendees)
+            .filter(attendee => !event.organizers.contains(attendee))
+            .filter(attendee => attendee.send_invite)
+            .sort()
+            .to_array_list();
+        
+        // no invitees, no invites
+        if (invitees.size == 0)
+            return;
+        
+        // TODO: Differentiate between instance updates and master updates
+        Component.iCalendar ics = event.export_master(iCal.icalproperty_method.REQUEST);
+        
+        // export .ics to temporary directory so the filename is a pristine "invite.ics"
+        string? temporary_filename = null;
+        try {
+            // "invite.ics" is the name of the file for an event invite delivered via email ...
+            // please translate but keep the .ics extension, as that's common to most calendar
+            // applications
+            temporary_filename = File.new_for_path(DirUtils.make_tmp("california-XXXXXX")).get_child(_("invite.ics")).get_path();
+            FileUtils.set_contents(temporary_filename, ics.source);
+            
+            // ensure this file is only readable by the user
+            FileUtils.chmod(temporary_filename, (int) (Posix.S_IRUSR | Posix.S_IWUSR));
+        } catch (Error err) {
+            Application.instance.error_message(deck.get_toplevel() as Gtk.Window,
+                _("Unable to export .ics to %s: %s").printf(
+                    temporary_filename ?? "(filename not generated)", err.message));
+            
+            return;
+        }
+        
+        //
+        // send using xdg-email, *not* Gtk.show_uri() w/ a mailto: URI, as handling attachments
+        // is best left to xdg-email
+        //
+        
+        string[] argv = new string[0];
+        argv += "xdg-email";
+        argv += "--utf8";
+        
+        foreach (Component.Person invitee in invitees)
+            argv += invitee.mailbox;
+        
+        argv += "--subject";
+        if (String.is_empty(event.summary)) {
+            argv += is_create ? _("Event invitation") : _("Updated event invitation");
+        } else if (String.is_empty(event.location)) {
+            argv += (is_create ? _("Invitation: %s") : _("Updated invitation: %s")).printf(event.summary);
+        } else {
+            // Invitation: <summary> at <location>
+            argv += (is_create ? _("Invitation: %s at %s") : _("Updated invitation: %s at %s")).printf(
+                event.summary, event.location);
+        }
+        
+        argv += "--body";
+        argv += generate_invite_body(event, is_create);
+        
+        argv += "--attach";
+        argv += temporary_filename;
+        
+        try {
+            Pid child_pid;
+            Process.spawn_async(null, argv, null, SpawnFlags.SEARCH_PATH, null, out child_pid);
+            Process.close_pid(child_pid);
+        } catch (SpawnError err) {
+            Application.instance.error_message(deck.get_toplevel() as Gtk.Window,
+                _("Unable to launch mail client: %s").printf(err.message));
+        }
+    }
+    
+    private static string generate_invite_body(Component.Event event, bool is_create) {
+        StringBuilder builder = new StringBuilder();
+        
+        // Salutations for an email
+        append_line(builder, _("Hello,"));
+        append_line(builder);
+        append_line(builder, is_create
+            ? _("Attached is an invitation to a new event:")
+            : _("Attached is an updated event invitation:")
+        );
+        append_line(builder);
+        
+        // Summary
+        if (!String.is_empty(event.summary))
+            append_line(builder, event.summary);
+        
+        // Date/Time span
+        string? pretty_time = event.get_event_time_pretty_string(
+            Calendar.Date.PrettyFlag.NO_TODAY | Calendar.Date.PrettyFlag.INCLUDE_OTHER_YEAR,
+            Calendar.ExactTimeSpan.PrettyFlag.INCLUDE_TIMEZONE,
+            Calendar.Timezone.local
+        );
+        if (!String.is_empty(pretty_time)) {
+            // Date/time of an event
+            append_line(builder, _("When: %s").printf(pretty_time));
+        }
+        
+        // Recurrences
+        if (event.rrule != null) {
+            string? rrule_explanation = event.rrule.explain(event.get_event_date_span(Calendar.Timezone.local).start_date);
+            if (!String.is_empty(rrule_explanation))
+                append_line(builder, rrule_explanation);
+        }
+        
+        // Location
+        if (!String.is_empty(event.location)) {
+            // Location of an event
+            append_line(builder, _("Where: %s").printf(event.location));
+        }
+        
+        // Organizer (only list one)
+        Component.Person? organizer = null;
+        if (!event.organizers.is_empty) {
+            organizer = traverse<Component.Person>(event.organizers)
+                .sort()
+                .first();
+            // Who organized (scheduled or planned) the event
+            append_line(builder, _("Organizer: %s").printf(organizer.full_mailbox));
+        }
+        
+        // Attendees (strip Organizer from list)
+        Gee.List<Component.Person> attendees = traverse<Component.Person>(event.attendees)
+            .filter(person => organizer == null || !person.equal_to(organizer))
+            .sort()
+            .to_array_list();
+        if (attendees.size > 0) {
+            // People attending event
+            append_line(builder, ngettext("Guest: %s", "Guests: %s", attendees.size).printf(
+                traverse<Component.Person>(attendees).to_string(stringify_people)));
+        }
+        
+        // Description
+        if (!String.is_empty(event.description)) {
+            append_line(builder);
+            append_line(builder, event.description);
+        }
+        
+        return builder.str;
+    }
+    
+    private static void append_line(StringBuilder builder, string? str = null) {
+        if (!String.is_empty(str))
+            builder.append(str);
+        
+        builder.append("\n");
+    }
+    
+    private static string? stringify_people(Component.Person person, bool is_first, bool is_last) {
+        // Email separator, i.e. "alice@example.com, bob@example.com"
+        return !is_last ? _("%s, ").printf(person.full_mailbox) : person.full_mailbox;
+    }
 }
 
 }

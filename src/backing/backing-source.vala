@@ -22,6 +22,7 @@ public abstract class Source : BaseObject, Gee.Comparable<Source> {
     public const string PROP_VISIBLE = "visible";
     public const string PROP_READONLY = "read-only";
     public const string PROP_COLOR = "color";
+    public const string PROP_MAILBOX = "mailbox";
     
     /**
      * A unique identifier for the {@link Source}.
@@ -95,6 +96,13 @@ public abstract class Source : BaseObject, Gee.Comparable<Source> {
      * it.
      */
     public string color { get; set; }
+    
+    /**
+     * The mailbox (email address) associated with this {@link Source}.
+     *
+     * This is the RFC822 mailbox address with no human-readable portion, i.e. "alice@example.com"
+     */
+    public string? mailbox { get; protected set; default = null; }
     
     protected Source(Store store, string id, string title) {
         this.store = store;

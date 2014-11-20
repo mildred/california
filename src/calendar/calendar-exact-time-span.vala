@@ -25,7 +25,11 @@ public class ExactTimeSpan : BaseObject, Gee.Comparable<ExactTimeSpan>, Gee.Hash
         /**
          * Use multiple lines to format string if lengthy.
          */
-        ALLOW_MULTILINE
+        ALLOW_MULTILINE,
+        /**
+         * Include timezone information in the string.
+         */
+        INCLUDE_TIMEZONE
     }
     
     /**
@@ -144,6 +148,7 @@ public class ExactTimeSpan : BaseObject, Gee.Comparable<ExactTimeSpan>, Gee.Hash
      */
     public string to_pretty_string(Calendar.Date.PrettyFlag date_flags, PrettyFlag time_flags) {
         bool allow_multiline = (time_flags & PrettyFlag.ALLOW_MULTILINE) != 0;
+        bool include_timezone = (time_flags & PrettyFlag.INCLUDE_TIMEZONE) != 0;
         
         if (!start_date.year.equal_to(Calendar.System.today.year)
             || !end_date.year.equal_to(Calendar.System.today.year)) {
@@ -151,17 +156,32 @@ public class ExactTimeSpan : BaseObject, Gee.Comparable<ExactTimeSpan>, Gee.Hash
         }
         
         if (is_same_day) {
-            // A span of time, i.e. "3:30pm to 4:30pm"
-            string timespan = _("%s to %s").printf(
-                start_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE),
-                end_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE));
+            string pretty_start_time = start_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE);
+            string pretty_end_time = end_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE);
+            
+            string timespan;
+            if (!include_timezone) {
+                // A span of time, i.e. "3:30pm to 4:30pm"
+                timespan = _("%s to %s").printf(pretty_start_time, pretty_end_time);
+            } else if (start_exact_time.tzid == end_exact_time.tzid) {
+                // A span of time followed by the timezone, i.e. "3:30pm to 4:30pm EST"
+                timespan = _("%s to %s %s").printf(pretty_start_time, pretty_end_time,
+                    start_exact_time.tzid);
+            } else {
+                // A span of time with each timezone's indicated, i.e.
+                // "12:30AM EDT to 2:30PM EST"
+                timespan = _("%s %s to %s %s").printf(pretty_start_time, start_exact_time.tzid,
+                    pretty_end_time, end_exact_time.tzid);
+            }
             
             // Single-day timed event, print "<full date>, <full start time> to <full end time>",
             // including year if not current year
-            return "%s, %s".printf(start_date.to_pretty_string(date_flags), timespan);
+            
+            // Date and time, i.e. "September 13, 4:30pm"
+            return _("%s, %s").printf(start_date.to_pretty_string(date_flags), timespan);
         }
         
-        if (allow_multiline) {
+        if (allow_multiline && !include_timezone) {
             // Multi-day timed event, print "<full time>, <full date>" on both lines,
             // including year if either not current year
             // Prints two full time and date strings on separate lines, i.e.:
@@ -172,6 +192,32 @@ public class ExactTimeSpan : BaseObject, Gee.Comparable<ExactTimeSpan>, Gee.Hash
                 start_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE),
                 end_exact_time.to_pretty_date_string(date_flags),
                 end_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE));
+        } else if (allow_multiline && include_timezone) {
+            // Multi-day timed event, print "<full time>, <full date>" on both lines,
+            // including year if either not current year,
+            // *and* including timezone
+            // Prints two full time and date strings on separate lines, i.e.:
+            // 12 January 2012, 3:30pm PST
+            // 13 January 2013, 6:30am PST
+            return _("%s, %s %s\n%s, %s %s").printf(
+                start_exact_time.to_pretty_date_string(date_flags),
+                start_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE),
+                start_exact_time.tzid,
+                end_exact_time.to_pretty_date_string(date_flags),
+                end_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE),
+                end_exact_time.tzid);
+        }
+        
+        if (include_timezone) {
+            // Prints full time and date strings on a single line with timezone, i.e.:
+            // 12 January 2012, 3:30pm PST to 13 January 2013, 6:30am PST
+            return _("%s, %s %s to %s, %s %s").printf(
+                    start_exact_time.to_pretty_date_string(date_flags),
+                    start_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE),
+                    start_exact_time.tzid,
+                    end_exact_time.to_pretty_date_string(date_flags),
+                    end_exact_time.to_pretty_time_string(Calendar.WallTime.PrettyFlag.NONE),
+                    end_exact_time.tzid);
         }
         
         // Prints full time and date strings on a single line, i.e.:

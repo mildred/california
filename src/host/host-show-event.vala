@@ -322,14 +322,9 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
             return;
         
         // if switch available and active, export master not the generated instance
-        Component.Instance to_export = (export_master_checkbutton != null && export_master_checkbutton.active)
-            ? event.master
-            : event;
-        
-        // Export as a self-contained iCalendar
-        Component.iCalendar icalendar = new Component.iCalendar(iCal.icalproperty_method.PUBLISH,
-            Component.ICAL_PRODID, Component.ICAL_VERSION, null,
-            iterate<Component.Instance>(to_export).to_array_list());
+        Component.iCalendar icalendar = (export_master_checkbutton != null && export_master_checkbutton.active)
+            ? event.export_master(iCal.icalproperty_method.PUBLISH)
+            : event.export(iCal.icalproperty_method.PUBLISH);
         
         try {
             FileUtils.set_contents(filename, icalendar.source);

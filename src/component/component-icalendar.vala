@@ -85,7 +85,7 @@ public class iCalendar : BaseObject {
      * later modifications will allow for Instances to be added and removed dynamically.
      */
     public iCalendar(iCal.icalproperty_method method, string? prodid, string? version, string? calscale,
-        Gee.List<Instance>? instances) {
+        Gee.Collection<Instance>? instances) {
         this.prodid = prodid;
         this.version = version;
         this.calscale = calscale;

@@ -159,7 +159,7 @@ public class EventTimeSettings : Gtk.Box, Toolkit.Card {
         else
             message.reset_exact_time_span(get_exact_time_span());
         
-        jump_to_card_by_name(CreateUpdateEvent.ID, message);
+        jump_to_card_by_id(CreateUpdateEvent.ID, message);
     }
     
     private void freeze_widget_notifications() {

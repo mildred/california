@@ -180,8 +180,12 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      * merely modify the list, the property can be watched for changes with the "notify" and/or
      * "altered" signals.
      *
+     * Note that it's possible for an ORGANIZER to also be an ATTENDEE.
+     *
      * See [[https://tools.ietf.org/html/rfc5545#section-3.8.4.3]]  In particular, note that the
      * {@link organizer} must be specified in group-scheduled calendar entity.
+     *
+     * @see attendees
      */
     public Gee.Set<Person> organizers { get; private set; default = new Gee.HashSet<Person>(); }
     
@@ -193,7 +197,11 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      * merely modify the list, the property can be watched for changes with the "notify" and/or
      * "altered" signals.
      *
+     * Note that it's possible for an ATTENDEE to also be an ORGANIZER.
+     *
      * See [[https://tools.ietf.org/html/rfc5545#section-3.8.4.1]]
+     *
+     * @see organizers
      */
     public Gee.Set<Person> attendees { get; private set; default = new Gee.HashSet<Person>(); }
     
@@ -559,6 +567,29 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
         return traverse<Person>(existing)
             .filter(person => !to_remove.contains(person))
             .to_hash_set();
+    }
+    
+    /**
+     * Export this {@link Instance} as an iCalendar.
+     *
+     * @see export_master
+     * @see is_generated_instance
+     */
+    public iCalendar export(iCal.icalproperty_method method) {
+        return new iCalendar(method, ICAL_PRODID, ICAL_VERSION, null,
+            iterate<Instance>(this).to_array_list());
+    }
+    
+    /**
+     * Export this {@link Instance}'s {@link master} as an iCalendar.
+     *
+     * If this Instance is the master, this is functionally the same as {@link export}.
+     *
+     * @see is_master
+     */
+    public iCalendar export_master(iCal.icalproperty_method method) {
+        return new iCalendar(method, ICAL_PRODID, ICAL_VERSION, null,
+            iterate<Instance>(master ?? this).to_array_list());
     }
     
     /**

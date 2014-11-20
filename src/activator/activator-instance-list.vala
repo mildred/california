@@ -63,7 +63,7 @@ public class InstanceList : Gtk.Grid, Toolkit.Card {
     }
     
     private void start(Instance activator) {
-        jump_to_card_by_name(activator.first_card_id, null);
+        jump_to_card_by_id(activator.first_card_id, null);
     }
     
     private Gtk.Widget model_presentation(Instance activator) {

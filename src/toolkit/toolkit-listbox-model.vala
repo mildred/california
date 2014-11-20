@@ -19,6 +19,7 @@ namespace California.Toolkit {
 
 public class ListBoxModel<G> : BaseObject {
     public const string PROP_SELECTED = "selected";
+    public const string PROP_SIZE = "size";
     
     private const string KEY = "org.yorba.california.listbox-model.model";
     
@@ -35,9 +36,9 @@ public class ListBoxModel<G> : BaseObject {
     public Gtk.ListBox listbox { get; private set; }
     
     /**
-     * The number if items in the {@link ListBoxModel}.
+     * The number of items in the {@link ListBoxModel}.
      */
-    public int size { get { return items.size; } }
+    public int size { get; private set; default = 0; }
     
     /**
      * The item currently selected by the {@link listbox}, null if no selection has been made.
@@ -126,6 +127,9 @@ public class ListBoxModel<G> : BaseObject {
         listbox.add(row);
         row.show_all();
         
+        // adjust size before signalling
+        size = size + 1;
+        
         added(item);
         
         return true;
@@ -183,6 +187,9 @@ public class ListBoxModel<G> : BaseObject {
         
         if (remove_from_listbox)
             row.destroy();
+        
+        // adjust before signalling
+        size = (size - 1).clamp(0, int.MAX);
         
         removed(item);
         

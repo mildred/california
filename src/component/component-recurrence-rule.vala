@@ -589,6 +589,8 @@ public class RecurrenceRule : BaseObject {
     /**
      * Returns a natural-language string explaining the {@link RecurrenceRule} for the user.
      *
+     * The start_date should be the starting date of the associated {@link Instance}.
+     *
      * Returns null if the RRULE is beyond the comprehension of this parser.
      */
     public string? explain(Calendar.Date start_date) {

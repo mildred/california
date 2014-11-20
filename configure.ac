@@ -64,6 +64,10 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <langinfo.h>]],
 AC_MSG_RESULT($california_ok)
 AM_CONDITIONAL(HAVE__NL_TIME_FIRST_WEEKDAY, test "$california_ok" = "yes")
 
+# xdg-utils (specifically, xdg-email)
+AC_CHECK_PROG([XDG_EMAIL], [xdg-email], [yes], [no])
+AS_IF([test "x$XDG_EMAIL" != xyes], [AC_MSG_ERROR([xdg-email required. Please install xdg-utils package.])])
+
 #
 # configure switches
 #

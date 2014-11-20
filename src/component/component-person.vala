@@ -7,10 +7,14 @@
 namespace California.Component {
 
 /**
- * An immutable representation of an iCalendar CAL-ADDRESS (ATTENDEE, ORGANIZER, etc.)
+ * A (mostly) immutable representation of an iCalendar CAL-ADDRESS (ATTENDEE, ORGANIZER, etc.)
  *
  * Person is not guaranteed to represent an individual per se, but it always represents an RFC822
  * mailbox (i.e. email address), which may be a group list address, multiuser mailbox, etc.
+ *
+ * Person is mostly immutable in the sense that the {@link send_invite} property is mutable, but
+ * this parameter is application-specific and not represented in the iCalendar component.  Notably,
+ * this property is not used for any comparison operations.
  *
  * For equality purposes, only the {@link mailto} is used.  All other parameters are ignored when
  * comparing Persons for equality.
@@ -22,6 +26,8 @@ namespace California.Component {
  */
 
 public class Person : BaseObject, Gee.Hashable<Person>, Gee.Comparable<Person> {
+    public const string PROP_SEND_INVITE = "send-invite";
+    
     /**
      * The relationship of this {@link Person} to the {@link Instance}.
      */
@@ -81,6 +87,13 @@ public class Person : BaseObject, Gee.Hashable<Person>, Gee.Comparable<Person> {
      * present, i.e. "Bob Jones <bob@example.com>".
      */
     public string full_mailbox { get; private set; }
+    
+    /**
+     * A mutable property indicating an invitation should be sent to the {@link Person}.
+     *
+     * In general, invites are not sent to organizers.
+     */
+    public bool send_invite { get; set; default = true; }
     
     private Gee.HashSet<string> parameters = new Gee.HashSet<string>(String.ci_hash, String.ci_equal);
     

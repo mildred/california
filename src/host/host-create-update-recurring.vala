@@ -492,7 +492,7 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
     [GtkCallback]
     private void on_ok_button_clicked() {
         update_master();
-        jump_to_card_by_name(CreateUpdateEvent.ID, event);
+        jump_to_card_by_id(CreateUpdateEvent.ID, event);
     }
     
     private bool can_make_rrule() {

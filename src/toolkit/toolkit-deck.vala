@@ -41,7 +41,7 @@ public class Deck : Gtk.Stack {
     
     private Gee.List<Card> list = new Gee.LinkedList<Card>();
     private Gee.Deque<Card> navigation_stack = new Gee.LinkedList<Card>();
-    private Gee.HashMap<string, Card> names = new Gee.HashMap<string, Card>();
+    private Gee.HashMap<string, Card> ids = new Gee.HashMap<string, Card>();
     
     /**
      * Fired before {@link Card}s are added or removed.
@@ -78,7 +78,7 @@ public class Deck : Gtk.Stack {
     }
     
     ~Deck() {
-        foreach (Card card in names.values) {
+        foreach (Card card in ids.values) {
             card.map.disconnect(on_card_mapped);
             card.realize.disconnect(on_card_realized);
         }
@@ -87,8 +87,7 @@ public class Deck : Gtk.Stack {
     private void on_child_to_top() {
         // disconnect from previous top card and push onto nav stack
         if (top != null) {
-            top.jump_to_card.disconnect(on_jump_to_card_instance);
-            top.jump_to_card_by_name.disconnect(on_jump_to_card_by_name);
+            top.jump_to_card_by_id.disconnect(on_jump_to_card_by_id);
             top.jump_back.disconnect(on_jump_back);
             top.jump_home.disconnect(on_jump_home);
             top.dismiss.disconnect(on_dismiss);
@@ -101,8 +100,7 @@ public class Deck : Gtk.Stack {
         // make new visible child top Card and connect to its signals
         top = visible_child as Card;
         if (top != null) {
-            top.jump_to_card.connect(on_jump_to_card_instance);
-            top.jump_to_card_by_name.connect(on_jump_to_card_by_name);
+            top.jump_to_card_by_id.connect(on_jump_to_card_by_id);
             top.jump_back.connect(on_jump_back);
             top.jump_home.connect(on_jump_home);
             top.dismiss.connect(on_dismiss);
@@ -138,14 +136,14 @@ public class Deck : Gtk.Stack {
         foreach (Card card in cards) {
             // each card must have a unique name
             assert(!String.is_empty(card.card_id));
-            assert(!names.has_key(card.card_id));
+            assert(!ids.has_key(card.card_id));
             
             if (String.is_empty(card.title))
                 add_named(card, card.card_id);
             else
                 add_titled(card, card.card_id, card.title);
             
-            names.set(card.card_id, card);
+            ids.set(card.card_id, card);
             
             // deal with initial_focus and default_widget when mapped, as the calls aren't
             // guaranteed to work during programmatic navigation (especially for the first card,
@@ -179,7 +177,7 @@ public class Deck : Gtk.Stack {
         adding_removing_cards(null, cards);
         
         foreach (Card card in cards) {
-            if (!names.has_key(card.card_id)) {
+            if (!ids.has_key(card.card_id)) {
                 message("Card %s not found in Deck", card.card_id);
                 
                 continue;
@@ -194,7 +192,7 @@ public class Deck : Gtk.Stack {
                 top = null;
             
             navigation_stack.remove(card);
-            names.unset(card.card_id);
+            ids.unset(card.card_id);
             list.remove(card);
         }
         
@@ -252,7 +250,7 @@ public class Deck : Gtk.Stack {
         }
         
         // do nothing if not registered with this Deck
-        if (!names.values.contains(next)) {
+        if (!ids.values.contains(next)) {
             GLib.message("Card %s not registered with Deck", next.card_id);
             
             return;
@@ -262,12 +260,8 @@ public class Deck : Gtk.Stack {
         next.jumped_to(card, reason, strip_null_value(message));
     }
     
-    private void on_jump_to_card_instance(Card card, Card next, Value? message) {
-        on_jump_to_card(card, next, Card.Jump.DIRECT, message);
-    }
-    
-    private void on_jump_to_card_by_name(Card card, string name, Value? message) {
-        Card? next = names.get(name);
+    private void on_jump_to_card_by_id(Card card, string id, Value? message) {
+        Card? next = ids.get(id);
         if (next != null)
             on_jump_to_card(card, next, Card.Jump.DIRECT, message);
         else
