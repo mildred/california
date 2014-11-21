@@ -69,23 +69,6 @@ AC_CHECK_PROG([XDG_EMAIL], [xdg-email], [yes], [no])
 AS_IF([test "x$XDG_EMAIL" != xyes], [AC_MSG_ERROR([xdg-email required. Please install xdg-utils package.])])
 
 #
-# configure switches
-#
-# Unity support
-#
-
-AC_MSG_CHECKING([Unity support])
-AC_ARG_ENABLE(
-	unity,
-	[  --enable-unity          enable Unity support [[default=disabled]]],
-	[ unity=$enableval ],
-	[ unity=no ]
-)
-
-AC_MSG_RESULT($unity)
-AM_CONDITIONAL(ENABLE_UNITY, test "x$unity" = "xyes")
-
-#
 # /configure switches
 #
 
@@ -98,9 +81,4 @@ AC_CONFIG_FILES([
 ])
 
 AC_OUTPUT
-
-AC_MSG_RESULT([
-Options:
-	Unity support:		$unity
-])
 

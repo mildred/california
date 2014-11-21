@@ -314,10 +314,10 @@ public class Deck : Gtk.Stack {
     // this overrides the color and uses the toplevel's background color for the Card.  See:
     // https://bugzilla.gnome.org/show_bug.cgi?id=735421
     private void on_card_realized(Gtk.Widget card) {
-#if ENABLE_UNITY
-        Gdk.RGBA bg = card.get_toplevel().get_style_context().get_background_color(Gtk.StateFlags.NORMAL);
-        card.override_background_color(Gtk.StateFlags.NORMAL, bg);
-#endif
+        if (Application.instance.is_running_unity) {
+            Gdk.RGBA bg = card.get_toplevel().get_style_context().get_background_color(Gtk.StateFlags.NORMAL);
+            card.override_background_color(Gtk.StateFlags.NORMAL, bg);
+        }
     }
 }
 

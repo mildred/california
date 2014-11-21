@@ -126,8 +126,15 @@ public class Application : Gtk.Application {
      */
     public Host.MainWindow? main_window { get; private set; default = null; }
     
+    /**
+     * Indicates application is running under Ubuntu's Unity shell.
+     */
+    public bool is_running_unity { get; private set; }
+    
     private Application() {
         Object (application_id: ID);
+        
+        is_running_unity = String.ci_equal(Environment.get_variable("XDG_CURRENT_DESKTOP"), "Unity");
     }
     
     ~Application() {

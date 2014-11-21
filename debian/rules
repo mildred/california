@@ -13,7 +13,7 @@
 	dh $@ --parallel
 
 configure:
-	./autogen.sh --prefix=/usr --enable-unity
+	./autogen.sh --prefix=/usr
 
 build-arch: configure
 	dh $@

@@ -216,10 +216,6 @@ california_RC = \
 
 california_OPTIONAL_VALAFLAGS =
 
-if ENABLE_UNITY
-california_OPTIONAL_VALAFLAGS += --define ENABLE_UNITY
-endif
-
 if HAVE__NL_TIME_FIRST_WEEKDAY
 california_OPTIONAL_VALAFLAGS += --define HAVE__NL_TIME_FIRST_WEEKDAY
 endif

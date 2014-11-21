@@ -149,12 +149,12 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         // if not on Unity, use headerbar as the titlebar (removes window chrome) and provide close
         // button for users who might have trouble finding it otherwise
-#if !ENABLE_UNITY
-        // Unity doesn't support GtkHeaderBar-as-title-bar very well yet; when set, the main
-        // window can't be resized no matter what additional GtkWindow properties are set
-        set_titlebar(headerbar);
-        headerbar.show_close_button = true;
-#endif
+        if (!Application.instance.is_running_unity) {
+            // Unity doesn't support GtkHeaderBar-as-title-bar very well yet; when set, the main
+            // window can't be resized no matter what additional GtkWindow properties are set
+            set_titlebar(headerbar);
+            headerbar.show_close_button = true;
+        }
         
         // Use custom headerbar title
         headerbar.custom_title = custom_title;
@@ -211,9 +211,8 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         Gtk.Box layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         // if on Unity, since headerbar is not the titlebar, need to pack it like any other widget
-#if ENABLE_UNITY
-        layout.pack_start(headerbar, false, true, 0);
-#endif
+        if (Application.instance.is_running_unity)
+            layout.pack_start(headerbar, false, true, 0);
         layout.pack_end(view_stack, true, true, 0);
         
         add(layout);
@@ -370,13 +369,13 @@ public class MainWindow : Gtk.ApplicationWindow {
     }
     
     private void on_quick_create_event() {
-#if ENABLE_UNITY
-        // Unity/Ambiance has display problems with GtkPopovers attached to GtkHeaderBars, so use
-        // a DeckWindow
-        quick_create_event(null, null, null);
-#else
-        quick_create_event(null, quick_add_button, null);
-#endif
+        if (Application.instance.is_running_unity) {
+            // Unity/Ambiance has display problems with GtkPopovers attached to GtkHeaderBars, so use
+            // a DeckWindow
+            quick_create_event(null, null, null);
+        } else {
+            quick_create_event(null, quick_add_button, null);
+        }
     }
     
     private void on_jump_to_today() {
