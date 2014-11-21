@@ -6,7 +6,7 @@
 
 namespace California.Host {
 
-[GtkTemplate (ui = "/org/yorba/california/rc/main-window-title.ui")]
+[GtkTemplate (ui = "/org/yorba/california/rc/host-main-window-title.ui")]
 internal class MainWindowTitle : Gtk.Grid {
     public const string PROP_MOTION = "motion";
     

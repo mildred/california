@@ -6,7 +6,7 @@
 
 namespace California.Activator.Generic {
 
-[GtkTemplate (ui = "/org/yorba/california/rc/generic-subscribe.ui")]
+[GtkTemplate (ui = "/org/yorba/california/rc/activator-generic-subscribe.ui")]
 internal abstract class Subscribe : Gtk.Grid, Toolkit.Card {
     public abstract string card_id { get; }
     

@@ -195,25 +195,25 @@ california_SOURCES = \
 	$(NULL)
 
 california_RC = \
-	rc/activator-list.ui \
+	rc/activator-generic-subscribe.ui \
+	rc/activator-google-authenticating-pane.ui \
+	rc/activator-google-calendar-list-pane.ui \
+	rc/activator-google-login-pane.ui \
+	rc/activator-instance-list.ui \
 	rc/app-menu.interface \
-	rc/calendar-import.ui \
-	rc/calendar-list-item.ui \
-	rc/calendar-manager-list.ui \
-	rc/calendar-manager-list-item.ui \
 	rc/event-editor-attendees-card.ui \
 	rc/event-editor-date-time-card.ui \
 	rc/event-editor-date-time-widget.ui \
 	rc/event-editor-main-card.ui \
 	rc/event-editor-recurring-card.ui \
-	rc/generic-subscribe.ui \
-	rc/google-authenticating.ui \
-	rc/google-calendar-list.ui \
-	rc/google-login.ui \
-	rc/main-window-title.ui \
-	rc/quick-create-event.ui \
-	rc/remove-calendar.ui \
-	rc/show-event.ui \
+	rc/host-calendar-list-item.ui \
+	rc/host-import-calendar.ui \
+	rc/host-main-window-title.ui \
+	rc/host-quick-create-event.ui \
+	rc/host-show-event.ui \
+	rc/manager-calendar-list.ui \
+	rc/manager-calendar-list-item.ui \
+	rc/manager-remove-calendar.ui \
 	rc/window-menu.interface \
 	$(NULL)
 

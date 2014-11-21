@@ -6,7 +6,7 @@
 
 namespace California.Activator.Google {
 
-[GtkTemplate (ui = "/org/yorba/california/rc/google-calendar-list.ui")]
+[GtkTemplate (ui = "/org/yorba/california/rc/activator-google-calendar-list-pane.ui")]
 public class CalendarListPane : Gtk.Grid, Toolkit.Card {
     public const string ID = "GoogleCalendarListPane";
     

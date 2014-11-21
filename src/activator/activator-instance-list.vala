@@ -6,7 +6,7 @@
 
 namespace California.Activator {
 
-[GtkTemplate (ui = "/org/yorba/california/rc/activator-list.ui")]
+[GtkTemplate (ui = "/org/yorba/california/rc/activator-instance-list.ui")]
 public class InstanceList : Gtk.Grid, Toolkit.Card {
     public const string ID = "ActivatorInstanceList";
     

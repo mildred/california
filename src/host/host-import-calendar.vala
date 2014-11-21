@@ -6,7 +6,7 @@
 
 namespace California.Host {
 
-[GtkTemplate (ui = "/org/yorba/california/rc/calendar-import.ui")]
+[GtkTemplate (ui = "/org/yorba/california/rc/host-import-calendar.ui")]
 public class ImportCalendar : Gtk.Dialog {
     public Component.iCalendar ical { get; private set;}
     

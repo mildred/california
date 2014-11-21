@@ -10,7 +10,7 @@ namespace California.Host {
  * MESSAGE IN: Send the Component.Event to be displayed.
  */
 
-[GtkTemplate (ui = "/org/yorba/california/rc/show-event.ui")]
+[GtkTemplate (ui = "/org/yorba/california/rc/host-show-event.ui")]
 public class ShowEvent : Gtk.Grid, Toolkit.Card {
     public const string ID = "ShowEvent";
     

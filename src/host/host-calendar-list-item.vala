@@ -6,7 +6,7 @@
 
 namespace California.Host {
 
-[GtkTemplate (ui = "/org/yorba/california/rc/calendar-list-item.ui")]
+[GtkTemplate (ui = "/org/yorba/california/rc/host-calendar-list-item.ui")]
 public class CalendarListItem : Gtk.Grid, Toolkit.MutableWidget {
     public Backing.CalendarSource calendar_source { get; private set; }
     

@@ -6,7 +6,7 @@
 
 namespace California.Manager {
 
-[GtkTemplate (ui = "/org/yorba/california/rc/remove-calendar.ui")]
+[GtkTemplate (ui = "/org/yorba/california/rc/manager-remove-calendar.ui")]
 private class RemoveCalendar : Gtk.Grid, Toolkit.Card {
     public const string ID = "RemoveCalendar";
     

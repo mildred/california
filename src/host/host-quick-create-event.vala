@@ -6,7 +6,7 @@
 
 namespace California.Host {
 
-[GtkTemplate (ui = "/org/yorba/california/rc/quick-create-event.ui")]
+[GtkTemplate (ui = "/org/yorba/california/rc/host-quick-create-event.ui")]
 public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
     public const string ID = "QuickCreateEvent";
     

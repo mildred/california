@@ -28,22 +28,23 @@ src/manager/manager-calendar-list-item.vala
 src/manager/manager-remove-calendar.vala
 src/view/month/month-controller.vala
 src/view/week/week-controller.vala
-[type: gettext/glade]src/rc/activator-list.ui
+[type: gettext/glade]src/rc/activator-generic-subscribe.ui
+[type: gettext/glade]src/rc/activator-google-authenticating-pane.ui
+[type: gettext/glade]src/rc/activator-google-calendar-list-pane.ui
+[type: gettext/glade]src/rc/activator-google-login-pane.ui
+[type: gettext/glade]src/rc/activator-instance-list.ui
 [type: gettext/glade]src/rc/app-menu.interface
-[type: gettext/glade]src/rc/calendar-import.ui
-[type: gettext/glade]src/rc/calendar-manager-list-item.ui
-[type: gettext/glade]src/rc/calendar-manager-list.ui
 [type: gettext/glade]src/rc/event-editor-attendees-card.ui
 [type: gettext/glade]src/rc/event-editor-date-time-card.ui
 [type: gettext/glade]src/rc/event-editor-date-time-widget.ui
 [type: gettext/glade]src/rc/event-editor-main-card.ui
 [type: gettext/glade]src/rc/event-editor-recurring-card.ui
-[type: gettext/glade]src/rc/generic-subscribe.ui
-[type: gettext/glade]src/rc/google-authenticating.ui
-[type: gettext/glade]src/rc/google-calendar-list.ui
-[type: gettext/glade]src/rc/google-login.ui
-[type: gettext/glade]src/rc/main-window-title.ui
-[type: gettext/glade]src/rc/quick-create-event.ui
-[type: gettext/glade]src/rc/remove-calendar.ui
-[type: gettext/glade]src/rc/show-event.ui
+[type: gettext/glade]src/rc/host-calendar-list-item.ui
+[type: gettext/glade]src/rc/host-import-calendar.ui
+[type: gettext/glade]src/rc/host-main-window-title.ui
+[type: gettext/glade]src/rc/host-quick-create-event.ui
+[type: gettext/glade]src/rc/host-show-event.ui
+[type: gettext/glade]src/rc/manager-calendar-list.ui
+[type: gettext/glade]src/rc/manager-calendar-list-item.ui
+[type: gettext/glade]src/rc/manager-remove-calendar.ui
 [type: gettext/glade]src/rc/window-menu.interface

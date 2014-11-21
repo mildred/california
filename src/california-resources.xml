@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
     <gresource prefix="/org/yorba/california">
-        <file compressed="true">rc/activator-list.ui</file>
+        <file compressed="true">rc/activator-generic-subscribe.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
+        <file compressed="true">rc/activator-google-authenticating-pane.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
+        <file compressed="true">rc/activator-google-calendar-list-pane.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
+        <file compressed="true">rc/activator-google-login-pane.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
+        <file compressed="true">rc/activator-instance-list.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
         <file compressed="true">rc/app-menu.interface</file>
-    </gresource>
-    <gresource prefix="/org/yorba/california">
-        <file compressed="true">rc/calendar-import.ui</file>
-    </gresource>
-    <gresource prefix="/org/yorba/california">
-        <file compressed="false">rc/calendar-list-item.ui</file>
-    </gresource>
-    <gresource prefix="/org/yorba/california">
-        <file compressed="false">rc/calendar-manager-list.ui</file>
-    </gresource>
-    <gresource prefix="/org/yorba/california">
-        <file compressed="false">rc/calendar-manager-list-item.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
         <file compressed="true">rc/event-editor-attendees-card.ui</file>
@@ -34,28 +34,28 @@
         <file compressed="false">rc/event-editor-recurring-card.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
-        <file compressed="true">rc/generic-subscribe.ui</file>
+        <file compressed="false">rc/host-calendar-list-item.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
-        <file compressed="true">rc/google-authenticating.ui</file>
+        <file compressed="true">rc/host-import-calendar.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
-        <file compressed="true">rc/google-calendar-list.ui</file>
+        <file compressed="true">rc/host-main-window-title.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
-        <file compressed="true">rc/google-login.ui</file>
+        <file compressed="true">rc/host-quick-create-event.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
-        <file compressed="true">rc/main-window-title.ui</file>
+        <file compressed="false">rc/host-show-event.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
-        <file compressed="true">rc/quick-create-event.ui</file>
+        <file compressed="false">rc/manager-calendar-list.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
-        <file compressed="true">rc/remove-calendar.ui</file>
+        <file compressed="false">rc/manager-calendar-list-item.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
-        <file compressed="false">rc/show-event.ui</file>
+        <file compressed="true">rc/manager-remove-calendar.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
         <file compressed="true">rc/window-menu.interface</file>

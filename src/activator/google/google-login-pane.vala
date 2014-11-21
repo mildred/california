@@ -6,7 +6,7 @@
 
 namespace California.Activator.Google {
 
-[GtkTemplate (ui = "/org/yorba/california/rc/google-login.ui")]
+[GtkTemplate (ui = "/org/yorba/california/rc/activator-google-login-pane.ui")]
 internal class LoginPane : Gtk.Grid, Toolkit.Card {
     public const string ID = "GoogleLoginPane";
     

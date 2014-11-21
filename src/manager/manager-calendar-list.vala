@@ -10,7 +10,7 @@ namespace California.Manager {
  * A list of available calendars and basic configuration controls.
  */
 
-[GtkTemplate (ui = "/org/yorba/california/rc/calendar-manager-list.ui")]
+[GtkTemplate (ui = "/org/yorba/california/rc/manager-calendar-list.ui")]
 internal class CalendarList : Gtk.Grid, Toolkit.Card {
     public const string PROP_SELECTED = "selected";
     

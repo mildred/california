@@ -10,7 +10,7 @@ namespace California.Manager {
  * An interactive list item in a {@link CalendarList}.
  */
 
-[GtkTemplate (ui = "/org/yorba/california/rc/calendar-manager-list-item.ui")]
+[GtkTemplate (ui = "/org/yorba/california/rc/manager-calendar-list-item.ui")]
 internal class CalendarListItem : Gtk.Grid, Toolkit.MutableWidget {
     private const int COLOR_DIM = 16;
     
