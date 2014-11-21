@@ -4,11 +4,11 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Host {
+namespace California.EventEditor {
 
-[GtkTemplate (ui = "/org/yorba/california/rc/event-time-settings.ui")]
-public class EventTimeSettings : Gtk.Box, Toolkit.Card {
-    public const string ID = "CaliforniaHostEventTimeSettings";
+[GtkTemplate (ui = "/org/yorba/california/rc/event-editor-date-time-card.ui")]
+public class DateTimeCard : Gtk.Box, Toolkit.Card {
+    public const string ID = "CaliforniaEventEditorDateTime";
     
     public class Message : Object {
         public Calendar.DateSpan? date_span { get; private set; default = null; }
@@ -76,7 +76,7 @@ public class EventTimeSettings : Gtk.Box, Toolkit.Card {
     private DateTimeWidget to_widget = new DateTimeWidget();
     private Calendar.Duration duration = new Calendar.Duration();
     
-    public EventTimeSettings() {
+    public DateTimeCard() {
         // need to manually pack the date/time widgets
         from_box.pack_start(from_widget);
         to_box.pack_start(to_widget);
@@ -100,7 +100,7 @@ public class EventTimeSettings : Gtk.Box, Toolkit.Card {
         Calendar.System.instance.is_24hr_changed.connect(on_update_summary);
     }
     
-    ~EventTimeSettings() {
+    ~DateTimeCard() {
         Calendar.System.instance.is_24hr_changed.disconnect(on_update_summary);
     }
     
@@ -159,7 +159,7 @@ public class EventTimeSettings : Gtk.Box, Toolkit.Card {
         else
             message.reset_exact_time_span(get_exact_time_span());
         
-        jump_to_card_by_id(CreateUpdateEvent.ID, message);
+        jump_to_card_by_id(MainCard.ID, message);
     }
     
     private void freeze_widget_notifications() {

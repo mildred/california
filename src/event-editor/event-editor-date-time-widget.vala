@@ -4,9 +4,9 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Host {
+namespace California.EventEditor {
 
-[GtkTemplate (ui = "/org/yorba/california/rc/date-time-widget.ui")]
+[GtkTemplate (ui = "/org/yorba/california/rc/event-editor-date-time-widget.ui")]
 public class DateTimeWidget : Gtk.Box {
     public const string PROP_ENABLE_TIME = "enable-time";
     public const string PROP_ENABLE_DATE = "enable-date";

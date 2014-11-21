@@ -4,11 +4,11 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Host {
+namespace California.EventEditor {
 
-[GtkTemplate (ui = "/org/yorba/california/rc/attendees-editor.ui")]
-public class AttendeesEditor : Gtk.Box, Toolkit.Card {
-    private const string ID = "CaliforniaHostAttendeesEditor";
+[GtkTemplate (ui = "/org/yorba/california/rc/event-editor-attendees-card.ui")]
+public class AttendeesCard : Gtk.Box, Toolkit.Card {
+    private const string ID = "CaliforniaEventEditorAttendees";
     
     private class Message : Object {
         public Component.Event event;
@@ -86,7 +86,7 @@ public class AttendeesEditor : Gtk.Box, Toolkit.Card {
     private Toolkit.ListBoxModel<Component.Person> guest_model;
     private Toolkit.EntryClearTextConnector entry_clear_connector = new Toolkit.EntryClearTextConnector();
     
-    public AttendeesEditor() {
+    public AttendeesCard() {
         guest_model = new Toolkit.ListBoxModel<Component.Person>(guest_listbox, model_presentation);
         
         organizer_entry.bind_property("text", accept_button, "sensitive", BindingFlags.SYNC_CREATE,
@@ -227,7 +227,7 @@ public class AttendeesEditor : Gtk.Box, Toolkit.Card {
         event.clear_attendees();
         event.add_attendees(guest_model.all());
         
-        jump_to_card_by_id(CreateUpdateEvent.ID, event);
+        jump_to_card_by_id(MainCard.ID, event);
     }
     
     [GtkCallback]

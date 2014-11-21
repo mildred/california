@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.16.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
-  <template class="CaliforniaHostEventTimeSettings" parent="GtkBox">
+  <template class="CaliforniaEventEditorDateTimeCard" parent="GtkBox">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="orientation">vertical</property>
@@ -117,7 +117,7 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="use_underline">True</property>
-            <signal name="clicked" handler="on_cancel_button_clicked" object="CaliforniaHostEventTimeSettings" swapped="no"/>
+            <signal name="clicked" handler="on_cancel_button_clicked" object="CaliforniaEventEditorDateTimeCard" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -132,7 +132,7 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="use_underline">True</property>
-            <signal name="clicked" handler="on_ok_button_clicked" object="CaliforniaHostEventTimeSettings" swapped="no"/>
+            <signal name="clicked" handler="on_ok_button_clicked" object="CaliforniaEventEditorDateTimeCard" swapped="no"/>
             <style>
               <class name="suggested-action"/>
             </style>

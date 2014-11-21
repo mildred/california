@@ -96,13 +96,16 @@ california_VALASOURCES = \
 	component/component-uid.vala \
 	component/component-vtype.vala \
 	\
+	event-editor/event-editor.vala \
+	event-editor/event-editor-attendees-card.vala \
+	event-editor/event-editor-date-time-card.vala \
+	event-editor/event-editor-date-time-widget.vala \
+	event-editor/event-editor-deck.vala \
+	event-editor/event-editor-main-card.vala \
+	event-editor/event-editor-recurring-card.vala \
+	\
 	host/host.vala \
-	host/host-attendees-editor.vala \
 	host/host-calendar-list-item.vala \
-	host/host-create-update-event.vala \
-	host/host-create-update-recurring.vala \
-	host/host-date-time-widget.vala \
-	host/host-event-time-settings.vala \
 	host/host-import-calendar.vala \
 	host/host-main-window.vala \
 	host/host-main-window-title.vala \
@@ -194,15 +197,15 @@ california_SOURCES = \
 california_RC = \
 	rc/activator-list.ui \
 	rc/app-menu.interface \
-	rc/attendees-editor.ui \
 	rc/calendar-import.ui \
 	rc/calendar-list-item.ui \
 	rc/calendar-manager-list.ui \
 	rc/calendar-manager-list-item.ui \
-	rc/create-update-event.ui \
-	rc/create-update-recurring.ui \
-	rc/date-time-widget.ui \
-	rc/event-time-settings.ui \
+	rc/event-editor-attendees-card.ui \
+	rc/event-editor-date-time-card.ui \
+	rc/event-editor-date-time-widget.ui \
+	rc/event-editor-main-card.ui \
+	rc/event-editor-recurring-card.ui \
 	rc/generic-subscribe.ui \
 	rc/google-authenticating.ui \
 	rc/google-calendar-list.ui \

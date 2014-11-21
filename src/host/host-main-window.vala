@@ -509,26 +509,7 @@ public class MainWindow : Gtk.ApplicationWindow {
             return;
         }
         
-        CreateUpdateEvent create_update = new CreateUpdateEvent();
-        create_update.is_update = is_update;
-        
-        CreateUpdateRecurring create_update_recurring = new CreateUpdateRecurring();
-        
-        EventTimeSettings event_time_settings = new EventTimeSettings();
-        
-        AttendeesEditor attendees_editor = new AttendeesEditor();
-        
-        Toolkit.Deck deck = new Toolkit.Deck();
-        deck.add_cards(
-            iterate<Toolkit.Card>(create_update, create_update_recurring, event_time_settings,
-                attendees_editor)
-            .to_array_list()
-        );
-        
-        // "initialize" the Deck with the requested Event
-        deck.go_home(clone);
-        
-        show_deck_window(deck);
+        show_deck_window(new EventEditor.Deck(clone, is_update));
     }
 }
 

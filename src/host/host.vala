@@ -24,12 +24,14 @@ public void init() throws Error {
     Calendar.init();
     Toolkit.init();
     Component.init();
+    EventEditor.init();
 }
 
 public void terminate() {
     if (!Unit.do_terminate(ref init_count))
         return;
     
+    EventEditor.terminate();
     Component.terminate();
     View.terminate();
     Backing.terminate();
@@ -37,7 +39,11 @@ public void terminate() {
     Toolkit.terminate();
 }
 
-private Toolkit.ComboBoxTextModel<Backing.CalendarSource> build_calendar_source_combo_model(
+/**
+ * Returns a {@link Toolkit.ComboBoxTextModel} holding all the available and visible
+ * {@link Backing.CalendarSource}s.
+ */
+public Toolkit.ComboBoxTextModel<Backing.CalendarSource> build_calendar_source_combo_model(
     Gtk.ComboBoxText combo, bool include_invisible = false, bool include_read_only = false) {
     Toolkit.ComboBoxTextModel<Backing.CalendarSource> model = new Toolkit.ComboBoxTextModel<Backing.CalendarSource>(
         combo, (calendar) => {

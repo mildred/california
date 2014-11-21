@@ -4,11 +4,11 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Host {
+namespace California.EventEditor {
 
-[GtkTemplate (ui = "/org/yorba/california/rc/create-update-recurring.ui")]
-public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
-    public const string ID = "CreateUpdateRecurring";
+[GtkTemplate (ui = "/org/yorba/california/rc/event-editor-recurring-card.ui")]
+public class RecurringCard : Gtk.Grid, Toolkit.Card {
+    public const string ID = "CaliforniaEventEditorRecurringCard";
     
     private const string PROP_START_DATE = "start-date";
     private const string PROP_END_DATE = "end-date";
@@ -112,7 +112,7 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
         Calendar.DayOfWeek, Gtk.CheckButton>();
     private Toolkit.EntryFilterConnector numeric_filter = new Toolkit.EntryFilterConnector.only_numeric();
     
-    public CreateUpdateRecurring() {
+    public RecurringCard() {
         // "Repeating event" checkbox activates almost every other control in this dialog
         make_recurring_checkbutton.bind_property("active", child_grid, "sensitive",
             BindingFlags.SYNC_CREATE);
@@ -492,7 +492,7 @@ public class CreateUpdateRecurring : Gtk.Grid, Toolkit.Card {
     [GtkCallback]
     private void on_ok_button_clicked() {
         update_master();
-        jump_to_card_by_id(CreateUpdateEvent.ID, event);
+        jump_to_card_by_id(MainCard.ID, event);
     }
     
     private bool can_make_rrule() {

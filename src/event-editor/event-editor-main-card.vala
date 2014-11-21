@@ -4,18 +4,16 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-namespace California.Host {
+namespace California.EventEditor {
 
 /**
- * A blank "form" of widgets for the user to enter or update event details.
- *
- * Message IN: If creating a new event, send Component.Event.blank() (pre-filled with any known
- * details).  If updating an existing event, send Component.Event.clone().
+ * A blank "form" of widgets for the user to enter or update event details that relies on other
+ * {@link Toolkit.Card}s in the {@link Toolkit.Deck} to perform more sophisticated editing.
  */
 
-[GtkTemplate (ui = "/org/yorba/california/rc/create-update-event.ui")]
-public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
-    public const string ID = "CreateUpdateEvent";
+[GtkTemplate (ui = "/org/yorba/california/rc/event-editor-main-card.ui")]
+public class MainCard : Gtk.Grid, Toolkit.Card {
+    public const string ID = "CaliforniaEventEditorMainCard";
     
     private const int START_HOUR = 0;
     private const int END_HOUR = 23;
@@ -65,7 +63,7 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     public bool is_update { get; set; default = false; }
     
     private new Component.Event event = new Component.Event.blank();
-    private EventTimeSettings.Message? dt = null;
+    private DateTimeCard.Message? dt = null;
     private Toolkit.ComboBoxTextModel<Backing.CalendarSource> calendar_model;
     
     private Toolkit.RotatingButtonBox rotating_button_box = new Toolkit.RotatingButtonBox();
@@ -77,7 +75,7 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
     private Gtk.Button update_this_button = new Gtk.Button.with_mnemonic(_("Save _This Event"));
     private Gtk.Button cancel_recurring_button = new Gtk.Button.with_mnemonic(_("_Cancel"));
     
-    public CreateUpdateEvent() {
+    public MainCard() {
         // create button is active only if summary is filled out; all other fields (so far)
         // guarantee valid values at all times
         clear_text_connector.connect_to(summary_entry);
@@ -87,7 +85,7 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         clear_text_connector.connect_to(location_entry);
         
         // use model to control calendars combo box
-        calendar_model = build_calendar_source_combo_model(calendar_combo);
+        calendar_model = Host.build_calendar_source_combo_model(calendar_combo);
         
         accept_button.can_default = true;
         accept_button.has_default = true;
@@ -125,7 +123,7 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         Calendar.System.instance.is_24hr_changed.connect(on_update_time_summary);
     }
     
-    ~CreateUpdateEvent() {
+    ~MainCard() {
         Calendar.System.instance.is_24hr_changed.disconnect(on_update_time_summary);
     }
     
@@ -140,12 +138,12 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         if (message == null)
             return;
         
-        if (message.type() == typeof(EventTimeSettings.Message)) {
-            dt = (EventTimeSettings.Message) message;
+        if (message.type() == typeof(DateTimeCard.Message)) {
+            dt = (DateTimeCard.Message) message;
         } else {
             event = (Component.Event) message;
             if (dt == null)
-                dt = new EventTimeSettings.Message.from_event(event);
+                dt = new DateTimeCard.Message.from_event(event);
         }
         
         update_controls();
@@ -260,24 +258,24 @@ public class CreateUpdateEvent : Gtk.Grid, Toolkit.Card {
         update_component(event, true);
         
         // send off to recurring editor
-        jump_to_card_by_id(CreateUpdateRecurring.ID, event);
+        jump_to_card_by_id(RecurringCard.ID, event);
     }
     
     [GtkCallback]
     private void on_edit_time_button_clicked() {
         if (dt == null)
-            dt = new EventTimeSettings.Message.from_event(event);
+            dt = new DateTimeCard.Message.from_event(event);
         
         // save changes with what's in the component now
         update_component(event, true);
         
-        jump_to_card_by_id(EventTimeSettings.ID, dt);
+        jump_to_card_by_id(DateTimeCard.ID, dt);
     }
     
     [GtkCallback]
     private void on_attendees_button_clicked() {
         if (calendar_model.active != null)
-            AttendeesEditor.pass_message(this, event, calendar_model.active);
+            AttendeesCard.pass_message(this, event, calendar_model.active);
     }
     
     private void on_accept_button_clicked() {

@@ -7,9 +7,6 @@
         <file compressed="true">rc/app-menu.interface</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
-        <file compressed="true">rc/attendees-editor.ui</file>
-    </gresource>
-    <gresource prefix="/org/yorba/california">
         <file compressed="true">rc/calendar-import.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
@@ -22,16 +19,19 @@
         <file compressed="false">rc/calendar-manager-list-item.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
-        <file compressed="false">rc/create-update-event.ui</file>
+        <file compressed="true">rc/event-editor-attendees-card.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
-        <file compressed="false">rc/create-update-recurring.ui</file>
+        <file compressed="false">rc/event-editor-date-time-card.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
-        <file compressed="false">rc/date-time-widget.ui</file>
+        <file compressed="false">rc/event-editor-date-time-widget.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
-        <file compressed="false">rc/event-time-settings.ui</file>
+        <file compressed="false">rc/event-editor-main-card.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
+        <file compressed="false">rc/event-editor-recurring-card.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
         <file compressed="true">rc/generic-subscribe.ui</file>

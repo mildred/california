@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.16.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
-  <template class="CaliforniaHostCreateUpdateRecurring" parent="GtkGrid">
+  <template class="CaliforniaEventEditorRecurringCard" parent="GtkGrid">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
@@ -19,7 +19,7 @@
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
-        <signal name="toggled" handler="on_update_explanation" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
+        <signal name="toggled" handler="on_update_explanation" object="CaliforniaEventEditorRecurringCard" swapped="no"/>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -137,8 +137,8 @@
               <item id="3" translatable="yes">Day of the month</item>
               <item id="4" translatable="yes">Yearly</item>
             </items>
-            <signal name="changed" handler="on_repeats_combobox_changed" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
-            <signal name="changed" handler="on_update_explanation" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
+            <signal name="changed" handler="on_repeats_combobox_changed" object="CaliforniaEventEditorRecurringCard" swapped="no"/>
+            <signal name="changed" handler="on_update_explanation" object="CaliforniaEventEditorRecurringCard" swapped="no"/>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -287,7 +287,7 @@
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
-                <signal name="toggled" handler="on_update_explanation" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
+                <signal name="toggled" handler="on_update_explanation" object="CaliforniaEventEditorRecurringCard" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -310,7 +310,7 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">never_radiobutton</property>
-                    <signal name="toggled" handler="on_update_explanation" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
+                    <signal name="toggled" handler="on_update_explanation" object="CaliforniaEventEditorRecurringCard" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -324,7 +324,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="on_date_button_clicked" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
+                    <signal name="clicked" handler="on_date_button_clicked" object="CaliforniaEventEditorRecurringCard" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -355,7 +355,7 @@
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">never_radiobutton</property>
-                    <signal name="toggled" handler="on_update_explanation" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
+                    <signal name="toggled" handler="on_update_explanation" object="CaliforniaEventEditorRecurringCard" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -371,8 +371,8 @@
                     <property name="activates_default">True</property>
                     <property name="width_chars">5</property>
                     <property name="input_purpose">number</property>
-                    <signal name="changed" handler="on_after_entry_changed" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
-                    <signal name="changed" handler="on_update_explanation" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
+                    <signal name="changed" handler="on_after_entry_changed" object="CaliforniaEventEditorRecurringCard" swapped="no"/>
+                    <signal name="changed" handler="on_update_explanation" object="CaliforniaEventEditorRecurringCard" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -414,7 +414,7 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="halign">start</property>
-            <signal name="clicked" handler="on_date_button_clicked" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
+            <signal name="clicked" handler="on_date_button_clicked" object="CaliforniaEventEditorRecurringCard" swapped="no"/>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -436,8 +436,8 @@
                 <property name="activates_default">True</property>
                 <property name="width_chars">5</property>
                 <property name="input_purpose">number</property>
-                <signal name="changed" handler="on_every_entry_changed" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
-                <signal name="changed" handler="on_update_explanation" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
+                <signal name="changed" handler="on_every_entry_changed" object="CaliforniaEventEditorRecurringCard" swapped="no"/>
+                <signal name="changed" handler="on_update_explanation" object="CaliforniaEventEditorRecurringCard" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -492,7 +492,7 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="use_underline">True</property>
-            <signal name="clicked" handler="on_cancel_button_clicked" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
+            <signal name="clicked" handler="on_cancel_button_clicked" object="CaliforniaEventEditorRecurringCard" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -509,7 +509,7 @@
             <property name="has_default">True</property>
             <property name="receives_default">True</property>
             <property name="use_underline">True</property>
-            <signal name="clicked" handler="on_ok_button_clicked" object="CaliforniaHostCreateUpdateRecurring" swapped="no"/>
+            <signal name="clicked" handler="on_ok_button_clicked" object="CaliforniaEventEditorRecurringCard" swapped="no"/>
             <style>
               <class name="suggested-action"/>
             </style>
