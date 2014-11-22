@@ -110,6 +110,10 @@ public class DateTimeCard : Gtk.Box, Toolkit.Card {
         return true;
     }
     
+    public static Value? make_message(Message date_time_message) {
+        return date_time_message;
+    }
+    
     public void jumped_to(Toolkit.Card? from, Toolkit.Card.Jump reason, Value? message_value) {
         message = (Message) message_value;
         
@@ -159,7 +163,7 @@ public class DateTimeCard : Gtk.Box, Toolkit.Card {
         else
             message.reset_exact_time_span(get_exact_time_span());
         
-        jump_to_card_by_id(MainCard.ID, message);
+        jump_to_card_by_id(MainCard.ID, MainCard.make_message_date_time(message));
     }
     
     private void freeze_widget_notifications() {

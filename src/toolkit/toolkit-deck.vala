@@ -69,12 +69,18 @@ public class Deck : Gtk.Stack {
      * By default the Deck configures the underlying Gtk.Stack to slide left and right, depending
      * on the position of the {@link Card}s.  This can be changed, but the recommended
      * transition types are SLIDE_LEFT_RIGHT and SLIDE_UP_DOWN.
+     *
+     * If a {@link Card} is passed, that will be the first Card added to the Deck and therefore the
+     * {@link home} Card.
      */
-    public Deck() {
+    public Deck(Card? home = null) {
         transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
         transition_duration = DEFAULT_STACK_TRANSITION_DURATION_MSEC;
         
         notify["visible-child"].connect(on_child_to_top);
+        
+        if (home != null)
+            add_card(home);
     }
     
     ~Deck() {
@@ -241,7 +247,7 @@ public class Deck : Gtk.Stack {
         home.jumped_to(null, Card.Jump.HOME, strip_null_value(message));
     }
     
-    private void on_jump_to_card(Card card, Card next, Card.Jump reason, Value? message) {
+    private void jump_to_card(Card caller, Card next, Card.Jump reason, Value? message) {
         // do nothing if already visible
         if (get_visible_child() == next) {
             debug("Already showing card %s", next.card_id);
@@ -257,29 +263,29 @@ public class Deck : Gtk.Stack {
         }
         
         set_visible_child(next);
-        next.jumped_to(card, reason, strip_null_value(message));
+        next.jumped_to(caller, reason, strip_null_value(message));
     }
     
-    private void on_jump_to_card_by_id(Card card, string id, Value? message) {
+    private void on_jump_to_card_by_id(Card caller, string id, Value? message) {
         Card? next = ids.get(id);
         if (next != null)
-            on_jump_to_card(card, next, Card.Jump.DIRECT, message);
+            jump_to_card(caller, next, Card.Jump.DIRECT, message);
         else
             GLib.message("Card %s not found in Deck", name);
     }
     
-    private void on_jump_back(Card card) {
+    private void on_jump_back(Card caller) {
         // if still not empty, next card is "back", so pop that off and jump to it
         if (!navigation_stack.is_empty)
-            on_jump_to_card(card, navigation_stack.poll_head(), Card.Jump.BACK, null);
+            jump_to_card(caller, navigation_stack.poll_head(), Card.Jump.BACK, null);
     }
     
-    private void on_jump_home(Card card) {
+    private void on_jump_home(Card caller) {
         // jumping home clears the navigation stack
         navigation_stack.clear();
         
         if (home != null)
-            on_jump_to_card(card, home, Card.Jump.HOME, null);
+            jump_to_card(caller, home, Card.Jump.HOME, null);
         else
             message("No home card in Deck");
     }

@@ -236,6 +236,10 @@ public class RecurringCard : Gtk.Grid, Toolkit.Card {
         return true;
     }
     
+    public static Value? make_message(Component.Event event) {
+        return event;
+    }
+    
     public void jumped_to(Toolkit.Card? from, Toolkit.Card.Jump reason, Value? message) {
         assert(message != null);
         
@@ -492,7 +496,7 @@ public class RecurringCard : Gtk.Grid, Toolkit.Card {
     [GtkCallback]
     private void on_ok_button_clicked() {
         update_master();
-        jump_to_card_by_id(MainCard.ID, event);
+        jump_to_card_by_id(MainCard.ID, MainCard.make_message_event(event));
     }
     
     private bool can_make_rrule() {

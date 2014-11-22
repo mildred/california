@@ -133,8 +133,16 @@ public class MainCard : Gtk.Grid, Toolkit.Card {
         return true;
     }
     
+    public static Value? make_message_event(Component.Event event) {
+        return event;
+    }
+    
+    public static Value? make_message_date_time(DateTimeCard.Message date_time) {
+        return date_time;
+    }
+    
     public void jumped_to(Toolkit.Card? from, Toolkit.Card.Jump reason, Value? message) {
-        // if no message, leave everything as it is
+        // if no message, leave everything as it is (i.e. jumped back to)
         if (message == null)
             return;
         
@@ -258,7 +266,7 @@ public class MainCard : Gtk.Grid, Toolkit.Card {
         update_component(event, true);
         
         // send off to recurring editor
-        jump_to_card_by_id(RecurringCard.ID, event);
+        jump_to_card_by_id(RecurringCard.ID, RecurringCard.make_message(event));
     }
     
     [GtkCallback]
@@ -269,13 +277,13 @@ public class MainCard : Gtk.Grid, Toolkit.Card {
         // save changes with what's in the component now
         update_component(event, true);
         
-        jump_to_card_by_id(DateTimeCard.ID, dt);
+        jump_to_card_by_id(DateTimeCard.ID, DateTimeCard.make_message(dt));
     }
     
     [GtkCallback]
     private void on_attendees_button_clicked() {
         if (calendar_model.active != null)
-            AttendeesCard.pass_message(this, event, calendar_model.active);
+            jump_to_card_by_id(AttendeesCard.ID, AttendeesCard.make_message(event, calendar_model.active));
     }
     
     private void on_accept_button_clicked() {

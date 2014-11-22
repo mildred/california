@@ -98,8 +98,6 @@ public interface Card : Gtk.Widget {
     
     /**
      * Fired when the {@link Card} wishes to jump to another Card by its name.
-     *
-     * @see jump_to_card
      */
     public signal void jump_to_card_by_id(string id, Value? message);
     

@@ -8,7 +8,7 @@ namespace California.EventEditor {
 
 [GtkTemplate (ui = "/org/yorba/california/rc/event-editor-attendees-card.ui")]
 public class AttendeesCard : Gtk.Box, Toolkit.Card {
-    private const string ID = "CaliforniaEventEditorAttendees";
+    public const string ID = "CaliforniaEventEditorAttendees";
     
     private class Message : Object {
         public Component.Event event;
@@ -127,9 +127,8 @@ public class AttendeesCard : Gtk.Box, Toolkit.Card {
         return true;
     }
     
-    public static void pass_message(Toolkit.Card caller, Component.Event event,
-        Backing.CalendarSource calendar_source) {
-        caller.jump_to_card_by_id(ID, new Message(event, calendar_source));
+    public static Value? make_message(Component.Event event, Backing.CalendarSource calendar_source) {
+        return new Message(event, calendar_source);
     }
     
     public void jumped_to(Toolkit.Card? from, Toolkit.Card.Jump reason, Value? message_value) {
@@ -227,7 +226,7 @@ public class AttendeesCard : Gtk.Box, Toolkit.Card {
         event.clear_attendees();
         event.add_attendees(guest_model.all());
         
-        jump_to_card_by_id(MainCard.ID, event);
+        jump_to_card_by_id(MainCard.ID, MainCard.make_message_event(event));
     }
     
     [GtkCallback]

@@ -451,9 +451,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         QuickCreateEvent quick_create = new QuickCreateEvent(use_deck_window);
         
-        Toolkit.Deck deck = new Toolkit.Deck();
-        deck.add_cards(iterate<Toolkit.Card>(quick_create).to_array_list());
-        
+        Toolkit.Deck deck = new Toolkit.Deck(quick_create);
         deck.go_home(initial);
         
         deck.dismiss.connect(() => {
@@ -471,9 +469,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         Gdk.Point? for_location) {
         ShowEvent show_event = new ShowEvent();
         
-        Toolkit.Deck deck = new Toolkit.Deck();
-        deck.add_cards(iterate<Toolkit.Card>(show_event).to_array_list());
-        
+        Toolkit.Deck deck = new Toolkit.Deck(show_event);
         deck.go_home(event);
         
         deck.dismiss.connect(() => {
