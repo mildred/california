@@ -22,6 +22,9 @@ internal class CalendarListItem : Gtk.Grid, Toolkit.MutableWidget {
     public bool is_selected { get; set; default = false; }
     
     [GtkChild]
+    private Gtk.Image server_sends_invites_icon;
+    
+    [GtkChild]
     private Gtk.Image readonly_icon;
     
     [GtkChild]
@@ -62,6 +65,10 @@ internal class CalendarListItem : Gtk.Grid, Toolkit.MutableWidget {
             BindingFlags.SYNC_CREATE, xform_default_to_icon_name);
         source.bind_property(Backing.CalendarSource.PROP_IS_DEFAULT, default_icon, "tooltip-text",
             BindingFlags.SYNC_CREATE, xform_default_to_tooltip_text);
+        source.bind_property(Backing.CalendarSource.PROP_SERVER_SENDS_INVITES, server_sends_invites_icon,
+            "icon-name", BindingFlags.SYNC_CREATE, xform_sends_invites_to_icon_name);
+        source.bind_property(Backing.CalendarSource.PROP_SERVER_SENDS_INVITES, server_sends_invites_icon,
+            "tooltip-text", BindingFlags.SYNC_CREATE, xform_sends_invites_to_tooltip_text);
         
         title_eventbox.button_release_event.connect(on_title_button_release);
     }
@@ -95,6 +102,20 @@ internal class CalendarListItem : Gtk.Grid, Toolkit.MutableWidget {
     
     private bool xform_default_to_tooltip_text(Binding binding, Value source_value, ref Value target_value) {
         target_value = source.is_default ? _("Calendar is default") : _("Make this calendar default");
+        
+        return true;
+    }
+    
+    private bool xform_sends_invites_to_icon_name(Binding binding, Value source_value, ref Value target_value) {
+        target_value = source.server_sends_invites ? "mail-unread-symbolic" : "";
+        
+        return true;
+    }
+    
+    private bool xform_sends_invites_to_tooltip_text(Binding binding, Value source_value, ref Value target_value) {
+        target_value = source.server_sends_invites
+            ? _("Server sends event invitations")
+            : _("Server does not send event invitations");
         
         return true;
     }
@@ -177,6 +198,11 @@ internal class CalendarListItem : Gtk.Grid, Toolkit.MutableWidget {
         } catch (Error err) {
             message("Unable to set default calendar to %s: %s", source.title, err.message);
         }
+    }
+    
+    [GtkCallback]
+    private void on_server_sends_invites_button_clicked() {
+        source.server_sends_invites = !source.server_sends_invites;
     }
 }
 

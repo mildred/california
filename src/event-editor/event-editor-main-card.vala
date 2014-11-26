@@ -376,7 +376,7 @@ public class MainCard : Gtk.Grid, Toolkit.Card {
         
         Toolkit.set_unbusy(this, cursor);
         
-        invite_attendees(target, true);
+        invite_attendees(calendar_model.active, target, true);
         
         if (create_err == null)
             notify_success();
@@ -430,7 +430,7 @@ public class MainCard : Gtk.Grid, Toolkit.Card {
         Toolkit.set_unbusy(this, cursor);
         
         // PUBLISH is used to update an existing event
-        invite_attendees(target, false);
+        invite_attendees(calendar_model.active, target, false);
         
         if (update_err == null)
             notify_success();
@@ -438,7 +438,12 @@ public class MainCard : Gtk.Grid, Toolkit.Card {
             report_error(_("Unable to update event: %s").printf(update_err.message));
     }
     
-    private void invite_attendees(Component.Event event, bool is_create) {
+    private void invite_attendees(Backing.CalendarSource calendar_source, Component.Event event,
+        bool is_create) {
+        // if the server handles this, don't duplicate effort
+        if (calendar_source.server_sends_invites)
+            return;
+        
         // Make list of invitees, which are attendees who are not organizers
         Gee.List<Component.Person> invitees = traverse<Component.Person>(event.attendees)
             .filter(attendee => !event.organizers.contains(attendee))

@@ -16,6 +16,7 @@ internal class EdsCalendarSource : CalendarSource {
     internal E.Source eds_source;
     internal E.SourceCalendar eds_calendar;
     
+    private E.SourceWebdav? webdav;
     private E.CalClient? client = null;
     private Scheduled? scheduled_source_write = null;
     private Scheduled? scheduled_source_read = null;
@@ -27,6 +28,7 @@ internal class EdsCalendarSource : CalendarSource {
         
         this.eds_source = eds_source;
         this.eds_calendar = eds_calendar;
+        webdav = eds_source.get_extension(E.SOURCE_EXTENSION_WEBDAV_BACKEND) as E.SourceWebdav;
         
         // read-only until opened, when state can be determined from client
         read_only = true;
@@ -37,6 +39,8 @@ internal class EdsCalendarSource : CalendarSource {
         eds_source.notify["display-name"].connect(on_schedule_source_property_read);
         eds_calendar.notify["selected"].connect(on_schedule_source_property_read);
         eds_calendar.notify["color"].connect(on_schedule_source_property_read);
+        if (webdav != null)
+            webdav.notify["calendar-auto-schedule"].connect(on_schedule_source_property_read);
         
         // ...and initialize
         title = eds_source.display_name;
@@ -44,11 +48,14 @@ internal class EdsCalendarSource : CalendarSource {
         color = eds_calendar.color;
         is_local = eds_calendar.backend_name == "local";
         is_removable = eds_source.removable;
+        if (webdav != null)
+            server_sends_invites = webdav.calendar_auto_schedule;
         
         // when changed within the app, need to write it back out
         notify[PROP_TITLE].connect(on_title_changed);
         notify[PROP_VISIBLE].connect(on_visible_changed);
         notify[PROP_COLOR].connect(on_color_changed);
+        notify[PROP_SERVER_SENDS_INVITES].connect(on_server_sends_invites_changed);
         
         // see note in open_async() about setting the "mailbox" property
     }
@@ -64,6 +71,8 @@ internal class EdsCalendarSource : CalendarSource {
         eds_source.notify["display-name"].disconnect(on_schedule_source_property_read);
         eds_calendar.notify["selected"].disconnect(on_schedule_source_property_read);
         eds_calendar.notify["color"].disconnect(on_schedule_source_property_read);
+        if (webdav != null)
+            webdav.notify["calendar-auto-schedule"].disconnect(on_schedule_source_property_read);
         
         // although disconnected, for safety cancel under lock
         lock (dirty_read_properties) {
@@ -105,6 +114,11 @@ internal class EdsCalendarSource : CalendarSource {
                 case "color":
                     color = eds_calendar.color;
                 break;
+                
+                case "calendar-auto-schedule":
+                    if (webdav != null)
+                        server_sends_invites = webdav.calendar_auto_schedule;
+                break;
             }
         }
     }
@@ -136,6 +150,14 @@ internal class EdsCalendarSource : CalendarSource {
         schedule_source_write("color=%s".printf(color));
     }
     
+    private void on_server_sends_invites_changed() {
+        if (webdav == null || webdav.calendar_auto_schedule == server_sends_invites)
+            return;
+        
+        webdav.calendar_auto_schedule = server_sends_invites;
+        schedule_source_write("server_sends_invites=%s".printf(server_sends_invites.to_string()));
+    }
+    
     private void schedule_source_write(string reason) {
         debug("Scheduling update of %s due to %s...", to_string(), reason);
         
@@ -165,8 +187,6 @@ internal class EdsCalendarSource : CalendarSource {
     }
     
     private string? get_webdav_email() {
-        E.SourceWebdav? webdav = eds_source.get_extension(E.SOURCE_EXTENSION_WEBDAV_BACKEND)
-            as E.SourceWebdav;
         if (webdav == null)
             return null;
         

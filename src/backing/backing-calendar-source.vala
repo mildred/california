@@ -19,6 +19,7 @@ namespace California.Backing {
 
 public abstract class CalendarSource : Source {
     public const string PROP_IS_DEFAULT = "is-default";
+    public const string PROP_SERVER_SENDS_INVITES = "server-sends-invites";
     
     /**
      * The affected range of a removal operation.
@@ -48,6 +49,14 @@ public abstract class CalendarSource : Source {
      * CalendarSource.
      */
     public bool is_default { get; private set; default = false; }
+    
+    /**
+     * Indicates this {@link CalendarSource}'s server will send invites (and all ITIP notifications)
+     * itself.
+     *
+     * If turned off, group event notifications must be performed by the client.
+     */
+    public bool server_sends_invites { get; set; default = false; }
     
     protected CalendarSource(Store store, string id, string title) {
         base (store, id, title);
