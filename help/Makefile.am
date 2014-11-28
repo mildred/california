@@ -26,7 +26,7 @@ HELP_FILES = \
 	legal.xml \
 	$(NULL)
 
-HELP_LINGUAS = 
+HELP_LINGUAS = ca
 
 GITIGNOREFILES = \
 	Makefile \
