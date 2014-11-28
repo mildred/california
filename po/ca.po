@@ -87,8 +87,9 @@ msgid "Web calendar (.ics or webcal:)"
 msgstr "Calendari Web (.ics or webcal:)"
 
 #: ../src/activator/activator.vala:37
+# N.T.: Nom de producte. No ho traduïm.
 msgid "Google Calendar"
-msgstr "Calendari del Google"
+msgstr "Google Calendar"
 
 #: ../src/activator/activator.vala:38
 msgid "CalDAV"
@@ -835,7 +836,7 @@ msgstr "Repeteix cada %s el %s, %s"
 #: ../src/component/component-recurrence-rule.vala:846
 #, c-format
 msgid "Repeats every %s on %s until %s"
-msgstr "Repeteix cada %s el %s fins %s"
+msgstr "Repeteix cada %s des de %s fins %s"
 
 #. As in, "Repeats every week on Friday, Saturday until Sept. 2, 2014, 8:00pm"
 #. As in, "Repeats every month on day 20 until Sept. 2, 2014, 8:00pm"
@@ -845,12 +846,12 @@ msgstr "Repeteix cada %s el %s fins %s"
 #: ../src/component/component-recurrence-rule.vala:853
 #, c-format
 msgid "Repeats every %s on %s until %s, %s"
-msgstr "Repeteix cada %s el %s fins %s, %s"
+msgstr "Repeteix cada %s des de %s fins %s, %s"
 
 #. As in, "Repeats every week on Monday, Wednesday, Friday"
 #. As in, "Repeats every month on day 5"
 #. As in, "Repeats every year on 3 March 2014"
-#: ../src/component/component-recurrence-rule.vala:738
+#: ../src/component/componelsnt-recurrence-rule.vala:738
 #: ../src/component/component-recurrence-rule.vala:823
 #: ../src/component/component-recurrence-rule.vala:860
 #, c-format
@@ -1468,7 +1469,7 @@ msgstr "Segur que voleu suprimir aquest calendari?"
 
 #: ../src/rc/show-event.ui.h:2
 msgid "Where"
-msgstr "On:"
+msgstr "On"
 
 #: ../src/rc/show-event.ui.h:3
 msgid "Organizers"
