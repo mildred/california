@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-17 13:25+0100\n"
+"POT-Creation-Date: 2014-11-29 16:57-0500\n"
 "PO-Revision-Date: 2014-11-09 19:39+0100\n"
 "Last-Translator: \n"
 "Language-Team: ca <tradgnome@softcatala.net>\n"
@@ -31,18 +31,19 @@ msgid ""
 "added to your calendar without filling out a form."
 msgstr ""
 "California és una aplicació nova de calendari pel GNOME 3 dissenyada per "
-"treballar amb calendaris de forma ràpida i senzilla. Proporciona visualitzacions "
-"setmanals i mensuals de la vostra planificació i formes senzilles d'afegir i "
-"actualitzar cites, incloent-hi l'opció de cites ràpides que us permet introduir els "
-"detalls de les cites i afegir-los al calendari sense necessitat d'omplir un formulari."
+"treballar amb calendaris de forma ràpida i senzilla. Proporciona "
+"visualitzacions setmanals i mensuals de la vostra planificació i formes "
+"senzilles d'afegir i actualitzar cites, incloent-hi l'opció de cites ràpides "
+"que us permet introduir els detalls de les cites i afegir-los al calendari "
+"sense necessitat d'omplir un formulari."
 
 #: ../data/california.appdata.xml.in.h:3
 msgid ""
 "California is currently in beta development and has a limited but growing "
 "set of features:"
 msgstr ""
-"California es troba en fase de desenvolupament beta i disposa d'un nombre limitat "
-"però creixent de característiques:"
+"California es troba en fase de desenvolupament beta i disposa d'un nombre "
+"limitat però creixent de característiques:"
 
 #: ../data/california.appdata.xml.in.h:4
 msgid "Modern, clean interface"
@@ -86,8 +87,8 @@ msgstr "Cita;Cites;Planifica;"
 msgid "Web calendar (.ics or webcal:)"
 msgstr "Calendari Web (.ics or webcal:)"
 
-#: ../src/activator/activator.vala:37
 # N.T.: Nom de producte. No ho traduïm.
+#: ../src/activator/activator.vala:37
 msgid "Google Calendar"
 msgstr "Google Calendar"
 
@@ -101,7 +102,7 @@ msgid "Unable to subscribe to calendar at %s: %s"
 msgstr "No s'ha pogut subscriure al calendari %s: %s"
 
 #: ../src/activator/google/google-authenticating-pane.vala:89
-#: ../src/rc/google-authenticating.ui.h:3
+#: ../src/rc/activator-google-authenticating-pane.ui.h:3
 msgid "Authenticating…"
 msgstr "S'està autenticant..."
 
@@ -129,7 +130,7 @@ msgstr "Autenticat"
 
 #. "None" as in "no people"
 #: ../src/activator/google/google-calendar-list-pane.vala:65
-#: ../src/host/host-create-update-event.vala:169
+#: ../src/event-editor/event-editor-main-card.vala:194
 msgid "None"
 msgstr "Cap"
 
@@ -186,7 +187,7 @@ msgstr "$ G_MESSAGES_DEBUG=all california"
 
 #: ../src/application/california-commandline.vala:34
 msgid "Please report problems and requests to:"
-msgstr "Envieu problemes i suggerències a:"
+msgstr "Envieu problemes i suggeriments a:"
 
 #: ../src/application/california-commandline.vala:40
 #, c-format
@@ -197,7 +198,7 @@ msgstr "Opcions desconegudes: %s\n"
 #. A span of time, i.e. "3:30pm to 4:30pm"
 #. date formatting: "<Start Date> to <End Date>"
 #: ../src/calendar/calendar-date-span.vala:95
-#: ../src/calendar/calendar-exact-time-span.vala:155
+#: ../src/calendar/calendar-exact-time-span.vala:165
 #: ../src/view/week/week-controller.vala:192
 #, c-format
 msgid "%s to %s"
@@ -376,12 +377,33 @@ msgstr "quart diumenge"
 msgid "fifth Sunday"
 msgstr "cinquè diumenge"
 
+#. A span of time followed by the timezone, i.e. "3:30pm to 4:30pm EST"
+#: ../src/calendar/calendar-exact-time-span.vala:168
+#, c-format
+msgid "%s to %s %s"
+msgstr "%s a %s %s"
+
+#. A span of time with each timezone's indicated, i.e.
+#. "12:30AM EDT to 2:30PM EST"
+#: ../src/calendar/calendar-exact-time-span.vala:173
+#, c-format
+msgid "%s %s to %s %s"
+msgstr "%s %s fins a %s %s"
+
+#. Single-day timed event, print "<full date>, <full start time> to <full end time>",
+#. including year if not current year
+#. Date and time, i.e. "September 13, 4:30pm"
+#: ../src/calendar/calendar-exact-time-span.vala:181
+#, c-format
+msgid "%s, %s"
+msgstr "%s, %s"
+
 #. Multi-day timed event, print "<full time>, <full date>" on both lines,
 #. including year if either not current year
 #. Prints two full time and date strings on separate lines, i.e.:
 #. 12 January 2012, 3:30pm
 #. 13 January 2013, 6:30am
-#: ../src/calendar/calendar-exact-time-span.vala:170
+#: ../src/calendar/calendar-exact-time-span.vala:190
 #, c-format
 msgid ""
 "%s, %s\n"
@@ -390,9 +412,31 @@ msgstr ""
 "%s, %s\n"
 "%s, %s"
 
+#. Multi-day timed event, print "<full time>, <full date>" on both lines,
+#. including year if either not current year,
+#. *and* including timezone
+#. Prints two full time and date strings on separate lines, i.e.:
+#. 12 January 2012, 3:30pm PST
+#. 13 January 2013, 6:30am PST
+#: ../src/calendar/calendar-exact-time-span.vala:202
+#, c-format
+msgid ""
+"%s, %s %s\n"
+"%s, %s %s"
+msgstr ""
+"%s, %s %s\n"
+"%s, %s %s"
+
+#. Prints full time and date strings on a single line with timezone, i.e.:
+#. 12 January 2012, 3:30pm PST to 13 January 2013, 6:30am PST
+#: ../src/calendar/calendar-exact-time-span.vala:214
+#, c-format
+msgid "%s, %s %s to %s, %s %s"
+msgstr "%s, %s %s fins a %s, %s %s"
+
 #. Prints full time and date strings on a single line, i.e.:
 #. 12 January 2012, 3:30pm to 13 January 2013, 6:30am
-#: ../src/calendar/calendar-exact-time-span.vala:179
+#: ../src/calendar/calendar-exact-time-span.vala:225
 #, c-format
 msgid "%s, %s to %s, %s"
 msgstr "%s, %s fins a %s, %s"
@@ -737,28 +781,28 @@ msgstr "a; al"
 msgid "st;nd;rd;th"
 msgstr "r;n;t;è"
 
-#: ../src/component/component-recurrence-rule.vala:597
+#: ../src/component/component-recurrence-rule.vala:599
 #, c-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d dia"
 msgstr[1] "%d dies"
 
-#: ../src/component/component-recurrence-rule.vala:600
+#: ../src/component/component-recurrence-rule.vala:602
 #, c-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] "%d setmana"
 msgstr[1] "%d setmanes"
 
-#: ../src/component/component-recurrence-rule.vala:611
+#: ../src/component/component-recurrence-rule.vala:613
 #, c-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "%d mes"
 msgstr[1] "%d mesos"
 
-#: ../src/component/component-recurrence-rule.vala:619
+#: ../src/component/component-recurrence-rule.vala:621
 #, c-format
 msgid "%d year"
 msgid_plural "%d years"
@@ -766,16 +810,16 @@ msgstr[0] "%d any"
 msgstr[1] "%d anys"
 
 #. As in, "Repeats every day, 2 times"
-#: ../src/component/component-recurrence-rule.vala:634
+#: ../src/component/component-recurrence-rule.vala:636
 #, c-format
 msgid "Repeats every %s, %s"
 msgstr "Repeteix cada %s, %s"
 
-#: ../src/component/component-recurrence-rule.vala:635
-#: ../src/component/component-recurrence-rule.vala:718
-#: ../src/component/component-recurrence-rule.vala:763
-#: ../src/component/component-recurrence-rule.vala:803
-#: ../src/component/component-recurrence-rule.vala:840
+#: ../src/component/component-recurrence-rule.vala:637
+#: ../src/component/component-recurrence-rule.vala:720
+#: ../src/component/component-recurrence-rule.vala:765
+#: ../src/component/component-recurrence-rule.vala:805
+#: ../src/component/component-recurrence-rule.vala:842
 #, c-format
 msgid "%d time"
 msgid_plural "%d times"
@@ -783,47 +827,47 @@ msgstr[0] "%d cop"
 msgstr[1] "%d cops"
 
 #. As in, "Repeats every week until Sept. 2, 2014"
-#: ../src/component/component-recurrence-rule.vala:641
+#: ../src/component/component-recurrence-rule.vala:643
 #, c-format
 msgid "Repeats every %s until %s"
 msgstr "Repeteix cada %s fins %s"
 
 #. As in, "Repeats every month until Sept. 2, 2014, 8:00pm"
-#: ../src/component/component-recurrence-rule.vala:648
+#: ../src/component/component-recurrence-rule.vala:650
 #, c-format
 msgid "Repeats every %s until %s, %s"
 msgstr "Repeteix cada %s fins %s, %s"
 
 #. As in, "Repeats every day"
-#: ../src/component/component-recurrence-rule.vala:655
+#: ../src/component/component-recurrence-rule.vala:657
 #, c-format
 msgid "Repeats every %s"
 msgstr "Repeteix cada %s"
 
 #. look for expressible patterns
-#: ../src/component/component-recurrence-rule.vala:677
+#: ../src/component/component-recurrence-rule.vala:679
 msgid "every day"
 msgstr "cada dia"
 
-#: ../src/component/component-recurrence-rule.vala:682
+#: ../src/component/component-recurrence-rule.vala:684
 msgid "the weekend"
 msgstr "el cap de setmana"
 
-#: ../src/component/component-recurrence-rule.vala:687
+#: ../src/component/component-recurrence-rule.vala:689
 msgid "weekdays"
 msgstr "dies laborables"
 
 #. Separator between days of the week, i.e. "Monday, Tuesday, Wednesday"
-#: ../src/component/component-recurrence-rule.vala:695
+#: ../src/component/component-recurrence-rule.vala:697
 msgid ", "
 msgstr ", "
 
 #. As in, "Repeats every week on Monday, Tuesday, 3 times"
 #. As in, "Repeats every month on day 4, 3 times"
 #. As in, "Repeats every year on 3 March 2014, 2 times"
-#: ../src/component/component-recurrence-rule.vala:717
-#: ../src/component/component-recurrence-rule.vala:802
-#: ../src/component/component-recurrence-rule.vala:839
+#: ../src/component/component-recurrence-rule.vala:719
+#: ../src/component/component-recurrence-rule.vala:804
+#: ../src/component/component-recurrence-rule.vala:841
 #, c-format
 msgid "Repeats every %s on %s, %s"
 msgstr "Repeteix cada %s el %s, %s"
@@ -831,9 +875,9 @@ msgstr "Repeteix cada %s el %s, %s"
 #. As in, "Repeats every week on Thursday until Sept. 2, 2014"
 #. As in, "Repeats every month on day 21 until Sept. 2, 2014"
 #. As in, "Repeats every year on 3 March 2014 until Sept. 2, 2014"
-#: ../src/component/component-recurrence-rule.vala:724
-#: ../src/component/component-recurrence-rule.vala:809
-#: ../src/component/component-recurrence-rule.vala:846
+#: ../src/component/component-recurrence-rule.vala:726
+#: ../src/component/component-recurrence-rule.vala:811
+#: ../src/component/component-recurrence-rule.vala:848
 #, c-format
 msgid "Repeats every %s on %s until %s"
 msgstr "Repeteix cada %s des de %s fins %s"
@@ -841,9 +885,9 @@ msgstr "Repeteix cada %s des de %s fins %s"
 #. As in, "Repeats every week on Friday, Saturday until Sept. 2, 2014, 8:00pm"
 #. As in, "Repeats every month on day 20 until Sept. 2, 2014, 8:00pm"
 #. As in, "Repeats every year on 3 March 2014 until Sept. 2, 2014, 8:00pm"
-#: ../src/component/component-recurrence-rule.vala:731
-#: ../src/component/component-recurrence-rule.vala:816
-#: ../src/component/component-recurrence-rule.vala:853
+#: ../src/component/component-recurrence-rule.vala:733
+#: ../src/component/component-recurrence-rule.vala:818
+#: ../src/component/component-recurrence-rule.vala:855
 #, c-format
 msgid "Repeats every %s on %s until %s, %s"
 msgstr "Repeteix cada %s des de %s fins %s, %s"
@@ -851,130 +895,230 @@ msgstr "Repeteix cada %s des de %s fins %s, %s"
 #. As in, "Repeats every week on Monday, Wednesday, Friday"
 #. As in, "Repeats every month on day 5"
 #. As in, "Repeats every year on 3 March 2014"
-#: ../src/component/componelsnt-recurrence-rule.vala:738
-#: ../src/component/component-recurrence-rule.vala:823
-#: ../src/component/component-recurrence-rule.vala:860
+#: ../src/component/component-recurrence-rule.vala:740
+#: ../src/component/component-recurrence-rule.vala:825
+#: ../src/component/component-recurrence-rule.vala:862
 #, c-format
 msgid "Repeats every %s on %s"
 msgstr "Repeteix cada %s el %s"
 
 #. As in, "Repeats every month on the first Tuesday, 3 times"
-#: ../src/component/component-recurrence-rule.vala:762
+#: ../src/component/component-recurrence-rule.vala:764
 #, c-format
 msgid "Repeats every %s on the %s, %s"
 msgstr "Repeteix cada %s el %s, %s"
 
 #. As in, "Repeats every month on the second Monday until Sept. 2, 2014"
-#: ../src/component/component-recurrence-rule.vala:769
+#: ../src/component/component-recurrence-rule.vala:771
 #, c-format
 msgid "Repeats every %s on the %s until %s"
 msgstr "Repeteix cada %s el %s fins %s"
 
 #. As in, "Repeats every month on the last Friday until Sept. 2, 2014, 8:00pm"
-#: ../src/component/component-recurrence-rule.vala:776
+#: ../src/component/component-recurrence-rule.vala:778
 #, c-format
 msgid "Repeats every %s on the %s until %s, %s"
 msgstr "Repeteix cada %s el %s fins %s, %s"
 
 #. As in, "Repeats every month on the third Tuesday"
-#: ../src/component/component-recurrence-rule.vala:783
+#: ../src/component/component-recurrence-rule.vala:785
 #, c-format
 msgid "Repeats every %s on the %s"
 msgstr "Repeteix cada %s el %s"
 
 #. As in, "Repeats on day 4 of the month"
-#: ../src/component/component-recurrence-rule.vala:798
+#: ../src/component/component-recurrence-rule.vala:800
 #, c-format
 msgid "day %d"
 msgstr "%d dia"
 
-#: ../src/host/host-create-update-event.vala:69
-#: ../src/host/host-create-update-event.vala:72
+#: ../src/event-editor/event-editor-attendees-card.vala:54
+msgid "Send invite"
+msgstr "Envia la invitació"
+
+#: ../src/event-editor/event-editor-attendees-card.vala:54
+msgid "Don't send invite"
+msgstr "No enviïs la invitació"
+
+#: ../src/event-editor/event-editor-main-card.vala:73
+#: ../src/event-editor/event-editor-main-card.vala:76
 #: ../src/host/host-show-event.vala:92 ../src/host/host-show-event.vala:299
-#: ../src/rc/activator-list.ui.h:1 ../src/rc/attendees-editor.ui.h:6
-#: ../src/rc/calendar-import.ui.h:1 ../src/rc/create-update-recurring.ui.h:24
-#: ../src/rc/event-time-settings.ui.h:4 ../src/rc/generic-subscribe.ui.h:5
-#: ../src/rc/google-authenticating.ui.h:1
-#: ../src/rc/google-calendar-list.ui.h:2 ../src/rc/google-login.ui.h:1
-#: ../src/rc/remove-calendar.ui.h:1
+#: ../src/rc/activator-generic-subscribe.ui.h:5
+#: ../src/rc/activator-google-authenticating-pane.ui.h:1
+#: ../src/rc/activator-google-calendar-list-pane.ui.h:2
+#: ../src/rc/activator-google-login-pane.ui.h:1
+#: ../src/rc/activator-instance-list.ui.h:1
+#: ../src/rc/event-editor-attendees-card.ui.h:10
+#: ../src/rc/event-editor-date-time-card.ui.h:4
+#: ../src/rc/event-editor-recurring-card.ui.h:24
+#: ../src/rc/host-import-calendar.ui.h:1
+#: ../src/rc/manager-remove-calendar.ui.h:1
 msgid "_Cancel"
 msgstr "_Cancel·la"
 
-#: ../src/host/host-create-update-event.vala:70
+#: ../src/event-editor/event-editor-main-card.vala:74
 msgid "Save A_ll Events"
 msgstr "Desa _totes les cites"
 
-#: ../src/host/host-create-update-event.vala:71
+#: ../src/event-editor/event-editor-main-card.vala:75
 msgid "Save _This Event"
 msgstr "Desa _aquesta cita"
 
-#: ../src/host/host-create-update-event.vala:180
+#: ../src/event-editor/event-editor-main-card.vala:205
 msgid "It's complicated…"
 msgstr "És complicat..."
 
-#: ../src/host/host-create-update-event.vala:183
+#: ../src/event-editor/event-editor-main-card.vala:208
 msgid "Never"
 msgstr "Mai"
 
-#: ../src/host/host-create-update-event.vala:185
+#: ../src/event-editor/event-editor-main-card.vala:210
 msgid "_Save"
 msgstr "_Desa"
 
-#: ../src/host/host-create-update-event.vala:185
+#: ../src/event-editor/event-editor-main-card.vala:210
 msgid "C_reate"
 msgstr "_Crea"
 
 #. Email address followed by common separator, i.e. "alice@example.com, bob@example.com"
-#: ../src/host/host-create-update-event.vala:206
+#. Email separator, i.e. "alice@example.com, bob@example.com"
+#: ../src/event-editor/event-editor-main-card.vala:243
+#: ../src/event-editor/event-editor-main-card.vala:598
 #, c-format
 msgid "%s, "
 msgstr "%s, "
 
-#: ../src/host/host-create-update-event.vala:325
+#: ../src/event-editor/event-editor-main-card.vala:363
 #: ../src/host/host-quick-create-event.vala:156
 msgid "Unable to create event: calendar must be specified"
 msgstr "No es pot crear la cita: cal especificar un calendari"
 
-#: ../src/host/host-create-update-event.vala:344
+#: ../src/event-editor/event-editor-main-card.vala:384
 #: ../src/host/host-quick-create-event.vala:175
 #, c-format
 msgid "Unable to create event: %s"
 msgstr "No s'ha pogut crear la cita: %s"
 
-#: ../src/host/host-create-update-event.vala:349
+#: ../src/event-editor/event-editor-main-card.vala:389
 msgid "Unable to update event: calendar must be specified"
 msgstr "No s'ha pogut actualitzar la cita: cal especificar un calendari"
 
-#: ../src/host/host-create-update-event.vala:395
+#: ../src/event-editor/event-editor-main-card.vala:438
 #, c-format
 msgid "Unable to update event: %s"
 msgstr "No s'ha pogut actualitzar la cita: %s"
 
-#: ../src/host/host-create-update-recurring.vala:438
+#. "invite.ics" is the name of the file for an event invite delivered via email ...
+#. please translate but keep the .ics extension, as that's common to most calendar
+#. applications
+#: ../src/event-editor/event-editor-main-card.vala:467
+msgid "invite.ics"
+msgstr "cita.ics"
+
+#: ../src/event-editor/event-editor-main-card.vala:474
+#, c-format
+msgid "Unable to export .ics to %s: %s"
+msgstr "S'ha produït un error en exportar .ics a: %s: %s"
+
+#: ../src/event-editor/event-editor-main-card.vala:494
+msgid "Event invitation"
+msgstr "Invitació a una cita"
+
+#: ../src/event-editor/event-editor-main-card.vala:494
+msgid "Updated event invitation"
+msgstr "Actualització de la invitació a una cita"
+
+#: ../src/event-editor/event-editor-main-card.vala:496
+#, c-format
+msgid "Invitation: %s"
+msgstr "Invitació: %s"
+
+#: ../src/event-editor/event-editor-main-card.vala:496
+#, c-format
+msgid "Updated invitation: %s"
+msgstr "Invitació actualitzada: %s"
+
+#. Invitation: <summary> at <location>
+#: ../src/event-editor/event-editor-main-card.vala:499
+#, c-format
+msgid "Invitation: %s at %s"
+msgstr "Invitació: %s a %s"
+
+#: ../src/event-editor/event-editor-main-card.vala:499
+#, c-format
+msgid "Updated invitation: %s at %s"
+msgstr "Invitació actualitzada: %s a %s"
+
+#: ../src/event-editor/event-editor-main-card.vala:515
+#, c-format
+msgid "Unable to launch mail client: %s"
+msgstr "No s'ha pogut iniciar el client de correu: %s"
+
+#. Salutations for an email
+#: ../src/event-editor/event-editor-main-card.vala:523
+msgid "Hello,"
+msgstr "Hola, "
+
+#: ../src/event-editor/event-editor-main-card.vala:526
+msgid "Attached is an invitation to a new event:"
+msgstr "Ajuntada hi ha una invitació a una cita nova:"
+
+#: ../src/event-editor/event-editor-main-card.vala:527
+msgid "Attached is an updated event invitation:"
+msgstr "Ajuntada hi ha una invitació a una cita actualitzada:"
+
+#. Date/time of an event
+#: ../src/event-editor/event-editor-main-card.vala:543
+#, c-format
+msgid "When: %s"
+msgstr "Quan: %s"
+
+#. Location
+#. Location of an event
+#: ../src/event-editor/event-editor-main-card.vala:556
+#, c-format
+msgid "Where: %s"
+msgstr "On: %s"
+
+#. Who organized (scheduled or planned) the event
+#: ../src/event-editor/event-editor-main-card.vala:566
+#, c-format
+msgid "Organizer: %s"
+msgstr "Organitzador: %s"
+
+#. People attending event
+#: ../src/event-editor/event-editor-main-card.vala:576
+#, c-format
+msgid "Guest: %s"
+msgid_plural "Guests: %s"
+msgstr[0] "Convidat: %s"
+msgstr[1] "Convidats: %s"
+
+#: ../src/event-editor/event-editor-recurring-card.vala:442
 msgid "month"
 msgid_plural "months"
 msgstr[0] "mes"
 msgstr[1] "mesos"
 
-#: ../src/host/host-create-update-recurring.vala:442
+#: ../src/event-editor/event-editor-recurring-card.vala:446
 msgid "week"
 msgid_plural "weeks"
 msgstr[0] "setmana"
 msgstr[1] "setmanes"
 
-#: ../src/host/host-create-update-recurring.vala:446
+#: ../src/event-editor/event-editor-recurring-card.vala:450
 msgid "year"
 msgid_plural "years"
 msgstr[0] "any"
 msgstr[1] "anys"
 
-#: ../src/host/host-create-update-recurring.vala:451
+#: ../src/event-editor/event-editor-recurring-card.vala:455
 msgid "day"
 msgid_plural "days"
 msgstr[0] "dia"
 msgstr[1] "dies"
 
-#: ../src/host/host-create-update-recurring.vala:463
+#: ../src/event-editor/event-editor-recurring-card.vala:467
 msgid "event"
 msgid_plural "events"
 msgstr[0] "cita"
@@ -1002,7 +1146,7 @@ msgstr "Afegeix una cita ràpidament (Ctrl+N)"
 msgid "Calendars (Ctrl+L)"
 msgstr "Calendaris (Ctrl+L)"
 
-#: ../src/host/host-main-window.vala:507
+#: ../src/host/host-main-window.vala:503
 #, c-format
 msgid "Unable to edit event: %s"
 msgstr "No s'ha pogut crear la cita: %s"
@@ -1053,6 +1197,8 @@ msgid "Delete event"
 msgstr "Suprimeix la cita"
 
 #: ../src/host/host-show-event.vala:174
+#: ../src/rc/event-editor-attendees-card.ui.h:2
+#: ../src/rc/event-editor-main-card.ui.h:12
 msgid "Organizer"
 msgid_plural "Organizers"
 msgstr[0] "Organitzador"
@@ -1079,45 +1225,57 @@ msgstr "cita.ics"
 msgid "Export _master event"
 msgstr "Exporta la cita _mestre"
 
-#: ../src/host/host-show-event.vala:338
+#: ../src/host/host-show-event.vala:333
 #, c-format
 msgid "Unable to export event as file: %s"
 msgstr "S'ha produït un error en exportar la cita com a fitxer: %s"
 
 #. No number is supplied because the number of events removed is indefinite in certain
 #. situations ... plural text should simply be for "more than one"
-#: ../src/host/host-show-event.vala:365
+#: ../src/host/host-show-event.vala:360
 #, c-format
 msgid "Unable to remove event: %s"
 msgid_plural "Unable to remove events: %s"
 msgstr[0] "S'ha produït un error en suprimir la cita: %s"
 msgstr[1] "S'ha produït un error en suprimir les cites: %s"
 
-#: ../src/manager/manager-calendar-list-item.vala:85
+#: ../src/manager/manager-calendar-list-item.vala:92
 msgid "Calendar is read-only"
 msgstr "El calendari és de només lectura"
 
-#: ../src/manager/manager-calendar-list-item.vala:97
+#: ../src/manager/manager-calendar-list-item.vala:104
 msgid "Calendar is default"
 msgstr "El calendari és predeterminat"
 
-#: ../src/manager/manager-calendar-list-item.vala:97
+#: ../src/manager/manager-calendar-list-item.vala:104
 msgid "Make this calendar default"
 msgstr "Fes-lo calendari per defecte"
+
+#: ../src/manager/manager-calendar-list-item.vala:117
+msgid "Server sends event invitations"
+msgstr "El servidor envia invitacions a cites"
+
+#: ../src/manager/manager-calendar-list-item.vala:118
+msgid "Server does not send event invitations"
+msgstr "El servidor no envia invitacions a cites"
 
 #: ../src/manager/manager-remove-calendar.vala:39
 #, c-format
 msgid ""
 "This will remove the %s local calendar from your computer.  All associated "
 "information will be deleted permanently."
-msgstr "Es suprimirà el calendari local %s de l'ordinador. Tota la informació associada es suprimirà permanentment."
+msgstr ""
+"Es suprimirà el calendari local %s de l'ordinador. Tota la informació "
+"associada es suprimirà permanentment."
 
 #: ../src/manager/manager-remove-calendar.vala:41
 #, c-format
 msgid ""
 "This will remove the %s network calendar from your computer.  This will not "
 "affect information stored on the server."
-msgstr "Es suprimirà el calendari en xarxa %s de l'ordinador. No afectarà la informació emmagatzemada al servidor."
+msgstr ""
+"Es suprimirà el calendari en xarxa %s de l'ordinador. No afectarà la "
+"informació emmagatzemada al servidor."
 
 #: ../src/manager/manager-remove-calendar.vala:74
 #, c-format
@@ -1138,7 +1296,68 @@ msgstr "Mes"
 msgid "Week"
 msgstr "Setmana"
 
-#: ../src/rc/activator-list.ui.h:2
+#: ../src/rc/activator-generic-subscribe.ui.h:1
+msgid "Calendar _name"
+msgstr "_Nom del calendari"
+
+#: ../src/rc/activator-generic-subscribe.ui.h:2
+msgid "_URL"
+msgstr "_URL"
+
+#: ../src/rc/activator-generic-subscribe.ui.h:3
+#: ../src/rc/manager-calendar-list-item.ui.h:1
+msgid "Calendar color"
+msgstr "Color del calendari"
+
+#: ../src/rc/activator-generic-subscribe.ui.h:4
+msgid "Select a color for the calendar"
+msgstr "Seleccioneu el color pel calendari"
+
+#: ../src/rc/activator-generic-subscribe.ui.h:6
+#: ../src/rc/activator-google-calendar-list-pane.ui.h:3
+msgid "_Subscribe"
+msgstr "_Subscriu-m'hi"
+
+#: ../src/rc/activator-generic-subscribe.ui.h:7
+msgid "User name"
+msgstr "Nom d'usuari"
+
+#: ../src/rc/activator-generic-subscribe.ui.h:8
+msgid ""
+"If supplied, your password will be requested when calendar is first accessed"
+msgstr ""
+"Si es facilita, la contrasenya es requerirà quan s'accedeixi al calendari "
+"per primer cop"
+
+#: ../src/rc/activator-generic-subscribe.ui.h:9
+msgid "optional"
+msgstr "opcional"
+
+#: ../src/rc/activator-google-authenticating-pane.ui.h:2
+msgid "_Try again"
+msgstr "_Torna-ho a provar"
+
+#: ../src/rc/activator-google-calendar-list-pane.ui.h:1
+msgid "My calendars"
+msgstr "Els meus calendaris"
+
+#: ../src/rc/activator-google-calendar-list-pane.ui.h:4
+msgid "Other available calendars"
+msgstr "Altres calendaris disponibles"
+
+#: ../src/rc/activator-google-login-pane.ui.h:2
+msgid "_Login"
+msgstr "_Entra"
+
+#: ../src/rc/activator-google-login-pane.ui.h:3
+msgid "Google _account name"
+msgstr "_Nom del compte de Google"
+
+#: ../src/rc/activator-google-login-pane.ui.h:4
+msgid "Google _password"
+msgstr "_Contrasenya del Google"
+
+#: ../src/rc/activator-instance-list.ui.h:2
 msgid "_Add"
 msgstr "_Afegeix"
 
@@ -1158,196 +1377,189 @@ msgstr "_Quant a"
 msgid "_Quit"
 msgstr "_Surt"
 
-#: ../src/rc/attendees-editor.ui.h:1
+#: ../src/rc/event-editor-attendees-card.ui.h:1
 msgid "Add / remove guests"
 msgstr "Afegeix / suprimeix convidats"
 
-#: ../src/rc/attendees-editor.ui.h:2
+#: ../src/rc/event-editor-attendees-card.ui.h:3
+msgid "For example, alice@example.com"
+msgstr "Per exemple: prova@domini.cat"
+
+#: ../src/rc/event-editor-attendees-card.ui.h:4
+msgid "Email address (required if guests are invited)"
+msgstr "Adreça electrònica (necessari si hi ha convidats)"
+
+#: ../src/rc/event-editor-attendees-card.ui.h:5
 msgid "For example, bob@example.com"
 msgstr "Per exemple: prova@domini.cat"
 
-#: ../src/rc/attendees-editor.ui.h:3
+#: ../src/rc/event-editor-attendees-card.ui.h:6
 msgid "Email address"
 msgstr "Adreça electrònica"
 
-#: ../src/rc/attendees-editor.ui.h:4
+#: ../src/rc/event-editor-attendees-card.ui.h:7
 msgid "A_dd Guest"
 msgstr "_Afegeix convidat"
 
-#: ../src/rc/attendees-editor.ui.h:5
+#: ../src/rc/event-editor-attendees-card.ui.h:8
 msgid "_Remove Guest"
 msgstr "_Suprimeix convidat"
 
-#: ../src/rc/attendees-editor.ui.h:7
+#: ../src/rc/event-editor-attendees-card.ui.h:9
+#: ../src/rc/event-editor-main-card.ui.h:10
+msgid "Guests"
+msgstr "Convidats"
+
+#: ../src/rc/event-editor-attendees-card.ui.h:11
 msgid "_Accept"
 msgstr "_Accepta"
 
-#: ../src/rc/calendar-import.ui.h:2
-msgid "_Import"
-msgstr "_Importa"
+#. As in "From 9pm to 10pm"
+#: ../src/rc/event-editor-date-time-card.ui.h:2
+msgid "to"
+msgstr "fins a"
 
-#: ../src/rc/calendar-manager-list-item.ui.h:1
-#: ../src/rc/generic-subscribe.ui.h:3
-msgid "Calendar color"
-msgstr "Color del calendari"
+#: ../src/rc/event-editor-date-time-card.ui.h:3
+msgid "_All-day event"
+msgstr "_Cita de tot el dia"
 
-#: ../src/rc/calendar-manager-list-item.ui.h:2
-msgid "Calendar visibility"
-msgstr "Visibilitat del calendari"
+#: ../src/rc/event-editor-date-time-card.ui.h:5
+#: ../src/rc/event-editor-recurring-card.ui.h:25
+msgid "_OK"
+msgstr "_D'acord"
 
-#: ../src/rc/calendar-manager-list.ui.h:1
-msgid "_Close"
-msgstr "_Tanca"
+#: ../src/rc/event-editor-date-time-widget.ui.h:1
+msgid ":"
+msgstr ":"
 
-#: ../src/rc/calendar-manager-list.ui.h:2
-msgid "Add calendar"
-msgstr "Afegeix un calendari"
-
-#: ../src/rc/calendar-manager-list.ui.h:3
-msgid "Rename calendar"
-msgstr "Canvia el nom del calendari"
-
-#: ../src/rc/calendar-manager-list.ui.h:4
-msgid "Remove calendar"
-msgstr "Suprimeix el calendari"
-
-#: ../src/rc/create-update-event.ui.h:1
+#: ../src/rc/event-editor-main-card.ui.h:1
 msgid "Untitled event"
 msgstr "Cita sense títol"
 
-#: ../src/rc/create-update-event.ui.h:2
+#: ../src/rc/event-editor-main-card.ui.h:2
 msgid "Summary"
 msgstr "Resum"
 
-#: ../src/rc/create-update-event.ui.h:3
+#: ../src/rc/event-editor-main-card.ui.h:3
 msgid "Time"
 msgstr "Temps"
 
-#: ../src/rc/create-update-event.ui.h:4
+#: ../src/rc/event-editor-main-card.ui.h:4
 msgid "Set the start and end time"
 msgstr "Estableix data d'inici i finalització"
 
-#: ../src/rc/create-update-event.ui.h:5
+#: ../src/rc/event-editor-main-card.ui.h:5
 msgid "Recurrence"
 msgstr "Periodicitat"
 
-#: ../src/rc/create-update-event.ui.h:6
+#: ../src/rc/event-editor-main-card.ui.h:6
 msgid "Add or remove recurrences of the event"
 msgstr "Afegeix o suprimeix periodicitats de la cita"
 
-#: ../src/rc/create-update-event.ui.h:7 ../src/rc/quick-create-event.ui.h:4
-#: ../src/rc/show-event.ui.h:4
+#: ../src/rc/event-editor-main-card.ui.h:7
+#: ../src/rc/host-quick-create-event.ui.h:4 ../src/rc/host-show-event.ui.h:4
 msgid "Calendar"
 msgstr "Calendari"
 
-#: ../src/rc/create-update-event.ui.h:8
+#: ../src/rc/event-editor-main-card.ui.h:8
 msgid "_Description"
 msgstr "_Descripció"
 
-#: ../src/rc/create-update-event.ui.h:9
+#: ../src/rc/event-editor-main-card.ui.h:9
 msgid "_Location"
 msgstr "_Ubicació"
 
-#: ../src/rc/create-update-event.ui.h:10
-msgid "Invited Guests"
-msgstr "Convidats"
-
-#: ../src/rc/create-update-event.ui.h:11
+#: ../src/rc/event-editor-main-card.ui.h:11
 msgid "Add and remove invited guests"
 msgstr "Afegeix o suprimeix convidats"
 
-#: ../src/rc/create-update-recurring.ui.h:1
+#: ../src/rc/event-editor-recurring-card.ui.h:1
 msgid "_Repeating event"
 msgstr "_Cita repetitiva"
 
-#: ../src/rc/create-update-recurring.ui.h:2
+#: ../src/rc/event-editor-recurring-card.ui.h:2
 msgid "Re_peats"
 msgstr "_Repeteix"
 
-#: ../src/rc/create-update-recurring.ui.h:3
+#: ../src/rc/event-editor-recurring-card.ui.h:3
 msgid "_Every"
 msgstr "_Cada"
 
-#: ../src/rc/create-update-recurring.ui.h:4
+#: ../src/rc/event-editor-recurring-card.ui.h:4
 msgid "En_ds"
 msgstr "Fin_alitza"
 
-#: ../src/rc/create-update-recurring.ui.h:5
+#: ../src/rc/event-editor-recurring-card.ui.h:5
 msgid "_Starts"
 msgstr "_Comença"
 
-#: ../src/rc/create-update-recurring.ui.h:6
+#: ../src/rc/event-editor-recurring-card.ui.h:6
 msgid "_On days"
 msgstr "_Als dies"
 
-#: ../src/rc/create-update-recurring.ui.h:7
+#: ../src/rc/event-editor-recurring-card.ui.h:7
 msgid "Daily"
 msgstr "Diàriament"
 
-#: ../src/rc/create-update-recurring.ui.h:8
+#: ../src/rc/event-editor-recurring-card.ui.h:8
 msgid "Weekly"
 msgstr "Setmanalment"
 
-#: ../src/rc/create-update-recurring.ui.h:9
+#: ../src/rc/event-editor-recurring-card.ui.h:9
 msgid "Day of the week"
 msgstr "Dia de la setmana"
 
-#: ../src/rc/create-update-recurring.ui.h:10
+#: ../src/rc/event-editor-recurring-card.ui.h:10
 msgid "Day of the month"
 msgstr "Dia del mes"
 
-#: ../src/rc/create-update-recurring.ui.h:11
+#: ../src/rc/event-editor-recurring-card.ui.h:11
 msgid "Yearly"
 msgstr "Anualment"
 
-#: ../src/rc/create-update-recurring.ui.h:12
+#: ../src/rc/event-editor-recurring-card.ui.h:12
 msgid "_Sun"
 msgstr "_Dg."
 
-#: ../src/rc/create-update-recurring.ui.h:13
+#: ../src/rc/event-editor-recurring-card.ui.h:13
 msgid "_Mon"
 msgstr "D_l."
 
-#: ../src/rc/create-update-recurring.ui.h:14
+#: ../src/rc/event-editor-recurring-card.ui.h:14
 msgid "_Tues"
 msgstr "D_t."
 
-#: ../src/rc/create-update-recurring.ui.h:15
+#: ../src/rc/event-editor-recurring-card.ui.h:15
 msgid "_Wed"
 msgstr "D_c."
 
-#: ../src/rc/create-update-recurring.ui.h:16
+#: ../src/rc/event-editor-recurring-card.ui.h:16
 msgid "T_hu"
 msgstr "D_j."
 
-#: ../src/rc/create-update-recurring.ui.h:17
+#: ../src/rc/event-editor-recurring-card.ui.h:17
 msgid "_Fri"
 msgstr "D_v."
 
-#: ../src/rc/create-update-recurring.ui.h:18
+#: ../src/rc/event-editor-recurring-card.ui.h:18
 msgid "S_at"
 msgstr "D_s."
 
-#: ../src/rc/create-update-recurring.ui.h:19
+#: ../src/rc/event-editor-recurring-card.ui.h:19
 msgid "_Never"
 msgstr "_Mai"
 
 #. As in, an event "ends on" a date
-#: ../src/rc/create-update-recurring.ui.h:21
+#: ../src/rc/event-editor-recurring-card.ui.h:21
 msgid "_On"
 msgstr "_el"
 
 #. As in, "After n events"
-#: ../src/rc/create-update-recurring.ui.h:23
+#: ../src/rc/event-editor-recurring-card.ui.h:23
 msgid "Aft_er"
 msgstr "_Després"
 
-#: ../src/rc/create-update-recurring.ui.h:25
-#: ../src/rc/event-time-settings.ui.h:5
-msgid "_OK"
-msgstr "_D'acord"
-
-#: ../src/rc/create-update-recurring.ui.h:26
+#: ../src/rc/event-editor-recurring-card.ui.h:26
 msgid ""
 "WARNING: California cannot edit this event's recurring criteria.\n"
 "• Press Cancel to keep the current criteria.\n"
@@ -1357,128 +1569,86 @@ msgstr ""
 "• Prem Cancel·la per mantenir el criteri actual.\n"
 "• Prem D'acord per sobreescriure el criteri existent amb els canvis."
 
-#: ../src/rc/date-time-widget.ui.h:1
-msgid ":"
-msgstr ":"
+#: ../src/rc/host-import-calendar.ui.h:2
+msgid "_Import"
+msgstr "_Importa"
 
-#. As in "From 9pm to 10pm"
-#: ../src/rc/event-time-settings.ui.h:2
-msgid "to"
-msgstr "fins a"
-
-#: ../src/rc/event-time-settings.ui.h:3
-msgid "_All-day event"
-msgstr "_Cita de tot el dia"
-
-#: ../src/rc/generic-subscribe.ui.h:1
-msgid "Calendar _name"
-msgstr "_Nom del calendari"
-
-#: ../src/rc/generic-subscribe.ui.h:2
-msgid "_URL"
-msgstr "_URL"
-
-#: ../src/rc/generic-subscribe.ui.h:4
-msgid "Select a color for the calendar"
-msgstr "Seleccioneu el color pel calendari"
-
-#: ../src/rc/generic-subscribe.ui.h:6 ../src/rc/google-calendar-list.ui.h:3
-msgid "_Subscribe"
-msgstr "_Subscriu-m'hi"
-
-#: ../src/rc/generic-subscribe.ui.h:7
-msgid "User name"
-msgstr "Nom d'usuari"
-
-#: ../src/rc/generic-subscribe.ui.h:8
-msgid ""
-"If supplied, your password will be requested when calendar is first accessed"
-msgstr "Si es facilita, la contrasenya es requerirà quan s'accedeixi al calendari per primer cop"
-
-#: ../src/rc/generic-subscribe.ui.h:9
-msgid "optional"
-msgstr "opcional"
-
-#: ../src/rc/google-authenticating.ui.h:2
-msgid "_Try again"
-msgstr "_Torna-ho a provar"
-
-#: ../src/rc/google-calendar-list.ui.h:1
-msgid "My calendars"
-msgstr "Els meus calendaris"
-
-#: ../src/rc/google-calendar-list.ui.h:4
-msgid "Other available calendars"
-msgstr "Altres calendaris disponibles"
-
-#: ../src/rc/google-login.ui.h:2
-msgid "_Login"
-msgstr "_Entra"
-
-#: ../src/rc/google-login.ui.h:3
-msgid "Google _account name"
-msgstr "_Nom del compte de Google"
-
-#: ../src/rc/google-login.ui.h:4
-msgid "Google _password"
-msgstr "_Contrasenya del Google"
-
-#: ../src/rc/main-window-title.ui.h:1
+#: ../src/rc/host-main-window-title.ui.h:1
 msgid "Previous (Alt+Left)"
 msgstr "Anterior (Alt esquerra)"
 
-#: ../src/rc/main-window-title.ui.h:2
+#: ../src/rc/host-main-window-title.ui.h:2
 msgid "Next (Alt+Right)"
 msgstr "Següent (Alt dreta)"
 
-#: ../src/rc/quick-create-event.ui.h:1
+#: ../src/rc/host-quick-create-event.ui.h:1
 msgid "_Quick Add Event"
 msgstr "_Afegeix una cita ràpidament"
 
-#: ../src/rc/quick-create-event.ui.h:2 ../src/rc/show-event.ui.h:1
+#: ../src/rc/host-quick-create-event.ui.h:2 ../src/rc/host-show-event.ui.h:1
 msgid "When"
 msgstr "Quan"
 
-#: ../src/rc/quick-create-event.ui.h:3
+#: ../src/rc/host-quick-create-event.ui.h:3
 msgid "What"
 msgstr "Què"
 
-#: ../src/rc/quick-create-event.ui.h:5
+#: ../src/rc/host-quick-create-event.ui.h:5
 msgid "Quick Add help"
 msgstr "Ajuda d'afegir ràpidament"
 
-#: ../src/rc/quick-create-event.ui.h:6
+#: ../src/rc/host-quick-create-event.ui.h:6
 msgid "Cancel"
 msgstr "Cancel·la"
 
-#: ../src/rc/quick-create-event.ui.h:7
+#: ../src/rc/host-quick-create-event.ui.h:7
 msgid "Edit event details"
 msgstr "Edita els detalls de la cita"
 
-#: ../src/rc/quick-create-event.ui.h:8
+#: ../src/rc/host-quick-create-event.ui.h:8
 msgid "Create event"
 msgstr "Crea una cita"
 
-#: ../src/rc/remove-calendar.ui.h:2
-msgid "_Remove"
-msgstr "_Suprimeix"
-
-#: ../src/rc/remove-calendar.ui.h:3
-msgid "Are you sure you want to remove this calendar?"
-msgstr "Segur que voleu suprimir aquest calendari?"
-
-#: ../src/rc/show-event.ui.h:2
+#: ../src/rc/host-show-event.ui.h:2
 msgid "Where"
 msgstr "On"
 
-#: ../src/rc/show-event.ui.h:3
+#: ../src/rc/host-show-event.ui.h:3
 msgid "Organizers"
 msgstr "Organitzadors"
 
-#: ../src/rc/show-event.ui.h:5
+#: ../src/rc/host-show-event.ui.h:5
 msgctxt "Attendees of an event (who are not organizing it)"
 msgid "Guests"
 msgstr "Convidats"
+
+#: ../src/rc/manager-calendar-list.ui.h:1
+msgid "_Close"
+msgstr "_Tanca"
+
+#: ../src/rc/manager-calendar-list.ui.h:2
+msgid "Add calendar"
+msgstr "Afegeix un calendari"
+
+#: ../src/rc/manager-calendar-list.ui.h:3
+msgid "Rename calendar"
+msgstr "Canvia el nom del calendari"
+
+#: ../src/rc/manager-calendar-list.ui.h:4
+msgid "Remove calendar"
+msgstr "Suprimeix el calendari"
+
+#: ../src/rc/manager-calendar-list-item.ui.h:2
+msgid "Calendar visibility"
+msgstr "Visibilitat del calendari"
+
+#: ../src/rc/manager-remove-calendar.ui.h:2
+msgid "_Remove"
+msgstr "_Suprimeix"
+
+#: ../src/rc/manager-remove-calendar.ui.h:3
+msgid "Are you sure you want to remove this calendar?"
+msgstr "Segur que voleu suprimir aquest calendari?"
 
 #: ../src/rc/window-menu.interface.h:1
 msgid "Zoom _In"
@@ -1491,6 +1661,9 @@ msgstr "Re_dueix"
 #: ../src/rc/window-menu.interface.h:3
 msgid "_Normal Size"
 msgstr "Mida _normal"
+
+#~ msgid "Invited Guests"
+#~ msgstr "Convidats"
 
 #~ msgid "_Update"
 #~ msgstr "Act_ualitza"
