@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: california 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-11-29 19:49+0200\n"
-"PO-Revision-Date: 2014-11-29 20:21+0200\n"
+"PO-Revision-Date: 2014-11-29 20:24+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -569,7 +569,7 @@ msgstr "אחה״צ"
 #: ../src/calendar/calendar.vala:206
 #, c-format
 msgid "%d:%02d%s"
-msgstr "%d:%02d%s"
+msgstr "%d:%02d %s"
 
 #. The 12-hour time with minute, seconds, and meridiem ("am" or "pm"), i.e. "5:06:31pm"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
@@ -577,7 +577,7 @@ msgstr "%d:%02d%s"
 #: ../src/calendar/calendar.vala:211
 #, c-format
 msgid "%d:%02d:%02d%s"
-msgstr "%d:%02d:%02d%s"
+msgstr "%d:%02d:%02d %s"
 
 #. The 24-hour time with minutes, i.e. "17:06"
 #: ../src/calendar/calendar.vala:214
