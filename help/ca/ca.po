@@ -17,7 +17,7 @@ msgstr ""
 #. (itstool) path: info/desc
 #: C/cal-add-calendar.page:8
 msgid "Sync or display web-based calendar feeds."
-msgstr "Sincronitza o mostra canals de calendaris web."
+msgstr "Sincronitzar o visualitzar canals de calendaris web."
 
 #. (itstool) path: credit/name
 #: C/cal-add-calendar.page:15 C/cal-change-view.page:13
@@ -79,7 +79,7 @@ msgstr ""
 #. (itstool) path: item/p
 #: C/cal-add-calendar.page:44
 msgid "Select <gui>Google Calendar</gui> and click <gui>Add</gui>."
-msgstr "Seleccioneu <gui>calendari Google</gui> i feu clic a <gui>Afegir</gui>."
+msgstr "Seleccioneu <gui>Google Calendar</gui> i feu clic a <gui>Afegir</gui>."
 
 #. (itstool) path: item/p
 #: C/cal-add-calendar.page:46
@@ -152,7 +152,7 @@ msgstr ""
 #. (itstool) path: section/title
 #: C/cal-add-calendar.page:73
 msgid "Add a CalDAV calendar"
-msgstr "Afegiu un calendari CalDAV"
+msgstr "Afegir un calendari CalDAV"
 
 #. (itstool) path: section/p
 #: C/cal-add-calendar.page:74
@@ -236,7 +236,7 @@ msgstr ""
 #. (itstool) path: section/title
 #: C/cal-add-calendar.page:105
 msgid "Display a Web Calendar (.ics or webcal) Feed"
-msgstr "Mostra un canal de calendari web (.ics or webcal)"
+msgstr "Mostrar un canal de calendari web (.ics or webcal)"
 
 #. (itstool) path: section/p
 #: C/cal-add-calendar.page:107
@@ -257,7 +257,7 @@ msgid ""
 "Follow these steps to add a <app>Web Calendar (.ics or webcal)</app> feed to "
 "<app>California</app>:"
 msgstr ""
-"Seguiu aquests passos per afegir un canal de <app>calendari web (.ics or webcal)</app>"
+"Seguiu aquests passos per afegir un canal de <app>calendari web (.ics or webcal)</app> "
 "al <app>California</app>:"
 
 #. (itstool) path: item/p
@@ -311,7 +311,7 @@ msgid ""
 "desired option from the buttons on the left-hand portion of the menu bar:"
 msgstr ""
 "El <app>California</app> mostrarà per defecte les cites d'un mes. Tanmateix, "
-"potser voleu canviar-ho per focalitzar-vos en cites d'una setmana o un dia."
+"potser voleu canviar-ho per focalitzar-vos en cites d'una setmana o un dia. "
 "Canvieu les opcions de visualització pel <app>California</app> seleccionant "
 "l'opció que desitgeu als botons de la part dreta de la barra de menú:"
 
@@ -389,12 +389,12 @@ msgstr "<keyseq><key>Ctrl</key><key>T</key></keyseq>"
 #. (itstool) path: info/desc
 #: C/cal-event-edit.page:8
 msgid "Change an event's details."
-msgstr "Canvieu els detalls d'una cita."
+msgstr "Canviar els detalls d'una cita."
 
 #. (itstool) path: page/title
 #: C/cal-event-edit.page:21
 msgid "Edit an Event"
-msgstr "Edita una cita"
+msgstr "Editar una cita"
 
 #. (itstool) path: page/p
 #: C/cal-event-edit.page:23
@@ -403,7 +403,7 @@ msgid ""
 "creating, or how to change the details of an event that you created in the "
 "past."
 msgstr ""
-"Aquesta pàgina descriu com canviar detalls específics d'una cita que esteu creant, "
+"Aquesta pàgina descriu com canviar els detalls específics d'una cita que esteu creant, "
 "o com canviar els detalls d'una cita que vau crear anteriorment."
 
 #. (itstool) path: note/p
@@ -422,7 +422,7 @@ msgstr ""
 #. (itstool) path: steps/title
 #: C/cal-event-edit.page:34
 msgid "Here is how to change an event's details:"
-msgstr "Aquí teniu com canviar els detalls d'una cita:"
+msgstr "Com canviar els detalls d'una cita:"
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:35 C/cal-event-edit.page:55 C/cal-event-edit.page:79
@@ -438,12 +438,12 @@ msgstr "Seleccioneu una cita. S'obrirà una finestra mostrant els detalls de la 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:38 C/cal-event-edit.page:58 C/cal-event-edit.page:82
 msgid "Select <gui>Edit</gui>."
-msgstr "Seleccineu <gui>Edita</gui>."
+msgstr "Seleccioneu <gui>Edita</gui>."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:39
 msgid "Change or enter all of the event's relevant details."
-msgstr "Canvia o introdueix tots els detalls rellevants d'una cita."
+msgstr "Canvieu o introduïu tots els detalls rellevants de la cita."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:40
@@ -453,7 +453,7 @@ msgid ""
 "which you would like the event to appear."
 msgstr ""
 "Podeu canviar el resum d'una cita, l'hora, la ubicació, la descripció i la "
-"freqüència de la cita. També podeu canviar el calendari en el que "
+"freqüència en que es produeix la cita. També podeu canviar el calendari en el que "
 "voleu que la cita aparegui."
 
 #. (itstool) path: item/p
@@ -462,7 +462,7 @@ msgid ""
 "Detailed instructions for changing the time of an event, or how often it "
 "occurs, are included below."
 msgstr ""
-"Les instruccions detallades per canviar l'hora d'una cita, o com sovint succeïx, "
+"Les instruccions detallades per canviar l'hora d'una cita, o la freqüència amb què es produeixen, "
 "es troben a sota."
 
 #. (itstool) path: item/p
@@ -471,6 +471,8 @@ msgid ""
 "When you are finished editing the event, select <gui>Save</gui>. If you do "
 "not want to save your changes, select <gui>Cancel</gui>."
 msgstr ""
+"Quan acabeu d'editar la cita, seleccioneu gui>Desa</gui>. "
+"Si no voleu desar els canvis, seleccioneu <gui>Cancel·la</gui>."
 
 #. (itstool) path: section/title
 #: C/cal-event-edit.page:51
@@ -524,12 +526,12 @@ msgstr ""
 #. (itstool) path: section/title
 #: C/cal-event-edit.page:75
 msgid "Change How Often an Event Occurs"
-msgstr ""
+msgstr "Canvia la freqüència amb què una cita es produeix"
 
 #. (itstool) path: steps/title
 #: C/cal-event-edit.page:78
 msgid "To change the frequency, or how often an event occurs:"
-msgstr "Per canviar la freqüència una cita succeïx:"
+msgstr "Per canviar la freqüència amb què una cita es produeix:"
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:83
@@ -551,7 +553,7 @@ msgstr "Si una cita es repeteix, seleccioneu la freqüència de repetició:"
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:89
 msgid "<em>Daily</em> events occur every day."
-msgstr "Les cites <em>Diàriament</em> succeixen cada dia."
+msgstr "Les cites <em>Diàriament</em> es produeixen cada dia."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:90
@@ -572,17 +574,17 @@ msgstr ""
 msgid ""
 "<em>Day of the week</em> events occur every month on the day you have "
 "selected."
-msgstr "Les cites <em>Dia de la setmana</em> succeïxen cada mes el dia que heu escollit."
+msgstr "Les cites <em>Dia de la setmana</em> es produeixen cada mes el dia que heu escollit."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:97
 msgid "<em>Day of the month</em> events occur every month."
-msgstr "Les cites <em>Dia del mes</em> succeïxen cada mes."
+msgstr "Les cites <em>Dia del mes</em> es produeixen cada mes."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:99
 msgid "<em>Yearly</em> events occur every year."
-msgstr "Les cites <em>Anualment</em> succeïxen cada any."
+msgstr "Les cites <em>Anualment</em> es produeixen cada any."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:102
@@ -625,12 +627,12 @@ msgstr "Seleccioneu <gui>Desa</gui>."
 #. (itstool) path: info/desc
 #: C/cal-event-quick-add.page:9
 msgid "Add an event to your calendar using everyday language."
-msgstr "Afegiu una cita al calendari utilitzant la llengua del dia a dia."
+msgstr "Afegir una cita al calendari utilitzant la llengua del dia a dia."
 
 #. (itstool) path: page/title
 #: C/cal-event-quick-add.page:23
 msgid "Use the Quick Add Feature to Add Events"
-msgstr ""
+msgstr "Useu la opció Cita ràpidament per afegit cites"
 
 #. (itstool) path: page/p
 #: C/cal-event-quick-add.page:25
@@ -776,12 +778,12 @@ msgstr ""
 #. (itstool) path: info/desc
 #: C/cal-event-remove.page:7
 msgid "Delete an event from your calendar."
-msgstr "Suprimeix una cita del calendari."
+msgstr "Suprimir una cita del calendari."
 
 #. (itstool) path: page/title
 #: C/cal-event-remove.page:21
 msgid "Remove an Event"
-msgstr "Suprimeix una cita"
+msgstr "Suprimir una cita"
 
 #. (itstool) path: page/p
 #: C/cal-event-remove.page:23
@@ -869,7 +871,7 @@ msgstr "Simplifiqueu la interfície del calendari"
 #. (itstool) path: page/title
 #: C/cal-hide-a-calendar.page:20
 msgid "Hide a Calendar From View"
-msgstr "Amaga un calendari de la visualització"
+msgstr "Amagar un calendari de la visualització"
 
 #. (itstool) path: page/p
 #: C/cal-hide-a-calendar.page:22
@@ -945,8 +947,8 @@ msgid ""
 "Select the <_:gui-1/> icon in the upper-right portion of <_:app-2/> menu "
 "bar. A list of your current calendars will appear in a new window."
 msgstr ""
-"Seleccioneu la icoona <_:gui-1/> a la part superior dreta de la barra menú <_:app-2/>. "
-"La llista dels calendaris actuals apareixerà a una finestra nova."
+"Seleccioneu la icona <_:gui-1/> a la part superior dreta de la barra menú <_:app-2/>. "
+"La llista dels calendaris actuals apareixerà en una finestra nova."
 
 #. (itstool) path: p/gui
 #: C/cal-open-calendar-list.xml:5
@@ -961,7 +963,7 @@ msgstr "Seleccioneu la icona <_:gui-1/> a la part inferior de la finestra."
 #. (itstool) path: info/desc
 #: C/cal-quickstart.page:7
 msgid "Get started with California."
-msgstr ""
+msgstr "Primers passos amb el California."
 
 #. (itstool) path: page/title
 #: C/cal-quickstart.page:19
@@ -1227,7 +1229,7 @@ msgid ""
 "link> pages."
 msgstr ""
 "Us donem la benvinguda a la guia d'ajuda del <app>California</app>. Per una introducció ràpida "
-"a les característiques bàsiques del <app>California's</app>, així com a algunes "
+"a les característiques bàsiques del <app>California</app>, així com a algunes "
 "de les dreceres de teclat avançades, visiteu les pàgines <link xref=\"cal-quickstart"
 "\">introducció</link> i <link xref=\"cal-shortcut-keys\">tecles de drecera</"
 "link>."
@@ -1254,7 +1256,7 @@ msgstr "Apreneu com afegir i gestionar calendaris."
 #. (itstool) path: section/title
 #: C/index.page:43
 msgid "Manage Calendar Events"
-msgstr "Gestioneu cites del calendari"
+msgstr "Gestionar cites del calendari"
 
 #. (itstool) path: section/p
 #: C/index.page:44
@@ -1274,3 +1276,6 @@ msgid ""
 "a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, "
 "California, 94041, USA."
 msgstr ""
+"Aquesta obra està subjecta a la llicència Creative Commons Atribució Compartir Igual 3.0 no portada. "
+"Per veure una còpia de la llicència, visiteu <_:link-1/> o envieu una carta a Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA."
+
