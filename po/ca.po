@@ -930,7 +930,7 @@ msgstr "Repeteix cada %s el %s"
 #: ../src/component/component-recurrence-rule.vala:800
 #, c-format
 msgid "day %d"
-msgstr "%d dia"
+msgstr "dia %d"
 
 #: ../src/event-editor/event-editor-attendees-card.vala:54
 msgid "Send invite"
@@ -1441,8 +1441,9 @@ msgid "Summary"
 msgstr "Resum"
 
 #: ../src/rc/event-editor-main-card.ui.h:3
+# N.T.: Hora de la cita
 msgid "Time"
-msgstr "Temps"
+msgstr "Hora"
 
 #: ../src/rc/event-editor-main-card.ui.h:4
 msgid "Set the start and end time"
