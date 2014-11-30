@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-23 16:00+0100\n"
-"PO-Revision-Date: 2014-11-23 16:01+0100\n"
+"POT-Creation-Date: 2014-11-30 18:16+0100\n"
+"PO-Revision-Date: 2014-11-30 18:17+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -990,7 +990,7 @@ msgstr "U_twórz"
 #. Email address followed by common separator, i.e. "alice@example.com, bob@example.com"
 #. Email separator, i.e. "alice@example.com, bob@example.com"
 #: ../src/event-editor/event-editor-main-card.vala:243
-#: ../src/event-editor/event-editor-main-card.vala:593
+#: ../src/event-editor/event-editor-main-card.vala:598
 #, c-format
 msgid "%s, "
 msgstr "%s, "
@@ -1018,83 +1018,83 @@ msgstr "Nie można zaktualizować wydarzenia: %s"
 #. "invite.ics" is the name of the file for an event invite delivered via email ...
 #. please translate but keep the .ics extension, as that's common to most calendar
 #. applications
-#: ../src/event-editor/event-editor-main-card.vala:462
+#: ../src/event-editor/event-editor-main-card.vala:467
 msgid "invite.ics"
 msgstr "zaproszenie.ics"
 
-#: ../src/event-editor/event-editor-main-card.vala:469
+#: ../src/event-editor/event-editor-main-card.vala:474
 #, c-format
 msgid "Unable to export .ics to %s: %s"
 msgstr "Nie można wyeksportować pliku .ics do %s: %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:489
+#: ../src/event-editor/event-editor-main-card.vala:494
 msgid "Event invitation"
 msgstr "Zaproszenie na wydarzenie"
 
-#: ../src/event-editor/event-editor-main-card.vala:489
+#: ../src/event-editor/event-editor-main-card.vala:494
 msgid "Updated event invitation"
 msgstr "Zaktualizowane zaproszenie na wydarzenie"
 
-#: ../src/event-editor/event-editor-main-card.vala:491
+#: ../src/event-editor/event-editor-main-card.vala:496
 #, c-format
 msgid "Invitation: %s"
 msgstr "Zaproszenie: %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:491
+#: ../src/event-editor/event-editor-main-card.vala:496
 #, c-format
 msgid "Updated invitation: %s"
 msgstr "Zaktualizowane zaproszenie: %s"
 
 #. Invitation: <summary> at <location>
-#: ../src/event-editor/event-editor-main-card.vala:494
+#: ../src/event-editor/event-editor-main-card.vala:499
 #, c-format
 msgid "Invitation: %s at %s"
 msgstr "Zaproszenie: %s w %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:494
+#: ../src/event-editor/event-editor-main-card.vala:499
 #, c-format
 msgid "Updated invitation: %s at %s"
 msgstr "Zaktualizowane zaproszenie: %s w %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:510
+#: ../src/event-editor/event-editor-main-card.vala:515
 #, c-format
 msgid "Unable to launch mail client: %s"
 msgstr "Nie można uruchomić klienta poczty: %s"
 
 #. Salutations for an email
-#: ../src/event-editor/event-editor-main-card.vala:518
+#: ../src/event-editor/event-editor-main-card.vala:523
 msgid "Hello,"
 msgstr "Dzień dobry,"
 
-#: ../src/event-editor/event-editor-main-card.vala:521
+#: ../src/event-editor/event-editor-main-card.vala:526
 msgid "Attached is an invitation to a new event:"
 msgstr "Załączone jest zaproszenie na nowe wydarzenie:"
 
-#: ../src/event-editor/event-editor-main-card.vala:522
+#: ../src/event-editor/event-editor-main-card.vala:527
 msgid "Attached is an updated event invitation:"
 msgstr "Załączone jest zaktualizowane zaproszenie na wydarzenie:"
 
 #. Date/time of an event
-#: ../src/event-editor/event-editor-main-card.vala:538
+#: ../src/event-editor/event-editor-main-card.vala:543
 #, c-format
 msgid "When: %s"
 msgstr "Kiedy: %s"
 
 #. Location
 #. Location of an event
-#: ../src/event-editor/event-editor-main-card.vala:551
+#: ../src/event-editor/event-editor-main-card.vala:556
 #, c-format
 msgid "Where: %s"
 msgstr "Gdzie: %s"
 
 #. Who organized (scheduled or planned) the event
-#: ../src/event-editor/event-editor-main-card.vala:561
+#: ../src/event-editor/event-editor-main-card.vala:566
 #, c-format
 msgid "Organizer: %s"
 msgstr "Organizator: %s"
 
 #. People attending event
-#: ../src/event-editor/event-editor-main-card.vala:571
+#: ../src/event-editor/event-editor-main-card.vala:576
 #, c-format
 msgid "Guest: %s"
 msgid_plural "Guests: %s"
@@ -1256,17 +1256,25 @@ msgstr[0] "Nie można usunąć wydarzenia: %s"
 msgstr[1] "Nie można usunąć wydarzeń: %s"
 msgstr[2] "Nie można usunąć wydarzeń: %s"
 
-#: ../src/manager/manager-calendar-list-item.vala:85
+#: ../src/manager/manager-calendar-list-item.vala:92
 msgid "Calendar is read-only"
 msgstr "Kalendarz jest tylko do odczytu"
 
-#: ../src/manager/manager-calendar-list-item.vala:97
+#: ../src/manager/manager-calendar-list-item.vala:104
 msgid "Calendar is default"
 msgstr "Domyślny kalendarz"
 
-#: ../src/manager/manager-calendar-list-item.vala:97
+#: ../src/manager/manager-calendar-list-item.vala:104
 msgid "Make this calendar default"
-msgstr "Ustaw ten kalendarz jako domyślny"
+msgstr "Ustawia ten kalendarz jako domyślny"
+
+#: ../src/manager/manager-calendar-list-item.vala:117
+msgid "Server sends event invitations"
+msgstr "Serwer wysyła zaproszenia na wydarzenie"
+
+#: ../src/manager/manager-calendar-list-item.vala:118
+msgid "Server does not send event invitations"
+msgstr "Serwer nie wysyła zaproszeń na wydarzenie"
 
 #: ../src/manager/manager-remove-calendar.vala:39
 #, c-format
