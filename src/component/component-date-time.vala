@@ -47,6 +47,9 @@ public class DateTime : BaseObject, Gee.Hashable<DateTime>, Gee.Comparable<DateT
     /**
      * Returns the original iCalendar string representing the DATE/DATE-TIME property value.
      *
+     * Will be the empty string if created directly from the iCal timetype or from the result
+     * of {@link adjust_duration}.
+     *
      * This does not include the iCal key string preceding the value, i.e. "DTSTAMP:"
      */
     public string value { get; private set; }
@@ -87,24 +90,41 @@ public class DateTime : BaseObject, Gee.Hashable<DateTime>, Gee.Comparable<DateT
     }
     
     private void init_from_property(iCal.icalproperty prop) throws ComponentError {
-        unowned iCal.icalvalue? prop_value = prop.get_value();
-        if (prop_value == null) {
-            throw new ComponentError.UNAVAILABLE("Property of kind %s has no associated value",
-                prop.isa().to_string());
-        }
-        
-        switch (prop_value.isa()) {
-            case iCal.icalvalue_kind.DATE_VALUE:
-                dt = prop_value.get_date();
+        // Would prefer to simply get the libical value object, determine if it's a date or date-time,
+        // and fetch it that way, but have run into repeated problems with valid DTSTAMP's returning
+        // as DURATION or X_VALUE's (even though they're properly formed in the VEVENT) ... so,
+        // going back to original strategy of pulling out the values directly based on their
+        // property type.  See https://bugzilla.gnome.org/show_bug.cgi?id=733319 for more information
+        switch (prop.isa()) {
+            case iCal.icalproperty_kind.DTSTAMP_PROPERTY:
+                dt = prop.get_dtstamp();
             break;
             
-            case iCal.icalvalue_kind.DATETIME_VALUE:
-                dt = prop_value.get_datetime();
+            case iCal.icalproperty_kind.DTSTART_PROPERTY:
+                dt = prop.get_dtstart();
+            break;
+            
+            case iCal.icalproperty_kind.DTEND_PROPERTY:
+                dt = prop.get_dtend();
+            break;
+            
+            case iCal.icalproperty_kind.EXDATE_PROPERTY:
+                dt = prop.get_exdate();
+            break;
+            
+            case iCal.icalproperty_kind.RECURRENCEID_PROPERTY:
+                dt = prop.get_recurrenceid();
+            break;
+            
+            // TODO: Better support for RDATE; see https://tools.ietf.org/html/rfc5545#section-3.8.5.2
+            case iCal.icalproperty_kind.RDATE_PROPERTY:
+                iCal.icaldatetimeperiodtype dtperiod = prop.get_rdate();
+                dt = dtperiod.time;
             break;
             
             default:
-                throw new ComponentError.INVALID("%s not a DATE/DATE-TIME value: %s (%s)",
-                    prop.isa().to_string(), prop_value.isa().to_string(), prop.as_ical_string());
+                throw new ComponentError.INVALID("%s not a known DATE/DATE-TIME property type: %s (%s)",
+                    prop.isa().to_string(), prop.get_value().isa().to_string(), prop.as_ical_string());
         }
         
         if (iCal.icaltime_is_null_time(dt) != 0)
