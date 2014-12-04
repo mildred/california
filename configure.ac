@@ -86,6 +86,21 @@ AC_MSG_RESULT($unity)
 AM_CONDITIONAL(ENABLE_UNITY, test "x$unity" = "xyes")
 
 #
+# Fatal warnings (valac only)
+#
+
+AC_MSG_CHECKING([fatal Vala warnings])
+AC_ARG_ENABLE(
+    fatal,
+    [  --disable-fatal         disable fatal warnings from Vala compiler [[default=enabled]]],
+    [ fatal=$enableval ],
+    [ fatal=yes ]
+)
+
+AC_MSG_RESULT($fatal)
+AM_CONDITIONAL(DISABLE_FATAL_WARNINGS, test "x$fatal" = "xno")
+
+#
 # /configure switches
 #
 
@@ -102,5 +117,6 @@ AC_OUTPUT
 AC_MSG_RESULT([
 Options:
 	Unity support:		$unity
+	Fatal Vala warnings:	$fatal
 ])
 

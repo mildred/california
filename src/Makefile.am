@@ -227,8 +227,12 @@ if HAVE__NL_TIME_FIRST_WEEKDAY
 california_OPTIONAL_VALAFLAGS += --define HAVE__NL_TIME_FIRST_WEEKDAY
 endif
 
+if !DISABLE_FATAL_WARNINGS
+california_OPTIONAL_VALAFLAGS += --fatal-warnings
+endif
+
 california_VALAFLAGS = \
-	--fatal-warnings --debug --enable-checking --vapidir $(top_srcdir)/vapi --target-glib=2.38 \
+	--debug --enable-checking --vapidir $(top_srcdir)/vapi --target-glib=2.38 \
 	--enable-deprecated \
 	--gresources=california-resources.xml \
 	$(california_OPTIONAL_VALAFLAGS) \
