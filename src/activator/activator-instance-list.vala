@@ -68,7 +68,7 @@ public class InstanceList : Gtk.Grid, Toolkit.Card {
     
     private Gtk.Widget model_presentation(Instance activator) {
         Gtk.Label label = new Gtk.Label(activator.title);
-        label.xalign = 0.0f;
+        Toolkit.set_label_xalign(label, 0.0f);
         label.margin = 4;
         
         return label;

@@ -110,7 +110,7 @@ public class CalendarListPane : Gtk.Grid, Toolkit.Card {
     
     private Gtk.Widget entry_to_widget(GData.CalendarCalendar calendar) {
         Gtk.Label label = new Gtk.Label(calendar.title);
-        label.xalign = 0.0f;
+        Toolkit.set_label_xalign(label, 0.0f);
         
         return label;
     }

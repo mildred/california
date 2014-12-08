@@ -117,6 +117,20 @@ public Gdk.Cursor? set_toplevel_cursor(Gtk.Widget widget, Gdk.CursorType? cursor
 }
 
 /**
+ * Set xalign property on Gtk.Label in a compatible way.
+ *
+ * GtkMisc is being deprecated in GTK+ 3 and the "xalign" property has been moved to GtkLabel.  This
+ * causes compatibility problems with newer versions of Vala generating code that won't link with
+ * older versions of GTK+.  This is a convenience method until California requires GTK+ 3.16 as its
+ * minimum GTK+ version.
+ *
+ * See [[https://bugzilla.gnome.org/show_bug.cgi?id=741265]]
+ */
+public void set_label_xalign(Gtk.Label label, float xalign) {
+    label.set("xalign", xalign);
+}
+
+/**
  * Destroy a Gtk.Widget when the event loop is idle.
  */
 public void destroy_later(Gtk.Widget widget) {

@@ -35,7 +35,7 @@ public class AttendeesCard : Gtk.Box, Toolkit.Card {
             update_invite_button();
             
             Gtk.Label email_label = new Gtk.Label(attendee.full_mailbox);
-            email_label.xalign = 0.0f;
+            Toolkit.set_label_xalign(email_label, 0.0f);
             
             add(invite_button);
             add(email_label);

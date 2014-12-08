@@ -118,7 +118,7 @@ public class ShowEvent : Gtk.Grid, Toolkit.Card {
         
         rotating_button_box.pack_end(FAMILY_NORMAL, action_box, false, true);
         
-        delete_label.xalign = 1.0f;
+        Toolkit.set_label_xalign(delete_label, 1.0f);
         delete_label.get_style_context().add_class(Gtk.STYLE_CLASS_DIM_LABEL);
         rotating_button_box.pack_start(FAMILY_REMOVING, delete_label);
         rotating_button_box.pack_end(FAMILY_REMOVING, remove_this_button);
