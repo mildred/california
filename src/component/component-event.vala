@@ -274,7 +274,6 @@ public class Event : Instance, Gee.Comparable<Event> {
      *
      * This will return a DateSpan whether the Event is a DATE or DATE-TIME VEVENT.
      */
-    // TODO: Make date_span/exact_time_span a separate object
     public Calendar.DateSpan get_event_date_span(Calendar.Timezone? tz) {
         if (date_span != null)
             return date_span;

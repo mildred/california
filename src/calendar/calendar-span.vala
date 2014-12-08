@@ -180,6 +180,58 @@ public abstract class Span : BaseObject {
     }
     
     /**
+     * Returns a {@link DateSpan} that covers the time of this {@link Span} and the supplied
+     * {@link Date}.
+     *
+     * If the Date is within the existing Span, a DateSpan for this Span is returned, i.e. this
+     * is just like calling {@link to_date_span}.
+     */
+    public DateSpan expand(Calendar.Date expansion) {
+        Date new_start = (expansion.compare_to(start_date) < 0) ? expansion : start_date;
+        Date new_end = (expansion.compare_to(end_date) > 0) ? expansion : end_date;
+        
+        return new DateSpan(new_start, new_end);
+    }
+    
+    /**
+     * Returns a {@link DateSpan} that represents this {@link Span} with the {@link start_date}
+     * set to the supplied {@link Date}.
+     *
+     * If the new start_date is the same or later than the {@link end_date}, a one-day Span is
+     * returned that matches the supplied Date.
+     *
+     * If the new start date is outside the range of this Span, a DateSpan for this Span is
+     * returned, i.e. this is just like calling {@link to_date_span}.
+     *
+     * @see reduce_from_end
+     */
+    public DateSpan reduce_from_start(Calendar.Date new_start_date) {
+        if (!has_date(new_start_date))
+            return to_date_span();
+        
+        return new DateSpan(new_start_date, end_date);
+    }
+    
+    /**
+     * Returns a {@link DateSpan} that represents this {@link Span} with the {@link end_date}
+     * set to the supplied {@link Date}.
+     *
+     * If the new end_date is the same or earlier than the {@link start_date}, a one-day Span is
+     * returned that matches the supplied Date.
+     *
+     * If the new end date is outside the range of this Span, a DateSpan for this Span is
+     * returned, i.e. this is just like calling {@link to_date_span}.
+     *
+     * @see reduce_from_start
+     */
+    public DateSpan reduce_from_end(Calendar.Date new_end_date) {
+        if (!has_date(new_end_date))
+            return to_date_span();
+        
+        return new DateSpan(start_date, new_end_date);
+    }
+    
+    /**
      * True if the {@link Span} contains the specified {@link Date}.
      */
     public bool has_date(Date date) {

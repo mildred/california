@@ -140,6 +140,25 @@ public class ExactTimeSpan : BaseObject, Gee.Comparable<ExactTimeSpan>, Gee.Hash
     }
     
     /**
+     * Returns an {@link ExactTimeSpan} expanded to include the supplied {@link ExactTime}.
+     *
+     * If the expanded_time is within this ExactTimeSpan, this object is returned.
+     */
+    public ExactTimeSpan expand(ExactTime expanded_time) {
+        if (contains(expanded_time))
+            return this;
+        
+        // if supplied time before start of span, that becomes the new start time
+        if (expanded_time.compare_to(start_exact_time) < 0)
+            return new ExactTimeSpan(expanded_time, end_exact_time);
+        
+        // prior tests guarantee supplied time is after end of this span
+        assert(expanded_time.compare_to(end_exact_time) > 0);
+        
+        return new ExactTimeSpan(start_exact_time, expanded_time);
+    }
+    
+    /**
      * Returns a prettified string describing the {@link Event}'s time span in as concise and
      * economical manner possible.
      *

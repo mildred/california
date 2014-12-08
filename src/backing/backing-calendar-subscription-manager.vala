@@ -115,6 +115,55 @@ public class CalendarSubscriptionManager : BaseObject {
         }
     }
     
+    /**
+     * Expand the {@link CalendarSubscriptionManager}'s {@link window} of time.
+     *
+     * expand_window() will increase the contiguous span of time being monitored for changes by the
+     * subscription manager.  There is no provision for managing multiple ''fragments'' of time,
+     * only expanding the window.
+     *
+     * expand_window() should ''not'' be called until {@link start_async} has completed.  Results
+     * are unguaranteed if called while start_async() is executing.
+     *
+     * If expanded_time is within the current window, nothing happens.
+     *
+     * TODO: Currently the subscription manager will expand the range by creating a new
+     * {@link CalendarSubscription} for the new dates.  This can be inefficient when dealing with
+     * lots of small ranges.  A better solution would be to create wider ranges and filter out
+     * events outside of the specified window.
+     */
+    public async void expand_window_async(Calendar.ExactTime expanded_time) {
+        if (expanded_time in window)
+            return;
+        
+        // and create a new subscription window to cover the new span of time without overlapping
+        // existing subscription(s)
+        Calendar.ExactTimeSpan subscription_window;
+        if (expanded_time.compare_to(window.start_exact_time) < 0) {
+            subscription_window = new Calendar.ExactTimeSpan(
+                expanded_time,
+                window.start_exact_time.adjust_time(-1, Calendar.TimeUnit.SECOND)
+            );
+        } else {
+            assert(expanded_time.compare_to(window.end_exact_time) > 0);
+            
+            subscription_window = new Calendar.ExactTimeSpan(
+                window.end_exact_time.adjust_time(1, Calendar.TimeUnit.SECOND),
+                expanded_time
+            );
+        }
+        
+        // expand the current window ... do this before adding subscriptions so if new calendars
+        // are reported during async calls, they use the full expanded window
+        window = window.expand(expanded_time);
+        
+        // create new subscriptions for the expanded span only
+        foreach (Backing.Store store in Backing.Manager.instance.get_stores()) {
+            foreach (Backing.CalendarSource calendar in store.get_sources_of_type<Backing.CalendarSource>())
+                yield add_subscription_async(calendar, subscription_window, null);
+        }
+    }
+    
     private void on_source_added(Backing.Source source) {
         Backing.CalendarSource? calendar = source as Backing.CalendarSource;
         if (calendar != null)
@@ -125,12 +174,17 @@ public class CalendarSubscriptionManager : BaseObject {
         // report calendar as added to subscription
         calendar_added(calendar);
         
-        // start generating instances on this calendar
+        // add a subscription for the new calendar with existing window
+        yield add_subscription_async(calendar, window, cancellable);
+    }
+    
+    private async void add_subscription_async(Backing.CalendarSource calendar,
+        Calendar.ExactTimeSpan subscription_window, Cancellable? cancellable) {
         try {
             // Since this might be called after the dtor has finished (cancelling the operation), don't
             // touch the "this" ref unless the Error is shown not to be a cancellation
-            Backing.CalendarSourceSubscription subscription = yield calendar.subscribe_async(window,
-                cancellable);
+            Backing.CalendarSourceSubscription subscription = yield calendar.subscribe_async(
+                subscription_window, cancellable);
             
             // okay to use "this" ref
             subscriptions.add(subscription);

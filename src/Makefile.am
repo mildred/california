@@ -170,6 +170,12 @@ california_VALASOURCES = \
 	view/view-controllable.vala \
 	view/view-palette.vala \
 	\
+	view/agenda/agenda.vala \
+	view/agenda/agenda-controller.vala \
+	view/agenda/agenda-date-row.vala \
+	view/agenda/agenda-event-row.vala \
+	view/agenda/agenda-load-more-row.vala \
+	\
 	view/common/common.vala \
 	view/common/common-events-cell.vala \
 	view/common/common-instance-container.vala \
@@ -214,6 +220,9 @@ california_RC = \
 	rc/manager-calendar-list.ui \
 	rc/manager-calendar-list-item.ui \
 	rc/manager-remove-calendar.ui \
+	rc/view-agenda-date-row.ui \
+	rc/view-agenda-event-row.ui \
+	rc/view-agenda-load-more-row.ui \
 	rc/window-menu.interface \
 	$(NULL)
 

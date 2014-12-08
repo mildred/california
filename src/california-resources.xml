@@ -58,6 +58,15 @@
         <file compressed="true">rc/manager-remove-calendar.ui</file>
     </gresource>
     <gresource prefix="/org/yorba/california">
+        <file compressed="false">rc/view-agenda-date-row.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
+        <file compressed="false">rc/view-agenda-event-row.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
+        <file compressed="true">rc/view-agenda-load-more-row.ui</file>
+    </gresource>
+    <gresource prefix="/org/yorba/california">
         <file compressed="true">rc/window-menu.interface</file>
     </gresource>
 </gresources>

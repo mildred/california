@@ -89,6 +89,7 @@ public class MainWindow : Gtk.ApplicationWindow {
     private View.Palette palette;
     private View.Controllable month_view;
     private View.Controllable week_view;
+    private View.Controllable agenda_view;
     private View.Controllable? current_controller = null;
     private Gee.HashSet<Binding> current_bindings = new Gee.HashSet<Binding>();
     private Gtk.Stack view_stack = new Gtk.Stack();
@@ -142,10 +143,12 @@ public class MainWindow : Gtk.ApplicationWindow {
         // ... then create the hosted views
         month_view = new View.Month.Controller(palette);
         week_view = new View.Week.Controller(palette);
+        agenda_view = new View.Agenda.Controller(palette);
         
         // add views to view stack, first added is first shown
         add_controller(month_view);
         add_controller(week_view);
+        add_controller(agenda_view);
         
         // if not on Unity, use headerbar as the titlebar (removes window chrome) and provide close
         // button for users who might have trouble finding it otherwise

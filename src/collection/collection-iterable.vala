@@ -307,6 +307,30 @@ public class Iterable<G> : Object {
     }
     
     /**
+     * Returns true if the {@link Iterable} is empty.
+     *
+     * This is more efficient than checking if {@link} count is zero when the Iterable is holding
+     * items.
+     *
+     * @see is_nonempty
+     */
+    public bool is_empty() {
+        return !iterator().has_next();
+    }
+    
+    /**
+     * Returns true if the {@link Iterable} is non-empty.
+     *
+     * This is more efficient than checking if {@link} count is non-zero when the Iterable is
+     * holding items.
+     *
+     * @see is_empty
+     */
+    public bool is_nonempty() {
+        return iterator().has_next();
+    }
+    
+    /**
      * The resulting Gee.Iterable comes with the same caveat that you may only
      * iterate over it once.
      */

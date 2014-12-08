@@ -58,11 +58,21 @@ public class ListBoxModel<G> : BaseObject {
     public signal void added(G item);
     
     /**
+     * Fired when a GtkListBoxRow is added to the {@link listbox}.
+     */
+    public signal void row_added(Gtk.ListBoxRow row, G item);
+    
+    /**
      * Fired when an item is removed from the {@link ListBoxModel}.
      *
      * @see remove
      */
     public signal void removed(G item);
+    
+    /**
+     * Fired when a GtkListBoxRow is removed from the {@link listbox}.
+     */
+    public signal void row_removed(Gtk.ListBoxRow row, G item);
     
     /**
      * Fired when the {@link listbox} activates an item.
@@ -107,6 +117,7 @@ public class ListBoxModel<G> : BaseObject {
      * Returns true if the model (and therefore the listbox) were altered due to the addition.
      *
      * @see added
+     * @see row_added
      */
     public bool add(G item) {
         if (items.has_key(item))
@@ -115,9 +126,18 @@ public class ListBoxModel<G> : BaseObject {
         // item -> Gtk.ListBoxRow, with MutableWidget support
         Gtk.ListBoxRow row = new Gtk.ListBoxRow();
         Gtk.Widget widget = model_presentation(item);
+        
+        // allow for external callers to make the ListBoxRow visible via their supplied widget's
+        // visibility flag ... this is necessary because setting the presentation widget to invisible
+        // leaves the row's visible and taking up a little space for border and margin and such
+        widget.bind_property("visible", row, "visible",
+            BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
+        
+        // if widget is mutable, watch for that
         MutableWidget? mutable = widget as MutableWidget;
         if (mutable != null)
             mutable.mutated.connect(() => { row.changed(); });
+        
         row.add(widget);
         
         // mappings
@@ -131,6 +151,7 @@ public class ListBoxModel<G> : BaseObject {
         size = size + 1;
         
         added(item);
+        row_added(row, item);
         
         return true;
     }
@@ -158,6 +179,7 @@ public class ListBoxModel<G> : BaseObject {
      * Returns true if the model (and therefore the listbox) were altered due to the removal.
      *
      * @see removed
+     * @see row_removed
      */
     public bool remove(G item) {
         return internal_remove(item, true);
@@ -192,6 +214,7 @@ public class ListBoxModel<G> : BaseObject {
         size = (size - 1).clamp(0, int.MAX);
         
         removed(item);
+        row_removed(row, item);
         
         return true;
     }
@@ -241,6 +264,16 @@ public class ListBoxModel<G> : BaseObject {
         }
         
         row.changed();
+        
+        // reset size as filter could have changed contents of list
+        int count = 0;
+        foreach (Gtk.Widget widget in listbox.get_children()) {
+            Gtk.ListBoxRow child = (Gtk.ListBoxRow) widget;
+            if (model_filter == null || model_filter(child.get_data<G>(KEY)))
+                count++;
+        }
+        
+        size = count;
     }
     
     /**

@@ -233,13 +233,15 @@ public void init() throws Error {
     // This init() throws an IOError, so perform before others to prevent unnecessary unwinding
     System.preinit();
     
-    // internal initialization
     Collection.init();
+    
+    // internal initialization
     OlsonZone.init();
     DayOfWeek.init();
     DayOfMonth.init();
     Month.init();
     WallTime.init();
+    Date.init();
     System.init();
     Timezone.init();
 }
@@ -250,11 +252,13 @@ public void terminate() {
     
     Timezone.terminate();
     System.terminate();
+    Date.terminate();
     WallTime.terminate();
     Month.terminate();
     DayOfMonth.terminate();
     DayOfWeek.terminate();
     OlsonZone.terminate();
+    
     Collection.terminate();
 }
 

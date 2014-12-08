@@ -62,6 +62,15 @@ public class Date : Unit<Date>, Gee.Comparable<Date>, Gee.Hashable<Date> {
         NO_DAY_OF_WEEK
     }
     
+    /**
+     * The practical earliest representable {@link Date} in time.
+     */
+    public static Date earliest { get; private set; }
+    
+    /**
+     * The practical latest representable {@link Date} in time.
+     */
+    public static Date latest { get; private set; }
     
     /**
      * @inheritDoc
@@ -143,6 +152,21 @@ public class Date : Unit<Date>, Gee.Comparable<Date>, Gee.Hashable<Date> {
         day_of_year = (int) gdate.get_day_of_year();
         month = Month.from_gdate(gdate);
         year = new Year.from_gdate(gdate);
+    }
+    
+    internal static void init() throws CalendarError {
+        GLib.Date earliest_gdate = GLib.Date();
+        earliest_gdate.set_julian(1);
+        earliest = new Date.from_gdate(earliest_gdate);
+        
+        // GLib.Date.set_julian(uint.MAX) causes strange assertions inside of GLib, so just jimmying
+        // together a date far in the future for now
+        latest = new Date(DayOfMonth.for(31), Month.DEC, new Year(100000));
+    }
+    
+    internal static void terminate() {
+        earliest = null;
+        latest = null;
     }
     
     /**

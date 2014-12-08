@@ -26,6 +26,9 @@ src/host/host-quick-create-event.vala
 src/host/host-show-event.vala
 src/manager/manager-calendar-list-item.vala
 src/manager/manager-remove-calendar.vala
+src/view/agenda/agenda-controller.vala
+src/view/agenda/agenda-event-row.vala
+src/view/agenda/agenda-load-more-row.vala
 src/view/month/month-controller.vala
 src/view/week/week-controller.vala
 [type: gettext/glade]src/rc/activator-generic-subscribe.ui
@@ -47,4 +50,7 @@ src/view/week/week-controller.vala
 [type: gettext/glade]src/rc/manager-calendar-list.ui
 [type: gettext/glade]src/rc/manager-calendar-list-item.ui
 [type: gettext/glade]src/rc/manager-remove-calendar.ui
+[type: gettext/glade]src/rc/view-agenda-date-row.ui
+[type: gettext/glade]src/rc/view-agenda-event-row.ui
+[type: gettext/glade]src/rc/view-agenda-load-more-row.ui
 [type: gettext/glade]src/rc/window-menu.interface

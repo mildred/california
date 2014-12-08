@@ -150,4 +150,19 @@ public void destroy_later(Gtk.Widget widget) {
     }, Priority.LOW);
 }
 
+/**
+ * Prevent prelight when a mouse hovers over the widget.
+ *
+ * This operates by preventing the Gtk.StateFlag.PRELIGHT state from being entered.  This may have
+ * negative effects for some widgets and should be used with caution.
+ */
+public void prevent_prelight(Gtk.Widget widget) {
+    widget.state_flags_changed.connect(on_state_flags_changed);
+}
+
+private void on_state_flags_changed(Gtk.Widget widget, Gtk.StateFlags old_state_flags) {
+    if ((widget.get_state_flags() & Gtk.StateFlags.PRELIGHT) != 0)
+        widget.unset_state_flags(Gtk.StateFlags.PRELIGHT);
+}
+
 }

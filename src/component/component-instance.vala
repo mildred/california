@@ -29,7 +29,6 @@ namespace California.Component {
  */
 
 public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
-    public const string PROP_CALENDAR_SOURCE = "calendar-source";
     public const string PROP_DTSTAMP = "dtstamp";
     public const string PROP_UID = "uid";
     public const string PROP_ICAL_COMPONENT = "ical-component";
@@ -46,6 +45,10 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
     
     /**
      * The {@link Backing.CalendarSource} this {@link Instance} originated from.
+     *
+     * This field is immutable for the lifetime of the {@link Instance}.  If an Instance is moved
+     * to another calendar, this instance will be destroyed and a new one reported from the
+     * appropriate {@link Backing.CalendarSourceSubscription}.
      *
      * This will initialize as null if created as a {@link blank} Instance.
      */
