@@ -1,3 +1,17 @@
+California 0.3.0 - 8 December 2014
+----------------------------------
+
+  * New Agenda view shows events as chronological list
+  * Set and honor default calendar
+  * Export event as .ics file
+  * Fix moving events between calendars
+  * Show and edit event attendees and organizer
+  * Send invites to attendees when editing event
+  * Fix nasty "Invalid DTSTAMP" problem: Bug #733319
+  * Various bug fixes
+  * Updated translations
+
+
 California 0.2.0 - 30 September 2014
 ------------------------------------
 

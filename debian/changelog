@@ -1,3 +1,18 @@
+california (0.3.0-1~utopic1) utopic; urgency=low
+
+  * New Agenda view shows events as chronological list
+  * Set and honor default calendar
+  * Export event as .ics file
+  * Fix moving events between calendars
+  * Show and edit event attendees and organizer
+  * Send invites to attendees when editing event
+  * Fix nasty "Invalid DTSTAMP" problem: Bug #733319
+  * Various bug fixes
+  * Updated translations
+
+ -- Jim Nelson <jim@yorba.org>  Mon, 08 Dec 2014 16:03:34 -0800
+
+
 california (0.2.0-1~utopic2) utopic; urgency=low
 
   * F1 Help (thanks to Jim Campbell)
