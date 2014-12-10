@@ -50,7 +50,7 @@ msgid ""
 "add or sync other calendars, as well:"
 msgstr ""
 "Per defecte, el <app>California</app> inclou dos calendaris: un calendari <em>Personal</"
-"em> i un calendari d'<em>aniversaris i commemoracions</em>. Podeu "
+"em> i un calendari d'<em>Aniversaris i commemoracions</em>. Podeu "
 "afegir o sincronitzar altres calendaris, com també:"
 
 #. (itstool) path: section/title
@@ -143,8 +143,8 @@ msgid ""
 msgstr ""
 "El calendari primari de Google es sincronitzarà completament entre el <app>California</app> "
 "i el Google Calendar. Tanmateix, podeu tenir o no tenir els permisos adequats "
-"per qualsevol dels <gui>Altres calendaris disponibles</gui> per sincronitzar completament "
-"el <app>California</app> amb els calendaris de Google. Consulteu el <link "
+"perquè qualsevol dels <gui>Altres calendaris disponibles</gui> es sincronitzi completament entre "
+"el <app>California</app> i els calendaris de Google. Consulteu el <link "
 "href=\"https://support.google.com/calendar/\">Centre d'ajuda del Google Calendar</"
 "link> si us trobeu amb qualsevol problema sincronitzant els calendaris de la llista "
 "amb <gui>Altres calendaris disponibles</gui>."
@@ -231,7 +231,7 @@ msgid ""
 msgstr ""
 "Tot i que el camp <gui>nom d'usuari</gui> està llistat com a <gui>Opcional</gui>, "
 "la majoria de calendaris <app>CalDAV</app> requereixen un nom d'usuari. El <app>California</app> "
-"podría no ser capaç de mostrar el calendari <app>CalDAV</app> sinó introduïu un nom d'usuari vàlid. "
+"pot no ser capaç de mostrar el calendari <app>CalDAV</app> si no introduïu un nom d'usuari vàlid. "
 
 #. (itstool) path: section/title
 #: C/cal-add-calendar.page:105
@@ -282,7 +282,7 @@ msgid ""
 "If required, enter your the username for your web calendar into the "
 "<gui>Username</gui> field."
 msgstr ""
-"Si se us demana, introduïu el nom d'usuari del calendari web al camp <gui>Nom d'usuari</gui>."
+"Si cal, introduïu el nom d'usuari del calendari web al camp <gui>Nom d'usuari</gui>."
 
 #. (itstool) path: note/p
 #: C/cal-add-calendar.page:135
@@ -389,7 +389,7 @@ msgstr "<keyseq><key>Ctrl</key><key>T</key></keyseq>"
 #. (itstool) path: info/desc
 #: C/cal-event-edit.page:8
 msgid "Change an event's details."
-msgstr "Canviar els detalls d'una cita."
+msgstr "Canvieu els detalls d'una cita."
 
 #. (itstool) path: page/title
 #: C/cal-event-edit.page:21
@@ -453,8 +453,8 @@ msgid ""
 "which you would like the event to appear."
 msgstr ""
 "Podeu canviar el resum d'una cita, l'hora, la ubicació, la descripció i la "
-"freqüència en que es produeix la cita. També podeu canviar el calendari en el que "
-"voleu que la cita aparegui."
+"freqüència en què es produeix la cita. També podeu canviar el calendari en el qual "
+"voleu que aparegui la cita."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:43
@@ -490,6 +490,7 @@ msgid ""
 "Select the <gui>Clock</gui> icon next to the event's time. A new window will "
 "appear."
 msgstr ""
+"Seleccioneu la icona <gui>Rellotge</gui> al costat de l'hora de la finta. Us apareixerà una finestra nova."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:61
@@ -515,6 +516,7 @@ msgstr "Seleccioneu <gui>D'acord</gui>."
 msgid ""
 "If necessary, enter information into any of the other event's detail fields."
 msgstr ""
+"Si cal, introduïu la informació en qualsevol dels camps de detall de l'altre cita."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:68
@@ -522,6 +524,7 @@ msgid ""
 "When you are done, select <gui>Save</gui>. If you do not want to save your "
 "changes, select <gui>Cancel</gui>."
 msgstr ""
+"En acabar, seleccioneu <gui>Desa</gui>. Si no voleu desar els canvis, seleccioneu <gui>Cancel·la</gui>."
 
 #. (itstool) path: section/title
 #: C/cal-event-edit.page:75
@@ -544,6 +547,8 @@ msgid ""
 "Mark or unmark the <gui>Repeating event</gui> check box. This box is used to "
 "indicate whether or not this event will repeat."
 msgstr ""
+" activeu o desactiveu la casella de selecció <gui>Cita repetitiva</gui>. "
+"Aquesta casella indica si la cita es repeteix o no."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:87
@@ -632,7 +637,7 @@ msgstr "Afegir una cita al calendari utilitzant la llengua del dia a dia."
 #. (itstool) path: page/title
 #: C/cal-event-quick-add.page:23
 msgid "Use the Quick Add Feature to Add Events"
-msgstr "Useu la opció Cita ràpidament per afegit cites"
+msgstr "Useu l'opció «Afegeix una cita ràpidament» per afegit cites"
 
 #. (itstool) path: page/p
 #: C/cal-event-quick-add.page:25
@@ -641,11 +646,14 @@ msgid ""
 "Add</em> feature. It allows you to add events to your calendar using "
 "everyday language. Let's look at a few examples to see how it works."
 msgstr ""
+"Una de les millors característiques del <app>California</app> és l'opció "
+"<em>Afegeix ràpidament</em>. Us permet afegir cites al calendari usant llenguatge quotidià. "
+"Anem a veure alguns exemples per entendre com funciona."
 
 #. (itstool) path: section/title
 #: C/cal-event-quick-add.page:31
 msgid "Create Both One-Time and Recurring Events"
-msgstr ""
+msgstr "Crea cites d'una sola vegada i recurrents"
 
 #. (itstool) path: section/p
 #: C/cal-event-quick-add.page:33
@@ -653,11 +661,12 @@ msgid ""
 "We can use the <em>Quick Add</em> feature to add events that occur only one "
 "time and events that occur more than once:"
 msgstr ""
-
+"Podem utilitzar l'opció <em>Afegeix ràpidament</em> per afegir cites que es produeixen una sola "
+"vegada i cites que es produeixen més d'un cop:"
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:37
 msgid "Start the <em>Quick Add</em> feature by doing any of the following:"
-msgstr ""
+msgstr "Inicieu l'opció <em>Afegeix ràpidament</em> fent qualsevol de les següents accions:"
 
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:40
@@ -689,11 +698,12 @@ msgid ""
 "Enter the details of your event. You can describe the event using natural "
 "language:"
 msgstr ""
+"Introduïu els detalls de la cita. Podeu descriure la cita utilitzant llenguatge natural:"
 
 #. (itstool) path: list/title
 #: C/cal-event-quick-add.page:52
 msgid "Examples of one-time events"
-msgstr ""
+msgstr "Exemples de cites d'una sola vegada"
 
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:53
@@ -748,7 +758,7 @@ msgstr "<em>Natació cada dimarts i dijous a les 18.00</em>"
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:71
 msgid "<em>Meet at Barney's every Monday at 9am until December 1st</em>"
-msgstr ""
+msgstr "<em>Trobar-se a la cafeteria la Nena cada dilluns a les 9am fins l'1 de desembre</em>"
 
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:75
@@ -757,6 +767,9 @@ msgid ""
 "gui>. See the <link href=\"cal-event-edit.page\">Edit an Event</link> page "
 "for information about editing events."
 msgstr ""
+"Si voleu introduir detalls específics d'aquesta cita, seleccioneu <gui>Edita</"
+"gui>. Visiteu la pàgina <link href=\"cal-event-edit.page\">Edita una cita</link> "
+"per informació sobre com editar cites."
 
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:79
@@ -788,7 +801,7 @@ msgstr "Suprimir una cita"
 #. (itstool) path: page/p
 #: C/cal-event-remove.page:23
 msgid "This page describes how to remove events from your calendar."
-msgstr "Aquesta pàgina descriu com suprimir cites del calendari"
+msgstr "Aquesta pàgina descriu com suprimir cites del calendari."
 
 #. (itstool) path: note/p
 #: C/cal-event-remove.page:25
@@ -816,6 +829,8 @@ msgid ""
 "repeat, the event will be deleted immediately. If you are deleting a "
 "recurring event, you will have other options:"
 msgstr ""
+"Seleccioneu <gui>Suprimeix</gui>. Si esteu esborrany un cita d'una vegada que no es repeteix, la cita "
+"es suprimirà immediatament. Si esteu esborrant una cita repetitiva, tindreu altres opcions:"
 
 #. (itstool) path: item/p
 #: C/cal-event-remove.page:38
@@ -824,7 +839,9 @@ msgid ""
 "other recurring events in this series, both events from the future and "
 "events from the past, will not be changed."
 msgstr ""
-
+"<gui>Suprimeix aquesta cita</gui>. Això suprimirà únicament aquesta cita. La "
+"resta de cites repetitives en aquesta sèrie, tant cites del futur com del passat, "
+"no es canviaran."
 #. (itstool) path: item/p
 #: C/cal-event-remove.page:42
 msgid ""
@@ -832,6 +849,8 @@ msgid ""
 "well as future events in this series. Events that occurred in the past will "
 "not be changed."
 msgstr ""
+"<gui>Suprimeix aquesta i les cites futures</gui>. Això suprimirà aquesta cita, així com "
+"futures cites de la sèrie. No es canviaran les cites que ja han succeït."
 
 #. (itstool) path: item/p
 #: C/cal-event-remove.page:45
@@ -839,6 +858,8 @@ msgid ""
 "<gui>Delete All Events</gui>. This will delete all events in this series, "
 "including events that occurred in the past."
 msgstr ""
+"<gui>Suprimeix totes les cites</gui>. Això suprimirà totes les cites de la sèrie, "
+"incloent-hi les cites ja han ja han succeït."
 
 #. (itstool) path: item/p
 #: C/cal-event-remove.page:49
@@ -866,7 +887,7 @@ msgstr ""
 #. (itstool) path: info/desc
 #: C/cal-hide-a-calendar.page:8
 msgid "Simplify your calendar's interface."
-msgstr "Simplifiqueu la interfície del calendari"
+msgstr "Simplifiqueu la interfície del calendari."
 
 #. (itstool) path: page/title
 #: C/cal-hide-a-calendar.page:20
@@ -953,7 +974,7 @@ msgstr ""
 #. (itstool) path: p/gui
 #: C/cal-open-calendar-list.xml:5
 msgid "Plus"
-msgstr "Plus"
+msgstr "Més"
 
 #. (itstool) path: item/p
 #: C/cal-open-calendar-list.xml:5
@@ -1022,7 +1043,7 @@ msgstr "Suprimeix un calendari"
 #. (itstool) path: page/p
 #: C/cal-remove-calendar.page.stub:23
 msgid "In some cases, you may decide that you no longer want to store or track"
-msgstr ""
+msgstr "En alguns casos, podeu decidir que no ja no voleu emmagatzemar o seguir."
 
 #. (itstool) path: info/desc
 #: C/cal-rename-calendar.page:7
@@ -1046,6 +1067,9 @@ msgid ""
 "<app>California's</app> menu bar, or press <keyseq><key>Ctrl</key> <key>L</"
 "key></keyseq>. A list of your current calendars will appear in a new window."
 msgstr ""
+"Seleccioneu la icona <gui>Calendari</gui> en la posició superior dreta de la barra "
+"de menú del <app>California</app>, o premeu <keyseq><key>Ctrl</key> <key>L</"
+"key></keyseq>. Us apareixerà una finestra nova amb la llista de calendaris."
 
 #. (itstool) path: item/p
 #: C/cal-rename-calendar.page:30
@@ -1063,11 +1087,12 @@ msgid ""
 "Select <gui>Close</gui>. The name of your calendar will be updated "
 "immediately."
 msgstr ""
+"Seleccioneu <gui>Tanca</gui>. El nom del calendari s'actualitzarà immediatament."
 
 #. (itstool) path: info/desc
 #: C/cal-shortcut-keys.page:8
 msgid "Learn California's keyboard shortcuts."
-msgstr "Apreneu les dreceres de teclat del California"
+msgstr "Apreneu les dreceres de teclat del California."
 
 #. (itstool) path: page/title
 #: C/cal-shortcut-keys.page:21
@@ -1081,6 +1106,9 @@ msgid ""
 "the mouse and menus. The following table lists all of <app>California's</"
 "app> shortcut keys."
 msgstr ""
+"Utilitzeu les <gui>dreceres de teclat</gui> per realitzar tasques habituals de forma "
+"més ràpida que amb el ratolí i els menús. La taula següent llista totes les "
+"dreceres de teclat del <app>California</app>."
 
 #. (itstool) path: table/title
 #: C/cal-shortcut-keys.page:35
@@ -1110,7 +1138,7 @@ msgstr "<keyseq><key>Alt</key><key>Fletxa a l'esquerra</key></keyseq>"
 #. (itstool) path: td/p
 #: C/cal-shortcut-keys.page:65
 msgid "Open the <em>Quick-add</em> window"
-msgstr ""
+msgstr "Obriu la finestra <em>Afegeix ràpidament</em>"
 
 #. (itstool) path: td/p
 #: C/cal-shortcut-keys.page:66
@@ -1170,7 +1198,7 @@ msgstr "<keyseq><key>Ctrl</key><key>Q</key></keyseq>"
 #. (itstool) path: schema/title
 #: C/gnome-help.sct:2
 msgid "Some sanity checks for the GNOME desktop help"
-msgstr ""
+msgstr "Algunes comprovacions de l'estat de l'ajuda de l'escriptori del GNOME"
 
 #. (itstool) path: rule/assert
 #: C/gnome-help.sct:7
@@ -1228,9 +1256,9 @@ msgid ""
 "\">Introduction</link> and <link xref=\"cal-shortcut-keys\">Shortcut Keys</"
 "link> pages."
 msgstr ""
-"Us donem la benvinguda a la guia d'ajuda del <app>California</app>. Per una introducció ràpida "
+"Us donem la benvinguda a la guia d'ajuda del <app>California</app>. Per a una introducció ràpida "
 "a les característiques bàsiques del <app>California</app>, així com a algunes "
-"de les dreceres de teclat avançades, visiteu les pàgines <link xref=\"cal-quickstart"
+"de les dreceres de teclat avançades, visiteu les pàgines d'<link xref=\"cal-quickstart"
 "\">introducció</link> i <link xref=\"cal-shortcut-keys\">tecles de drecera</"
 "link>."
 
@@ -1240,7 +1268,7 @@ msgid ""
 "Other help topics are grouped together into sections below. Enjoy using "
 "<app>California</app>!"
 msgstr ""
-"Altres temes d'ajuda estan agrupats conjuntament a les seccions de sota. Gaudiu usant el"
+"Altres temes d'ajuda estan agrupats a les seccions de sota. Gaudiu usant el "
 "<app>California</app>!"
 
 #. (itstool) path: section/title
@@ -1256,7 +1284,7 @@ msgstr "Apreneu com afegir i gestionar calendaris."
 #. (itstool) path: section/title
 #: C/index.page:43
 msgid "Manage Calendar Events"
-msgstr "Gestionar cites del calendari"
+msgstr "Gestioneu cites del calendari"
 
 #. (itstool) path: section/p
 #: C/index.page:44
