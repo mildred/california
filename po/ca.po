@@ -460,21 +460,21 @@ msgstr "%b %Y"
 #: ../src/calendar/calendar.vala:124
 #, no-c-format
 msgid "%A, %B %e, %Y"
-msgstr "%A, %B %e, %Y"
+msgstr "%A, %e de %B, %Y"
 
 #. A "pretty" date with no year according to locale preferences, i.e. "Monday, March 10"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
 #: ../src/calendar/calendar.vala:129
 #, no-c-format
 msgid "%A, %B %e"
-msgstr "%A, %B %e"
+msgstr "%A, %e de %B"
 
 #. A "pretty" date abbreviated according to locale preferences, i.e. "Mon, Mar 10, 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
 #: ../src/calendar/calendar.vala:134
 #, no-c-format
 msgid "%a, %b %e, %Y"
-msgstr "%a, %b %e, %Y"
+msgstr "%a, %e de %b, %Y"
 
 #. A "pretty" date abbreviated and no year according to locale preferences, i.e.
 #. "Mon, Mar 10"
@@ -482,14 +482,14 @@ msgstr "%a, %b %e, %Y"
 #: ../src/calendar/calendar.vala:140
 #, no-c-format
 msgid "%a, %b %e"
-msgstr "%a, %b %e"
+msgstr "%a, %e %b"
 
 #. A "pretty" date with no day of week according to locale preferences, i.e. "March 10, 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
 #: ../src/calendar/calendar.vala:145
 #, no-c-format
 msgid "%B %e, %Y"
-msgstr "%B %e, %Y"
+msgstr "%e de %B, %Y"
 
 #. A "pretty" date abbreviated with no day of week according to locale preferences,
 #. i.e. "Mar 10, 2014"
@@ -497,14 +497,14 @@ msgstr "%B %e, %Y"
 #: ../src/calendar/calendar.vala:151
 #, no-c-format
 msgid "%b %e, %Y"
-msgstr "%b %e, %Y"
+msgstr "%e de %b, %Y"
 
 #. A "pretty" date with no day of week or year according to locale preferences, i.e. "March 10"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
 #: ../src/calendar/calendar.vala:156
 #, no-c-format
 msgid "%B %e"
-msgstr "%B %e"
+msgstr "%e de %B"
 
 #. A "pretty" date abbreviated with no day of week or year according to locale preferences,
 #. i.e. "Mar 10"
@@ -512,7 +512,7 @@ msgstr "%B %e"
 #: ../src/calendar/calendar.vala:162
 #, no-c-format
 msgid "%b %e"
-msgstr "%b %e"
+msgstr "%e %b"
 
 #. A "pretty" date compacted according to locale preferences, i.e. "Mon 3/10/2014"
 #. Leading zeroes will be stripped.
@@ -1297,7 +1297,7 @@ msgstr "Tot el dia"
 #: ../src/view/agenda/agenda-load-more-row.vala:38
 #, c-format
 msgid "Showing events until %s"
-msgstr "S'estan mostran les cites fins %s"
+msgstr "S'estan mostrant les cites fins el %s"
 
 #. *
 #. * @inheritDoc
@@ -1368,7 +1368,7 @@ msgstr "_Entra"
 
 #: ../src/rc/activator-google-login-pane.ui.h:3
 msgid "Google _account name"
-msgstr "_Nom del compte de Google"
+msgstr "_Nom del compte del Google"
 
 #: ../src/rc/activator-google-login-pane.ui.h:4
 msgid "Google _password"
@@ -1457,10 +1457,10 @@ msgstr "Cita sense títol"
 msgid "Summary"
 msgstr "Resum"
 
-# N.T.: Hora de la cita
+# N.T.: Quan es produeix de la cita
 #: ../src/rc/event-editor-main-card.ui.h:3
 msgid "Time"
-msgstr "Hora"
+msgstr "Quan"
 
 #: ../src/rc/event-editor-main-card.ui.h:4
 msgid "Set the start and end time"
