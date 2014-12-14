@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-30 18:16+0100\n"
-"PO-Revision-Date: 2014-11-30 18:17+0100\n"
+"POT-Creation-Date: 2014-12-14 12:49+0100\n"
+"PO-Revision-Date: 2014-12-14 12:50+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -203,13 +203,13 @@ msgstr "Nieznane opcje: %s\n"
 #. A span of time, i.e. "3:30pm to 4:30pm"
 #. date formatting: "<Start Date> to <End Date>"
 #: ../src/calendar/calendar-date-span.vala:95
-#: ../src/calendar/calendar-exact-time-span.vala:165
+#: ../src/calendar/calendar-exact-time-span.vala:184
 #: ../src/view/week/week-controller.vala:192
 #, c-format
 msgid "%s to %s"
 msgstr "%s do %s"
 
-#: ../src/calendar/calendar-date.vala:360
+#: ../src/calendar/calendar-date.vala:384
 msgid "Today"
 msgstr "Dzisiaj"
 
@@ -383,14 +383,14 @@ msgid "fifth Sunday"
 msgstr "piąta niedziela"
 
 #. A span of time followed by the timezone, i.e. "3:30pm to 4:30pm EST"
-#: ../src/calendar/calendar-exact-time-span.vala:168
+#: ../src/calendar/calendar-exact-time-span.vala:187
 #, c-format
 msgid "%s to %s %s"
 msgstr "%s do %s %s"
 
 #. A span of time with each timezone's indicated, i.e.
 #. "12:30AM EDT to 2:30PM EST"
-#: ../src/calendar/calendar-exact-time-span.vala:173
+#: ../src/calendar/calendar-exact-time-span.vala:192
 #, c-format
 msgid "%s %s to %s %s"
 msgstr "%s %s do %s %s"
@@ -398,7 +398,7 @@ msgstr "%s %s do %s %s"
 #. Single-day timed event, print "<full date>, <full start time> to <full end time>",
 #. including year if not current year
 #. Date and time, i.e. "September 13, 4:30pm"
-#: ../src/calendar/calendar-exact-time-span.vala:181
+#: ../src/calendar/calendar-exact-time-span.vala:200
 #, c-format
 msgid "%s, %s"
 msgstr "%s, %s"
@@ -408,7 +408,7 @@ msgstr "%s, %s"
 #. Prints two full time and date strings on separate lines, i.e.:
 #. 12 January 2012, 3:30pm
 #. 13 January 2013, 6:30am
-#: ../src/calendar/calendar-exact-time-span.vala:190
+#: ../src/calendar/calendar-exact-time-span.vala:209
 #, c-format
 msgid ""
 "%s, %s\n"
@@ -423,7 +423,7 @@ msgstr ""
 #. Prints two full time and date strings on separate lines, i.e.:
 #. 12 January 2012, 3:30pm PST
 #. 13 January 2013, 6:30am PST
-#: ../src/calendar/calendar-exact-time-span.vala:202
+#: ../src/calendar/calendar-exact-time-span.vala:221
 #, c-format
 msgid ""
 "%s, %s %s\n"
@@ -434,14 +434,14 @@ msgstr ""
 
 #. Prints full time and date strings on a single line with timezone, i.e.:
 #. 12 January 2012, 3:30pm PST to 13 January 2013, 6:30am PST
-#: ../src/calendar/calendar-exact-time-span.vala:214
+#: ../src/calendar/calendar-exact-time-span.vala:233
 #, c-format
 msgid "%s, %s %s to %s, %s %s"
 msgstr "%s, %s %s do %s, %s %s"
 
 #. Prints full time and date strings on a single line, i.e.:
 #. 12 January 2012, 3:30pm to 13 January 2013, 6:30am
-#: ../src/calendar/calendar-exact-time-span.vala:225
+#: ../src/calendar/calendar-exact-time-span.vala:244
 #, c-format
 msgid "%s, %s to %s, %s"
 msgstr "%s, %s do %s, %s"
@@ -1144,23 +1144,23 @@ msgstr[0] "Proszę wybrać kalendarz, do którego zaimportować wydarzenie:"
 msgstr[1] "Proszę wybrać kalendarz, do którego zaimportować wydarzenia:"
 msgstr[2] "Proszę wybrać kalendarz, do którego zaimportować wydarzenia:"
 
-#: ../src/host/host-main-window.vala:97
+#: ../src/host/host-main-window.vala:98
 msgid "_Today"
 msgstr "_Dzisiaj"
 
-#: ../src/host/host-main-window.vala:164
+#: ../src/host/host-main-window.vala:167
 msgid "Jump to today's date (Ctrl+T)"
 msgstr "Przechodzi do dzisiejszej daty (Ctrl+T)"
 
-#: ../src/host/host-main-window.vala:182
+#: ../src/host/host-main-window.vala:185
 msgid "Quick add event (Ctrl+N)"
 msgstr "Szybko tworzy nowe wydarzenie (Ctrl+N)"
 
-#: ../src/host/host-main-window.vala:188
+#: ../src/host/host-main-window.vala:191
 msgid "Calendars (Ctrl+L)"
 msgstr "Kalendarze (Ctrl+L)"
 
-#: ../src/host/host-main-window.vala:503
+#: ../src/host/host-main-window.vala:506
 #, c-format
 msgid "Unable to edit event: %s"
 msgstr "Nie można zmodyfikować wydarzenia: %s"
@@ -1298,6 +1298,23 @@ msgstr ""
 #, c-format
 msgid "Unable to remove calendar: %s"
 msgstr "Nie można usunąć kalendarza: %s"
+
+#. *
+#. * @inheritDoc
+#.
+#: ../src/view/agenda/agenda-controller.vala:33
+msgid "Agenda"
+msgstr "Terminarz"
+
+#: ../src/view/agenda/agenda-event-row.vala:109
+msgid "All day"
+msgstr "Cały dzień"
+
+#. %s is a date, i.e. "Showing events until December 5, 2014"
+#: ../src/view/agenda/agenda-load-more-row.vala:38
+#, c-format
+msgid "Showing events until %s"
+msgstr "Wyświetlanie wydarzeń do: %s"
 
 #. *
 #. * @inheritDoc
@@ -1668,6 +1685,19 @@ msgstr "_Usuń"
 #: ../src/rc/manager-remove-calendar.ui.h:3
 msgid "Are you sure you want to remove this calendar?"
 msgstr "Na pewno usunąć ten kalendarz?"
+
+#: ../src/rc/view-agenda-event-row.ui.h:1
+msgid "Event has guests"
+msgstr "Wydarzenie posiada gości"
+
+#: ../src/rc/view-agenda-event-row.ui.h:2
+msgid "Event is recurring"
+msgstr "Wydarzenie się powtarza"
+
+#. As in, "Load more events"
+#: ../src/rc/view-agenda-load-more-row.ui.h:2
+msgid "Load _More"
+msgstr "Wczytaj _więcej"
 
 #: ../src/rc/window-menu.interface.h:1
 msgid "Zoom _In"
