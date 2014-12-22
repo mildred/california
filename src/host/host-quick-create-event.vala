@@ -107,6 +107,15 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
         if (String.is_empty(details))
             return;
         
+        // if event was supplied, make sure new event is for selected calendar
+        if (event != null && event.calendar_source != calendar_model.active) {
+            try {
+                event = (Component.Event) event.clone(calendar_model.active);
+            } catch (Error err) {
+                debug("Unable to clone event: %s", err.message);
+            }
+        }
+        
         Component.DetailsParser parser = new Component.DetailsParser(details, calendar_model.active,
             event);
         event = parser.event;
@@ -121,12 +130,18 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
     [GtkCallback]
     private void on_edit_button_clicked() {
         // empty text okay
-        string details = details_entry.text.strip();
-        if (!String.is_empty(details)) {
-            Component.DetailsParser parser = new Component.DetailsParser(details, calendar_model.active,
-                event);
-            event = parser.event;
+        // if event was supplied, make sure final event is for selected calendar
+        if (event != null && event.calendar_source != calendar_model.active) {
+            try {
+                event = (Component.Event) event.clone(calendar_model.active);
+            } catch (Error err) {
+                debug("Unable to clone event: %s", err.message);
+            }
         }
+        
+        Component.DetailsParser parser = new Component.DetailsParser(details_entry.text, calendar_model.active,
+            event);
+        event = parser.event;
         
         // always edit
         edit_event();
@@ -140,7 +155,7 @@ public class QuickCreateEvent : Gtk.Grid, Toolkit.Card {
     private void edit_event() {
         // Must pass some kind of event to create/update, so use blank if required
         if (event == null)
-            event = new Component.Event.blank();
+            event = new Component.Event.blank(calendar_model.active);
         
         // ensure it's at least valid
         if (!event.is_valid(false))

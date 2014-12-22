@@ -485,9 +485,14 @@ public abstract class Instance : BaseObject, Gee.Hashable<Instance> {
      * editing (where a number of changes are made and stored in the Instance, only being submitted
      * when the user gives the okay).
      *
+     * If a {@link Backing.Source} is provided, it will be used as the source of the cloned
+     * instance.  Note that this does ''not'' move instances between sources, but is a convenience
+     * for when editing, etc.  If the Source is not appropriate to the child class of the Instance,
+     * an error will be thrown.
+     *
      * Cloning will also clone the {@link master}, if present.
      */
-    public abstract Component.Instance clone() throws Error;
+    public abstract Component.Instance clone(Backing.Source? clone_source) throws Error;
     
     /**
      * Add a {@link RecurrenceRule} to the {@link Instance}.

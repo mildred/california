@@ -501,7 +501,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         // pass a clone of the existing event for editing
         Component.Event clone;
         try {
-            clone = event.clone() as Component.Event;
+            clone = event.clone(null) as Component.Event;
         } catch (Error err) {
             Application.instance.error_message(this, _("Unable to edit event: %s").printf(err.message));
             

@@ -261,10 +261,19 @@ public class Event : Instance, Gee.Comparable<Event> {
     /**
      * @inheritDoc
      */
-    public override Component.Instance clone() throws Error {
-        Component.Event cloned_event = new Component.Event(calendar_source, ical_component);
+    public override Component.Instance clone(Backing.Source? clone_source) throws Error {
+        Backing.CalendarSource clone_calendar_source = null;
+        if (clone_source != null) {
+            clone_calendar_source = clone_source as Backing.CalendarSource;
+            if (clone_calendar_source == null)
+                throw new BackingError.INVALID("Supplied backing source for clone not a CalendarSource");
+        } else {
+            clone_calendar_source = calendar_source;
+        }
+        
+        Component.Event cloned_event = new Component.Event(clone_calendar_source, ical_component);
         if (master != null)
-            cloned_event.master = new Component.Event(master.calendar_source, master.ical_component);
+            cloned_event.master = new Component.Event(clone_calendar_source, master.ical_component);
         
         return cloned_event;
     }
