@@ -120,10 +120,11 @@ private class EventRow : Gtk.Box, Toolkit.MutableWidget {
         if (!String.is_empty(event.location)) {
             // hex value is an endash
             summary_label.label = "<span color=\"%s\">%s</span> &#x2013; %s".printf(
-                event.calendar_source.color, event.summary, event.location);
+                event.calendar_source.color, GLib.Markup.escape_text(event.summary),
+                GLib.Markup.escape_text(event.location));
         } else {
             summary_label.label = "<span color=\"%s\">%s</span>".printf(
-                event.calendar_source.color, event.summary);
+                event.calendar_source.color, GLib.Markup.escape_text(event.summary));
         }
         
         // only show guests icon if attendees include someone not an organizer
