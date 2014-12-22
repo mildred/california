@@ -65,6 +65,7 @@ public class MainCard : Gtk.Grid, Toolkit.Card {
     private new Component.Event event = new Component.Event.blank();
     private DateTimeCard.Message? dt = null;
     private Toolkit.ComboBoxTextModel<Backing.CalendarSource> calendar_model;
+    private bool first_message = true;
     
     private Toolkit.RotatingButtonBox rotating_button_box = new Toolkit.RotatingButtonBox();
     private Toolkit.EntryClearTextConnector clear_text_connector = new Toolkit.EntryClearTextConnector();
@@ -154,6 +155,20 @@ public class MainCard : Gtk.Grid, Toolkit.Card {
                 dt = new DateTimeCard.Message.from_event(event);
         }
         
+        // set combo to event's calendar, but only if first (initial) message; since the selected
+        // calendar is maintained outside of the event and only applied when Save/Create is pressed,
+        // don't want to update it every time this card is brought to the top
+        if (first_message) {
+            if (event.calendar_source != null) {
+                calendar_model.set_item_active(event.calendar_source);
+            } else {
+                calendar_model.set_item_default_active();
+                is_update = false;
+            }
+            
+            first_message = false;
+        }
+        
         update_controls();
     }
     
@@ -164,14 +179,6 @@ public class MainCard : Gtk.Grid, Toolkit.Card {
             summary_entry.text = "";
         
         on_update_time_summary();
-        
-        // set combo to event's calendar
-        if (event.calendar_source != null) {
-            calendar_model.set_item_active(event.calendar_source);
-        } else {
-            calendar_model.set_item_default_active();
-            is_update = false;
-        }
         
         location_entry.text = event.location ?? "";
         description_textview.buffer.text = event.description ?? "";
