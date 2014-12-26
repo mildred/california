@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: california\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-10 17:26-0500\n"
-"PO-Revision-Date: 2014-11-09 19:39+0100\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2014-12-26 20:19+0100\n"
+"Last-Translator: Pau Iranzo <paugnu@gmail.com>\n"
 "Language-Team: ca <tradgnome@softcatala.net>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -67,7 +67,7 @@ msgstr "Afegeix cites ràpidament amb un analitzador del llenguatge natural"
 
 #: ../data/california.appdata.xml.in.h:9
 msgid "Works with Google, WebCal, and CalDAV servers"
-msgstr "Funciona amb servidors Google, WebCal, i CalDAV"
+msgstr "Funciona amb servidors Google, WebCal i CalDAV"
 
 #: ../data/california.desktop.in.in.h:1
 #: ../src/application/california-application.vala:19
@@ -137,7 +137,7 @@ msgstr "Cap"
 #: ../src/activator/google/google-calendar-list-pane.vala:158
 #, c-format
 msgid "Bad Google URI \"%s\""
-msgstr "La sintaxi de l'URI de Google «{%s}» no és correcta."
+msgstr "La sintaxi de l'URI de Google «{%s}» no és correcta"
 
 #: ../src/activator/google/google-calendar-list-pane.vala:166
 #: ../src/activator/google/google-calendar-list-pane.vala:188
@@ -1061,11 +1061,11 @@ msgstr "Hola, "
 
 #: ../src/event-editor/event-editor-main-card.vala:526
 msgid "Attached is an invitation to a new event:"
-msgstr "Ajuntada hi ha una invitació a una cita nova:"
+msgstr "Adjuntada hi ha una invitació a una cita nova:"
 
 #: ../src/event-editor/event-editor-main-card.vala:527
 msgid "Attached is an updated event invitation:"
-msgstr "Ajuntada hi ha una invitació a una cita actualitzada:"
+msgstr "Adjuntada hi ha una invitació a una cita actualitzada:"
 
 #. Date/time of an event
 #: ../src/event-editor/event-editor-main-card.vala:543
@@ -1245,7 +1245,7 @@ msgstr "El calendari és de només lectura"
 
 #: ../src/manager/manager-calendar-list-item.vala:104
 msgid "Calendar is default"
-msgstr "El calendari és predeterminat"
+msgstr "El calendari és per defecte"
 
 #: ../src/manager/manager-calendar-list-item.vala:104
 msgid "Make this calendar default"
@@ -1265,8 +1265,8 @@ msgid ""
 "This will remove the %s local calendar from your computer.  All associated "
 "information will be deleted permanently."
 msgstr ""
-"Es suprimirà el calendari local %s de l'ordinador. Tota la informació "
-"associada es suprimirà permanentment."
+"Se suprimirà el calendari local %s de l'ordinador. Tota la informació "
+"associada se suprimirà permanentment."
 
 #: ../src/manager/manager-remove-calendar.vala:41
 #, c-format
@@ -1274,7 +1274,7 @@ msgid ""
 "This will remove the %s network calendar from your computer.  This will not "
 "affect information stored on the server."
 msgstr ""
-"Es suprimirà el calendari en xarxa %s de l'ordinador. No afectarà la "
+"Se suprimirà el calendari en xarxa %s de l'ordinador. No afectarà la "
 "informació emmagatzemada al servidor."
 
 #: ../src/manager/manager-remove-calendar.vala:74
@@ -1344,7 +1344,7 @@ msgid ""
 "If supplied, your password will be requested when calendar is first accessed"
 msgstr ""
 "Si es facilita, la contrasenya es requerirà quan s'accedeixi al calendari "
-"per primer cop"
+"per primera vegada"
 
 #: ../src/rc/activator-generic-subscribe.ui.h:9
 msgid "optional"
@@ -1396,7 +1396,7 @@ msgstr "_Surt"
 
 #: ../src/rc/event-editor-attendees-card.ui.h:1
 msgid "Add / remove guests"
-msgstr "Afegeix / suprimeix convidats"
+msgstr "Afegeix/Suprimeix convidats"
 
 #: ../src/rc/event-editor-attendees-card.ui.h:3
 msgid "For example, alice@example.com"
@@ -1464,7 +1464,7 @@ msgstr "Quan"
 
 #: ../src/rc/event-editor-main-card.ui.h:4
 msgid "Set the start and end time"
-msgstr "Estableix data d'inici i finalització"
+msgstr "Estableix la data d'inici i finalització"
 
 #: ../src/rc/event-editor-main-card.ui.h:5
 msgid "Recurrence"
@@ -1583,9 +1583,9 @@ msgid ""
 "• Press Cancel to keep the current criteria.\n"
 "• Press OK to overwrite the existing criteria with your changes."
 msgstr ""
-"Avís: California no pot editar el criteri de recurrència de la cita.\n"
-"• Prem Cancel·la per mantenir el criteri actual.\n"
-"• Prem D'acord per sobreescriure el criteri existent amb els canvis."
+"Avís: el California no pot editar el criteri de recurrència de la cita.\n"
+"• Premeu Cancel·la per mantenir el criteri actual.\n"
+"• Premeu D'acord per sobreescriure el criteri existent amb els canvis."
 
 #: ../src/rc/host-import-calendar.ui.h:2
 msgid "_Import"
