@@ -40,7 +40,7 @@ msgstr "2014"
 #. (itstool) path: page/title
 #: C/cal-add-calendar.page:23
 msgid "Add a Calendar"
-msgstr "Afegeiu un calendari"
+msgstr "Afegir un calendari"
 
 #. (itstool) path: page/p
 #: C/cal-add-calendar.page:25
@@ -113,7 +113,7 @@ msgid ""
 msgstr ""
 "El calendari del vostre compte de Google predeterminat apareixerà a la finestra "
 "<gui>Els meus calendaris</gui>. Si us subscriviu a altres calendaris mitjançant "
-"el compte de Google, aquests calendaris apareixeran a la llista <gui>Altres calendaris disponibles</gui>"
+"el compte de Google, aquests calendaris apareixeran a la llista <gui>Altres calendaris disponibles</gui>."
 
 #. (itstool) path: item/p
 #: C/cal-add-calendar.page:56
@@ -151,7 +151,7 @@ msgstr ""
 "el <app>California</app> i els calendaris de Google. Consulteu el <link "
 "href=\"https://support.google.com/calendar/\">Centre d'ajuda del Google Calendar</"
 "link> si us trobeu amb qualsevol problema sincronitzant els calendaris de la llista "
-"amb <gui>Altres calendaris disponibles</gui>."
+"<gui>Altres calendaris disponibles</gui>."
 
 #. (itstool) path: section/title
 #: C/cal-add-calendar.page:73
@@ -167,7 +167,7 @@ msgid ""
 msgstr ""
 "<code>CalDAV</code> és un estàndard obert per a transmetre i emmagatzemar "
 "informació de calendaris. És utilitzat per molts serveis populars incloent-hi "
-"el calendari d'<app>ownCloud</app> i el seu d'Apple <app>iCloud</app>."
+"el calendari de l'<app>ownCloud</app> i el servei <app>iCloud</app> d'Apple."
 
 #. (itstool) path: steps/title
 #: C/cal-add-calendar.page:79
@@ -178,7 +178,6 @@ msgstr ""
 "Seguiu aquests passos per sincronitzar el calendari <code>CalDAV</code> amb "
 "el <app>California</app>:"
 
-
 #. (itstool) path: item/p
 #: C/cal-add-calendar.page:82
 msgid ""
@@ -187,7 +186,7 @@ msgid ""
 "provider or from your system administrator."
 msgstr ""
 "Obteniu l'adreça URL del calendari que voleu afegir al <app>California</app>. "
-"Us caldrà obtenir aquesta adreça del vostre proveïdor del servei de calendari o del vostre administrador de sistemes."
+"Us caldrà obtenir aquesta adreça del proveïdor del servei de calendari o de l'administrador de sistemes."
 
 #. (itstool) path: item/p
 #: C/cal-add-calendar.page:88
@@ -197,7 +196,7 @@ msgstr "Seleccioneu <gui>CalDAV</gui> i feu clic <gui>Afegir</gui>."
 #. (itstool) path: item/p
 #: C/cal-add-calendar.page:89 C/cal-add-calendar.page:125
 msgid "Enter a calendar name. This can be any name of your choosing."
-msgstr "Introduïu un nom de calendari. Pot ser qualsevol nom que vulgueu. "
+msgstr "Introduïu un nom de calendari. Pot ser qualsevol nom que vulgueu."
 
 #. (itstool) path: item/p
 #: C/cal-add-calendar.page:91 C/cal-add-calendar.page:127
@@ -304,7 +303,7 @@ msgstr "Seleccioneu una vista mensual, setmanal o diària del calendari."
 #. (itstool) path: page/title
 #: C/cal-change-view.page:21
 msgid "Change Your Calendar's View"
-msgstr "Canvieu la vista del calendari"
+msgstr "Canviar la vista del calendari"
 
 #. (itstool) path: page/p
 #: C/cal-change-view.page:23
@@ -317,7 +316,7 @@ msgstr ""
 "El <app>California</app> mostrarà per defecte les cites d'un mes. Tanmateix, "
 "potser voleu canviar-ho per focalitzar-vos en cites d'una setmana o un dia. "
 "Canvieu les opcions de visualització pel <app>California</app> seleccionant "
-"l'opció que desitgeu als botons de la part dreta de la barra de menú:"
+"l'opció que desitgeu als botons de la part esquerra de la barra de menú:"
 
 #. (itstool) path: item/p
 #: C/cal-change-view.page:30
@@ -398,7 +397,7 @@ msgstr "Canvieu els detalls d'una cita."
 #. (itstool) path: page/title
 #: C/cal-event-edit.page:21
 msgid "Edit an Event"
-msgstr "Editeu una cita"
+msgstr "Editar una cita"
 
 #. (itstool) path: page/p
 #: C/cal-event-edit.page:23
@@ -819,12 +818,12 @@ msgstr ""
 #. (itstool) path: info/desc
 #: C/cal-event-remove.page:7
 msgid "Delete an event from your calendar."
-msgstr "Suprimiu una cita del calendari."
+msgstr "Suprimir una cita del calendari."
 
 #. (itstool) path: page/title
 #: C/cal-event-remove.page:21
 msgid "Remove an Event"
-msgstr "Suprimiu una cita"
+msgstr "Suprimir una cita"
 
 #. (itstool) path: page/p
 #: C/cal-event-remove.page:23
@@ -924,7 +923,7 @@ msgstr "Simplifiqueu la interfície del calendari."
 #. (itstool) path: page/title
 #: C/cal-hide-a-calendar.page:20
 msgid "Hide a Calendar From View"
-msgstr "Amageu un calendari de la visualització"
+msgstr "Amagar un calendari de la visualització"
 
 #. (itstool) path: page/p
 #: C/cal-hide-a-calendar.page:22
@@ -1101,7 +1100,7 @@ msgstr "Canvieu el nom d'un calendari."
 #. (itstool) path: page/title
 #: C/cal-rename-calendar.page:21
 msgid "Rename a Calendar"
-msgstr "Canvia el nom a un calendari"
+msgstr "Canviar el nom a un calendari"
 
 #. (itstool) path: steps/title
 #: C/cal-rename-calendar.page:24
