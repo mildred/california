@@ -12,6 +12,8 @@
 %:
 	dh $@ --parallel
 
+override_dh_auto_configure: configure
+
 configure:
 	./autogen.sh --prefix=/usr --enable-unity
 
