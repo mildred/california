@@ -72,6 +72,8 @@ public class Controller : BaseObject, View.Controllable {
         this.palette = palette;
         
         container = new Container(this, listbox);
+        Toolkit.unity_fixup_background(container);
+        
         listbox_model = new Toolkit.ListBoxModel<Calendar.Date>(listbox, model_presentation);
         
         // Don't prelight the DateRows, as they can't be selected or activated

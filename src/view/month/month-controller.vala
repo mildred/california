@@ -90,6 +90,7 @@ public class Controller : BaseObject, View.Controllable {
         master_grid.row_homogeneous = false;
         master_grid.row_spacing = 0;
         master_grid.expand = true;
+        Toolkit.unity_fixup_background(master_grid);
         
         stack.transition_duration = Toolkit.SLOW_STACK_TRANSITION_DURATION_MSEC;
         

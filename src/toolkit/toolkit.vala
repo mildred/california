@@ -165,4 +165,33 @@ private void on_state_flags_changed(Gtk.Widget widget, Gtk.StateFlags old_state_
         widget.unset_state_flags(Gtk.StateFlags.PRELIGHT);
 }
 
+/**
+ * When a child GtkScrolledWindow is visible, the entire GtkStack's background color goes black;
+ * this overrides the color and uses the toplevel's background color for the child widget.  See:
+ * https://bugzilla.gnome.org/show_bug.cgi?id=735421
+ * and https://bugzilla.gnome.org/show_bug.cgi?id=742310
+ */
+public void unity_fixup_background(Gtk.Widget widget) {
+#if ENABLE_UNITY
+    widget.realize.connect(on_unity_fixup_realize);
+    
+    Gtk.Container? container = widget as Gtk.Container;
+    if (container == null)
+        return;
+    
+    // Fixup all existing children
+    container.foreach(unity_fixup_background);
+    
+    // Fixup all added children
+    container.add.connect(unity_fixup_background);
+#endif
+}
+
+#if ENABLE_UNITY
+private void on_unity_fixup_realize(Gtk.Widget widget) {
+    Gdk.RGBA bg = widget.get_toplevel().get_style_context().get_background_color(Gtk.StateFlags.NORMAL);
+    widget.override_background_color(Gtk.StateFlags.NORMAL, bg);
+}
+#endif
+
 }

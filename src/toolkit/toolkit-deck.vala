@@ -81,13 +81,13 @@ public class Deck : Gtk.Stack {
         
         if (home != null)
             add_card(home);
+        
+        Toolkit.unity_fixup_background(this);
     }
     
     ~Deck() {
-        foreach (Card card in ids.values) {
+        foreach (Card card in ids.values)
             card.map.disconnect(on_card_mapped);
-            card.realize.disconnect(on_card_realized);
-        }
     }
     
     private void on_child_to_top() {
@@ -156,9 +156,6 @@ public class Deck : Gtk.Stack {
             // i.e. home)
             card.map.connect(on_card_mapped);
             
-            // some theme issues with Unity
-            card.realize.connect(on_card_realized);
-            
             // add in order to ensure order is preserved if sparsely removed later
             list.add(card);
         }
@@ -190,7 +187,6 @@ public class Deck : Gtk.Stack {
             }
             
             card.map.disconnect(on_card_mapped);
-            card.realize.disconnect(on_card_realized);
             
             remove(card);
             
@@ -314,16 +310,6 @@ public class Deck : Gtk.Stack {
             else
                 message("Card %s specifies initial focus that cannot focus", card.card_id);
         }
-    }
-    
-    // When a child GtkScrolledWindow is visible, the entire GtkStack's background color goes black;
-    // this overrides the color and uses the toplevel's background color for the Card.  See:
-    // https://bugzilla.gnome.org/show_bug.cgi?id=735421
-    private void on_card_realized(Gtk.Widget card) {
-#if ENABLE_UNITY
-        Gdk.RGBA bg = card.get_toplevel().get_style_context().get_background_color(Gtk.StateFlags.NORMAL);
-        card.override_background_color(Gtk.StateFlags.NORMAL, bg);
-#endif
     }
 }
 
