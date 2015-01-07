@@ -257,8 +257,9 @@ public class RecurringCard : Gtk.Grid, Toolkit.Card {
         // "Ends ... After" entry
         after_entry.text = "1";
         
-        // "Starts" and "Ends...On" entries
-        Calendar.DateSpan event_span = master.get_event_date_span(Calendar.Timezone.local);
+        // "Starts" and "Ends...On" entries ... use a null Timezone because want all information
+        // here to be in the timezone of the master's DTSTART, which RRULEs are sensitive to
+        Calendar.DateSpan event_span = master.get_event_date_span(null);
         start_date = event_span.start_date;
         end_date = event_span.end_date;
         
