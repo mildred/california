@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-12-08 23:13+0000\n"
-"PO-Revision-Date: 2015-01-08 18:12+0100\n"
+"POT-Creation-Date: 2015-01-08 17:14+0000\n"
+"PO-Revision-Date: 2015-01-23 10:29+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -133,7 +133,7 @@ msgstr "Autenticado"
 
 #. "None" as in "no people"
 #: ../src/activator/google/google-calendar-list-pane.vala:65
-#: ../src/event-editor/event-editor-main-card.vala:194
+#: ../src/event-editor/event-editor-main-card.vala:201
 msgid "None"
 msgstr "Niguno"
 
@@ -186,7 +186,7 @@ msgstr ""
 
 #: ../src/application/california-commandline.vala:33
 msgid "$ G_MESSAGES_DEBUG=all california"
-msgstr ""
+msgstr "$ G_MESSAGES_DEBUG=all california"
 
 #: ../src/application/california-commandline.vala:34
 msgid "Please report problems and requests to:"
@@ -214,171 +214,171 @@ msgstr "Hoy"
 #. See get_day_of_week_of_month().
 #: ../src/calendar/calendar-day-of-week.vala:60
 msgid "last Monday"
-msgstr ""
+msgstr "último lunes"
 
 #: ../src/calendar/calendar-day-of-week.vala:60
 msgid "first Monday"
-msgstr ""
+msgstr "primer lunes"
 
 #: ../src/calendar/calendar-day-of-week.vala:60
 msgid "second Monday"
-msgstr ""
+msgstr "segundo lunes"
 
 #: ../src/calendar/calendar-day-of-week.vala:60
 msgid "third Monday"
-msgstr ""
+msgstr "tercer lunes"
 
 #: ../src/calendar/calendar-day-of-week.vala:60
 msgid "fourth Monday"
-msgstr ""
+msgstr "cuarto lunes"
 
 #: ../src/calendar/calendar-day-of-week.vala:60
 msgid "fifth Monday"
-msgstr ""
+msgstr "quinto lunes"
 
 #: ../src/calendar/calendar-day-of-week.vala:61
 msgid "last Tuesday"
-msgstr ""
+msgstr "último martes"
 
 #: ../src/calendar/calendar-day-of-week.vala:61
 msgid "first Tuesday"
-msgstr ""
+msgstr "primer martes"
 
 #: ../src/calendar/calendar-day-of-week.vala:61
 msgid "second Tuesday"
-msgstr ""
+msgstr "segundo martes"
 
 #: ../src/calendar/calendar-day-of-week.vala:61
 msgid "third Tuesday"
-msgstr ""
+msgstr "tercer martes"
 
 #: ../src/calendar/calendar-day-of-week.vala:61
 msgid "fourth Tuesday"
-msgstr ""
+msgstr "cuarto martes"
 
 #: ../src/calendar/calendar-day-of-week.vala:61
 msgid "fifth Tuesday"
-msgstr ""
+msgstr "quinto martes"
 
 #: ../src/calendar/calendar-day-of-week.vala:62
 msgid "last Wednesday"
-msgstr ""
+msgstr "último miércoles"
 
 #: ../src/calendar/calendar-day-of-week.vala:62
 msgid "first Wednesday"
-msgstr ""
+msgstr "primer miércoles"
 
 #: ../src/calendar/calendar-day-of-week.vala:62
 msgid "second Wednesday"
-msgstr ""
+msgstr "segundo miércoles"
 
 #: ../src/calendar/calendar-day-of-week.vala:62
 msgid "third Wednesday"
-msgstr ""
+msgstr "tercer miércoles"
 
 #: ../src/calendar/calendar-day-of-week.vala:62
 msgid "fourth Wednesday"
-msgstr ""
+msgstr "cuarto miércoles"
 
 #: ../src/calendar/calendar-day-of-week.vala:62
 msgid "fifth Wednesday"
-msgstr ""
+msgstr "quinto miércoles"
 
 #: ../src/calendar/calendar-day-of-week.vala:63
 msgid "last Thursday"
-msgstr ""
+msgstr "último jueves"
 
 #: ../src/calendar/calendar-day-of-week.vala:63
 msgid "first Thursday"
-msgstr ""
+msgstr "primer jueves"
 
 #: ../src/calendar/calendar-day-of-week.vala:63
 msgid "second Thursday"
-msgstr ""
+msgstr "segundo jueves"
 
 #: ../src/calendar/calendar-day-of-week.vala:63
 msgid "third Thursday"
-msgstr ""
+msgstr "tercer jueves"
 
 #: ../src/calendar/calendar-day-of-week.vala:63
 msgid "fourth Thursday"
-msgstr ""
+msgstr "cuarto jueves"
 
 #: ../src/calendar/calendar-day-of-week.vala:63
 msgid "fifth Thursday"
-msgstr ""
+msgstr "quinto jueves"
 
 #: ../src/calendar/calendar-day-of-week.vala:64
 msgid "last Friday"
-msgstr ""
+msgstr "último viernes"
 
 #: ../src/calendar/calendar-day-of-week.vala:64
 msgid "first Friday"
-msgstr ""
+msgstr "primer viernes"
 
 #: ../src/calendar/calendar-day-of-week.vala:64
 msgid "second Friday"
-msgstr ""
+msgstr "segundo viernes"
 
 #: ../src/calendar/calendar-day-of-week.vala:64
 msgid "third Friday"
-msgstr ""
+msgstr "tercer viernes"
 
 #: ../src/calendar/calendar-day-of-week.vala:64
 msgid "fourth Friday"
-msgstr ""
+msgstr "cuarto viernes"
 
 #: ../src/calendar/calendar-day-of-week.vala:64
 msgid "fifth Friday"
-msgstr ""
+msgstr "quinto viernes"
 
 #: ../src/calendar/calendar-day-of-week.vala:65
 msgid "last Saturday"
-msgstr ""
+msgstr "último sábado"
 
 #: ../src/calendar/calendar-day-of-week.vala:65
 msgid "first Saturday"
-msgstr ""
+msgstr "primer sábado"
 
 #: ../src/calendar/calendar-day-of-week.vala:65
 msgid "second Saturday"
-msgstr ""
+msgstr "segundo sábado"
 
 #: ../src/calendar/calendar-day-of-week.vala:65
 msgid "third Saturday"
-msgstr ""
+msgstr "tercer sábado"
 
 #: ../src/calendar/calendar-day-of-week.vala:65
 msgid "fourth Saturday"
-msgstr ""
+msgstr "cuarto sábado"
 
 #: ../src/calendar/calendar-day-of-week.vala:65
 msgid "fifth Saturday"
-msgstr ""
+msgstr "quinto sábado"
 
 #: ../src/calendar/calendar-day-of-week.vala:66
 msgid "last Sunday"
-msgstr ""
+msgstr "último domingo"
 
 #: ../src/calendar/calendar-day-of-week.vala:66
 msgid "first Sunday"
-msgstr ""
+msgstr "primer domingo"
 
 #: ../src/calendar/calendar-day-of-week.vala:66
 msgid "second Sunday"
-msgstr ""
+msgstr "segundo domingo"
 
 #: ../src/calendar/calendar-day-of-week.vala:66
 msgid "third Sunday"
-msgstr ""
+msgstr "tercer domingo"
 
 #: ../src/calendar/calendar-day-of-week.vala:66
 msgid "fourth Sunday"
-msgstr ""
+msgstr "cuarto domingo"
 
 #: ../src/calendar/calendar-day-of-week.vala:66
 msgid "fifth Sunday"
-msgstr ""
+msgstr "quinto domingo"
 
 #. A span of time followed by the timezone, i.e. "3:30pm to 4:30pm EST"
 #: ../src/calendar/calendar-exact-time-span.vala:187
@@ -399,14 +399,12 @@ msgstr "%s, %s hasta %s, %s"
 #. including year if not current year
 #. Date and time, i.e. "September 13, 4:30pm"
 #: ../src/calendar/calendar-exact-time-span.vala:200
-#, fuzzy, c-format
+#, c-format
 #| msgid ""
 #| "%s, %s\n"
 #| "%s, %s"
 msgid "%s, %s"
-msgstr ""
-"%s, %s\n"
-"%s, %s"
+msgstr "%s, %s"
 
 #. Multi-day timed event, print "<full time>, <full date>" on both lines,
 #. including year if either not current year
@@ -429,7 +427,7 @@ msgstr ""
 #. 12 January 2012, 3:30pm PST
 #. 13 January 2013, 6:30am PST
 #: ../src/calendar/calendar-exact-time-span.vala:221
-#, fuzzy, c-format
+#, c-format
 #| msgid ""
 #| "%s, %s\n"
 #| "%s, %s"
@@ -437,8 +435,8 @@ msgid ""
 "%s, %s %s\n"
 "%s, %s %s"
 msgstr ""
-"%s, %s\n"
-"%s, %s"
+"%s, %s %s\n"
+"%s, %s %s"
 
 #. Prints full time and date strings on a single line with timezone, i.e.:
 #. 12 January 2012, 3:30pm PST to 13 January 2013, 6:30am PST
@@ -796,35 +794,35 @@ msgstr "º;"
 #, c-format
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d día"
+msgstr[1] "%d días"
 
 #: ../src/component/component-recurrence-rule.vala:602
-#, fuzzy, c-format
+#, c-format
 #| msgid "week"
 #| msgid_plural "weeks"
 msgid "%d week"
 msgid_plural "%d weeks"
-msgstr[0] "semana"
-msgstr[1] "semanas"
+msgstr[0] "%d semana"
+msgstr[1] "%d semanas"
 
 #: ../src/component/component-recurrence-rule.vala:613
-#, fuzzy, c-format
+#, c-format
 #| msgid "month"
 #| msgid_plural "months"
 msgid "%d month"
 msgid_plural "%d months"
-msgstr[0] "mes"
-msgstr[1] "meses"
+msgstr[0] "%d mes"
+msgstr[1] "%d meses"
 
 #: ../src/component/component-recurrence-rule.vala:621
-#, fuzzy, c-format
+#, c-format
 #| msgid "year"
 #| msgid_plural "years"
 msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] "año"
-msgstr[1] "años"
+msgstr[0] "%d año"
+msgstr[1] "%d años"
 
 #. As in, "Repeats every day, 2 times"
 #: ../src/component/component-recurrence-rule.vala:636
@@ -864,10 +862,9 @@ msgstr "Evento pe_riódico"
 
 #. look for expressible patterns
 #: ../src/component/component-recurrence-rule.vala:679
-#, fuzzy
 #| msgid "every;"
 msgid "every day"
-msgstr "cada;"
+msgstr "cada día"
 
 #: ../src/component/component-recurrence-rule.vala:684
 #, fuzzy
@@ -884,7 +881,7 @@ msgstr "semanal"
 #. Separator between days of the week, i.e. "Monday, Tuesday, Wednesday"
 #: ../src/component/component-recurrence-rule.vala:697
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #. As in, "Repeats every week on Monday, Tuesday, 3 times"
 #. As in, "Repeats every month on day 4, 3 times"
@@ -955,7 +952,7 @@ msgstr ""
 #: ../src/component/component-recurrence-rule.vala:800
 #, c-format
 msgid "day %d"
-msgstr ""
+msgstr "día %d"
 
 #: ../src/event-editor/event-editor-attendees-card.vala:54
 msgid "Send invite"
@@ -965,8 +962,8 @@ msgstr ""
 msgid "Don't send invite"
 msgstr ""
 
-#: ../src/event-editor/event-editor-main-card.vala:73
-#: ../src/event-editor/event-editor-main-card.vala:76
+#: ../src/event-editor/event-editor-main-card.vala:74
+#: ../src/event-editor/event-editor-main-card.vala:77
 #: ../src/host/host-show-event.vala:92 ../src/host/host-show-event.vala:299
 #: ../src/rc/activator-generic-subscribe.ui.h:5
 #: ../src/rc/activator-google-authenticating-pane.ui.h:1
@@ -981,56 +978,55 @@ msgstr ""
 msgid "_Cancel"
 msgstr "_Cancelar"
 
-#: ../src/event-editor/event-editor-main-card.vala:74
+#: ../src/event-editor/event-editor-main-card.vala:75
 msgid "Save A_ll Events"
 msgstr "Guardar _todos los eventos"
 
-#: ../src/event-editor/event-editor-main-card.vala:75
+#: ../src/event-editor/event-editor-main-card.vala:76
 msgid "Save _This Event"
 msgstr "Guardar _este evento"
 
-#: ../src/event-editor/event-editor-main-card.vala:205
+#: ../src/event-editor/event-editor-main-card.vala:212
 msgid "It's complicated…"
 msgstr ""
 
-#: ../src/event-editor/event-editor-main-card.vala:208
-#, fuzzy
+#: ../src/event-editor/event-editor-main-card.vala:215
 #| msgid "_Never"
 msgid "Never"
-msgstr "_Nunca"
+msgstr "Nunca"
 
-#: ../src/event-editor/event-editor-main-card.vala:210
+#: ../src/event-editor/event-editor-main-card.vala:217
 msgid "_Save"
 msgstr "_Guardar"
 
-#: ../src/event-editor/event-editor-main-card.vala:210
+#: ../src/event-editor/event-editor-main-card.vala:217
 msgid "C_reate"
 msgstr "C_rear"
 
 #. Email address followed by common separator, i.e. "alice@example.com, bob@example.com"
 #. Email separator, i.e. "alice@example.com, bob@example.com"
-#: ../src/event-editor/event-editor-main-card.vala:243
-#: ../src/event-editor/event-editor-main-card.vala:598
+#: ../src/event-editor/event-editor-main-card.vala:250
+#: ../src/event-editor/event-editor-main-card.vala:605
 #, c-format
 msgid "%s, "
-msgstr ""
+msgstr "%s, "
 
-#: ../src/event-editor/event-editor-main-card.vala:363
-#: ../src/host/host-quick-create-event.vala:156
+#: ../src/event-editor/event-editor-main-card.vala:370
+#: ../src/host/host-quick-create-event.vala:171
 msgid "Unable to create event: calendar must be specified"
 msgstr "No se pudo crear el evento: se debe especificar el calendario"
 
-#: ../src/event-editor/event-editor-main-card.vala:384
-#: ../src/host/host-quick-create-event.vala:175
+#: ../src/event-editor/event-editor-main-card.vala:391
+#: ../src/host/host-quick-create-event.vala:190
 #, c-format
 msgid "Unable to create event: %s"
 msgstr "No se pudo crear el evento: %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:389
+#: ../src/event-editor/event-editor-main-card.vala:396
 msgid "Unable to update event: calendar must be specified"
 msgstr "No se pudo actualizar el evento: se debe especificar el calendario"
 
-#: ../src/event-editor/event-editor-main-card.vala:438
+#: ../src/event-editor/event-editor-main-card.vala:445
 #, c-format
 msgid "Unable to update event: %s"
 msgstr "No se pudo actualizar el evento: %s"
@@ -1038,66 +1034,66 @@ msgstr "No se pudo actualizar el evento: %s"
 #. "invite.ics" is the name of the file for an event invite delivered via email ...
 #. please translate but keep the .ics extension, as that's common to most calendar
 #. applications
-#: ../src/event-editor/event-editor-main-card.vala:467
+#: ../src/event-editor/event-editor-main-card.vala:474
 msgid "invite.ics"
 msgstr ""
 
-#: ../src/event-editor/event-editor-main-card.vala:474
+#: ../src/event-editor/event-editor-main-card.vala:481
 #, fuzzy, c-format
 #| msgid "Unable to subscribe to %s: %s"
 msgid "Unable to export .ics to %s: %s"
 msgstr "No se pudo suscribir a %s: %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:494
+#: ../src/event-editor/event-editor-main-card.vala:501
 msgid "Event invitation"
 msgstr ""
 
-#: ../src/event-editor/event-editor-main-card.vala:494
+#: ../src/event-editor/event-editor-main-card.vala:501
 msgid "Updated event invitation"
 msgstr ""
 
-#: ../src/event-editor/event-editor-main-card.vala:496
+#: ../src/event-editor/event-editor-main-card.vala:503
 #, c-format
 msgid "Invitation: %s"
 msgstr ""
 
-#: ../src/event-editor/event-editor-main-card.vala:496
+#: ../src/event-editor/event-editor-main-card.vala:503
 #, c-format
 msgid "Updated invitation: %s"
 msgstr ""
 
 #. Invitation: <summary> at <location>
-#: ../src/event-editor/event-editor-main-card.vala:499
+#: ../src/event-editor/event-editor-main-card.vala:506
 #, c-format
 msgid "Invitation: %s at %s"
 msgstr ""
 
-#: ../src/event-editor/event-editor-main-card.vala:499
+#: ../src/event-editor/event-editor-main-card.vala:506
 #, c-format
 msgid "Updated invitation: %s at %s"
 msgstr ""
 
-#: ../src/event-editor/event-editor-main-card.vala:515
+#: ../src/event-editor/event-editor-main-card.vala:522
 #, fuzzy, c-format
 #| msgid "Unable to create event: %s"
 msgid "Unable to launch mail client: %s"
 msgstr "No se pudo crear el evento: %s"
 
 #. Salutations for an email
-#: ../src/event-editor/event-editor-main-card.vala:523
+#: ../src/event-editor/event-editor-main-card.vala:530
 msgid "Hello,"
-msgstr ""
+msgstr "Hola,"
 
-#: ../src/event-editor/event-editor-main-card.vala:526
+#: ../src/event-editor/event-editor-main-card.vala:533
 msgid "Attached is an invitation to a new event:"
 msgstr ""
 
-#: ../src/event-editor/event-editor-main-card.vala:527
+#: ../src/event-editor/event-editor-main-card.vala:534
 msgid "Attached is an updated event invitation:"
 msgstr ""
 
 #. Date/time of an event
-#: ../src/event-editor/event-editor-main-card.vala:543
+#: ../src/event-editor/event-editor-main-card.vala:550
 #, fuzzy, c-format
 #| msgid "When"
 msgid "When: %s"
@@ -1105,51 +1101,51 @@ msgstr "Cuándo"
 
 #. Location
 #. Location of an event
-#: ../src/event-editor/event-editor-main-card.vala:556
-#, fuzzy, c-format
+#: ../src/event-editor/event-editor-main-card.vala:563
+#, c-format
 #| msgid "Where"
 msgid "Where: %s"
-msgstr "Dónde"
+msgstr "Dónde: %s"
 
 #. Who organized (scheduled or planned) the event
-#: ../src/event-editor/event-editor-main-card.vala:566
+#: ../src/event-editor/event-editor-main-card.vala:573
 #, c-format
 msgid "Organizer: %s"
-msgstr ""
+msgstr "Organizador: %s"
 
 #. People attending event
-#: ../src/event-editor/event-editor-main-card.vala:576
+#: ../src/event-editor/event-editor-main-card.vala:583
 #, c-format
 msgid "Guest: %s"
 msgid_plural "Guests: %s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/event-editor/event-editor-recurring-card.vala:442
+#: ../src/event-editor/event-editor-recurring-card.vala:443
 msgid "month"
 msgid_plural "months"
 msgstr[0] "mes"
 msgstr[1] "meses"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:446
+#: ../src/event-editor/event-editor-recurring-card.vala:447
 msgid "week"
 msgid_plural "weeks"
 msgstr[0] "semana"
 msgstr[1] "semanas"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:450
+#: ../src/event-editor/event-editor-recurring-card.vala:451
 msgid "year"
 msgid_plural "years"
 msgstr[0] "año"
 msgstr[1] "años"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:455
+#: ../src/event-editor/event-editor-recurring-card.vala:456
 msgid "day"
 msgid_plural "days"
 msgstr[0] "día"
 msgstr[1] "días"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:467
+#: ../src/event-editor/event-editor-recurring-card.vala:468
 msgid "event"
 msgid_plural "events"
 msgstr[0] "evento"
@@ -1330,11 +1326,11 @@ msgstr "No se pudo quitar el evento: %s"
 #.
 #: ../src/view/agenda/agenda-controller.vala:33
 msgid "Agenda"
-msgstr ""
+msgstr "Agenda"
 
 #: ../src/view/agenda/agenda-event-row.vala:109
 msgid "All day"
-msgstr ""
+msgstr "Todo el día"
 
 #. %s is a date, i.e. "Showing events until December 5, 2014"
 #: ../src/view/agenda/agenda-load-more-row.vala:38
@@ -1443,7 +1439,7 @@ msgstr ""
 
 #: ../src/rc/event-editor-attendees-card.ui.h:3
 msgid "For example, alice@example.com"
-msgstr ""
+msgstr "Por ejemplo: irene@dominio.com"
 
 #: ../src/rc/event-editor-attendees-card.ui.h:4
 msgid "Email address (required if guests are invited)"
@@ -1451,11 +1447,11 @@ msgstr ""
 
 #: ../src/rc/event-editor-attendees-card.ui.h:5
 msgid "For example, bob@example.com"
-msgstr ""
+msgstr "Por ejemplo: juan@dominio.com"
 
 #: ../src/rc/event-editor-attendees-card.ui.h:6
 msgid "Email address"
-msgstr ""
+msgstr "Dirección de correo _electrónico"
 
 #: ../src/rc/event-editor-attendees-card.ui.h:7
 msgid "A_dd Guest"
@@ -1470,11 +1466,11 @@ msgstr "_Quitar"
 #: ../src/rc/event-editor-attendees-card.ui.h:9
 #: ../src/rc/event-editor-main-card.ui.h:10
 msgid "Guests"
-msgstr ""
+msgstr "Invitados"
 
 #: ../src/rc/event-editor-attendees-card.ui.h:11
 msgid "_Accept"
-msgstr ""
+msgstr "_Aceptar"
 
 #. As in "From 9pm to 10pm"
 #: ../src/rc/event-editor-date-time-card.ui.h:2
@@ -1661,10 +1657,9 @@ msgid "Quick Add help"
 msgstr "Ayuda de añadir rápido"
 
 #: ../src/rc/host-quick-create-event.ui.h:6
-#, fuzzy
 #| msgid "_Cancel"
 msgid "Cancel"
-msgstr "_Cancelar"
+msgstr "Cancelar"
 
 #: ../src/rc/host-quick-create-event.ui.h:7
 msgid "Edit event details"
@@ -1680,7 +1675,7 @@ msgstr "Dónde"
 
 #: ../src/rc/host-show-event.ui.h:3
 msgid "Organizers"
-msgstr ""
+msgstr "Organizadores"
 
 #: ../src/rc/host-show-event.ui.h:5
 msgctxt "Attendees of an event (who are not organizing it)"
@@ -1700,10 +1695,9 @@ msgid "Rename calendar"
 msgstr "Renombrar calendario"
 
 #: ../src/rc/manager-calendar-list.ui.h:4
-#, fuzzy
 #| msgid "Rename calendar"
 msgid "Remove calendar"
-msgstr "Renombrar calendario"
+msgstr "Eliminar calendario"
 
 #: ../src/rc/manager-calendar-list-item.ui.h:2
 msgid "Calendar visibility"
