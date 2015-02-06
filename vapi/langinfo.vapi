@@ -1,5 +1,7 @@
 /**
  * nl_langinfo bindings.
+ *
+ * Copyright 2014-2015 Yorba Foundation
  */
 
 [CCode (cprefix = "")]

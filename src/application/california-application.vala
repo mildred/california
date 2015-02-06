@@ -1,4 +1,4 @@
-/* Copyright 2014 Yorba Foundation
+/* Copyright 2014-2015 Yorba Foundation
  *
  * This software is licensed under the GNU Lesser General Public License
  * (version 2.1 or later).  See the COPYING file in this distribution.
@@ -18,7 +18,7 @@ namespace California {
 public class Application : Gtk.Application {
     public const string TITLE = _("California");
     public const string DESCRIPTION = _("GNOME 3 Calendar");
-    public const string COPYRIGHT = _("Copyright 2014 Yorba Foundation");
+    public const string COPYRIGHT = _("Copyright 2014-2015 Yorba Foundation");
     public const string VERSION = PACKAGE_VERSION;
     public const string WEBSITE_NAME = _("Visit California's home page");
     public const string WEBSITE_URL = "https://wiki.gnome.org/Apps/California";

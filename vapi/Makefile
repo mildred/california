@@ -1,3 +1,6 @@
+#
+# Copyright 2014-2015 Yorba Foundation
+#
 
 LIBECAL-1.2_FILES = \
 	libecal-1.2/libecal-1.2.defines \
