@@ -1,15 +1,16 @@
 # Czech translation for california.
 # Copyright (C) 2014 california's COPYRIGHT HOLDER
 # This file is distributed under the same license as the california package.
-# Marek Černocký <marek@manet.cz>, 2014.
+#
+# Marek Černocký <marek@manet.cz>, 2014, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-12-08 23:13+0000\n"
-"PO-Revision-Date: 2014-12-27 07:49+0100\n"
+"POT-Creation-Date: 2015-02-06 20:51+0000\n"
+"PO-Revision-Date: 2015-02-08 23:34+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -129,7 +130,7 @@ msgstr "Ověřeno"
 
 #. "None" as in "no people"
 #: ../src/activator/google/google-calendar-list-pane.vala:65
-#: ../src/event-editor/event-editor-main-card.vala:194
+#: ../src/event-editor/event-editor-main-card.vala:201
 msgid "None"
 msgstr "Žádný"
 
@@ -145,8 +146,8 @@ msgid "Unable to subscribe to %s: %s"
 msgstr "Nelze se přihlásit k %s: %s"
 
 #: ../src/application/california-application.vala:21
-msgid "Copyright 2014 Yorba Foundation"
-msgstr "Copyright 2014 Yorba Foundation"
+msgid "Copyright 2014-2015 Yorba Foundation"
+msgstr "Copyright 2014 – 2015 Yorba Foundation"
 
 #: ../src/application/california-application.vala:23
 msgid "Visit California's home page"
@@ -942,8 +943,8 @@ msgstr "Poslat pozvánku"
 msgid "Don't send invite"
 msgstr "Neposílat pozvánku"
 
-#: ../src/event-editor/event-editor-main-card.vala:73
-#: ../src/event-editor/event-editor-main-card.vala:76
+#: ../src/event-editor/event-editor-main-card.vala:74
+#: ../src/event-editor/event-editor-main-card.vala:77
 #: ../src/host/host-show-event.vala:92 ../src/host/host-show-event.vala:299
 #: ../src/rc/activator-generic-subscribe.ui.h:5
 #: ../src/rc/activator-google-authenticating-pane.ui.h:1
@@ -958,54 +959,54 @@ msgstr "Neposílat pozvánku"
 msgid "_Cancel"
 msgstr "_Zrušit"
 
-#: ../src/event-editor/event-editor-main-card.vala:74
+#: ../src/event-editor/event-editor-main-card.vala:75
 msgid "Save A_ll Events"
 msgstr "U_ložit všechny události"
 
-#: ../src/event-editor/event-editor-main-card.vala:75
+#: ../src/event-editor/event-editor-main-card.vala:76
 msgid "Save _This Event"
 msgstr "Uložit _tuto událost"
 
-#: ../src/event-editor/event-editor-main-card.vala:205
+#: ../src/event-editor/event-editor-main-card.vala:212
 msgid "It's complicated…"
 msgstr "Je to složité…"
 
-#: ../src/event-editor/event-editor-main-card.vala:208
+#: ../src/event-editor/event-editor-main-card.vala:215
 msgid "Never"
 msgstr "Nikdy"
 
-#: ../src/event-editor/event-editor-main-card.vala:210
+#: ../src/event-editor/event-editor-main-card.vala:217
 msgid "_Save"
 msgstr "_Uložit"
 
-#: ../src/event-editor/event-editor-main-card.vala:210
+#: ../src/event-editor/event-editor-main-card.vala:217
 msgid "C_reate"
 msgstr "_Vytvořit"
 
 #. Email address followed by common separator, i.e. "alice@example.com, bob@example.com"
 #. Email separator, i.e. "alice@example.com, bob@example.com"
-#: ../src/event-editor/event-editor-main-card.vala:243
-#: ../src/event-editor/event-editor-main-card.vala:598
+#: ../src/event-editor/event-editor-main-card.vala:250
+#: ../src/event-editor/event-editor-main-card.vala:605
 #, c-format
 msgid "%s, "
 msgstr "%s, "
 
-#: ../src/event-editor/event-editor-main-card.vala:363
-#: ../src/host/host-quick-create-event.vala:156
+#: ../src/event-editor/event-editor-main-card.vala:370
+#: ../src/host/host-quick-create-event.vala:171
 msgid "Unable to create event: calendar must be specified"
 msgstr "Nelze vytvořit událost: musí být určen kalendář"
 
-#: ../src/event-editor/event-editor-main-card.vala:384
-#: ../src/host/host-quick-create-event.vala:175
+#: ../src/event-editor/event-editor-main-card.vala:391
+#: ../src/host/host-quick-create-event.vala:190
 #, c-format
 msgid "Unable to create event: %s"
 msgstr "Nelze vytvořit událost: %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:389
+#: ../src/event-editor/event-editor-main-card.vala:396
 msgid "Unable to update event: calendar must be specified"
 msgstr "Nelze aktualizovat událost: musí být určen kalendář"
 
-#: ../src/event-editor/event-editor-main-card.vala:438
+#: ../src/event-editor/event-editor-main-card.vala:445
 #, c-format
 msgid "Unable to update event: %s"
 msgstr "Nelze aktualizovat událost: %s"
@@ -1013,83 +1014,83 @@ msgstr "Nelze aktualizovat událost: %s"
 #. "invite.ics" is the name of the file for an event invite delivered via email ...
 #. please translate but keep the .ics extension, as that's common to most calendar
 #. applications
-#: ../src/event-editor/event-editor-main-card.vala:467
+#: ../src/event-editor/event-editor-main-card.vala:474
 msgid "invite.ics"
 msgstr "pozvánka.ics"
 
-#: ../src/event-editor/event-editor-main-card.vala:474
+#: ../src/event-editor/event-editor-main-card.vala:481
 #, c-format
 msgid "Unable to export .ics to %s: %s"
 msgstr "Nelze exportovat .ics do %s: %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:494
+#: ../src/event-editor/event-editor-main-card.vala:501
 msgid "Event invitation"
 msgstr "Pozvánka na událost"
 
-#: ../src/event-editor/event-editor-main-card.vala:494
+#: ../src/event-editor/event-editor-main-card.vala:501
 msgid "Updated event invitation"
 msgstr "Aktualizovaná pozvánka na událost"
 
-#: ../src/event-editor/event-editor-main-card.vala:496
+#: ../src/event-editor/event-editor-main-card.vala:503
 #, c-format
 msgid "Invitation: %s"
 msgstr "Pozvánka: %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:496
+#: ../src/event-editor/event-editor-main-card.vala:503
 #, c-format
 msgid "Updated invitation: %s"
 msgstr "Aktualizovaná pozvánka: %s"
 
 #. Invitation: <summary> at <location>
-#: ../src/event-editor/event-editor-main-card.vala:499
+#: ../src/event-editor/event-editor-main-card.vala:506
 #, c-format
 msgid "Invitation: %s at %s"
 msgstr "Pozvánka: %s s místem konání %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:499
+#: ../src/event-editor/event-editor-main-card.vala:506
 #, c-format
 msgid "Updated invitation: %s at %s"
 msgstr "Aktualizovaná pozvánka: %s s místem konání %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:515
+#: ../src/event-editor/event-editor-main-card.vala:522
 #, c-format
 msgid "Unable to launch mail client: %s"
 msgstr "Nelze spustit poštovního klienta: %s"
 
 #. Salutations for an email
-#: ../src/event-editor/event-editor-main-card.vala:523
+#: ../src/event-editor/event-editor-main-card.vala:530
 msgid "Hello,"
 msgstr "Dobrý den,"
 
-#: ../src/event-editor/event-editor-main-card.vala:526
+#: ../src/event-editor/event-editor-main-card.vala:533
 msgid "Attached is an invitation to a new event:"
 msgstr "V příloze je pozvánka na novou událost:"
 
-#: ../src/event-editor/event-editor-main-card.vala:527
+#: ../src/event-editor/event-editor-main-card.vala:534
 msgid "Attached is an updated event invitation:"
 msgstr "V příloze je pozvánka na aktualizovanou událost:"
 
 #. Date/time of an event
-#: ../src/event-editor/event-editor-main-card.vala:543
+#: ../src/event-editor/event-editor-main-card.vala:550
 #, c-format
 msgid "When: %s"
 msgstr "Kdy: %s"
 
 #. Location
 #. Location of an event
-#: ../src/event-editor/event-editor-main-card.vala:556
+#: ../src/event-editor/event-editor-main-card.vala:563
 #, c-format
 msgid "Where: %s"
 msgstr "Kde: %s"
 
 #. Who organized (scheduled or planned) the event
-#: ../src/event-editor/event-editor-main-card.vala:566
+#: ../src/event-editor/event-editor-main-card.vala:573
 #, c-format
 msgid "Organizer: %s"
 msgstr "Pořadatel: %s"
 
 #. People attending event
-#: ../src/event-editor/event-editor-main-card.vala:576
+#: ../src/event-editor/event-editor-main-card.vala:583
 #, c-format
 msgid "Guest: %s"
 msgid_plural "Guests: %s"
@@ -1097,35 +1098,35 @@ msgstr[0] "Host: %s"
 msgstr[1] "Hosté: %s"
 msgstr[2] "Hosté: %s"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:442
+#: ../src/event-editor/event-editor-recurring-card.vala:443
 msgid "month"
 msgid_plural "months"
 msgstr[0] "měsíc"
 msgstr[1] "měsíce"
 msgstr[2] "měsíců"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:446
+#: ../src/event-editor/event-editor-recurring-card.vala:447
 msgid "week"
 msgid_plural "weeks"
 msgstr[0] "týden"
 msgstr[1] "týdny"
 msgstr[2] "týdnů"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:450
+#: ../src/event-editor/event-editor-recurring-card.vala:451
 msgid "year"
 msgid_plural "years"
 msgstr[0] "rok"
 msgstr[1] "roky"
 msgstr[2] "let"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:455
+#: ../src/event-editor/event-editor-recurring-card.vala:456
 msgid "day"
 msgid_plural "days"
 msgstr[0] "den"
 msgstr[1] "dny"
 msgstr[2] "dní"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:467
+#: ../src/event-editor/event-editor-recurring-card.vala:468
 msgid "event"
 msgid_plural "events"
 msgstr[0] "události"
