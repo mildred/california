@@ -4,14 +4,14 @@
 # pomóc w jego rozwijaniu i pielęgnowaniu, napisz do nas:
 # gnomepl@aviary.pl
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-# Piotr Drąg <piotrdrag@gmail.com>, 2014.
-# Aviary.pl <gnomepl@aviary.pl>, 2014.
+# Piotr Drąg <piotrdrag@gmail.com>, 2014-2015.
+# Aviary.pl <gnomepl@aviary.pl>, 2014-2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: california\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-14 12:49+0100\n"
-"PO-Revision-Date: 2014-12-14 12:50+0100\n"
+"POT-Creation-Date: 2015-02-08 13:53+0100\n"
+"PO-Revision-Date: 2015-02-08 13:54+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -133,7 +133,7 @@ msgstr "Uwierzytelniono"
 
 #. "None" as in "no people"
 #: ../src/activator/google/google-calendar-list-pane.vala:65
-#: ../src/event-editor/event-editor-main-card.vala:194
+#: ../src/event-editor/event-editor-main-card.vala:201
 msgid "None"
 msgstr "Brak"
 
@@ -149,8 +149,8 @@ msgid "Unable to subscribe to %s: %s"
 msgstr "Nie można subskrybować %s: %s"
 
 #: ../src/application/california-application.vala:21
-msgid "Copyright 2014 Yorba Foundation"
-msgstr "Copyright 2014 Fundacja Yorba"
+msgid "Copyright 2014-2015 Yorba Foundation"
+msgstr "Copyright 2014-2015 Fundacja Yorba"
 
 #: ../src/application/california-application.vala:23
 msgid "Visit California's home page"
@@ -171,8 +171,8 @@ msgstr "O programie %s"
 #: ../src/application/california-application.vala:330
 msgid "translator-credits"
 msgstr ""
-"Piotr Drąg <piotrdrag@gmail.com>, 2014\n"
-"Aviary.pl <gnomepl@aviary.pl>, 2014"
+"Piotr Drąg <piotrdrag@gmail.com>, 2014-2015\n"
+"Aviary.pl <gnomepl@aviary.pl>, 2014-2015"
 
 #: ../src/application/california-commandline.vala:9
 msgid "[.ics FILE...]"
@@ -947,8 +947,8 @@ msgstr "Wysyła zaproszenie"
 msgid "Don't send invite"
 msgstr "Nie wysyła zaproszenia"
 
-#: ../src/event-editor/event-editor-main-card.vala:73
-#: ../src/event-editor/event-editor-main-card.vala:76
+#: ../src/event-editor/event-editor-main-card.vala:74
+#: ../src/event-editor/event-editor-main-card.vala:77
 #: ../src/host/host-show-event.vala:92 ../src/host/host-show-event.vala:299
 #: ../src/rc/activator-generic-subscribe.ui.h:5
 #: ../src/rc/activator-google-authenticating-pane.ui.h:1
@@ -963,54 +963,54 @@ msgstr "Nie wysyła zaproszenia"
 msgid "_Cancel"
 msgstr "_Anuluj"
 
-#: ../src/event-editor/event-editor-main-card.vala:74
+#: ../src/event-editor/event-editor-main-card.vala:75
 msgid "Save A_ll Events"
 msgstr "Zapisz _wszystkie wydarzenia"
 
-#: ../src/event-editor/event-editor-main-card.vala:75
+#: ../src/event-editor/event-editor-main-card.vala:76
 msgid "Save _This Event"
 msgstr "Zapisz _to wydarzenie"
 
-#: ../src/event-editor/event-editor-main-card.vala:205
+#: ../src/event-editor/event-editor-main-card.vala:212
 msgid "It's complicated…"
 msgstr "To skomplikowane…"
 
-#: ../src/event-editor/event-editor-main-card.vala:208
+#: ../src/event-editor/event-editor-main-card.vala:215
 msgid "Never"
 msgstr "Nigdy"
 
-#: ../src/event-editor/event-editor-main-card.vala:210
+#: ../src/event-editor/event-editor-main-card.vala:217
 msgid "_Save"
 msgstr "_Zapisz"
 
-#: ../src/event-editor/event-editor-main-card.vala:210
+#: ../src/event-editor/event-editor-main-card.vala:217
 msgid "C_reate"
 msgstr "U_twórz"
 
 #. Email address followed by common separator, i.e. "alice@example.com, bob@example.com"
 #. Email separator, i.e. "alice@example.com, bob@example.com"
-#: ../src/event-editor/event-editor-main-card.vala:243
-#: ../src/event-editor/event-editor-main-card.vala:598
+#: ../src/event-editor/event-editor-main-card.vala:250
+#: ../src/event-editor/event-editor-main-card.vala:605
 #, c-format
 msgid "%s, "
 msgstr "%s, "
 
-#: ../src/event-editor/event-editor-main-card.vala:363
-#: ../src/host/host-quick-create-event.vala:156
+#: ../src/event-editor/event-editor-main-card.vala:370
+#: ../src/host/host-quick-create-event.vala:171
 msgid "Unable to create event: calendar must be specified"
 msgstr "Nie można utworzyć wydarzenia: należy podać kalendarz"
 
-#: ../src/event-editor/event-editor-main-card.vala:384
-#: ../src/host/host-quick-create-event.vala:175
+#: ../src/event-editor/event-editor-main-card.vala:391
+#: ../src/host/host-quick-create-event.vala:190
 #, c-format
 msgid "Unable to create event: %s"
 msgstr "Nie można utworzyć wydarzenia: %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:389
+#: ../src/event-editor/event-editor-main-card.vala:396
 msgid "Unable to update event: calendar must be specified"
 msgstr "Nie można zaktualizować wydarzenia: należy podać kalendarz"
 
-#: ../src/event-editor/event-editor-main-card.vala:438
+#: ../src/event-editor/event-editor-main-card.vala:445
 #, c-format
 msgid "Unable to update event: %s"
 msgstr "Nie można zaktualizować wydarzenia: %s"
@@ -1018,83 +1018,83 @@ msgstr "Nie można zaktualizować wydarzenia: %s"
 #. "invite.ics" is the name of the file for an event invite delivered via email ...
 #. please translate but keep the .ics extension, as that's common to most calendar
 #. applications
-#: ../src/event-editor/event-editor-main-card.vala:467
+#: ../src/event-editor/event-editor-main-card.vala:474
 msgid "invite.ics"
 msgstr "zaproszenie.ics"
 
-#: ../src/event-editor/event-editor-main-card.vala:474
+#: ../src/event-editor/event-editor-main-card.vala:481
 #, c-format
 msgid "Unable to export .ics to %s: %s"
 msgstr "Nie można wyeksportować pliku .ics do %s: %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:494
+#: ../src/event-editor/event-editor-main-card.vala:501
 msgid "Event invitation"
 msgstr "Zaproszenie na wydarzenie"
 
-#: ../src/event-editor/event-editor-main-card.vala:494
+#: ../src/event-editor/event-editor-main-card.vala:501
 msgid "Updated event invitation"
 msgstr "Zaktualizowane zaproszenie na wydarzenie"
 
-#: ../src/event-editor/event-editor-main-card.vala:496
+#: ../src/event-editor/event-editor-main-card.vala:503
 #, c-format
 msgid "Invitation: %s"
 msgstr "Zaproszenie: %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:496
+#: ../src/event-editor/event-editor-main-card.vala:503
 #, c-format
 msgid "Updated invitation: %s"
 msgstr "Zaktualizowane zaproszenie: %s"
 
 #. Invitation: <summary> at <location>
-#: ../src/event-editor/event-editor-main-card.vala:499
+#: ../src/event-editor/event-editor-main-card.vala:506
 #, c-format
 msgid "Invitation: %s at %s"
 msgstr "Zaproszenie: %s w %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:499
+#: ../src/event-editor/event-editor-main-card.vala:506
 #, c-format
 msgid "Updated invitation: %s at %s"
 msgstr "Zaktualizowane zaproszenie: %s w %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:515
+#: ../src/event-editor/event-editor-main-card.vala:522
 #, c-format
 msgid "Unable to launch mail client: %s"
 msgstr "Nie można uruchomić klienta poczty: %s"
 
 #. Salutations for an email
-#: ../src/event-editor/event-editor-main-card.vala:523
+#: ../src/event-editor/event-editor-main-card.vala:530
 msgid "Hello,"
 msgstr "Dzień dobry,"
 
-#: ../src/event-editor/event-editor-main-card.vala:526
+#: ../src/event-editor/event-editor-main-card.vala:533
 msgid "Attached is an invitation to a new event:"
 msgstr "Załączone jest zaproszenie na nowe wydarzenie:"
 
-#: ../src/event-editor/event-editor-main-card.vala:527
+#: ../src/event-editor/event-editor-main-card.vala:534
 msgid "Attached is an updated event invitation:"
 msgstr "Załączone jest zaktualizowane zaproszenie na wydarzenie:"
 
 #. Date/time of an event
-#: ../src/event-editor/event-editor-main-card.vala:543
+#: ../src/event-editor/event-editor-main-card.vala:550
 #, c-format
 msgid "When: %s"
 msgstr "Kiedy: %s"
 
 #. Location
 #. Location of an event
-#: ../src/event-editor/event-editor-main-card.vala:556
+#: ../src/event-editor/event-editor-main-card.vala:563
 #, c-format
 msgid "Where: %s"
 msgstr "Gdzie: %s"
 
 #. Who organized (scheduled or planned) the event
-#: ../src/event-editor/event-editor-main-card.vala:566
+#: ../src/event-editor/event-editor-main-card.vala:573
 #, c-format
 msgid "Organizer: %s"
 msgstr "Organizator: %s"
 
 #. People attending event
-#: ../src/event-editor/event-editor-main-card.vala:576
+#: ../src/event-editor/event-editor-main-card.vala:583
 #, c-format
 msgid "Guest: %s"
 msgid_plural "Guests: %s"
@@ -1102,35 +1102,35 @@ msgstr[0] "Gość: %s"
 msgstr[1] "Goście: %s"
 msgstr[2] "Goście: %s"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:442
+#: ../src/event-editor/event-editor-recurring-card.vala:443
 msgid "month"
 msgid_plural "months"
 msgstr[0] "miesiąc"
 msgstr[1] "miesiące"
 msgstr[2] "miesięcy"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:446
+#: ../src/event-editor/event-editor-recurring-card.vala:447
 msgid "week"
 msgid_plural "weeks"
 msgstr[0] "%d tydzień"
 msgstr[1] "%d tygodnie"
 msgstr[2] "%d tygodni"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:450
+#: ../src/event-editor/event-editor-recurring-card.vala:451
 msgid "year"
 msgid_plural "years"
 msgstr[0] "%d rok"
 msgstr[1] "%d lata"
 msgstr[2] "%d lat"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:455
+#: ../src/event-editor/event-editor-recurring-card.vala:456
 msgid "day"
 msgid_plural "days"
 msgstr[0] "%d dzień"
 msgstr[1] "%d dni"
 msgstr[2] "%d dni"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:467
+#: ../src/event-editor/event-editor-recurring-card.vala:468
 msgid "event"
 msgid_plural "events"
 msgstr[0] "wydarzenie"
