@@ -81,7 +81,7 @@ msgstr "Kalender för GNOME 3"
 
 #: ../data/california.desktop.in.in.h:3
 msgid "Event;Events;Schedule;"
-msgstr "Event;Events;Schedule;Händelse;Händelser;Schema"
+msgstr "Event;Events;Schedule;Händelse;Händelser;Schema;"
 
 #: ../src/activator/activator.vala:36
 msgid "Web calendar (.ics or webcal:)"
