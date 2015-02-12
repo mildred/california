@@ -102,11 +102,14 @@ public class Date : Unit<Date>, Gee.Comparable<Date>, Gee.Hashable<Date> {
     public Date(DayOfMonth day_of_month, Month month, Year year) throws CalendarError {
         base.uninitialized(DateUnit.DAY);
         
-        gdate.set_dmy(day_of_month.to_date_day(), month.to_date_month(), year.to_date_year());
-        if (!gdate.valid()) {
+        // Check validity before Date.set_dmy(), which will trigger a console assertion on bad dates
+        if (!GLib.Date.valid_dmy(day_of_month.to_date_day(), month.to_date_month(), year.to_date_year())) {
             throw new CalendarError.INVALID("Invalid day/month/year %s/%s/%s", day_of_month.to_string(),
                 month.to_string(), year.to_string());
         }
+        
+        gdate.set_dmy(day_of_month.to_date_day(), month.to_date_month(), year.to_date_year());
+        assert(gdate.valid());
         
         day_of_week = DayOfWeek.from_gdate(gdate);
         this.day_of_month = day_of_month;

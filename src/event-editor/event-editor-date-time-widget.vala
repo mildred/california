@@ -320,9 +320,11 @@ public class DateTimeWidget : Gtk.Box {
     private void on_date_changed() {
         disconnect_widget_signals();
         
-        calendar.day = date.day_of_month.value;
-        calendar.month = date.month.value - 1;
+        // set in y/m/d to avoid GTK+ assertions due to invalid day of months (i.e. setting day to
+        // 30 when month is still February)
         calendar.year = date.year.value;
+        calendar.month = date.month.value - 1;
+        calendar.day = date.day_of_month.value;
         
         connect_widget_signals();
     }
