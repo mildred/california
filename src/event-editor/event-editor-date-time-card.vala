@@ -148,6 +148,9 @@ public class DateTimeCard : Gtk.Box, Toolkit.Card {
         
         all_day_checkbutton.active = (message.exact_time_span == null);
         
+        from_widget.user_modified = false;
+        to_widget.user_modified = false;
+        
         thaw_widget_notifications();
     }
     
@@ -207,16 +210,28 @@ public class DateTimeCard : Gtk.Box, Toolkit.Card {
     
     private void on_date_time_changed(DateTimeWidget source, DateTimeWidget other, int duration_adjustment) {
         // if From is pushed forward beyond To (or To pushed back before From), adjust the other
-        // widget to maintain the user's duration
+        // widget to maintain the user's duration ... to allow for spans to be reduced, don't auto
+        // adjust if the other was manually modified by the user (but at least make sure from is
+        // earlier than to)
         Calendar.ExactTime from_exact_time = from_widget.get_exact_time(Calendar.Timezone.local);
         Calendar.ExactTime to_exact_time = to_widget.get_exact_time(Calendar.Timezone.local);
         if (from_exact_time.compare_to(to_exact_time) >= 0) {
-            Calendar.ExactTime adjusted = source.get_exact_time(Calendar.Timezone.local)
-                .adjust_time(duration_adjustment, Calendar.TimeUnit.SECOND);
+            Calendar.ExactTime adjusted = source.get_exact_time(Calendar.Timezone.local);
+            if (!other.user_modified) {
+                // user hasn't touched the other widget, so maintain duration
+                adjusted = adjusted.adjust_time(duration_adjustment, Calendar.TimeUnit.SECOND);
+            }
             
+            Calendar.Date new_other_date = new Calendar.Date.from_exact_time(adjusted);
+            Calendar.WallTime new_other_wall_time = adjusted.to_wall_time();
+            
+            // to avoid signal cycles, freeze notifications and avoid property change notifications
+            // if new values are the same
             freeze_widget_notifications();
-            other.date = new Calendar.Date.from_exact_time(adjusted);
-            other.wall_time = adjusted.to_wall_time();
+            if (!other.date.equal_to(new_other_date))
+                other.date = new_other_date;
+            if (!other.wall_time.equal_to(new_other_wall_time))
+                other.wall_time = new_other_wall_time;
             thaw_widget_notifications();
         } else if (!source.in_time_edit) {
             // otherwise, this is the new duration to be maintained (but only adjust if not editing

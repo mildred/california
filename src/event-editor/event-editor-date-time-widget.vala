@@ -16,11 +16,15 @@ public class DateTimeWidget : Gtk.Box {
     public const string PROP_FLOOR = "floor";
     public const string PROP_CEILING = "ceiling";
     public const string PROP_OUT_OF_RANGE = "out-of-range";
+    public const string PROP_USER_MODIFIED = "user-modified";
     
     public bool enable_time { get; set; default = true; }
     
     public bool enable_date { get; set; default = true; }
     
+    /**
+     * Indicates one of the time-of-day controls have focus.
+     */
     public bool in_time_edit { get; protected set; default = false; }
     
     public Calendar.Date date { get; set; default = Calendar.System.today; }
@@ -36,6 +40,13 @@ public class DateTimeWidget : Gtk.Box {
      * of {@link floor} and/or {@link ceiling}.
      */
     public bool out_of_range { get; protected set; default = false; }
+    
+    /**
+     * Set when the time or date is updated due to user manipulation of a widget.
+     *
+     * Can be reset any time by the owner of this widget.
+     */
+    public bool user_modified { get; set; default = false; }
     
     [GtkChild]
     private Gtk.Calendar calendar;
@@ -167,22 +178,32 @@ public class DateTimeWidget : Gtk.Box {
         button_connector.clicked.connect(on_time_adjustment_clicked);
         
         calendar.day_selected.connect(on_calendar_day_selected);
+        calendar.day_selected.connect(on_user_modified);
         calendar.month_changed.connect(on_calendar_month_or_year_changed);
         calendar.next_year.connect(on_calendar_month_or_year_changed);
         calendar.prev_year.connect(on_calendar_month_or_year_changed);
         hour_entry.changed.connect(on_time_entry_changed);
+        hour_entry.changed.connect(on_user_modified);
         minutes_entry.changed.connect(on_time_entry_changed);
+        minutes_entry.changed.connect(on_user_modified);
     }
     
     private void disconnect_widget_signals() {
         button_connector.clicked.disconnect(on_time_adjustment_clicked);
         
         calendar.day_selected.disconnect(on_calendar_day_selected);
+        calendar.day_selected.disconnect(on_user_modified);
         calendar.month_changed.disconnect(on_calendar_month_or_year_changed);
         calendar.next_year.disconnect(on_calendar_month_or_year_changed);
         calendar.prev_year.disconnect(on_calendar_month_or_year_changed);
         hour_entry.changed.disconnect(on_time_entry_changed);
+        hour_entry.changed.disconnect(on_user_modified);
         minutes_entry.changed.disconnect(on_time_entry_changed);
+        minutes_entry.changed.disconnect(on_user_modified);
+    }
+    
+    private void on_user_modified() {
+        user_modified = true;
     }
     
     private bool on_time_adjustment_clicked(Toolkit.ButtonEvent details) {
@@ -223,6 +244,9 @@ public class DateTimeWidget : Gtk.Box {
                 date = new_date;
             thaw_notify();
         }
+        
+        // treat all valid changing events off the ButtonConnector as a user modification
+        on_user_modified();
         
         return Toolkit.STOP;
     }
