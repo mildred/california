@@ -2,18 +2,18 @@
 # Copyright (C) 2014. Free Software Foundation, Inc.
 # This file is distributed under the same license as the california package.
 #
-# Balázs Úr <urbalazs at gmail dot com>, 2014.
 # Attila Hammer <hammera at pickup dot hu>, 2014.
+# Balázs Úr <urbalazs at gmail dot com>, 2014, 2015.
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-12-08 23:13+0000\n"
-"PO-Revision-Date: 2014-12-23 17:16+0100\n"
+"POT-Creation-Date: 2015-02-06 20:51+0000\n"
+"PO-Revision-Date: 2015-02-15 14:42+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
-"Language-Team: Hungarian <gnome-hu-list@gnome.org>\n"
+"Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -132,7 +132,7 @@ msgstr "Hitelesítve"
 
 #. "None" as in "no people"
 #: ../src/activator/google/google-calendar-list-pane.vala:65
-#: ../src/event-editor/event-editor-main-card.vala:194
+#: ../src/event-editor/event-editor-main-card.vala:201
 msgid "None"
 msgstr "Nincs"
 
@@ -148,8 +148,9 @@ msgid "Unable to subscribe to %s: %s"
 msgstr "Nem sikerült feliratkozni erre: %s: %s"
 
 #: ../src/application/california-application.vala:21
-msgid "Copyright 2014 Yorba Foundation"
-msgstr "Copyright 2014 Yorba Foundation"
+#| msgid "Copyright 2014 Yorba Foundation"
+msgid "Copyright 2014-2015 Yorba Foundation"
+msgstr "Copyright 2014-2015 Yorba Foundation"
 
 #: ../src/application/california-application.vala:23
 msgid "Visit California's home page"
@@ -382,7 +383,6 @@ msgstr "ötödik vasárnap"
 #. A span of time followed by the timezone, i.e. "3:30pm to 4:30pm EST"
 #: ../src/calendar/calendar-exact-time-span.vala:187
 #, c-format
-#| msgid "%s to %s"
 msgid "%s to %s %s"
 msgstr "%s - %s %s"
 
@@ -390,7 +390,6 @@ msgstr "%s - %s %s"
 #. "12:30AM EDT to 2:30PM EST"
 #: ../src/calendar/calendar-exact-time-span.vala:192
 #, c-format
-#| msgid "%s, %s to %s, %s"
 msgid "%s %s to %s %s"
 msgstr "%s %s - %s %s"
 
@@ -399,9 +398,6 @@ msgstr "%s %s - %s %s"
 #. Date and time, i.e. "September 13, 4:30pm"
 #: ../src/calendar/calendar-exact-time-span.vala:200
 #, c-format
-#| msgid ""
-#| "%s, %s\n"
-#| "%s, %s"
 msgid "%s, %s"
 msgstr "%s, %s"
 
@@ -427,9 +423,6 @@ msgstr ""
 #. 13 January 2013, 6:30am PST
 #: ../src/calendar/calendar-exact-time-span.vala:221
 #, c-format
-#| msgid ""
-#| "%s, %s\n"
-#| "%s, %s"
 msgid ""
 "%s, %s %s\n"
 "%s, %s %s"
@@ -441,7 +434,6 @@ msgstr ""
 #. 12 January 2012, 3:30pm PST to 13 January 2013, 6:30am PST
 #: ../src/calendar/calendar-exact-time-span.vala:233
 #, c-format
-#| msgid "%s, %s to %s, %s"
 msgid "%s, %s %s to %s, %s %s"
 msgstr "%s, %s %s - %s, %s %s"
 
@@ -948,8 +940,8 @@ msgstr "Meghívás küldése"
 msgid "Don't send invite"
 msgstr "Ne küldjön meghívást"
 
-#: ../src/event-editor/event-editor-main-card.vala:73
-#: ../src/event-editor/event-editor-main-card.vala:76
+#: ../src/event-editor/event-editor-main-card.vala:74
+#: ../src/event-editor/event-editor-main-card.vala:77
 #: ../src/host/host-show-event.vala:92 ../src/host/host-show-event.vala:299
 #: ../src/rc/activator-generic-subscribe.ui.h:5
 #: ../src/rc/activator-google-authenticating-pane.ui.h:1
@@ -964,54 +956,54 @@ msgstr "Ne küldjön meghívást"
 msgid "_Cancel"
 msgstr "Mé_gse"
 
-#: ../src/event-editor/event-editor-main-card.vala:74
+#: ../src/event-editor/event-editor-main-card.vala:75
 msgid "Save A_ll Events"
 msgstr "Min_den esemény mentése"
 
-#: ../src/event-editor/event-editor-main-card.vala:75
+#: ../src/event-editor/event-editor-main-card.vala:76
 msgid "Save _This Event"
 msgstr "_Ezen esemény mentése"
 
-#: ../src/event-editor/event-editor-main-card.vala:205
+#: ../src/event-editor/event-editor-main-card.vala:212
 msgid "It's complicated…"
 msgstr "Ez bonyolult…"
 
-#: ../src/event-editor/event-editor-main-card.vala:208
+#: ../src/event-editor/event-editor-main-card.vala:215
 msgid "Never"
 msgstr "Soha"
 
-#: ../src/event-editor/event-editor-main-card.vala:210
+#: ../src/event-editor/event-editor-main-card.vala:217
 msgid "_Save"
 msgstr "_Mentés"
 
-#: ../src/event-editor/event-editor-main-card.vala:210
+#: ../src/event-editor/event-editor-main-card.vala:217
 msgid "C_reate"
 msgstr "_Létrehozás"
 
 #. Email address followed by common separator, i.e. "alice@example.com, bob@example.com"
 #. Email separator, i.e. "alice@example.com, bob@example.com"
-#: ../src/event-editor/event-editor-main-card.vala:243
-#: ../src/event-editor/event-editor-main-card.vala:598
+#: ../src/event-editor/event-editor-main-card.vala:250
+#: ../src/event-editor/event-editor-main-card.vala:605
 #, c-format
 msgid "%s, "
 msgstr "%s, "
 
-#: ../src/event-editor/event-editor-main-card.vala:363
-#: ../src/host/host-quick-create-event.vala:156
+#: ../src/event-editor/event-editor-main-card.vala:370
+#: ../src/host/host-quick-create-event.vala:171
 msgid "Unable to create event: calendar must be specified"
 msgstr "Nem sikerült létrehozni az eseményt: meg kell adni egy naptárat"
 
-#: ../src/event-editor/event-editor-main-card.vala:384
-#: ../src/host/host-quick-create-event.vala:175
+#: ../src/event-editor/event-editor-main-card.vala:391
+#: ../src/host/host-quick-create-event.vala:190
 #, c-format
 msgid "Unable to create event: %s"
 msgstr "Nem sikerült létrehozni az eseményt: %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:389
+#: ../src/event-editor/event-editor-main-card.vala:396
 msgid "Unable to update event: calendar must be specified"
 msgstr "Nem sikerült frissíteni az eseményt: meg kell adni egy naptárat"
 
-#: ../src/event-editor/event-editor-main-card.vala:438
+#: ../src/event-editor/event-editor-main-card.vala:445
 #, c-format
 msgid "Unable to update event: %s"
 msgstr "Nem sikerült frissíteni az eseményt: %s"
@@ -1019,118 +1011,114 @@ msgstr "Nem sikerült frissíteni az eseményt: %s"
 #. "invite.ics" is the name of the file for an event invite delivered via email ...
 #. please translate but keep the .ics extension, as that's common to most calendar
 #. applications
-#: ../src/event-editor/event-editor-main-card.vala:467
+#: ../src/event-editor/event-editor-main-card.vala:474
 msgid "invite.ics"
 msgstr "meghivas.ics"
 
-#: ../src/event-editor/event-editor-main-card.vala:474
+#: ../src/event-editor/event-editor-main-card.vala:481
 #, c-format
-#| msgid "Unable to subscribe to %s: %s"
 msgid "Unable to export .ics to %s: %s"
 msgstr "Nem lehet exportálni az .ics fájlt ide: %s: %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:494
+#: ../src/event-editor/event-editor-main-card.vala:501
 msgid "Event invitation"
 msgstr "Esemény meghívás"
 
-#: ../src/event-editor/event-editor-main-card.vala:494
+#: ../src/event-editor/event-editor-main-card.vala:501
 msgid "Updated event invitation"
 msgstr "Frissített esemény meghívás"
 
-#: ../src/event-editor/event-editor-main-card.vala:496
+#: ../src/event-editor/event-editor-main-card.vala:503
 #, c-format
 msgid "Invitation: %s"
 msgstr "Meghívás: %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:496
+#: ../src/event-editor/event-editor-main-card.vala:503
 #, c-format
 msgid "Updated invitation: %s"
 msgstr "Frissített meghívás: %s"
 
 #. Invitation: <summary> at <location>
-#: ../src/event-editor/event-editor-main-card.vala:499
+#: ../src/event-editor/event-editor-main-card.vala:506
 #, c-format
 msgid "Invitation: %s at %s"
 msgstr "Meghívás: %s, ide: %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:499
+#: ../src/event-editor/event-editor-main-card.vala:506
 #, c-format
 msgid "Updated invitation: %s at %s"
 msgstr "Frissített meghívás: %s, ide: %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:515
+#: ../src/event-editor/event-editor-main-card.vala:522
 #, c-format
-#| msgid "Unable to create event: %s"
 msgid "Unable to launch mail client: %s"
 msgstr "Nem lehet elindítani a levelezőklienst: %s"
 
 #. Salutations for an email
-#: ../src/event-editor/event-editor-main-card.vala:523
+#: ../src/event-editor/event-editor-main-card.vala:530
 msgid "Hello,"
 msgstr "Szia!"
 
-#: ../src/event-editor/event-editor-main-card.vala:526
+#: ../src/event-editor/event-editor-main-card.vala:533
 msgid "Attached is an invitation to a new event:"
 msgstr "A melléklet egy új esemény meghívója:"
 
-#: ../src/event-editor/event-editor-main-card.vala:527
+#: ../src/event-editor/event-editor-main-card.vala:534
 msgid "Attached is an updated event invitation:"
 msgstr "A melléklet egy frissített esemény meghívója:"
 
 #. Date/time of an event
-#: ../src/event-editor/event-editor-main-card.vala:543
+#: ../src/event-editor/event-editor-main-card.vala:550
 #, c-format
-#| msgid "When"
 msgid "When: %s"
 msgstr "Mikor: %s"
 
 #. Location
 #. Location of an event
-#: ../src/event-editor/event-editor-main-card.vala:556
+#: ../src/event-editor/event-editor-main-card.vala:563
 #, c-format
-#| msgid "Where"
 msgid "Where: %s"
 msgstr "Hol: %s"
 
 #. Who organized (scheduled or planned) the event
-#: ../src/event-editor/event-editor-main-card.vala:566
+#: ../src/event-editor/event-editor-main-card.vala:573
 #, c-format
 msgid "Organizer: %s"
 msgstr "Szervező: %s"
 
 #. People attending event
-#: ../src/event-editor/event-editor-main-card.vala:576
+#: ../src/event-editor/event-editor-main-card.vala:583
 #, c-format
 msgid "Guest: %s"
 msgid_plural "Guests: %s"
 msgstr[0] "Vendég: %s"
 msgstr[1] "Vendégek: %s"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:442
+#: ../src/event-editor/event-editor-recurring-card.vala:443
 msgid "month"
 msgid_plural "months"
 msgstr[0] "hónap"
 msgstr[1] "hónap"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:446
+#: ../src/event-editor/event-editor-recurring-card.vala:447
 msgid "week"
 msgid_plural "weeks"
 msgstr[0] "hét"
 msgstr[1] "hét"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:450
+#: ../src/event-editor/event-editor-recurring-card.vala:451
 msgid "year"
 msgid_plural "years"
 msgstr[0] "év"
 msgstr[1] "év"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:455
+#: ../src/event-editor/event-editor-recurring-card.vala:456
 msgid "day"
 msgid_plural "days"
 msgstr[0] "nap"
 msgstr[1] "nap"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:467
+#: ../src/event-editor/event-editor-recurring-card.vala:468
 msgid "event"
 msgid_plural "events"
 msgstr[0] "esemény"
@@ -1201,7 +1189,6 @@ msgid "Edit event"
 msgstr "Esemény szerkesztése"
 
 #: ../src/host/host-show-event.vala:99 ../src/host/host-show-event.vala:297
-#| msgid "Edit event details"
 msgid "Export event as .ics"
 msgstr "Esemény exportálása .ics fájlként"
 
@@ -1224,7 +1211,6 @@ msgstr[0] "Vendég"
 msgstr[1] "Vendégek"
 
 #: ../src/host/host-show-event.vala:300
-#| msgid "_Import"
 msgid "E_xport"
 msgstr "E_xportálás"
 
@@ -1232,19 +1218,15 @@ msgstr "E_xportálás"
 #. should always be present no matter the translation, as many systems rely on it to detect
 #. the file type
 #: ../src/host/host-show-event.vala:304
-#| msgid "event"
-#| msgid_plural "events"
 msgid "event.ics"
 msgstr "esemeny.ics"
 
 #: ../src/host/host-show-event.vala:311
-#| msgid "Create event"
 msgid "Export _master event"
 msgstr "_Mesteresemény exportálása"
 
 #: ../src/host/host-show-event.vala:333
 #, c-format
-#| msgid "Unable to edit event: %s"
 msgid "Unable to export event as file: %s"
 msgstr "Nem lehet exportálni az eseményt fájlként: %s"
 
@@ -1262,7 +1244,6 @@ msgid "Calendar is read-only"
 msgstr "A naptár csak olvasható"
 
 #: ../src/manager/manager-calendar-list-item.vala:104
-#| msgid "Calendar is read-only"
 msgid "Calendar is default"
 msgstr "A naptár alapértelmezett"
 
@@ -1309,8 +1290,6 @@ msgid "Agenda"
 msgstr "Napirend"
 
 #: ../src/view/agenda/agenda-event-row.vala:109
-#| msgid "%d day"
-#| msgid_plural "%d days"
 msgid "All day"
 msgstr "Egész nap"
 
@@ -1439,7 +1418,6 @@ msgid "A_dd Guest"
 msgstr "Vendég _hozzáadása"
 
 #: ../src/rc/event-editor-attendees-card.ui.h:8
-#| msgid "_Remove"
 msgid "_Remove Guest"
 msgstr "Vendég _eltávolítása"
 
