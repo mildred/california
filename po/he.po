@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-11 12:56+0200\n"
-"PO-Revision-Date: 2014-12-11 12:57+0200\n"
-"Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
+"POT-Creation-Date: 2015-02-17 01:56+0200\n"
+"PO-Revision-Date: 2015-02-17 01:57+0200\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -126,7 +126,7 @@ msgstr "מאומת"
 
 #. "None" as in "no people"
 #: ../src/activator/google/google-calendar-list-pane.vala:65
-#: ../src/event-editor/event-editor-main-card.vala:194
+#: ../src/event-editor/event-editor-main-card.vala:201
 msgid "None"
 msgstr "אף אחד"
 
@@ -142,8 +142,8 @@ msgid "Unable to subscribe to %s: %s"
 msgstr "לא ניתן להירשם אל %s: ‏%s"
 
 #: ../src/application/california-application.vala:21
-msgid "Copyright 2014 Yorba Foundation"
-msgstr "כל הזכויות שמורות 2014 Yorba Foundation"
+msgid "Copyright 2014-2015 Yorba Foundation"
+msgstr "כל הזכויות שמורות 2014-2015 Yorba Foundation"
 
 #: ../src/application/california-application.vala:23
 msgid "Visit California's home page"
@@ -200,7 +200,7 @@ msgstr "Unknown options: %s\n"
 msgid "%s to %s"
 msgstr "%s עד %s"
 
-#: ../src/calendar/calendar-date.vala:384
+#: ../src/calendar/calendar-date.vala:387
 msgid "Today"
 msgstr "היום"
 
@@ -940,8 +940,8 @@ msgstr "שליחת הזמנה"
 msgid "Don't send invite"
 msgstr "לא לשלוח הזמנה"
 
-#: ../src/event-editor/event-editor-main-card.vala:73
-#: ../src/event-editor/event-editor-main-card.vala:76
+#: ../src/event-editor/event-editor-main-card.vala:74
+#: ../src/event-editor/event-editor-main-card.vala:77
 #: ../src/host/host-show-event.vala:92 ../src/host/host-show-event.vala:299
 #: ../src/rc/activator-generic-subscribe.ui.h:5
 #: ../src/rc/activator-google-authenticating-pane.ui.h:1
@@ -956,54 +956,54 @@ msgstr "לא לשלוח הזמנה"
 msgid "_Cancel"
 msgstr "_ביטול"
 
-#: ../src/event-editor/event-editor-main-card.vala:74
+#: ../src/event-editor/event-editor-main-card.vala:75
 msgid "Save A_ll Events"
 msgstr "שמירת _כל האירועים"
 
-#: ../src/event-editor/event-editor-main-card.vala:75
+#: ../src/event-editor/event-editor-main-card.vala:76
 msgid "Save _This Event"
 msgstr "שמירת אירוע _זה"
 
-#: ../src/event-editor/event-editor-main-card.vala:205
+#: ../src/event-editor/event-editor-main-card.vala:212
 msgid "It's complicated…"
 msgstr "זה מסובך…"
 
-#: ../src/event-editor/event-editor-main-card.vala:208
+#: ../src/event-editor/event-editor-main-card.vala:215
 msgid "Never"
 msgstr "לעולם לא"
 
-#: ../src/event-editor/event-editor-main-card.vala:210
+#: ../src/event-editor/event-editor-main-card.vala:217
 msgid "_Save"
 msgstr "_שמירה"
 
-#: ../src/event-editor/event-editor-main-card.vala:210
+#: ../src/event-editor/event-editor-main-card.vala:217
 msgid "C_reate"
 msgstr "_יצירה"
 
 #. Email address followed by common separator, i.e. "alice@example.com, bob@example.com"
 #. Email separator, i.e. "alice@example.com, bob@example.com"
-#: ../src/event-editor/event-editor-main-card.vala:243
-#: ../src/event-editor/event-editor-main-card.vala:598
+#: ../src/event-editor/event-editor-main-card.vala:250
+#: ../src/event-editor/event-editor-main-card.vala:605
 #, c-format
 msgid "%s, "
 msgstr "%s, "
 
-#: ../src/event-editor/event-editor-main-card.vala:363
-#: ../src/host/host-quick-create-event.vala:156
+#: ../src/event-editor/event-editor-main-card.vala:370
+#: ../src/host/host-quick-create-event.vala:171
 msgid "Unable to create event: calendar must be specified"
 msgstr "לא ניתן ליצור אירוע: יש לציין לוח שנה"
 
-#: ../src/event-editor/event-editor-main-card.vala:384
-#: ../src/host/host-quick-create-event.vala:175
+#: ../src/event-editor/event-editor-main-card.vala:391
+#: ../src/host/host-quick-create-event.vala:190
 #, c-format
 msgid "Unable to create event: %s"
 msgstr "לא ניתן ליצור את האירוע: %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:389
+#: ../src/event-editor/event-editor-main-card.vala:396
 msgid "Unable to update event: calendar must be specified"
 msgstr "לא ניתן לעדכן אירוע: יש לציין לוח שנה"
 
-#: ../src/event-editor/event-editor-main-card.vala:438
+#: ../src/event-editor/event-editor-main-card.vala:445
 #, c-format
 msgid "Unable to update event: %s"
 msgstr "לא ניתן לעדכן את האירוע: %s"
@@ -1011,83 +1011,83 @@ msgstr "לא ניתן לעדכן את האירוע: %s"
 #. "invite.ics" is the name of the file for an event invite delivered via email ...
 #. please translate but keep the .ics extension, as that's common to most calendar
 #. applications
-#: ../src/event-editor/event-editor-main-card.vala:467
+#: ../src/event-editor/event-editor-main-card.vala:474
 msgid "invite.ics"
 msgstr "הזמנה.ics"
 
-#: ../src/event-editor/event-editor-main-card.vala:474
+#: ../src/event-editor/event-editor-main-card.vala:481
 #, c-format
 msgid "Unable to export .ics to %s: %s"
 msgstr "לא ניתן לייצא ‎.ics ל־%s: ‏%s"
 
-#: ../src/event-editor/event-editor-main-card.vala:494
+#: ../src/event-editor/event-editor-main-card.vala:501
 msgid "Event invitation"
 msgstr "הזמנה לאירוע"
 
-#: ../src/event-editor/event-editor-main-card.vala:494
+#: ../src/event-editor/event-editor-main-card.vala:501
 msgid "Updated event invitation"
 msgstr "עדכון הזמנה לאירוע"
 
-#: ../src/event-editor/event-editor-main-card.vala:496
+#: ../src/event-editor/event-editor-main-card.vala:503
 #, c-format
 msgid "Invitation: %s"
 msgstr "הזמנה: %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:496
+#: ../src/event-editor/event-editor-main-card.vala:503
 #, c-format
 msgid "Updated invitation: %s"
 msgstr "עדכון הזמנה: %s"
 
 #. Invitation: <summary> at <location>
-#: ../src/event-editor/event-editor-main-card.vala:499
+#: ../src/event-editor/event-editor-main-card.vala:506
 #, c-format
 msgid "Invitation: %s at %s"
 msgstr "הזמנה: %s במקום %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:499
+#: ../src/event-editor/event-editor-main-card.vala:506
 #, c-format
 msgid "Updated invitation: %s at %s"
 msgstr "עדכון הזמנה: %s במקום %s"
 
-#: ../src/event-editor/event-editor-main-card.vala:515
+#: ../src/event-editor/event-editor-main-card.vala:522
 #, c-format
 msgid "Unable to launch mail client: %s"
 msgstr "לא ניתן לשגר לקוח דוא״ל: %s"
 
 #. Salutations for an email
-#: ../src/event-editor/event-editor-main-card.vala:523
+#: ../src/event-editor/event-editor-main-card.vala:530
 msgid "Hello,"
 msgstr "שלום,"
 
-#: ../src/event-editor/event-editor-main-card.vala:526
+#: ../src/event-editor/event-editor-main-card.vala:533
 msgid "Attached is an invitation to a new event:"
 msgstr "מצורפת הזמנה לאירוע חדש:"
 
-#: ../src/event-editor/event-editor-main-card.vala:527
+#: ../src/event-editor/event-editor-main-card.vala:534
 msgid "Attached is an updated event invitation:"
 msgstr "מצורפת הזמנה מעודכנת לאירוע:"
 
 #. Date/time of an event
-#: ../src/event-editor/event-editor-main-card.vala:543
+#: ../src/event-editor/event-editor-main-card.vala:550
 #, c-format
 msgid "When: %s"
 msgstr "מתי: %s"
 
 #. Location
 #. Location of an event
-#: ../src/event-editor/event-editor-main-card.vala:556
+#: ../src/event-editor/event-editor-main-card.vala:563
 #, c-format
 msgid "Where: %s"
 msgstr "איפה: %s"
 
 #. Who organized (scheduled or planned) the event
-#: ../src/event-editor/event-editor-main-card.vala:566
+#: ../src/event-editor/event-editor-main-card.vala:573
 #, c-format
 msgid "Organizer: %s"
 msgstr "מארגן: %s"
 
 #. People attending event
-#: ../src/event-editor/event-editor-main-card.vala:576
+#: ../src/event-editor/event-editor-main-card.vala:583
 #, c-format
 msgid "Guest: %s"
 msgid_plural "Guests: %s"
@@ -1095,35 +1095,35 @@ msgstr[0] "אורח: %s"
 msgstr[1] "אורחים: %s"
 msgstr[2] "אורחים: %s"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:442
+#: ../src/event-editor/event-editor-recurring-card.vala:443
 msgid "month"
 msgid_plural "months"
 msgstr[0] "חודש"
 msgstr[1] "חודשים"
 msgstr[2] "חודשים"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:446
+#: ../src/event-editor/event-editor-recurring-card.vala:447
 msgid "week"
 msgid_plural "weeks"
 msgstr[0] "שבוע"
 msgstr[1] "שבועות"
 msgstr[2] "שבועות"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:450
+#: ../src/event-editor/event-editor-recurring-card.vala:451
 msgid "year"
 msgid_plural "years"
 msgstr[0] "שנה"
 msgstr[1] "שנים"
 msgstr[2] "שנים"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:455
+#: ../src/event-editor/event-editor-recurring-card.vala:456
 msgid "day"
 msgid_plural "days"
 msgstr[0] "יום"
 msgstr[1] "ימים"
 msgstr[2] "ימים"
 
-#: ../src/event-editor/event-editor-recurring-card.vala:467
+#: ../src/event-editor/event-editor-recurring-card.vala:468
 msgid "event"
 msgid_plural "events"
 msgstr[0] "אירוע"
