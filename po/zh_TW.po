@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2015-02-23 04:03+0000\n"
-"PO-Revision-Date: 2015-02-23 21:06+0800\n"
+"PO-Revision-Date: 2015-02-28 17:50+0800\n"
 "Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) <chinese-l10n@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -31,6 +31,10 @@ msgid ""
 "Quick Add feature which allows you to type the event details and have them "
 "added to your calendar without filling out a form."
 msgstr ""
+"California 是個專為 GNOME 3 設計的全新行事曆程式，可讓您快速且輕鬆地處理行事"
+"曆。它提供月覽、週覽等檢視行程的方式，並且可透過簡單的方法加入與更新行程，其"
+"中包括「快速加入」功能，讓你可以輸入行程的細節就將之加入行事曆中，卻不必填寫"
+"任何表單。"
 
 #: ../data/california.appdata.xml.in.h:3
 msgid ""
@@ -47,9 +51,8 @@ msgid "Month and week view of your schedule"
 msgstr "您行程規劃的月覽或週覽"
 
 #: ../data/california.appdata.xml.in.h:6
-#, fuzzy
 msgid "Quick setup (if any is required at all)"
-msgstr "快速設置 (如果)"
+msgstr "快速設置 (如果需要任何的話)"
 
 #: ../data/california.appdata.xml.in.h:7
 msgid "Integrates with Evolution Data Server"
@@ -228,160 +231,160 @@ msgstr "第五個週一"
 
 #: ../src/calendar/calendar-day-of-week.vala:61
 msgid "last Tuesday"
-msgstr ""
+msgstr "最後的週二"
 
 #: ../src/calendar/calendar-day-of-week.vala:61
 msgid "first Tuesday"
-msgstr ""
+msgstr "第一個週二"
 
 #: ../src/calendar/calendar-day-of-week.vala:61
 msgid "second Tuesday"
-msgstr ""
+msgstr "第二個週二"
 
 #: ../src/calendar/calendar-day-of-week.vala:61
 msgid "third Tuesday"
-msgstr ""
+msgstr "第三個週二"
 
 #: ../src/calendar/calendar-day-of-week.vala:61
 msgid "fourth Tuesday"
-msgstr ""
+msgstr "第四個週二"
 
 #: ../src/calendar/calendar-day-of-week.vala:61
 msgid "fifth Tuesday"
-msgstr ""
+msgstr "第五個週二"
 
 #: ../src/calendar/calendar-day-of-week.vala:62
 msgid "last Wednesday"
-msgstr ""
+msgstr "最後的週三"
 
 #: ../src/calendar/calendar-day-of-week.vala:62
 msgid "first Wednesday"
-msgstr ""
+msgstr "第一個週三"
 
 #: ../src/calendar/calendar-day-of-week.vala:62
 msgid "second Wednesday"
-msgstr ""
+msgstr "第二個週三"
 
 #: ../src/calendar/calendar-day-of-week.vala:62
 msgid "third Wednesday"
-msgstr ""
+msgstr "第三個週三"
 
 #: ../src/calendar/calendar-day-of-week.vala:62
 msgid "fourth Wednesday"
-msgstr ""
+msgstr "第四個週三"
 
 #: ../src/calendar/calendar-day-of-week.vala:62
 msgid "fifth Wednesday"
-msgstr ""
+msgstr "第五個週三"
 
 #: ../src/calendar/calendar-day-of-week.vala:63
 msgid "last Thursday"
-msgstr ""
+msgstr "最後的週四"
 
 #: ../src/calendar/calendar-day-of-week.vala:63
 msgid "first Thursday"
-msgstr ""
+msgstr "第一個週四"
 
 #: ../src/calendar/calendar-day-of-week.vala:63
 msgid "second Thursday"
-msgstr ""
+msgstr "第二個週四"
 
 #: ../src/calendar/calendar-day-of-week.vala:63
 msgid "third Thursday"
-msgstr ""
+msgstr "第三個週四"
 
 #: ../src/calendar/calendar-day-of-week.vala:63
 msgid "fourth Thursday"
-msgstr ""
+msgstr "第四個週四"
 
 #: ../src/calendar/calendar-day-of-week.vala:63
 msgid "fifth Thursday"
-msgstr ""
+msgstr "第五個週四"
 
 #: ../src/calendar/calendar-day-of-week.vala:64
 msgid "last Friday"
-msgstr ""
+msgstr "最後的週五"
 
 #: ../src/calendar/calendar-day-of-week.vala:64
 msgid "first Friday"
-msgstr ""
+msgstr "第一個週五"
 
 #: ../src/calendar/calendar-day-of-week.vala:64
 msgid "second Friday"
-msgstr ""
+msgstr "第二個週五"
 
 #: ../src/calendar/calendar-day-of-week.vala:64
 msgid "third Friday"
-msgstr ""
+msgstr "第三個週五"
 
 #: ../src/calendar/calendar-day-of-week.vala:64
 msgid "fourth Friday"
-msgstr ""
+msgstr "第四個週五"
 
 #: ../src/calendar/calendar-day-of-week.vala:64
 msgid "fifth Friday"
-msgstr ""
+msgstr "第五個週五"
 
 #: ../src/calendar/calendar-day-of-week.vala:65
 msgid "last Saturday"
-msgstr ""
+msgstr "最後的週六"
 
 #: ../src/calendar/calendar-day-of-week.vala:65
 msgid "first Saturday"
-msgstr ""
+msgstr "第一個週六"
 
 #: ../src/calendar/calendar-day-of-week.vala:65
 msgid "second Saturday"
-msgstr ""
+msgstr "第二個週六"
 
 #: ../src/calendar/calendar-day-of-week.vala:65
 msgid "third Saturday"
-msgstr ""
+msgstr "第三個週六"
 
 #: ../src/calendar/calendar-day-of-week.vala:65
 msgid "fourth Saturday"
-msgstr ""
+msgstr "第四個週六"
 
 #: ../src/calendar/calendar-day-of-week.vala:65
 msgid "fifth Saturday"
-msgstr ""
+msgstr "第五個週六"
 
 #: ../src/calendar/calendar-day-of-week.vala:66
 msgid "last Sunday"
-msgstr ""
+msgstr "最後的週日"
 
 #: ../src/calendar/calendar-day-of-week.vala:66
 msgid "first Sunday"
-msgstr ""
+msgstr "第一個週日"
 
 #: ../src/calendar/calendar-day-of-week.vala:66
 msgid "second Sunday"
-msgstr ""
+msgstr "第二個週日"
 
 #: ../src/calendar/calendar-day-of-week.vala:66
 msgid "third Sunday"
-msgstr ""
+msgstr "第三個週日"
 
 #: ../src/calendar/calendar-day-of-week.vala:66
 msgid "fourth Sunday"
-msgstr ""
+msgstr "第四個週日"
 
 #: ../src/calendar/calendar-day-of-week.vala:66
 msgid "fifth Sunday"
-msgstr ""
+msgstr "第五個週日"
 
 #. A span of time followed by the timezone, i.e. "3:30pm to 4:30pm EST"
 #: ../src/calendar/calendar-exact-time-span.vala:187
 #, c-format
 msgid "%s to %s %s"
-msgstr ""
+msgstr "%s 到 %s %s"
 
 #. A span of time with each timezone's indicated, i.e.
 #. "12:30AM EDT to 2:30PM EST"
 #: ../src/calendar/calendar-exact-time-span.vala:192
 #, c-format
 msgid "%s %s to %s %s"
-msgstr ""
+msgstr "%s %s 到 %s %s"
 
 #. Single-day timed event, print "<full date>, <full start time> to <full end time>",
 #. including year if not current year
@@ -389,7 +392,7 @@ msgstr ""
 #: ../src/calendar/calendar-exact-time-span.vala:200
 #, c-format
 msgid "%s, %s"
-msgstr ""
+msgstr "%s %s"
 
 #. Multi-day timed event, print "<full time>, <full date>" on both lines,
 #. including year if either not current year
@@ -402,6 +405,8 @@ msgid ""
 "%s, %s\n"
 "%s, %s"
 msgstr ""
+"%s %s\n"
+"%s %s"
 
 #. Multi-day timed event, print "<full time>, <full date>" on both lines,
 #. including year if either not current year,
@@ -415,55 +420,57 @@ msgid ""
 "%s, %s %s\n"
 "%s, %s %s"
 msgstr ""
+"%s %s %s\n"
+"%s %s %s"
 
 #. Prints full time and date strings on a single line with timezone, i.e.:
 #. 12 January 2012, 3:30pm PST to 13 January 2013, 6:30am PST
 #: ../src/calendar/calendar-exact-time-span.vala:233
 #, c-format
 msgid "%s, %s %s to %s, %s %s"
-msgstr ""
+msgstr "%s %s %s 到 %s %s %s"
 
 #. Prints full time and date strings on a single line, i.e.:
 #. 12 January 2012, 3:30pm to 13 January 2013, 6:30am
 #: ../src/calendar/calendar-exact-time-span.vala:244
 #, c-format
 msgid "%s, %s to %s, %s"
-msgstr ""
+msgstr "%s %s 到 %s %s"
 
 #. The month and year according to locale preferences, i.e. "March 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
 #: ../src/calendar/calendar.vala:114
 #, no-c-format
 msgid "%B %Y"
-msgstr ""
+msgstr "%Y年%m月"
 
 #. The abbreviated month and year according to locale preferences, i.e. "Mar 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
 #: ../src/calendar/calendar.vala:119
 #, no-c-format
 msgid "%b %Y"
-msgstr ""
+msgstr "%Y年%b"
 
 #. A "pretty" date according to locale preferences, i.e. "Monday, March 10, 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
 #: ../src/calendar/calendar.vala:124
 #, no-c-format
 msgid "%A, %B %e, %Y"
-msgstr ""
+msgstr "%Y年%m月%e日%A"
 
 #. A "pretty" date with no year according to locale preferences, i.e. "Monday, March 10"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
 #: ../src/calendar/calendar.vala:129
 #, no-c-format
 msgid "%A, %B %e"
-msgstr ""
+msgstr "%m月%e%A"
 
 #. A "pretty" date abbreviated according to locale preferences, i.e. "Mon, Mar 10, 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
 #: ../src/calendar/calendar.vala:134
 #, no-c-format
 msgid "%a, %b %e, %Y"
-msgstr ""
+msgstr "%Y年%b%e (%a)"
 
 #. A "pretty" date abbreviated and no year according to locale preferences, i.e.
 #. "Mon, Mar 10"
@@ -471,14 +478,14 @@ msgstr ""
 #: ../src/calendar/calendar.vala:140
 #, no-c-format
 msgid "%a, %b %e"
-msgstr ""
+msgstr "%b%e (%a)"
 
 #. A "pretty" date with no day of week according to locale preferences, i.e. "March 10, 2014"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
 #: ../src/calendar/calendar.vala:145
 #, no-c-format
 msgid "%B %e, %Y"
-msgstr ""
+msgstr "%Y年%m月%d日"
 
 #. A "pretty" date abbreviated with no day of week according to locale preferences,
 #. i.e. "Mar 10, 2014"
@@ -486,14 +493,14 @@ msgstr ""
 #: ../src/calendar/calendar.vala:151
 #, no-c-format
 msgid "%b %e, %Y"
-msgstr ""
+msgstr "%Y年%b%e"
 
 #. A "pretty" date with no day of week or year according to locale preferences, i.e. "March 10"
 #. See http://www.cplusplus.com/reference/ctime/strftime/ for format reference
 #: ../src/calendar/calendar.vala:156
 #, no-c-format
 msgid "%B %e"
-msgstr ""
+msgstr "%m月%d日"
 
 #. A "pretty" date abbreviated with no day of week or year according to locale preferences,
 #. i.e. "Mar 10"
@@ -501,7 +508,7 @@ msgstr ""
 #: ../src/calendar/calendar.vala:162
 #, no-c-format
 msgid "%b %e"
-msgstr ""
+msgstr "%b%e"
 
 #. A "pretty" date compacted according to locale preferences, i.e. "Mon 3/10/2014"
 #. Leading zeroes will be stripped.
@@ -509,7 +516,7 @@ msgstr ""
 #: ../src/calendar/calendar.vala:168
 #, no-c-format
 msgid "%a %x"
-msgstr ""
+msgstr "%x %a"
 
 #. A "pretty" date abbreviated and no year according to locale preferences, i.e. "Mon 3/10"
 #. Leading zeroes will be stripped.
@@ -517,7 +524,7 @@ msgstr ""
 #: ../src/calendar/calendar.vala:174
 #, no-c-format
 msgid "%a %m/%d"
-msgstr ""
+msgstr "%m/%d (%a)"
 
 #. A "pretty" date abbreviated with no day of week or year according to locale preferences,
 #. i.e. "3/10"
@@ -526,35 +533,35 @@ msgstr ""
 #: ../src/calendar/calendar.vala:181
 #, no-c-format
 msgid "%m/%d"
-msgstr ""
+msgstr "%m/%d"
 
 #. Ante meridiem
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
 #: ../src/calendar/calendar.vala:186
 msgid "am"
-msgstr ""
+msgstr "上午"
 
 #. Brief ante meridiem, i.e. "am" -> "a"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
 #: ../src/calendar/calendar.vala:191
 msgid "a"
-msgstr ""
+msgstr "上"
 
 #. Post meridiem
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
 #: ../src/calendar/calendar.vala:196
 msgid "pm"
-msgstr ""
+msgstr "下午"
 
 #. Brief post meridiem, i.e. "pm" -> "p"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
 #: ../src/calendar/calendar.vala:201
 msgid "p"
-msgstr ""
+msgstr "下"
 
 #. The 12-hour time with minute and meridiem ("am" or "pm"), i.e. "5:06pm"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
@@ -562,7 +569,7 @@ msgstr ""
 #: ../src/calendar/calendar.vala:206
 #, c-format
 msgid "%d:%02d%s"
-msgstr ""
+msgstr "%d:%02d%s"
 
 #. The 12-hour time with minute, seconds, and meridiem ("am" or "pm"), i.e. "5:06:31pm"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
@@ -570,67 +577,67 @@ msgstr ""
 #: ../src/calendar/calendar.vala:211
 #, c-format
 msgid "%d:%02d:%02d%s"
-msgstr ""
+msgstr "%d:%02d:%02d%s"
 
 #. The 24-hour time with minutes, i.e. "17:06"
 #: ../src/calendar/calendar.vala:214
 #, c-format
 msgid "%02d:%02d"
-msgstr ""
+msgstr "%02d:%02d"
 
 #. The 24-hour time with minutes and seconds, i.e. "17:06:31"
 #: ../src/calendar/calendar.vala:217
 #, c-format
 msgid "%02d:%02d:%02d"
-msgstr ""
+msgstr "%02d:%02d:%02d"
 
 #. Used by quick-add to indicate the user wants to create an event at midnight.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/calendar/calendar.vala:227
 msgid "midnight"
-msgstr ""
+msgstr "midnight;午夜;子夜;凌晨;"
 
 #. Used by quick-add to indicate the user wants to create an event at noon.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/calendar/calendar.vala:231
 msgid "noon"
-msgstr ""
+msgstr "noon;中午;"
 
 #. Used by quick-add to indicate the user wants to create an event for today.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:72
 msgid "today"
-msgstr ""
+msgstr "today;今天;今日;"
 
 #. Used by quick-add to indicate the user wants to create an event for tomorrow.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:76
 msgid "tomorrow"
-msgstr ""
+msgstr "tomorrow;明天;明日;"
 
 #. Used by quick-add to indicate the user wants to create an event for yesterday.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:80
 msgid "yesterday"
-msgstr ""
+msgstr "yesterday;昨天;昨日;"
 
 #. Used by quick-add to indicate the user wants to create a daily recurring event
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:84
 msgid "daily"
-msgstr ""
+msgstr "daily;每天;每日;"
 
 #. Used by quick-add to indicate the user wants to create a weekly recurring event
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:88
 msgid "weekly"
-msgstr ""
+msgstr "weekly;每週;"
 
 #. Used by quick-add to indicate the user wants to create a yearly recurring event
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:92
 msgid "yearly"
-msgstr ""
+msgstr "yearly;每年;"
 
 #. Used by quick-add to indicate the user wants to create an event for every weekday
 #. (in most Western countries, this means Monday through Friday, i.e. the work week)
@@ -639,7 +646,7 @@ msgstr ""
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:99
 msgid "weekday;weekdays;"
-msgstr ""
+msgstr "weekday;weekdays;週間;工作日;平常日;平日;"
 
 #. Used by quick-add to indicate the user wants to create an event for every weekend
 #. (in most Western countries, this means Saturday and Sunday, i.e. non-work days)
@@ -648,49 +655,49 @@ msgstr ""
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:106
 msgid "weekend;weekends;"
-msgstr ""
+msgstr "weekend;weekends;週末;"
 
 #. Used by quick-add to convert a user's years unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:111
 msgid "year;years;yr;yrs;"
-msgstr ""
+msgstr "year;years;yr;yrs;年;"
 
 #. Used by quick-add to convert a user's month unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:116
 msgid "month;months;mo;mos;"
-msgstr ""
+msgstr "month;months;mo;mos;月;個月"
 
 #. Used by quick-add to convert a user's week unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:121
 msgid "week;weeks;wk;weeks;"
-msgstr ""
+msgstr "week;weeks;wk;weeks;週;周"
 
 #. Used by quick-add to convert a user's day unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:126
 msgid "day;days;"
-msgstr ""
+msgstr "day;days;天;日;"
 
 #. Used by quick-add to convert a user's hours unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:131
 msgid "hour;hours;hr;hrs"
-msgstr ""
+msgstr "hour;hours;hr;hrs;小時;鐘頭;時"
 
 #. Used by quick-add to convert a user's minute unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:136
 msgid "minute;minutes;min;mins"
-msgstr ""
+msgstr "minute;minutes;min;mins;分鐘;分"
 
 #. Used by quick-add to determine if the word is a COMMON preposition (indicating linkage or a
 #. connection).  Each word must be separate by semi-colons.
@@ -700,7 +707,7 @@ msgstr ""
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:144
 msgid "and;or;"
-msgstr ""
+msgstr "and;or;和;或;與;及;以及;還有;或者;抑或是;亦"
 
 #. Used by quick-add to determine if the word is a TIME preposition (indicating a
 #. specific time of day, not a duration).  Each word must be separated by semi-colons.
@@ -711,7 +718,7 @@ msgstr ""
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:153
 msgid "at;from;to;on;until;this;"
-msgstr ""
+msgstr "at;from;to;on;until;this;在;從;到;至;直到;這個;"
 
 #. Used by quick-add to determine if the word is a DURATION preposition (indicating a
 #. a duration of time, not a specific time).  Each word must be separated by semi-colons.
@@ -722,7 +729,7 @@ msgstr ""
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:162
 msgid "for;"
-msgstr ""
+msgstr "for;時間;共;"
 
 #. Used by quick-add to determine if the word is a DELAY preposition (indicating a specific
 #. time from the current moment).  Each word must be separated by semi-colons.
@@ -733,7 +740,7 @@ msgstr ""
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:171
 msgid "in;"
-msgstr ""
+msgstr "in;內;之內;不到;過;經過;再;"
 
 #. Used by quick-add to determine if the word is a RECURRING preposition (indicating a
 #. regular occurrance in time).  Each word must be separated by semi-colons.
@@ -744,7 +751,7 @@ msgstr ""
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:180
 msgid "every;"
-msgstr ""
+msgstr "every;每;每個;"
 
 #. Used by quick-add to determine if the word is a LOCATION preposition (indicating a
 #. specific place).  Each word must be separated by semi-colons.
@@ -755,7 +762,7 @@ msgstr ""
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:189
 msgid "at;"
-msgstr ""
+msgstr "at;在;於;位置;位在;位於;去;到;"
 
 #. Used by quick-add to strip date numbers of common ordinal suffices.  Each word must be
 #. separated by semi-colons.
@@ -765,41 +772,37 @@ msgstr ""
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:197
 msgid "st;nd;rd;th"
-msgstr ""
+msgstr "st;nd;rd;th;第;"
 
 #: ../src/component/component-recurrence-rule.vala:599
 #, c-format
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d 天"
 
 #: ../src/component/component-recurrence-rule.vala:602
 #, c-format
 msgid "%d week"
 msgid_plural "%d weeks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d 週"
 
 #: ../src/component/component-recurrence-rule.vala:613
 #, c-format
 msgid "%d month"
 msgid_plural "%d months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d 個月"
 
 #: ../src/component/component-recurrence-rule.vala:621
 #, c-format
 msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d 年"
 
 #. As in, "Repeats every day, 2 times"
 #: ../src/component/component-recurrence-rule.vala:636
 #, c-format
 msgid "Repeats every %s, %s"
-msgstr ""
+msgstr "每%s重複，共 %s"
 
 #: ../src/component/component-recurrence-rule.vala:637
 #: ../src/component/component-recurrence-rule.vala:720
@@ -809,44 +812,43 @@ msgstr ""
 #, c-format
 msgid "%d time"
 msgid_plural "%d times"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d 次"
 
 #. As in, "Repeats every week until Sept. 2, 2014"
 #: ../src/component/component-recurrence-rule.vala:643
 #, c-format
 msgid "Repeats every %s until %s"
-msgstr ""
+msgstr "每%s重複，直到 %s"
 
 #. As in, "Repeats every month until Sept. 2, 2014, 8:00pm"
 #: ../src/component/component-recurrence-rule.vala:650
 #, c-format
 msgid "Repeats every %s until %s, %s"
-msgstr ""
+msgstr "每%s重複，直到 %s %s"
 
 #. As in, "Repeats every day"
 #: ../src/component/component-recurrence-rule.vala:657
 #, c-format
 msgid "Repeats every %s"
-msgstr ""
+msgstr "每%s重複"
 
 #. look for expressible patterns
 #: ../src/component/component-recurrence-rule.vala:679
 msgid "every day"
-msgstr ""
+msgstr "每天"
 
 #: ../src/component/component-recurrence-rule.vala:684
 msgid "the weekend"
-msgstr ""
+msgstr "週末"
 
 #: ../src/component/component-recurrence-rule.vala:689
 msgid "weekdays"
-msgstr ""
+msgstr "平日"
 
 #. Separator between days of the week, i.e. "Monday, Tuesday, Wednesday"
 #: ../src/component/component-recurrence-rule.vala:697
 msgid ", "
-msgstr ""
+msgstr "、"
 
 #. As in, "Repeats every week on Monday, Tuesday, 3 times"
 #. As in, "Repeats every month on day 4, 3 times"
@@ -856,7 +858,7 @@ msgstr ""
 #: ../src/component/component-recurrence-rule.vala:841
 #, c-format
 msgid "Repeats every %s on %s, %s"
-msgstr ""
+msgstr "每%s重複，在 %s，共 %s"
 
 #. As in, "Repeats every week on Thursday until Sept. 2, 2014"
 #. As in, "Repeats every month on day 21 until Sept. 2, 2014"
@@ -866,7 +868,7 @@ msgstr ""
 #: ../src/component/component-recurrence-rule.vala:848
 #, c-format
 msgid "Repeats every %s on %s until %s"
-msgstr ""
+msgstr "每%s重複，在 %s，直到 %s"
 
 #. As in, "Repeats every week on Friday, Saturday until Sept. 2, 2014, 8:00pm"
 #. As in, "Repeats every month on day 20 until Sept. 2, 2014, 8:00pm"
@@ -876,7 +878,7 @@ msgstr ""
 #: ../src/component/component-recurrence-rule.vala:855
 #, c-format
 msgid "Repeats every %s on %s until %s, %s"
-msgstr ""
+msgstr "每%s重複，在 %s，直到 %s %s"
 
 #. As in, "Repeats every week on Monday, Wednesday, Friday"
 #. As in, "Repeats every month on day 5"
@@ -886,45 +888,45 @@ msgstr ""
 #: ../src/component/component-recurrence-rule.vala:862
 #, c-format
 msgid "Repeats every %s on %s"
-msgstr ""
+msgstr "每%s重複，在 %s"
 
 #. As in, "Repeats every month on the first Tuesday, 3 times"
 #: ../src/component/component-recurrence-rule.vala:764
 #, c-format
 msgid "Repeats every %s on the %s, %s"
-msgstr ""
+msgstr "每%s重複，在%s，共 %s"
 
 #. As in, "Repeats every month on the second Monday until Sept. 2, 2014"
 #: ../src/component/component-recurrence-rule.vala:771
 #, c-format
 msgid "Repeats every %s on the %s until %s"
-msgstr ""
+msgstr "每%s重複，在%s，直到 %s"
 
 #. As in, "Repeats every month on the last Friday until Sept. 2, 2014, 8:00pm"
 #: ../src/component/component-recurrence-rule.vala:778
 #, c-format
 msgid "Repeats every %s on the %s until %s, %s"
-msgstr ""
+msgstr "每%s重複，在%s，直到 %s%s"
 
 #. As in, "Repeats every month on the third Tuesday"
 #: ../src/component/component-recurrence-rule.vala:785
 #, c-format
 msgid "Repeats every %s on the %s"
-msgstr ""
+msgstr "每%s重複，在%s"
 
 #. As in, "Repeats on day 4 of the month"
 #: ../src/component/component-recurrence-rule.vala:800
 #, c-format
 msgid "day %d"
-msgstr ""
+msgstr "%d 號"
 
 #: ../src/event-editor/event-editor-attendees-card.vala:54
 msgid "Send invite"
-msgstr ""
+msgstr "傳送邀請"
 
 #: ../src/event-editor/event-editor-attendees-card.vala:54
 msgid "Don't send invite"
-msgstr ""
+msgstr "不要傳送邀請"
 
 #: ../src/event-editor/event-editor-main-card.vala:74
 #: ../src/event-editor/event-editor-main-card.vala:77
@@ -940,19 +942,19 @@ msgstr ""
 #: ../src/rc/host-import-calendar.ui.h:1
 #: ../src/rc/manager-remove-calendar.ui.h:1
 msgid "_Cancel"
-msgstr ""
+msgstr "取消(_C)"
 
 #: ../src/event-editor/event-editor-main-card.vala:75
 msgid "Save A_ll Events"
-msgstr ""
+msgstr "儲存所有行程(_L)"
 
 #: ../src/event-editor/event-editor-main-card.vala:76
 msgid "Save _This Event"
-msgstr ""
+msgstr "儲存此行程(_T)"
 
 #: ../src/event-editor/event-editor-main-card.vala:212
 msgid "It's complicated…"
-msgstr ""
+msgstr "有點複雜…"
 
 #: ../src/event-editor/event-editor-main-card.vala:215
 msgid "Never"
@@ -977,22 +979,22 @@ msgstr "%s, "
 #: ../src/event-editor/event-editor-main-card.vala:370
 #: ../src/host/host-quick-create-event.vala:171
 msgid "Unable to create event: calendar must be specified"
-msgstr ""
+msgstr "無法建立行程：必須指定行事曆"
 
 #: ../src/event-editor/event-editor-main-card.vala:391
 #: ../src/host/host-quick-create-event.vala:190
 #, c-format
 msgid "Unable to create event: %s"
-msgstr ""
+msgstr "無法建立行程：%s"
 
 #: ../src/event-editor/event-editor-main-card.vala:396
 msgid "Unable to update event: calendar must be specified"
-msgstr ""
+msgstr "無法更新行程：必須指定行事曆"
 
 #: ../src/event-editor/event-editor-main-card.vala:445
 #, c-format
 msgid "Unable to update event: %s"
-msgstr ""
+msgstr "無法更新行程：%s"
 
 #. "invite.ics" is the name of the file for an event invite delivered via email ...
 #. please translate but keep the .ics extension, as that's common to most calendar
@@ -1004,41 +1006,41 @@ msgstr "invite.ics"
 #: ../src/event-editor/event-editor-main-card.vala:481
 #, c-format
 msgid "Unable to export .ics to %s: %s"
-msgstr ""
+msgstr "無法將 .ics 匯出成 %s：%s"
 
 #: ../src/event-editor/event-editor-main-card.vala:501
 msgid "Event invitation"
-msgstr ""
+msgstr "行程邀請"
 
 #: ../src/event-editor/event-editor-main-card.vala:501
 msgid "Updated event invitation"
-msgstr ""
+msgstr "已更新行程邀請"
 
 #: ../src/event-editor/event-editor-main-card.vala:503
 #, c-format
 msgid "Invitation: %s"
-msgstr ""
+msgstr "邀請：%s"
 
 #: ../src/event-editor/event-editor-main-card.vala:503
 #, c-format
 msgid "Updated invitation: %s"
-msgstr ""
+msgstr "已更新邀請：%s"
 
 #. Invitation: <summary> at <location>
 #: ../src/event-editor/event-editor-main-card.vala:506
 #, c-format
 msgid "Invitation: %s at %s"
-msgstr ""
+msgstr "邀請：%s 在 %s"
 
 #: ../src/event-editor/event-editor-main-card.vala:506
 #, c-format
 msgid "Updated invitation: %s at %s"
-msgstr ""
+msgstr "已更新邀請：%s 在 %s"
 
 #: ../src/event-editor/event-editor-main-card.vala:522
 #, c-format
 msgid "Unable to launch mail client: %s"
-msgstr ""
+msgstr "無法啟動郵件客戶端：%s"
 
 #. Salutations for an email
 #: ../src/event-editor/event-editor-main-card.vala:530
@@ -1047,11 +1049,11 @@ msgstr "您好，"
 
 #: ../src/event-editor/event-editor-main-card.vala:533
 msgid "Attached is an invitation to a new event:"
-msgstr ""
+msgstr "附上新的行程邀請："
 
 #: ../src/event-editor/event-editor-main-card.vala:534
 msgid "Attached is an updated event invitation:"
-msgstr ""
+msgstr "附上更新過的行程邀請："
 
 #. Date/time of an event
 #: ../src/event-editor/event-editor-main-card.vala:550
@@ -1115,37 +1117,37 @@ msgstr "今日(_T)"
 
 #: ../src/host/host-main-window.vala:167
 msgid "Jump to today's date (Ctrl+T)"
-msgstr ""
+msgstr "跳到今天的日期 (Ctrl+T)"
 
 #: ../src/host/host-main-window.vala:185
 msgid "Quick add event (Ctrl+N)"
-msgstr ""
+msgstr "快速加入行程 (Ctrl+N)"
 
 #: ../src/host/host-main-window.vala:191
 msgid "Calendars (Ctrl+L)"
-msgstr ""
+msgstr "行事曆 (Ctrl+L)"
 
 #: ../src/host/host-main-window.vala:506
 #, c-format
 msgid "Unable to edit event: %s"
-msgstr ""
+msgstr "無法編輯行程：%s"
 
 #: ../src/host/host-quick-create-event.vala:79
 msgid "Example: Dinner at Tadich Grill 7:30pm"
-msgstr ""
+msgstr "範例：晚餐在雄野燒肉 下午7:30"
 
 #: ../src/host/host-quick-create-event.vala:81
 msgid "Example: Dinner at Tadich Grill"
-msgstr ""
+msgstr "範例：晚餐在雄野燒肉"
 
 #: ../src/host/host-quick-create-event.vala:85
 msgid "Example: Dinner at Tadich Grill 7:30pm tomorrow"
-msgstr ""
+msgstr "範例：晚餐在雄野燒肉 明天下午7:30"
 
 #: ../src/host/host-quick-create-event.vala:99
 #, c-format
 msgid "Error opening help: %s"
-msgstr ""
+msgstr "開啟幫助說明時發生錯誤：%s"
 
 #: ../src/host/host-show-event.vala:87
 msgid "Delete"
@@ -1153,15 +1155,15 @@ msgstr "刪除"
 
 #: ../src/host/host-show-event.vala:88
 msgid "A_ll Events"
-msgstr ""
+msgstr "所有行程(_L)"
 
 #: ../src/host/host-show-event.vala:89
 msgid "_This Event"
-msgstr ""
+msgstr "這個行程(_T)"
 
 #: ../src/host/host-show-event.vala:91
 msgid "This & _Future Events"
-msgstr ""
+msgstr "這個行程和後續行程(_F)"
 
 #: ../src/host/host-show-event.vala:98
 msgid "Edit event"
@@ -1205,7 +1207,7 @@ msgstr "匯出主行程(_M)"
 #: ../src/host/host-show-event.vala:333
 #, c-format
 msgid "Unable to export event as file: %s"
-msgstr ""
+msgstr "無法將行程匯出成檔案：%s"
 
 #. No number is supplied because the number of events removed is indefinite in certain
 #. situations ... plural text should simply be for "more than one"
@@ -1213,8 +1215,7 @@ msgstr ""
 #, c-format
 msgid "Unable to remove event: %s"
 msgid_plural "Unable to remove events: %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "無法移除行程：%s"
 
 #: ../src/manager/manager-calendar-list-item.vala:92
 msgid "Calendar is read-only"
@@ -1241,7 +1242,7 @@ msgstr "伺服器不傳送行程邀請"
 msgid ""
 "This will remove the %s local calendar from your computer.  All associated "
 "information will be deleted permanently."
-msgstr ""
+msgstr "這會從您的電腦中移除 %s 本地端行事曆。所有相關的資訊都會永遠刪除。"
 
 #: ../src/manager/manager-remove-calendar.vala:41
 #, c-format
@@ -1249,11 +1250,12 @@ msgid ""
 "This will remove the %s network calendar from your computer.  This will not "
 "affect information stored on the server."
 msgstr ""
+"這會從您的電腦中移除 %s 網路行事曆。這不會影響到伺服器端所儲存的資訊。"
 
 #: ../src/manager/manager-remove-calendar.vala:74
 #, c-format
 msgid "Unable to remove calendar: %s"
-msgstr ""
+msgstr "無法移除行事曆：%s"
 
 #. *
 #. * @inheritDoc
@@ -1315,7 +1317,7 @@ msgstr "使用者名稱"
 #: ../src/rc/activator-generic-subscribe.ui.h:8
 msgid ""
 "If supplied, your password will be requested when calendar is first accessed"
-msgstr ""
+msgstr "如果提供的話，在第一次存取行事曆時會索取您的密碼"
 
 #: ../src/rc/activator-generic-subscribe.ui.h:9
 msgid "optional"
@@ -1553,6 +1555,9 @@ msgid ""
 "• Press Cancel to keep the current criteria.\n"
 "• Press OK to overwrite the existing criteria with your changes."
 msgstr ""
+"警告：California 無法編輯這個行程的重複條件。\n"
+"• 請按「取消」保留目前的條件。\n"
+"• 請按「確定」用您所作的更動覆蓋之前的條件。"
 
 #: ../src/rc/host-import-calendar.ui.h:2
 msgid "_Import"
