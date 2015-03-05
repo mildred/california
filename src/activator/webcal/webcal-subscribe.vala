@@ -16,7 +16,8 @@ internal class Subscribe : California.Activator.Generic.Subscribe {
     private Backing.WebCalSubscribable store;
     
     public Subscribe(Backing.WebCalSubscribable store, Soup.URI? supplied_url) {
-        base (supplied_url, iterate<string>("http://", "https://", "webcal://").to_hash_set());
+        base (supplied_url,
+            iterate<string>("http://", "https://", "webcal://", "ftp://", "ftps://").to_hash_set());
         
         this.store = store;
     }
