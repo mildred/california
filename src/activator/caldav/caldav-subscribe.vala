@@ -16,7 +16,7 @@ internal class Subscribe : California.Activator.Generic.Subscribe {
     private Backing.CalDAVSubscribable store;
     
     public Subscribe(Backing.CalDAVSubscribable store, Soup.URI? supplied_url) {
-        base (supplied_url, iterate<string>("http://", "https://", "ftp://", "ftps://").to_hash_set());
+        base (supplied_url, iterate<string>("http://", "https://").to_hash_set());
         
         this.store = store;
     }
