@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-02-09 04:03+0000\n"
-"PO-Revision-Date: 2015-01-27 15:23+0100\n"
+"POT-Creation-Date: 2015-02-17 22:14+0000\n"
+"PO-Revision-Date: 2015-03-07 18:46+0100\n"
 "Last-Translator: Mattias Eriksson <snaggen@gmail.com>\n"
 "Language-Team: Svenska <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -81,7 +81,7 @@ msgstr "Kalender för GNOME 3"
 
 #: ../data/california.desktop.in.in.h:3
 msgid "Event;Events;Schedule;"
-msgstr "Event;Events;Schedule;Händelse;Händelser;Schema"
+msgstr "Event;Events;Schedule;Händelse;Händelser;Schema;"
 
 #: ../src/activator/activator.vala:36
 msgid "Web calendar (.ics or webcal:)"
@@ -209,7 +209,7 @@ msgstr "Okända flaggor: %s\n"
 msgid "%s to %s"
 msgstr "%s till %s"
 
-#: ../src/calendar/calendar-date.vala:384
+#: ../src/calendar/calendar-date.vala:387
 msgid "Today"
 msgstr "Idag"
 
@@ -678,7 +678,7 @@ msgstr "år;"
 #. For more information see https://wiki.gnome.org/Apps/California/TranslatingQuickAdd
 #: ../src/component/component.vala:116
 msgid "month;months;mo;mos;"
-msgstr "månad;månader;mån"
+msgstr "månad;månader;mån;"
 
 #. Used by quick-add to convert a user's week unit into an internal value.  Common abbreviations
 #. (without punctuation) should be included.  Each word must be separated by semi-colons.
