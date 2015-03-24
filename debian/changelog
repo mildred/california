@@ -1,4 +1,4 @@
-california (0.4.0-1~vivid1) vivid; urgency=low
+california (0.4.0-4~vivid1) vivid; urgency=low
 
   * Fix UI issue where date span of event could not be reduced (#744147)
   * Add ftp, ftps support for WebCal
