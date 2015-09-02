@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-08 13:53+0100\n"
-"PO-Revision-Date: 2015-02-08 13:54+0100\n"
+"POT-Creation-Date: 2015-09-02 17:34+0200\n"
+"PO-Revision-Date: 2015-09-02 17:35+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -140,7 +140,7 @@ msgstr "Brak"
 #: ../src/activator/google/google-calendar-list-pane.vala:158
 #, c-format
 msgid "Bad Google URI \"%s\""
-msgstr "Błędny adres URL Google \"%s\""
+msgstr "Błędny adres URL Google „%s”"
 
 #: ../src/activator/google/google-calendar-list-pane.vala:166
 #: ../src/activator/google/google-calendar-list-pane.vala:188
@@ -176,7 +176,7 @@ msgstr ""
 
 #: ../src/application/california-commandline.vala:9
 msgid "[.ics FILE...]"
-msgstr "[PLIK .ics...]"
+msgstr "[PLIK .ics…]"
 
 #: ../src/application/california-commandline.vala:15
 msgid "Display program version"
@@ -209,7 +209,7 @@ msgstr "Nieznane opcje: %s\n"
 msgid "%s to %s"
 msgstr "%s do %s"
 
-#: ../src/calendar/calendar-date.vala:384
+#: ../src/calendar/calendar-date.vala:387
 msgid "Today"
 msgstr "Dzisiaj"
 
@@ -1336,7 +1336,7 @@ msgstr "_Nazwa kalendarza"
 
 #: ../src/rc/activator-generic-subscribe.ui.h:2
 msgid "_URL"
-msgstr "_URL"
+msgstr "Adres _URL"
 
 #: ../src/rc/activator-generic-subscribe.ui.h:3
 #: ../src/rc/manager-calendar-list-item.ui.h:1
