@@ -1346,7 +1346,7 @@ msgstr "Výběr barvy pro kalendář"
 #: ../src/rc/activator-generic-subscribe.ui.h:6
 #: ../src/rc/activator-google-calendar-list-pane.ui.h:3
 msgid "_Subscribe"
-msgstr "Přihlá_sit se"
+msgstr "Přihlá_sit"
 
 #: ../src/rc/activator-generic-subscribe.ui.h:7
 msgid "User name"
@@ -1446,7 +1446,7 @@ msgstr "_Přijmout"
 #. As in "From 9pm to 10pm"
 #: ../src/rc/event-editor-date-time-card.ui.h:2
 msgid "to"
-msgstr "do"
+msgstr "až"
 
 #: ../src/rc/event-editor-date-time-card.ui.h:3
 msgid "_All-day event"
@@ -1612,7 +1612,7 @@ msgstr "Následující (Alt+→)"
 
 #: ../src/rc/host-quick-create-event.ui.h:1
 msgid "_Quick Add Event"
-msgstr "_Rychle přidat událost"
+msgstr "Rychlé přidání události"
 
 #: ../src/rc/host-quick-create-event.ui.h:2 ../src/rc/host-show-event.ui.h:1
 msgid "When"
