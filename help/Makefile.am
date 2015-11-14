@@ -21,7 +21,6 @@ HELP_FILES = \
 	cal-remove-calendar.page.stub \
 	cal-rename-calendar.page \
 	cal-shortcut-keys.page \
-	gnome-help.sct \
 	index.page \
 	legal.xml \
 	$(NULL)
