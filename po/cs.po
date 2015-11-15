@@ -544,28 +544,28 @@ msgstr "%e.%m."
 #. format user settings to be honored)
 #: ../src/calendar/calendar.vala:186
 msgid "am"
-msgstr "dop."
+msgstr "dopoledne"
 
 #. Brief ante meridiem, i.e. "am" -> "a"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
 #: ../src/calendar/calendar.vala:191
 msgid "a"
-msgstr "d."
+msgstr "dop."
 
 #. Post meridiem
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
 #: ../src/calendar/calendar.vala:196
 msgid "pm"
-msgstr "odp."
+msgstr "odpoledne"
 
 #. Brief post meridiem, i.e. "pm" -> "p"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
 #. format user settings to be honored)
 #: ../src/calendar/calendar.vala:201
 msgid "p"
-msgstr "o."
+msgstr "odp."
 
 #. The 12-hour time with minute and meridiem ("am" or "pm"), i.e. "5:06pm"
 #. (Please translate even if 24-hour clock used in your locale; this allows for GNOME time
@@ -783,7 +783,7 @@ msgstr ".;"
 #, c-format
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] "%d den"
+msgstr[0] "den"
 msgstr[1] "%d dny"
 msgstr[2] "%d dní"
 
@@ -791,7 +791,7 @@ msgstr[2] "%d dní"
 #, c-format
 msgid "%d week"
 msgid_plural "%d weeks"
-msgstr[0] "%d týden"
+msgstr[0] "týden"
 msgstr[1] "%d týdny"
 msgstr[2] "%d týdnů"
 
@@ -799,7 +799,7 @@ msgstr[2] "%d týdnů"
 #, c-format
 msgid "%d month"
 msgid_plural "%d months"
-msgstr[0] "%d měsíc"
+msgstr[0] "měsíc"
 msgstr[1] "%d měsíce"
 msgstr[2] "%d měsíců"
 
@@ -807,7 +807,7 @@ msgstr[2] "%d měsíců"
 #, c-format
 msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] "%d rok"
+msgstr[0] "rok"
 msgstr[1] "%d roky"
 msgstr[2] "%d let"
 
@@ -1310,7 +1310,7 @@ msgstr "Všechny dny"
 #: ../src/view/agenda/agenda-load-more-row.vala:38
 #, c-format
 msgid "Showing events until %s"
-msgstr "Zobrazuje události do %s"
+msgstr "Zobrazuje události po %s"
 
 #. *
 #. * @inheritDoc
