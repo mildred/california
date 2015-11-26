@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2015-09-07 19:17+0000\n"
-"PO-Revision-Date: 2015-11-26 21:00+0700\n"
+"PO-Revision-Date: 2015-11-26 21:31+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -211,7 +211,7 @@ msgstr "Hari ini"
 #. See get_day_of_week_of_month().
 #: ../src/calendar/calendar-day-of-week.vala:60
 msgid "last Monday"
-msgstr "Senin lalu"
+msgstr "Senin terakhir"
 
 #: ../src/calendar/calendar-day-of-week.vala:60
 msgid "first Monday"
@@ -235,7 +235,7 @@ msgstr "Senin kelima"
 
 #: ../src/calendar/calendar-day-of-week.vala:61
 msgid "last Tuesday"
-msgstr "Selasa lalu"
+msgstr "Selasa terakhir"
 
 #: ../src/calendar/calendar-day-of-week.vala:61
 msgid "first Tuesday"
@@ -259,7 +259,7 @@ msgstr "Selasa kelima"
 
 #: ../src/calendar/calendar-day-of-week.vala:62
 msgid "last Wednesday"
-msgstr "Rabu lalu"
+msgstr "Rabu terakhir"
 
 #: ../src/calendar/calendar-day-of-week.vala:62
 msgid "first Wednesday"
@@ -283,7 +283,7 @@ msgstr "Rabu kelima"
 
 #: ../src/calendar/calendar-day-of-week.vala:63
 msgid "last Thursday"
-msgstr "Kamis lalu"
+msgstr "Kamis terakhir"
 
 #: ../src/calendar/calendar-day-of-week.vala:63
 msgid "first Thursday"
@@ -307,7 +307,7 @@ msgstr "Kamis kelima"
 
 #: ../src/calendar/calendar-day-of-week.vala:64
 msgid "last Friday"
-msgstr "Jumat lalu"
+msgstr "Jumat terakhir"
 
 #: ../src/calendar/calendar-day-of-week.vala:64
 msgid "first Friday"
@@ -331,7 +331,7 @@ msgstr "Jumat kelima"
 
 #: ../src/calendar/calendar-day-of-week.vala:65
 msgid "last Saturday"
-msgstr "Sabtu lalu"
+msgstr "Sabtu terakhir"
 
 #: ../src/calendar/calendar-day-of-week.vala:65
 msgid "first Saturday"
@@ -355,7 +355,7 @@ msgstr "Sabtu kelima"
 
 #: ../src/calendar/calendar-day-of-week.vala:66
 msgid "last Sunday"
-msgstr "hari Minggu lalu"
+msgstr "hari Minggu terakhir"
 
 #: ../src/calendar/calendar-day-of-week.vala:66
 msgid "first Sunday"
