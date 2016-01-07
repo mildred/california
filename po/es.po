@@ -2,15 +2,15 @@
 # Copyright (C) 2014 california's COPYRIGHT HOLDER
 # This file is distributed under the same license as the california package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2014, 2015.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2014, 2015, 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-07 19:16+0000\n"
-"PO-Revision-Date: 2015-12-02 16:34+0100\n"
+"POT-Creation-Date: 2016-01-07 04:10+0000\n"
+"PO-Revision-Date: 2016-01-07 16:25+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -86,7 +86,6 @@ msgid "Event;Events;Schedule;"
 msgstr "Evento;Eventos;Calendario;"
 
 #: ../src/activator/activator.vala:36
-#| msgid "Web calendar (.ics)"
 msgid "Web calendar (.ics or webcal:)"
 msgstr "Calendario web (.ics . webcal:)"
 
@@ -148,7 +147,6 @@ msgid "Unable to subscribe to %s: %s"
 msgstr "No se pudo suscribir a %s: %s"
 
 #: ../src/application/california-application.vala:21
-#| msgid "Copyright 2014 Yorba Foundation"
 msgid "Copyright 2014-2015 Yorba Foundation"
 msgstr "Copyright 2014-2015 Fundación Yorba"
 
@@ -182,7 +180,7 @@ msgstr "Mostrar la versión del programa"
 
 #: ../src/application/california-commandline.vala:32
 msgid "To log debug to standard out:"
-msgstr ""
+msgstr "Para mostrar el registro de depuración por la salia estándar:"
 
 #: ../src/application/california-commandline.vala:33
 msgid "$ G_MESSAGES_DEBUG=all california"
@@ -383,7 +381,6 @@ msgstr "quinto domingo"
 #. A span of time followed by the timezone, i.e. "3:30pm to 4:30pm EST"
 #: ../src/calendar/calendar-exact-time-span.vala:187
 #, c-format
-#| msgid "%s to %s"
 msgid "%s to %s %s"
 msgstr "%s a %s %s"
 
@@ -391,7 +388,6 @@ msgstr "%s a %s %s"
 #. "12:30AM EDT to 2:30PM EST"
 #: ../src/calendar/calendar-exact-time-span.vala:192
 #, c-format
-#| msgid "%s, %s to %s, %s"
 msgid "%s %s to %s %s"
 msgstr "%s %s a %s %s"
 
@@ -436,7 +432,6 @@ msgstr ""
 #. 12 January 2012, 3:30pm PST to 13 January 2013, 6:30am PST
 #: ../src/calendar/calendar-exact-time-span.vala:233
 #, c-format
-#| msgid "%s, %s to %s, %s"
 msgid "%s, %s %s to %s, %s %s"
 msgstr "%s, %s %s hasta el %s, %s %s"
 
@@ -826,25 +821,24 @@ msgstr "Se repite cada %s, %s"
 #, c-format
 msgid "%d time"
 msgid_plural "%d times"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d vez"
+msgstr[1] "%d veces"
 
 #. As in, "Repeats every week until Sept. 2, 2014"
 #: ../src/component/component-recurrence-rule.vala:643
 #, c-format
 msgid "Repeats every %s until %s"
-msgstr ""
+msgstr "Se repite cada %s hasta %s"
 
 #. As in, "Repeats every month until Sept. 2, 2014, 8:00pm"
 #: ../src/component/component-recurrence-rule.vala:650
 #, c-format
 msgid "Repeats every %s until %s, %s"
-msgstr ""
+msgstr "Se repite cada %s hasta %s, %s"
 
 #. As in, "Repeats every day"
 #: ../src/component/component-recurrence-rule.vala:657
 #, c-format
-#| msgid "_Repeating event"
 msgid "Repeats every %s"
 msgstr "Se repite cada %s"
 
@@ -854,12 +848,10 @@ msgid "every day"
 msgstr "cada día"
 
 #: ../src/component/component-recurrence-rule.vala:684
-#| msgid "Day of the week"
 msgid "the weekend"
 msgstr "el fin de semana"
 
 #: ../src/component/component-recurrence-rule.vala:689
-#| msgid "weekly"
 msgid "weekdays"
 msgstr "días de la semana"
 
@@ -874,10 +866,10 @@ msgstr ", "
 #: ../src/component/component-recurrence-rule.vala:719
 #: ../src/component/component-recurrence-rule.vala:804
 #: ../src/component/component-recurrence-rule.vala:841
-#, fuzzy, c-format
+#, c-format
 #| msgid "%s, %s to %s, %s"
 msgid "Repeats every %s on %s, %s"
-msgstr "%s, %s hasta %s, %s"
+msgstr "Se repite cada %s, el %s, %s"
 
 #. As in, "Repeats every week on Thursday until Sept. 2, 2014"
 #. As in, "Repeats every month on day 21 until Sept. 2, 2014"
@@ -887,7 +879,7 @@ msgstr "%s, %s hasta %s, %s"
 #: ../src/component/component-recurrence-rule.vala:848
 #, c-format
 msgid "Repeats every %s on %s until %s"
-msgstr ""
+msgstr "Se repite cada %s el %s hasta %s"
 
 #. As in, "Repeats every week on Friday, Saturday until Sept. 2, 2014, 8:00pm"
 #. As in, "Repeats every month on day 20 until Sept. 2, 2014, 8:00pm"
@@ -897,7 +889,7 @@ msgstr ""
 #: ../src/component/component-recurrence-rule.vala:855
 #, c-format
 msgid "Repeats every %s on %s until %s, %s"
-msgstr ""
+msgstr "Se repite cada %s el %s hasta %s, %s"
 
 #. As in, "Repeats every week on Monday, Wednesday, Friday"
 #. As in, "Repeats every month on day 5"
@@ -919,19 +911,19 @@ msgstr "Se repite cada %s, el %s, %s"
 #: ../src/component/component-recurrence-rule.vala:771
 #, c-format
 msgid "Repeats every %s on the %s until %s"
-msgstr ""
+msgstr "Se repite cada %s el %s hasta %s"
 
 #. As in, "Repeats every month on the last Friday until Sept. 2, 2014, 8:00pm"
 #: ../src/component/component-recurrence-rule.vala:778
 #, c-format
 msgid "Repeats every %s on the %s until %s, %s"
-msgstr ""
+msgstr "Se repite cada %s el %s hasta %s, %s"
 
 #. As in, "Repeats every month on the third Tuesday"
 #: ../src/component/component-recurrence-rule.vala:785
 #, c-format
 msgid "Repeats every %s on the %s"
-msgstr ""
+msgstr "Se repite cada %s el %s"
 
 #. As in, "Repeats on day 4 of the month"
 #: ../src/component/component-recurrence-rule.vala:800
@@ -1024,7 +1016,6 @@ msgstr "invitacion.ics"
 
 #: ../src/event-editor/event-editor-main-card.vala:481
 #, c-format
-#| msgid "Unable to subscribe to %s: %s"
 msgid "Unable to export .ics to %s: %s"
 msgstr "No se pudo exportar el .ics a %s: %s"
 
@@ -1050,18 +1041,18 @@ msgstr "Invitación actualizada: %s"
 #: ../src/event-editor/event-editor-main-card.vala:506
 #, c-format
 msgid "Invitation: %s at %s"
-msgstr ""
+msgstr "Invitación actualizada: %s en %s"
 
 #: ../src/event-editor/event-editor-main-card.vala:506
 #, c-format
 msgid "Updated invitation: %s at %s"
-msgstr ""
+msgstr "Invitación actualizada: %s en %s"
 
 #: ../src/event-editor/event-editor-main-card.vala:522
-#, fuzzy, c-format
+#, c-format
 #| msgid "Unable to create event: %s"
 msgid "Unable to launch mail client: %s"
-msgstr "No se pudo crear el evento: %s"
+msgstr "No se puede lanzar el cliente de correo: %s"
 
 #. Salutations for an email
 #: ../src/event-editor/event-editor-main-card.vala:530
@@ -1070,16 +1061,15 @@ msgstr "Hola,"
 
 #: ../src/event-editor/event-editor-main-card.vala:533
 msgid "Attached is an invitation to a new event:"
-msgstr ""
+msgstr "El adjunto es una invitación a un evento nuevo:"
 
 #: ../src/event-editor/event-editor-main-card.vala:534
 msgid "Attached is an updated event invitation:"
-msgstr ""
+msgstr "El adjunto es una invitación a un evento actualizado:"
 
 #. Date/time of an event
 #: ../src/event-editor/event-editor-main-card.vala:550
 #, c-format
-#| msgid "When"
 msgid "When: %s"
 msgstr "Cuándo: %s"
 
@@ -1199,7 +1189,6 @@ msgid "Edit event"
 msgstr "Editar evento"
 
 #: ../src/host/host-show-event.vala:99 ../src/host/host-show-event.vala:297
-#| msgid "Edit event details"
 msgid "Export event as .ics"
 msgstr "Exportar evento como .ics"
 
@@ -1222,7 +1211,6 @@ msgstr[0] "Invitado"
 msgstr[1] "Invitados"
 
 #: ../src/host/host-show-event.vala:300
-#| msgid "_Import"
 msgid "E_xport"
 msgstr "E_xportar"
 
@@ -1230,22 +1218,19 @@ msgstr "E_xportar"
 #. should always be present no matter the translation, as many systems rely on it to detect
 #. the file type
 #: ../src/host/host-show-event.vala:304
-#| msgid "event"
-#| msgid_plural "events"
 msgid "event.ics"
 msgstr "evento.ics"
 
 #: ../src/host/host-show-event.vala:311
-#, fuzzy
 #| msgid "Create event"
 msgid "Export _master event"
-msgstr "Crear evento"
+msgstr "Exportar evento _maestro"
 
 #: ../src/host/host-show-event.vala:333
-#, fuzzy, c-format
+#, c-format
 #| msgid "Unable to edit event: %s"
 msgid "Unable to export event as file: %s"
-msgstr "No se pudo editar el evento: %s"
+msgstr "No se puede exportar el evento como un archivo: %s"
 
 #. No number is supplied because the number of events removed is indefinite in certain
 #. situations ... plural text should simply be for "more than one"
@@ -1257,19 +1242,17 @@ msgstr[0] "No se pudo quitar el evento: %s"
 msgstr[1] "No se pudieron quitar los eventos: %s"
 
 #: ../src/manager/manager-calendar-list-item.vala:92
-#| msgid "Calendar visibility"
 msgid "Calendar is read-only"
 msgstr "Calendario de sólo elctura"
 
 #: ../src/manager/manager-calendar-list-item.vala:104
-#, fuzzy
 #| msgid "Calendar visibility"
 msgid "Calendar is default"
-msgstr "Visibilidad del calendario"
+msgstr "Calendario predeterminado"
 
 #: ../src/manager/manager-calendar-list-item.vala:104
 msgid "Make this calendar default"
-msgstr ""
+msgstr "Hacer que este calendario sea el predeterminado"
 
 #: ../src/manager/manager-calendar-list-item.vala:117
 msgid "Server sends event invitations"
@@ -1277,7 +1260,7 @@ msgstr "El servidor envía invitaciones al evento"
 
 #: ../src/manager/manager-calendar-list-item.vala:118
 msgid "Server does not send event invitations"
-msgstr ""
+msgstr "El servidor no envía invitaciones a eventos"
 
 #: ../src/manager/manager-remove-calendar.vala:39
 #, c-format
@@ -1285,6 +1268,8 @@ msgid ""
 "This will remove the %s local calendar from your computer.  All associated "
 "information will be deleted permanently."
 msgstr ""
+"Esto eliminará el calendario local %s de su equipo.  Toda la información "
+"asociada se perderá de manera permanente."
 
 #: ../src/manager/manager-remove-calendar.vala:41
 #, c-format
@@ -1292,11 +1277,11 @@ msgid ""
 "This will remove the %s network calendar from your computer.  This will not "
 "affect information stored on the server."
 msgstr ""
+"Esto eliminará el calendario en red %s de su equipo.  Esto no afectará a la "
+"información guardada en el servidor."
 
 #: ../src/manager/manager-remove-calendar.vala:74
 #, c-format
-#| msgid "Unable to remove event: %s"
-#| msgid_plural "Unable to remove events: %s"
 msgid "Unable to remove calendar: %s"
 msgstr "No se pudo quitar el calendario: %s"
 
@@ -1315,7 +1300,7 @@ msgstr "Todo el día"
 #: ../src/view/agenda/agenda-load-more-row.vala:38
 #, c-format
 msgid "Showing events until %s"
-msgstr ""
+msgstr "Mostrando eventos hasta %s"
 
 #. *
 #. * @inheritDoc
@@ -1422,7 +1407,7 @@ msgstr "Por ejemplo: irene@dominio.com"
 
 #: ../src/rc/event-editor-attendees-card.ui.h:4
 msgid "Email address (required if guests are invited)"
-msgstr ""
+msgstr "Dirección de correo (requerida si hay invitados)"
 
 #: ../src/rc/event-editor-attendees-card.ui.h:5
 msgid "For example, bob@example.com"
@@ -1434,10 +1419,9 @@ msgstr "Dirección de correo _electrónico"
 
 #: ../src/rc/event-editor-attendees-card.ui.h:7
 msgid "A_dd Guest"
-msgstr ""
+msgstr "Aña_dir invitado"
 
 #: ../src/rc/event-editor-attendees-card.ui.h:8
-#| msgid "_Remove"
 msgid "_Remove Guest"
 msgstr "_Quitar invitado"
 
@@ -1486,11 +1470,11 @@ msgstr "Establecer la hora inicial y final"
 
 #: ../src/rc/event-editor-main-card.ui.h:5
 msgid "Recurrence"
-msgstr ""
+msgstr "Repetición"
 
 #: ../src/rc/event-editor-main-card.ui.h:6
 msgid "Add or remove recurrences of the event"
-msgstr ""
+msgstr "Añadir o quitar repeticiones de este evento"
 
 #: ../src/rc/event-editor-main-card.ui.h:7
 #: ../src/rc/host-quick-create-event.ui.h:4 ../src/rc/host-show-event.ui.h:4
@@ -1685,7 +1669,7 @@ msgstr "_Quitar"
 
 #: ../src/rc/manager-remove-calendar.ui.h:3
 msgid "Are you sure you want to remove this calendar?"
-msgstr ""
+msgstr "¿Está seguro de querer eliminar este calendario?"
 
 #: ../src/rc/view-agenda-event-row.ui.h:1
 msgid "Event has guests"
@@ -1693,12 +1677,12 @@ msgstr "El evento tiene invitados"
 
 #: ../src/rc/view-agenda-event-row.ui.h:2
 msgid "Event is recurring"
-msgstr ""
+msgstr "El evento se repite"
 
 #. As in, "Load more events"
 #: ../src/rc/view-agenda-load-more-row.ui.h:2
 msgid "Load _More"
-msgstr ""
+msgstr "Cargar _más"
 
 #: ../src/rc/window-menu.interface.h:1
 msgid "Zoom _In"
