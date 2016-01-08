@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-11-18 21:40+0000\n"
-"PO-Revision-Date: 2016-01-01 16:32+0100\n"
+"POT-Creation-Date: 2016-01-08 04:10+0000\n"
+"PO-Revision-Date: 2016-01-08 16:59+0100\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.5\n"
+"X-Generator: Poedit 1.8.6\n"
 
 #: ../data/california.appdata.xml.in.h:1
 msgid "GNOME 3 calendar"
@@ -1232,7 +1232,7 @@ msgstr "E_xportieren"
 #. the file type
 #: ../src/host/host-show-event.vala:304
 msgid "event.ics"
-msgstr "Ereignis.ics"
+msgstr "Termin.ics"
 
 #: ../src/host/host-show-event.vala:311
 msgid "Export _master event"
@@ -1266,11 +1266,11 @@ msgstr "Kalender als Vorgabe festlegen"
 
 #: ../src/manager/manager-calendar-list-item.vala:117
 msgid "Server sends event invitations"
-msgstr "Server verschickt Ereigniseinladungen"
+msgstr "Server verschickt Termineinladungen"
 
 #: ../src/manager/manager-calendar-list-item.vala:118
 msgid "Server does not send event invitations"
-msgstr "Server verschickt keine Ereigniseinladungen"
+msgstr "Server verschickt keine Termineinladungen"
 
 #: ../src/manager/manager-remove-calendar.vala:39
 #, c-format
@@ -1688,7 +1688,7 @@ msgstr "Termin hat Teilnehmer"
 
 #: ../src/rc/view-agenda-event-row.ui.h:2
 msgid "Event is recurring"
-msgstr "Wiederkehrendes Ereignis"
+msgstr "Wiederkehrender Termin"
 
 #. As in, "Load more events"
 #: ../src/rc/view-agenda-load-more-row.ui.h:2
