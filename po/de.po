@@ -4,15 +4,16 @@
 # rhaglion <rhaglion@riseup.net>, 2014.
 # Benjamin Steinwender <b@stbe.at>, 2014.
 # Wolfgang Stöggl <c72578@yahoo.de>, 2014-2015.
+# Mario Blättermann <mario.blaettermann@gmail.com>, 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: california master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=california&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-11-14 16:12+0000\n"
-"PO-Revision-Date: 2015-11-16 22:53+0100\n"
-"Last-Translator: Wolfgang Stoeggl <c72578@yahoo.de>\n"
+"POT-Creation-Date: 2016-01-08 04:10+0000\n"
+"PO-Revision-Date: 2016-01-08 16:59+0100\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -35,7 +36,7 @@ msgid ""
 msgstr ""
 "California ist ein neues Kalenderprogramm für GNOME 3. Es soll Ihnen dabei "
 "helfen, schnell und einfach mit Ihren Kalendern zu arbeiten. Es bietet "
-"Wochen- und Monatsansichten ihres Terminplans und einfache Möglichkeiten, "
+"Wochen- und Monatsansichten Ihres Terminplans und einfache Möglichkeiten, "
 "Termine hinzuzufügen oder zu modifizieren. Außerdem unterstützt es eine "
 "Funktion zum schnellen Hinzufügen, ohne dass Sie dazu eine Maske ausfüllen "
 "müssen."
@@ -805,7 +806,7 @@ msgstr[1] "%d Wochen"
 #, c-format
 msgid "%d month"
 msgid_plural "%d months"
-msgstr[0] "Monat"
+msgstr[0] "%d Monat"
 msgstr[1] "%d Monate"
 
 #: ../src/component/component-recurrence-rule.vala:621
@@ -1034,11 +1035,11 @@ msgstr "Exportieren der .ics nach %s ist nicht möglich: %s"
 
 #: ../src/event-editor/event-editor-main-card.vala:501
 msgid "Event invitation"
-msgstr "Ereigniseinladung"
+msgstr "Termineinladung"
 
 #: ../src/event-editor/event-editor-main-card.vala:501
 msgid "Updated event invitation"
-msgstr "Aktualisierte Ereigniseinladung"
+msgstr "Aktualisierte Termineinladung"
 
 #: ../src/event-editor/event-editor-main-card.vala:503
 #, c-format
@@ -1133,8 +1134,8 @@ msgstr[1] "Tage"
 #: ../src/event-editor/event-editor-recurring-card.vala:468
 msgid "event"
 msgid_plural "events"
-msgstr[0] "Ereignis"
-msgstr[1] "Ereignisse"
+msgstr[0] "Termin"
+msgstr[1] "Termine"
 
 #: ../src/host/host-import-calendar.vala:33
 msgid "Select calendar to import event into:"
@@ -1165,15 +1166,15 @@ msgstr "Termin konnte nicht bearbeitet werden: %s"
 
 #: ../src/host/host-quick-create-event.vala:79
 msgid "Example: Dinner at Tadich Grill 7:30pm"
-msgstr "Beispiel: Abendessen bei Charly's Restaurant um 19:30"
+msgstr "Beispiel: Abendessen in Charly's Restaurant um 19:30"
 
 #: ../src/host/host-quick-create-event.vala:81
 msgid "Example: Dinner at Tadich Grill"
-msgstr "Beispiel: Abendessen bei Charly's Restaurant"
+msgstr "Beispiel: Abendessen in Charly's Restaurant"
 
 #: ../src/host/host-quick-create-event.vala:85
 msgid "Example: Dinner at Tadich Grill 7:30pm tomorrow"
-msgstr "Beispiel: Abendessen bei Charly's Restaurant morgen um 19:30"
+msgstr "Beispiel: Abendessen in Charly's Restaurant morgen um 19:30"
 
 #: ../src/host/host-quick-create-event.vala:99
 #, c-format
@@ -1186,15 +1187,15 @@ msgstr "Löschen"
 
 #: ../src/host/host-show-event.vala:88
 msgid "A_ll Events"
-msgstr "A_lle Ereignisse"
+msgstr "A_lle Termine"
 
 #: ../src/host/host-show-event.vala:89
 msgid "_This Event"
-msgstr "_Dieses Ereignis"
+msgstr "_Dieser Termin"
 
 #: ../src/host/host-show-event.vala:91
 msgid "This & _Future Events"
-msgstr "Dieses und alle _zukünftigen Ereignisse"
+msgstr "Diesen und alle _zukünftigen Termine"
 
 #: ../src/host/host-show-event.vala:98
 msgid "Edit event"
@@ -1231,11 +1232,11 @@ msgstr "E_xportieren"
 #. the file type
 #: ../src/host/host-show-event.vala:304
 msgid "event.ics"
-msgstr "Ereignis.ics"
+msgstr "Termin.ics"
 
 #: ../src/host/host-show-event.vala:311
 msgid "Export _master event"
-msgstr "_Hauptereignis exportieren"
+msgstr "_Haupttermin exportieren"
 
 #: ../src/host/host-show-event.vala:333
 #, c-format
@@ -1265,11 +1266,11 @@ msgstr "Kalender als Vorgabe festlegen"
 
 #: ../src/manager/manager-calendar-list-item.vala:117
 msgid "Server sends event invitations"
-msgstr "Server verschickt Ereigniseinladungen"
+msgstr "Server verschickt Termineinladungen"
 
 #: ../src/manager/manager-calendar-list-item.vala:118
 msgid "Server does not send event invitations"
-msgstr "Server verschickt keine Ereigniseinladungen"
+msgstr "Server verschickt keine Termineinladungen"
 
 #: ../src/manager/manager-remove-calendar.vala:39
 #, c-format
@@ -1277,7 +1278,7 @@ msgid ""
 "This will remove the %s local calendar from your computer.  All associated "
 "information will be deleted permanently."
 msgstr ""
-"Dies wird den %s lokalen Kalender von Ihrem Computer entfernen. Alle damit "
+"Dies wird den lokalen Kalender %s von Ihrem Rechner entfernen. Alle damit "
 "verbundenen Informationen werden dauerhaft gelöscht."
 
 #: ../src/manager/manager-remove-calendar.vala:41
@@ -1286,7 +1287,7 @@ msgid ""
 "This will remove the %s network calendar from your computer.  This will not "
 "affect information stored on the server."
 msgstr ""
-"Dies wird den %s Netzwerk-Kalender von Ihrem Computer entfernen. Dies wird "
+"Dies wird den Netzwerk-Kalender %s von Ihrem Rechner entfernen. Dies wird "
 "die auf dem Server gespeicherten Informationen nicht beeinflussen."
 
 #: ../src/manager/manager-remove-calendar.vala:74
@@ -1309,7 +1310,7 @@ msgstr "Ganztägig"
 #: ../src/view/agenda/agenda-load-more-row.vala:38
 #, c-format
 msgid "Showing events until %s"
-msgstr "Ereignisse werden dargestellt bis zum %s"
+msgstr "Termine werden dargestellt bis zum %s"
 
 #. *
 #. * @inheritDoc
@@ -1355,7 +1356,7 @@ msgstr "Benutzername"
 msgid ""
 "If supplied, your password will be requested when calendar is first accessed"
 msgstr ""
-"Falls angegeben wird ihr Password benötigt, um auf den Kalender zuzugreifen"
+"Falls angegeben, wird Ihr Passwort benötigt, um auf den Kalender zuzugreifen"
 
 #: ../src/rc/activator-generic-subscribe.ui.h:9
 msgid "optional"
@@ -1449,12 +1450,12 @@ msgstr "bis"
 
 #: ../src/rc/event-editor-date-time-card.ui.h:3
 msgid "_All-day event"
-msgstr "_Ganztägiges Ereignis"
+msgstr "_Ganztägiger Termin"
 
 #: ../src/rc/event-editor-date-time-card.ui.h:5
 #: ../src/rc/event-editor-recurring-card.ui.h:25
 msgid "_OK"
-msgstr "_Ok"
+msgstr "_OK"
 
 #: ../src/rc/event-editor-date-time-widget.ui.h:1
 msgid ":"
@@ -1462,7 +1463,7 @@ msgstr ":"
 
 #: ../src/rc/event-editor-main-card.ui.h:1
 msgid "Untitled event"
-msgstr "Unbenanntes Ereignis"
+msgstr "Unbenannter Termin"
 
 #: ../src/rc/event-editor-main-card.ui.h:2
 msgid "Summary"
@@ -1482,7 +1483,7 @@ msgstr "Wiederholung"
 
 #: ../src/rc/event-editor-main-card.ui.h:6
 msgid "Add or remove recurrences of the event"
-msgstr "Wiederholungen des Ereignisses hinzufügen oder entfernen"
+msgstr "Wiederholungen des Termins hinzufügen oder entfernen"
 
 #: ../src/rc/event-editor-main-card.ui.h:7
 #: ../src/rc/host-quick-create-event.ui.h:4 ../src/rc/host-show-event.ui.h:4
@@ -1503,7 +1504,7 @@ msgstr "Eingeladene Teilnehmer hinzufügen und entfernen"
 
 #: ../src/rc/event-editor-recurring-card.ui.h:1
 msgid "_Repeating event"
-msgstr "_Wiederkehrendes Ereignis"
+msgstr "Sich _wiederholender Termin"
 
 #: ../src/rc/event-editor-recurring-card.ui.h:2
 msgid "Re_peats"
@@ -1594,11 +1595,11 @@ msgid ""
 "• Press Cancel to keep the current criteria.\n"
 "• Press OK to overwrite the existing criteria with your changes."
 msgstr ""
-"WARNUNG: California kann die Kriterien für die Wiederholung dieses "
-"Ereignisses nicht bearbeiten.\n"
-"• Drücken Sie »Abbrechen«, um die aktuellen Kriterien beizubehalten\n"
-"• Drücken Sie »Ok« um die bisherigen Kriterien mit Ihren Veränderungen zu "
-"überschreiben"
+"WARNUNG: California kann die Kriterien für die Wiederholung dieses Termins "
+"nicht bearbeiten.\n"
+"• Klicken Sie auf »Abbrechen«, um die aktuellen Kriterien beizubehalten.\n"
+"• Klicken Sie auf »OK«, um die bisherigen Kriterien mit Ihren Veränderungen "
+"zu überschreiben."
 
 #: ../src/rc/host-import-calendar.ui.h:2
 msgid "_Import"
@@ -1634,7 +1635,7 @@ msgstr "Abbrechen"
 
 #: ../src/rc/host-quick-create-event.ui.h:7
 msgid "Edit event details"
-msgstr "Ereignisdetails bearbeiten"
+msgstr "Termindetails bearbeiten"
 
 #: ../src/rc/host-quick-create-event.ui.h:8
 msgid "Create event"
@@ -1687,7 +1688,7 @@ msgstr "Termin hat Teilnehmer"
 
 #: ../src/rc/view-agenda-event-row.ui.h:2
 msgid "Event is recurring"
-msgstr "Wiederholendes Ereignis"
+msgstr "Wiederkehrender Termin"
 
 #. As in, "Load more events"
 #: ../src/rc/view-agenda-load-more-row.ui.h:2
