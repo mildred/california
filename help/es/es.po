@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: california master\n"
 "POT-Creation-Date: 2016-02-22 16:11+0000\n"
-"PO-Revision-Date: 2016-02-23 13:05+0100\n"
+"PO-Revision-Date: 2016-02-24 11:40+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 #. Put one translator per line, in the form NAME <EMAIL>, YEAR1, YEAR2
 msgctxt "_"
 msgid "translator-credits"
-msgstr ""
+msgstr "Daniel Mustieles <daniel.mustieles@gmail.com>"
 
 #. (itstool) path: info/desc
 #: C/cal-add-calendar.page:8
@@ -80,6 +80,8 @@ msgid ""
 "Follow these steps to syncronize your Google calendar with <app>California</"
 "app>:"
 msgstr ""
+"Siga estos pasos para sincronizar su calendario de Google con "
+"<app>California</app>:"
 
 #. (itstool) path: item/p
 #: C/cal-add-calendar.page:44
@@ -91,6 +93,8 @@ msgstr "Seleccione <gui>Calendario de Google</gui> y pulse <gui>Añadir</gui>."
 msgid ""
 "Enter your Google account name and Google password. Click <gui>Login</gui>."
 msgstr ""
+"Introduzca su nombre de cuenta de Google y su contraseña. Pulse en "
+"<gui>Iniciar sesión</gui>."
 
 #. (itstool) path: item/p
 #: C/cal-add-calendar.page:48
@@ -115,6 +119,8 @@ msgid ""
 "Select all of the calendars that you wish to sync, and select "
 "<gui>Subscribe</gui>."
 msgstr ""
+"Seleccione todos los calendarios que quiere sincronizar y pulse "
+"<gui>Suscribir</gui>."
 
 #. (itstool) path: note/p
 #: C/cal-add-calendar.page:59
@@ -155,6 +161,8 @@ msgid ""
 "Follow these steps to syncronize a <code>CalDAV</code> calendar with "
 "<app>California</app>:"
 msgstr ""
+"Siga estos pasos para sincronizar un calendario <code>CalDAV</code> con "
+"<app>California</app>:"
 
 #. (itstool) path: item/p
 #: C/cal-add-calendar.page:82
@@ -167,12 +175,14 @@ msgstr ""
 #. (itstool) path: item/p
 #: C/cal-add-calendar.page:88
 msgid "Select <gui>CalDAV</gui> and click <gui>Add</gui>."
-msgstr ""
+msgstr "Seleccione <gui>CalDAV</gui> y pulse <gui>Añadir</gui>."
 
 #. (itstool) path: item/p
 #: C/cal-add-calendar.page:89 C/cal-add-calendar.page:125
 msgid "Enter a calendar name. This can be any name of your choosing."
 msgstr ""
+"Introduzca un nombre de calendario. Esto puede ser cualquier nombre a su "
+"elección."
 
 #. (itstool) path: item/p
 #: C/cal-add-calendar.page:91 C/cal-add-calendar.page:127
@@ -185,6 +195,8 @@ msgid ""
 "Enter your the username for your online calendar into the <gui>Username</"
 "gui> field."
 msgstr ""
+"Introduzca su nombre de usuario para su calendario en línea en el campo "
+"<gui>Nombre de usuario</gui>."
 
 #. (itstool) path: item/p
 #: C/cal-add-calendar.page:94 C/cal-add-calendar.page:130
@@ -196,6 +208,8 @@ msgstr "Pulse <gui>Suscribir</gui>."
 msgid ""
 "If you have entered a username, you may also be prompted to enter a password."
 msgstr ""
+"Si ha introducido un nombre de usuario, es posible que se le solicite una "
+"contraseña."
 
 #. (itstool) path: note/p
 #: C/cal-add-calendar.page:98
@@ -239,6 +253,8 @@ msgstr ""
 msgid ""
 "Select <gui>Web Calendar (.ics or webcal)</gui> and click <gui>Add</gui>."
 msgstr ""
+"Seleccione <gui>Calendario web (.ics o webcal)</gui> y pulse <gui>Añadir</"
+"gui>."
 
 #. (itstool) path: item/p
 #: C/cal-add-calendar.page:128
@@ -257,12 +273,12 @@ msgstr ""
 #. (itstool) path: info/desc
 #: C/cal-change-view.page:9
 msgid "Choose a monthly, weekly or daily view of your calendar."
-msgstr ""
+msgstr "Elija la vista mensual, semanal o diaria de su calendario."
 
 #. (itstool) path: page/title
 #: C/cal-change-view.page:21
 msgid "Change Your Calendar's View"
-msgstr ""
+msgstr "Cambiar la vista de su calendario"
 
 #. (itstool) path: page/p
 #: C/cal-change-view.page:23
@@ -299,7 +315,7 @@ msgstr ""
 #. (itstool) path: table/title
 #: C/cal-change-view.page:42
 msgid "Calendar View Shortcut Keys"
-msgstr ""
+msgstr "Atajos de la vista de calendario"
 
 #. (itstool) path: td/p
 #: C/cal-change-view.page:45 C/cal-shortcut-keys.page:38
@@ -334,7 +350,7 @@ msgstr "<keyseq><key>Ctrl</key><key>M</key></keyseq>"
 #. (itstool) path: td/p
 #: C/cal-change-view.page:59 C/cal-shortcut-keys.page:44
 msgid "Reset the view to highlight the current day"
-msgstr ""
+msgstr "Restaurar la vista para resaltar el día actual"
 
 #. (itstool) path: td/p
 #: C/cal-change-view.page:60 C/cal-shortcut-keys.page:45
@@ -376,7 +392,7 @@ msgstr ""
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:35 C/cal-event-edit.page:55 C/cal-event-edit.page:79
 msgid "Find the event you want to edit on your calendar."
-msgstr ""
+msgstr "Busque el evento que quiere editar en su calendario."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:36 C/cal-event-edit.page:56 C/cal-event-edit.page:80
@@ -468,12 +484,12 @@ msgstr ""
 #. (itstool) path: section/title
 #: C/cal-event-edit.page:75
 msgid "Change How Often an Event Occurs"
-msgstr ""
+msgstr "Cambiar cada cuánto sucede un evento"
 
 #. (itstool) path: steps/title
 #: C/cal-event-edit.page:78
 msgid "To change the frequency, or how often an event occurs:"
-msgstr ""
+msgstr "Para cambiar la frecuencia, o cada cuánto sucede un evento:"
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:83
@@ -490,7 +506,7 @@ msgstr ""
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:87
 msgid "If the event repeats, select how often it repeats:"
-msgstr ""
+msgstr "Si el evento se repite, seleccione cada cuánto se repite:"
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:89
@@ -617,7 +633,7 @@ msgstr ""
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:45
 msgid "Press <keyseq><key>Ctrl</key><key>N</key></keyseq>."
-msgstr ""
+msgstr "Pulse <keyseq><key>Ctrl</key><key>N</key></keyseq>."
 
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:47
