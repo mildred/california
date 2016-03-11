@@ -2,26 +2,29 @@
 # Copyright (C) 2016 california's COPYRIGHT HOLDER
 # This file is distributed under the same license as the california package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Roberto Jimenez <roberto.jimenez.c93@hotmail.com>, 2016.
 # Daniel Mustieles <daniel.mustieles@gmail.com>, 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: california master\n"
-"POT-Creation-Date: 2016-02-22 16:11+0000\n"
-"PO-Revision-Date: 2016-02-24 11:40+0100\n"
+"POT-Creation-Date: 2016-03-10 17:53+0000\n"
+"PO-Revision-Date: 2016-03-11 11:05+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
 #. Put one translator per line, in the form NAME <EMAIL>, YEAR1, YEAR2
 msgctxt "_"
 msgid "translator-credits"
-msgstr "Daniel Mustieles <daniel.mustieles@gmail.com>"
+msgstr ""
+"Roberto Jimenez <roberto.jimenez.c93@hotmail.com>, 2016\n"
+"Daniel Mustieles <daniel.mustieles@gmail.com>, 2016"
 
 #. (itstool) path: info/desc
 #: C/cal-add-calendar.page:8
@@ -868,12 +871,12 @@ msgstr ""
 #. (itstool) path: item/p
 #: C/cal-hide-a-calendar.page:38
 msgid "Click <gui>Close</gui>."
-msgstr ""
+msgstr "Pulse <gui>Cerrar</gui>."
 
 #. (itstool) path: page/p
 #: C/cal-hide-a-calendar.page:41
 msgid "The calendar that you selected will now be hidden from view."
-msgstr ""
+msgstr "El calendario que seleccionó ahora estará oculto a la vista."
 
 #. (itstool) path: note/p
 #: C/cal-hide-a-calendar.page:43
@@ -907,7 +910,7 @@ msgstr "Más"
 #. (itstool) path: item/p
 #: C/cal-open-calendar-list.xml:5
 msgid "Select the <_:gui-1/> icon at the bottom of that window."
-msgstr ""
+msgstr "Seleccione el <_:gui-1/> icono en la parte inferior de la ventana."
 
 #. (itstool) path: media
 #. This is a reference to an external file such as an image or video. When
@@ -961,7 +964,7 @@ msgstr ""
 #. (itstool) path: info/desc
 #: C/cal-remove-calendar.page.stub:7
 msgid "Delete a calendar and its related event details."
-msgstr ""
+msgstr "Eliminar un calendario y sus detalles de los eventos relacionados."
 
 #. (itstool) path: page/title
 #: C/cal-remove-calendar.page.stub:21
@@ -987,6 +990,7 @@ msgstr "Renombrar un calendario"
 #: C/cal-rename-calendar.page:24
 msgid "You can change the names of your calendars. Here is how to do it:"
 msgstr ""
+"Puede cambiar el nombre de su calendario. Aquí se explica como hacerlo:"
 
 #. (itstool) path: item/p
 #: C/cal-rename-calendar.page:26
@@ -999,12 +1003,12 @@ msgstr ""
 #. (itstool) path: item/p
 #: C/cal-rename-calendar.page:30
 msgid "Double-click the name of the calendar that you would like to change."
-msgstr ""
+msgstr "Doble pulsación en el nombre del calendario que quiera modificar."
 
 #. (itstool) path: item/p
 #: C/cal-rename-calendar.page:32
 msgid "Enter the new name for that calendar."
-msgstr ""
+msgstr "Introduzca el nuevo nombre para el calendario."
 
 #. (itstool) path: item/p
 #: C/cal-rename-calendar.page:33
@@ -1016,7 +1020,7 @@ msgstr ""
 #. (itstool) path: info/desc
 #: C/cal-shortcut-keys.page:8
 msgid "Learn California's keyboard shortcuts."
-msgstr ""
+msgstr "Aprender los atajos de teclado de California"
 
 #. (itstool) path: page/title
 #: C/cal-shortcut-keys.page:21
@@ -1039,7 +1043,7 @@ msgstr "Lista de atajos del teclado"
 #. (itstool) path: td/p
 #: C/cal-shortcut-keys.page:57
 msgid "View the next month / week"
-msgstr ""
+msgstr "Ver el mes/semana siguiente"
 
 #. (itstool) path: td/p
 #: C/cal-shortcut-keys.page:58
@@ -1049,7 +1053,7 @@ msgstr "<keyseq><key>Alt</key><key>Flecha derecha</key></keyseq>"
 #. (itstool) path: td/p
 #: C/cal-shortcut-keys.page:61
 msgid "View the previous month / week"
-msgstr ""
+msgstr "Ver el mes/semana previo"
 
 #. (itstool) path: td/p
 #: C/cal-shortcut-keys.page:62
@@ -1059,7 +1063,7 @@ msgstr "<keyseq><key>Alt</key><key>Flecha izquierda</key></keyseq>"
 #. (itstool) path: td/p
 #: C/cal-shortcut-keys.page:65
 msgid "Open the <em>Quick-add</em> window"
-msgstr ""
+msgstr "Abrir la ventana de <em>Añadir rapido</em>"
 
 #. (itstool) path: td/p
 #: C/cal-shortcut-keys.page:66
@@ -1154,6 +1158,8 @@ msgid ""
 "Other help topics are grouped together into sections below. Enjoy using "
 "<app>California</app>!"
 msgstr ""
+"Otros temas de ayuda están agrupados las secciones de abajo. Disfrute usando "
+"<app>California</app>!"
 
 #. (itstool) path: section/title
 #: C/index.page:38
@@ -1163,17 +1169,17 @@ msgstr "Gestionar los calendarios"
 #. (itstool) path: section/p
 #: C/index.page:39
 msgid "Learn how to add and manage your calendars."
-msgstr ""
+msgstr "Aprender como añadir y gestionar sus calendarios."
 
 #. (itstool) path: section/title
 #: C/index.page:43
 msgid "Manage Calendar Events"
-msgstr ""
+msgstr "Manejar los eventos del calendario"
 
 #. (itstool) path: section/p
 #: C/index.page:44
 msgid "Learn how to add and manage events on your calendar."
-msgstr ""
+msgstr "Aprender como añadir y gestionar los eventos en su calendario."
 
 #. (itstool) path: p/link
 #: C/legal.xml:3
