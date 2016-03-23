@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: california master\n"
-"POT-Creation-Date: 2016-03-15 16:11+0000\n"
-"PO-Revision-Date: 2016-03-21 15:09+0100\n"
+"POT-Creation-Date: 2016-03-21 16:13+0000\n"
+"PO-Revision-Date: 2016-03-23 10:12+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -285,6 +285,8 @@ msgid ""
 "Follow these steps to add a <app>Web Calendar (.ics or webcal)</app> feed to "
 "<app>California</app>:"
 msgstr ""
+"Siga estos pasos para añadir un proveedor de un <app>Calendario Web (.ics o "
+"webcal)</app> a <app>California</app>:"
 
 #. (itstool) path: item/p
 #: C/cal-add-calendar.page:117
@@ -292,6 +294,8 @@ msgid ""
 "Obtain the URL address of the calendar feed that you wish to add to "
 "<app>California</app>. The address will end with a \".ics\" extension."
 msgstr ""
+"Obtenga la dirección URL del proveedor del calendario que quiera añadir a "
+"<app>Califormia</app>. La dirección terminará con la extensión \".ics\"."
 
 #. (itstool) path: item/p
 #: C/cal-add-calendar.page:123
@@ -307,6 +311,8 @@ msgid ""
 "If required, enter your the username for your web calendar into the "
 "<gui>Username</gui> field."
 msgstr ""
+"Si se le solicita, introduzca su nombre de usuario para su calendario web en "
+"el campo <gui>Nombre de usuario</gui>."
 
 #. (itstool) path: note/p
 #: C/cal-add-calendar.page:135
@@ -314,6 +320,8 @@ msgid ""
 "Most <app>Web Calendar (.ics or webcal)</app> feeds do not require a "
 "password."
 msgstr ""
+"La mayoría de los proveedores de <app>Calendario web (ics. o .webcal)</app> "
+"no requieren una contraseña."
 
 #. (itstool) path: info/desc
 #: C/cal-change-view.page:9
@@ -333,16 +341,22 @@ msgid ""
 "day. Change the view options for <app>California</app> by selecting your "
 "desired option from the buttons on the left-hand portion of the menu bar:"
 msgstr ""
+"<app>California</app> mostrará de manera predeterminada los eventos de un "
+"mes. Además puede querer enfocarse en eventos de solo una semana o solo un "
+"día. Cambie la opción de vista para <app>California</app> seleccionando la "
+"opción que quiera desde los botones en la parte izquierda de la barra de "
+"menú."
 
 #. (itstool) path: item/p
 #: C/cal-change-view.page:30
 msgid "Selecting <gui>Week</gui> will display events for the current week."
 msgstr ""
+"Seleccionando <gui>Semana</gui> mostrará eventos de la semana en curso."
 
 #. (itstool) path: item/p
 #: C/cal-change-view.page:32
 msgid "Selecting <gui>Month</gui> will display events for the entire month."
-msgstr ""
+msgstr "Seleccionando <gui>Mes</gui> mostrará los eventos de un mes completo."
 
 #. (itstool) path: item/p
 #: C/cal-change-view.page:34
@@ -351,11 +365,16 @@ msgid ""
 "helpful if you've been looking at events in the future or in the past and "
 "want to quickly return to see current events."
 msgstr ""
+"Seleccionando <gui>Hoy</gui> resaltará el día actual. Esto puede ser útil si "
+"ha estado buscando eventos en el futuro o en el pasado y quiere volver "
+"rápidamente a ver los eventos actuales."
 
 #. (itstool) path: page/p
 #: C/cal-change-view.page:39
 msgid "You can also change your calendar view by using keyboard shortcuts:"
 msgstr ""
+"También puede cambiar la vista de su calendario utilizando atajos del "
+"teclado:"
 
 #. (itstool) path: table/title
 #: C/cal-change-view.page:42
@@ -419,6 +438,8 @@ msgid ""
 "creating, or how to change the details of an event that you created in the "
 "past."
 msgstr ""
+"Esta página describe cómo añadir detalles específicos a un evento que está "
+"creando, o cómo cambiar los detalles de un evento que ha creado en el pasado."
 
 #. (itstool) path: note/p
 #: C/cal-event-edit.page:27
@@ -428,11 +449,15 @@ msgid ""
 "but do not have permission to edit events on your friend's calendar, you "
 "will not be able to change the details of their events."
 msgstr ""
+"No podrá editar eventos que son parte de ciertos proveedores de calendarios "
+"basados en la web. Por ejemplo, si se suscribe al calendario de Google de un "
+"amigo, pero no tiene los permisos para editar los eventos en el calendario "
+"de su amigo, no podrá cambiar los detalles de sus eventos."
 
 #. (itstool) path: steps/title
 #: C/cal-event-edit.page:34
 msgid "Here is how to change an event's details:"
-msgstr ""
+msgstr "Aquí se explica cómo se cambian los detalles de un evento:"
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:35 C/cal-event-edit.page:55 C/cal-event-edit.page:79
@@ -444,6 +469,8 @@ msgstr "Busque el evento que quiere editar en su calendario."
 #: C/cal-event-remove.page:32
 msgid "Select the event. A window will open, displaying the event's details."
 msgstr ""
+"Seleccione el evento. Una ventana se abrirá mostrando los detalles del "
+"evento."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:38 C/cal-event-edit.page:58 C/cal-event-edit.page:82
@@ -453,7 +480,7 @@ msgstr "Seleccione <gui>Editar</gui>."
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:39
 msgid "Change or enter all of the event's relevant details."
-msgstr ""
+msgstr "Cambie o introduzca todos los detalles relevantes del evento."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:40
@@ -462,6 +489,9 @@ msgid ""
 "frequency with which the event occurs. You can also change the calendar on "
 "which you would like the event to appear."
 msgstr ""
+"Puede cambiar el resumen de un evento, la hora, la ubicación, la descripción "
+"y la frecuencia con la que ese evento sucede. También puede cambiar el "
+"calendario en el cual le gustaría que ese evento apareciera."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:43
