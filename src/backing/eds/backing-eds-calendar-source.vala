@@ -256,7 +256,7 @@ internal class EdsCalendarSource : CalendarSource {
     
     // Invoked by EdsStore prior to making it available outside of unit
     internal async void open_async(Cancellable? cancellable) throws Error {
-        client = (E.CalClient) yield E.CalClient.connect(eds_source, E.CalClientSourceType.EVENTS,
+        client = (E.CalClient) yield E.CalClient.connect(eds_source, E.CalClientSourceType.EVENTS, 1,
             cancellable);
         
         client.bind_property("readonly", this, PROP_READONLY, BindingFlags.SYNC_CREATE);

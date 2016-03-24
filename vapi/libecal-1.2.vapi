@@ -23,7 +23,7 @@ namespace E {
 		public bool check_save_schedules ();
 		public static bool check_timezones (iCal.icalcomponent comp, GLib.List comps, GLib.Callback tzlookup, void* ecalclient, GLib.Cancellable cancellable) throws GLib.Error;
 		[CCode (finish_name = "e_cal_client_connect_finish")]
-		public static async unowned E.Client connect (E.Source source, E.CalClientSourceType source_type, GLib.Cancellable cancellable) throws GLib.Error;
+		public static async unowned E.Client connect (E.Source source, E.CalClientSourceType source_type, uint32 wait_for_connected_seconds, GLib.Cancellable cancellable) throws GLib.Error;
 		public static unowned E.Client connect_sync (E.Source source, E.CalClientSourceType source_type, GLib.Cancellable cancellable) throws GLib.Error;
 		[CCode (finish_name = "e_cal_client_create_object_finish")]
 		public async void create_object (iCal.icalcomponent icalcomp, GLib.Cancellable? cancellable, out string out_uid) throws GLib.Error;
