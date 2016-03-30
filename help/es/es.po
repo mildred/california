@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: california master\n"
-"POT-Creation-Date: 2016-03-21 16:13+0000\n"
-"PO-Revision-Date: 2016-03-23 10:12+0100\n"
+"POT-Creation-Date: 2016-03-26 04:14+0000\n"
+"PO-Revision-Date: 2016-03-30 09:14+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -499,6 +499,8 @@ msgid ""
 "Detailed instructions for changing the time of an event, or how often it "
 "occurs, are included below."
 msgstr ""
+"Se incluyen a continuación instrucciones detalladas para cambiar la hora de "
+"un evento o cuán a menudo éste sucede."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:45
@@ -506,6 +508,8 @@ msgid ""
 "When you are finished editing the event, select <gui>Save</gui>. If you do "
 "not want to save your changes, select <gui>Cancel</gui>."
 msgstr ""
+"Cuando ha terminado de editar un evento, seleccione<gui>Guardar</gui>. Si no "
+"quiere guardar los cambios, seleccione <gui>Cancelar</gui>."
 
 #. (itstool) path: section/title
 #: C/cal-event-edit.page:51
@@ -523,6 +527,8 @@ msgid ""
 "Select the <gui>Clock</gui> icon next to the event's time. A new window will "
 "appear."
 msgstr ""
+"Seleccione el ícono del <gui>Reloj</gui> junto a la hora del evento. "
+"Aparecerá una nueva ventana."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:61
@@ -530,6 +536,8 @@ msgid ""
 "Select the <em>start</em> date and time using the calendar and time "
 "selectors on the <em>left</em>."
 msgstr ""
+"Seleccione la fecha y la hora de <em>comienzo</em> usando los selectores de "
+"calendario y hora en la <em>izquierda</em>."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:63
@@ -537,6 +545,8 @@ msgid ""
 "Select the <em>end</em> date and time using the calendar and time selectors "
 "on the <em>right</em>."
 msgstr ""
+"Seleccione la fecha y la hora de <em>fin</em> usando los selectores de "
+"calendario y hora en la <em>derecha</em>."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:65 C/cal-event-edit.page:117
@@ -548,6 +558,8 @@ msgstr "Seleccione <gui>Aceptar</gui>."
 msgid ""
 "If necessary, enter information into any of the other event's detail fields."
 msgstr ""
+"Si es necesario, introduzca información en cualquiera de los otros campos "
+"para detalles del evento."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:68
@@ -555,11 +567,13 @@ msgid ""
 "When you are done, select <gui>Save</gui>. If you do not want to save your "
 "changes, select <gui>Cancel</gui>."
 msgstr ""
+"Cuando haya terminado, seleccione <gui>Guardar</gui> Si no quiere guardar "
+"los cambios realizados, seleccione <gui>Cancelar</gui>"
 
 #. (itstool) path: section/title
 #: C/cal-event-edit.page:75
 msgid "Change How Often an Event Occurs"
-msgstr "Cambiar cada cuánto sucede un evento"
+msgstr "Cambia cada cuánto sucede un evento"
 
 #. (itstool) path: steps/title
 #: C/cal-event-edit.page:78
@@ -569,7 +583,7 @@ msgstr "Para cambiar la frecuencia, o cada cuánto sucede un evento:"
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:83
 msgid "Select <gui>Repeats . . .</gui>"
-msgstr ""
+msgstr "Seleccione <gui>Repetir . . .</gui>"
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:84
@@ -577,6 +591,8 @@ msgid ""
 "Mark or unmark the <gui>Repeating event</gui> check box. This box is used to "
 "indicate whether or not this event will repeat."
 msgstr ""
+"Marque o desmarque la opción <gui>Repetir evento</gui>. Esto se usa para "
+"indicar si el evento se repetirá o no."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:87
@@ -594,6 +610,8 @@ msgid ""
 "<em>Weekly</em> events occur on a weekly basis, and you can set them to "
 "occur on certain days of the week."
 msgstr ""
+"Los eventos <em>semanales</em> suceden semanalmente, y se pueden configurar "
+"para que ocurran en ciertos días de la semana."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:92
@@ -601,6 +619,8 @@ msgid ""
 "To select the days of the week that you would like the event to occur, mark "
 "the check box next to each day that you would like the event to repeat."
 msgstr ""
+"Para elegir los días de la semana que quiere que los eventos sucedan, marque "
+"la casilla junto a cada día que quiera que el evento se repita."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:95
@@ -608,11 +628,13 @@ msgid ""
 "<em>Day of the week</em> events occur every month on the day you have "
 "selected."
 msgstr ""
+"Los eventos <em>día de la semana</em> ocurren cada mes en el día que ha "
+"elegido."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:97
 msgid "<em>Day of the month</em> events occur every month."
-msgstr ""
+msgstr "Los eventos <em>día del mes</em> suceden cada mes."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:99
@@ -622,7 +644,7 @@ msgstr "Los eventos <em>anuales</em> suceden cada año."
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:102
 msgid "Enter or change the date that the event <em>Starts</em>."
-msgstr ""
+msgstr "Introduzca o cambie la fecha en que el evento <em>Empieza</em>."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:104
@@ -630,6 +652,8 @@ msgid ""
 "Enter or change the date that the event <em>Ends</em>. You can set events to "
 "end in this manner:"
 msgstr ""
+"Entre o cambie la fecha en la que el evento <em>Finaliza</em>. Puede "
+"establecer eventos para terminar en esta manera:"
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:107
@@ -638,11 +662,17 @@ msgid ""
 "your calendar. This is appropriate for events like birthdays, anniversaries, "
 "or other dates that you will always want to remember."
 msgstr ""
+"<em>Nunca</em>. Los eventos que se han configurado para que nunca finalicen "
+"se repetirán indefinidamente en su calendario. Esto es apropiado para "
+"eventos tales como cumpleaños, aniversarios u otras fechas que siempre "
+"quiere recordar."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:111
 msgid "<em>On</em>. You can set repeating events to end on a certain date"
 msgstr ""
+"<em>En</em>. Puede configurar eventos para que terminen en una fecha "
+"determinada."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:113
@@ -650,6 +680,8 @@ msgid ""
 "<em>After</em>. Use this option to mark an event as ending after a certain "
 "number of occurrences."
 msgstr ""
+"<em>Después</em>. Use esta opción para marcar un evento que finaliza luego "
+"de una cierta cantidad de ocurrencias."
 
 #. (itstool) path: item/p
 #: C/cal-event-edit.page:118
@@ -659,12 +691,12 @@ msgstr "Seleccione <gui>Guardar</gui>."
 #. (itstool) path: info/desc
 #: C/cal-event-quick-add.page:9
 msgid "Add an event to your calendar using everyday language."
-msgstr ""
+msgstr "Añadir un evento a su calendario usando lenguaje cotidiano."
 
 #. (itstool) path: page/title
 #: C/cal-event-quick-add.page:23
 msgid "Use the Quick Add Feature to Add Events"
-msgstr ""
+msgstr "Use la característica Añadir rápidamente para agregar eventos."
 
 #. (itstool) path: page/p
 #: C/cal-event-quick-add.page:25
