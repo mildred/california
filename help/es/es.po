@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: california master\n"
-"POT-Creation-Date: 2016-03-26 04:14+0000\n"
-"PO-Revision-Date: 2016-03-30 09:14+0200\n"
+"POT-Creation-Date: 2016-04-03 15:13+0000\n"
+"PO-Revision-Date: 2016-04-04 09:47+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -705,11 +705,14 @@ msgid ""
 "Add</em> feature. It allows you to add events to your calendar using "
 "everyday language. Let's look at a few examples to see how it works."
 msgstr ""
+"Una de las mejores características de <app>California</app> es la llamada "
+"<em>Agregar rápidamente</em>. Ésta permite añadir eventos a su calendario "
+"usando lenguaje cotidiano. Vea algunos ejemplos para ver cómo funciona."
 
 #. (itstool) path: section/title
 #: C/cal-event-quick-add.page:31
 msgid "Create Both One-Time and Recurring Events"
-msgstr ""
+msgstr "Crear eventos de Una sola vez y Recurrentes."
 
 #. (itstool) path: section/p
 #: C/cal-event-quick-add.page:33
@@ -717,11 +720,15 @@ msgid ""
 "We can use the <em>Quick Add</em> feature to add events that occur only one "
 "time and events that occur more than once:"
 msgstr ""
+"Puede usar la característica <em>Añadir rápidamente</em> para añadir eventos "
+"que suceden solamente una vez y eventos que suceden mas de una vez:"
 
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:37
 msgid "Start the <em>Quick Add</em> feature by doing any of the following:"
 msgstr ""
+"Empiece con la característica <em>Añadir rápidamente</em> realizando "
+"cualquiera de las siguientes acciones:"
 
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:40
@@ -729,6 +736,8 @@ msgid ""
 "Find the date or time on your calendar when the event will occur, and "
 "<em>double-click</em> that portion of the calendar."
 msgstr ""
+"Encuentre la fecha y la hora en su calendario de cuándo ocurrirá el evento y "
+"haga una<em>doble pulsación</em> en esa parte del calendario."
 
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:43
@@ -736,6 +745,8 @@ msgid ""
 "Press the <gui>Plus</gui> button in the upper-right portion of "
 "<app>California's</app> <gui>menu bar</gui>."
 msgstr ""
+"Pulse el botón<gui>Más</gui> en la parte superior derecha de la <gui>barra "
+"de menú</gui> de <app>California</app>."
 
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:45
@@ -745,7 +756,7 @@ msgstr "Pulse <keyseq><key>Ctrl</key><key>N</key></keyseq>."
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:47
 msgid "The <em>Quick Add</em> window will appear."
-msgstr ""
+msgstr "Aparecerá la ventana de <em>Añadir rápidamente</em>."
 
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:49
@@ -753,11 +764,13 @@ msgid ""
 "Enter the details of your event. You can describe the event using natural "
 "language:"
 msgstr ""
+"Introduzca los detalles de su evento. Puede describir el evento utilizando "
+"lenguaje natural:"
 
 #. (itstool) path: list/title
 #: C/cal-event-quick-add.page:52
 msgid "Examples of one-time events"
-msgstr ""
+msgstr "Ejemplos de eventos de sólo una vez"
 
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:53
@@ -765,11 +778,13 @@ msgid ""
 "If you double-clicked on the specific date and time you want an event to "
 "occur, just type out the details of the event:"
 msgstr ""
+"Si pulsa dos veces en la fecha y hora específica en la que quiere que el "
+"evento suceda, simplemente escriba los detalles del evento:"
 
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:55
 msgid "<em>Meet James at the movies.</em>"
-msgstr ""
+msgstr "<em>Encontrarme con James en el cine.</em>"
 
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:56
@@ -778,21 +793,27 @@ msgid ""
 "key><key>N</key></keyseq>, you will need to also enter the event's date and "
 "time:"
 msgstr ""
+"Si ha elegido el botón <gui>Más</gui> o ha pulsado<keyseq><key>Ctrl</"
+"key><key>N</key></keyseq>, necesitará también introducir la fecha y hora del "
+"evento."
 
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:59
 msgid "<em>Go to Jeff and Mindy's wedding on October 26th at 4:00pm</em>"
 msgstr ""
+"<em>Asistir a la boda de Jeff y Mindy el 26 de octubre a las 4:00pm</em>"
 
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:61
 msgid "You can also define how long the event takes place:"
-msgstr ""
+msgstr "También puede definir cuánto durará el evento:"
 
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:62
 msgid "<em>Visit Alice at office on November 1st from 1pm to 2:30pm</em>"
 msgstr ""
+"<em>Visitar a Alicia en la oficina el 1 de noviembre desde la 1pm hasta las "
+"2:30pm</em>"
 
 #. (itstool) path: list/title
 #: C/cal-event-quick-add.page:67
@@ -802,17 +823,18 @@ msgstr "Ejemplos de eventos recurrentes"
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:68
 msgid "<em>Take out the trash every Tuesday at 7:30am</em>"
-msgstr ""
+msgstr "<em>Sacar la basura todos los martes a las 7:30pm</em>"
 
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:69
 msgid "<em>Swimming class every Tuesday and Thursday at 6:00pm</em>"
-msgstr ""
+msgstr "<em>Clase de natación cada martes y jueves a las 6:00pm</em>"
 
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:71
 msgid "<em>Meet at Barney's every Monday at 9am until December 1st</em>"
 msgstr ""
+"<em>Reunión donde Barney cada lunes a las 9am hasta el 1 de diciembre</em>"
 
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:75
@@ -821,6 +843,9 @@ msgid ""
 "gui>. See the <link href=\"cal-event-edit.page\">Edit an Event</link> page "
 "for information about editing events."
 msgstr ""
+"Si desea introducir detalles específicos de acuerdo al evento, elija "
+"<gui>Editar</gui>. Consulte la página <link href=\"cal-event-edit.page"
+"\">Editar un evento</enlace> con información acerca de la edición de eventos."
 
 #. (itstool) path: item/p
 #: C/cal-event-quick-add.page:79
