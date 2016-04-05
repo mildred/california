@@ -538,6 +538,15 @@ public class WallTime : BaseObject, Gee.Comparable<WallTime>, Gee.Hashable<WallT
         return second - other.second;
     }
     
+    /**
+     * Returns the difference between the two times in seconds (positive if
+     * other is earlier)
+     */
+    public int difference(WallTime other) {
+        return 3600 * (hour - other.hour) + 60 * (minute - other.minute) +
+            second - other.second;
+    }
+    
     public bool equal_to(WallTime other) {
         return compare_to(other) == 0;
     }

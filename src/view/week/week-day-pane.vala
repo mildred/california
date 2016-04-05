@@ -377,20 +377,9 @@ internal class DayPane : Pane, Common.InstanceContainer {
                 Gdk.cairo_set_source_rgba(ctx, rgba);
                 ctx.stroke();
                 
-                // time range on first line, summary on second ... note that separator character is an
-                // endash
-                string timespan = "%s &#x2013; %s".printf(
-                    actual_start_time.to_pretty_string(Calendar.WallTime.PrettyFlag.NONE),
-                    actual_end_time.to_pretty_string(Calendar.WallTime.PrettyFlag.NONE));
-                Pango.Layout layout_0 = print_line(ctx, draw_start_time, 0, timespan, rgba, start_x, rect_width,
-                    true);
-                Pango.Layout layout_1 = print_line(ctx, draw_start_time, 1, event.summary, rgba, start_x,
-                    rect_width, false);
-                
-                // if either was ellipsized, set tooltip (otherwise clear any existing)
-                bool is_ellipsized = layout_0.is_ellipsized() || layout_1.is_ellipsized();
-                event.set_data<string?>(key_tooltip_date,
-                    is_ellipsized ? "%s\n%s".printf(timespan, GLib.Markup.escape_text(event.summary)) : null);
+                print_event_desc(ctx, draw_start_time,
+                        actual_start_time, actual_end_time, event, rgba,
+                        start_x, rect_width, rect_height);
                 
                 ctr++;
             }
@@ -428,13 +417,45 @@ internal class DayPane : Pane, Common.InstanceContainer {
         return true;
     }
     
+    private void print_event_desc(Cairo.Context ctx,
+            Calendar.WallTime draw_start_time,
+            Calendar.WallTime actual_start_time,
+            Calendar.WallTime actual_end_time,
+            Component.Event event,
+            Gdk.RGBA rgba,
+            int start_x,
+            int total_width,
+            int total_height) {
+        // time range on first line, summary on second ... note that separator character is an
+        // endash
+        string timespan = "%s – %s".printf(
+                actual_start_time.to_pretty_string(Calendar.WallTime.PrettyFlag.NONE),
+                actual_end_time.to_pretty_string(Calendar.WallTime.PrettyFlag.NONE));
+        bool show_tooltip = true;
+
+        if (actual_end_time.difference(actual_start_time) < 45 * 60) {
+            string text = "%s: %s".printf(
+                    actual_start_time.to_pretty_string(Calendar.WallTime.PrettyFlag.NONE),
+                    event.summary);
+            print_line(ctx, draw_start_time, 0, text, rgba, start_x, total_width);
+        } else {
+            Pango.Layout layout_0 = print_line(ctx, draw_start_time, 0, timespan,
+                    rgba, start_x, total_width);
+            Pango.Layout layout_1 = print_line(ctx, draw_start_time, 1, event.summary, rgba, start_x,
+                    total_width);
+
+            // if either was ellipsized, set tooltip (otherwise clear any existing)
+            show_tooltip = layout_0.is_ellipsized() || layout_1.is_ellipsized();
+        }
+
+        event.set_data<string?>(key_tooltip_date,
+                show_tooltip ? "%s\n%s".printf(timespan, GLib.Markup.escape_text(event.summary)) : null);
+    }
+    
     private Pango.Layout print_line(Cairo.Context ctx, Calendar.WallTime start_time, int lineno,
-        string text, Gdk.RGBA rgba, int start_x, int total_width, bool is_markup) {
+        string text, Gdk.RGBA rgba, int start_x, int total_width) {
         Pango.Layout layout = create_pango_layout(null);
-        if (is_markup)
-            layout.set_markup(text, -1);
-        else
-            layout.set_text(text, -1);
+        layout.set_text(text, -1);
         layout.set_font_description(palette.small_font);
         layout.set_width((total_width - (Palette.TEXT_MARGIN_PX * 2)) * Pango.SCALE);
         layout.set_ellipsize(Pango.EllipsizeMode.END);
